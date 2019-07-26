@@ -6,7 +6,7 @@
 
   <arg name="car_name" default="dr_drift" />
  
-  <arg name="world_name" default="worlds/world.sdf"/>
+  <arg name="world_name" default="default-road"/>
   <arg name="paused" default="false"/>
   <arg name="use_sim_time" default="true"/>
   <arg name="extra_gazebo_args" default=""/>
@@ -33,11 +33,9 @@
     <arg name="car_name" value="$(arg car_name)"/>
   </include>
 
-  <node if="$(arg gui)" pkg="rqt_mission_mode" type="rqt_mission_mode" name="rqt_mission_mode" output="screen"/>
+  <node pkg="rqt_mission_mode" type="rqt_mission_mode" name="rqt_mission_mode" output="screen"/>
 
   <include file="$(find gazebo_simulation)/launch/world.launch">
-    <!-- env name="GAZEBO_MODEL_PATH" value="$GAZEBO_MODEL_PATH:$(find gazebo_simulation)/data/models/sensors:$(find gazebo_simulation)/data/models/vehicles:$(find gazebo_simulation)/data/models/misc"/ -->
-    <!-- env name="GAZEBO_RESOURCE_PATH" value="$GAZEBO_RESOURCE_PATH:$(find gazebo_simulation)/data/worlds:$(find gazebo_simulation)/data/" / -->
     <arg name="world_name" value="$(arg world_name)"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
