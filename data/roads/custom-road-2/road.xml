@@ -1,0 +1,19 @@
+<template>
+	<sequence>
+		<line length="0.848"/>
+		<startLane length="0.05"/>
+		<parkingArea length="3" leftLot="1" leftStart="1" leftEnd="2.5" rightStart="0.8" rightEnd="2.0"/>
+		<!--ramp signDistance="1"/-->
+		<line length="1"/>
+	    <leftArc radius="2.55" angle="180"/>
+		<line length="0.5"/>
+		<blockedArea width="0.3" length="1.5"/>
+		<line length="1"/>
+		<intersection rule="equal" turn="right"/>
+		<line length="1"/>
+		<leftArc radius="1" angle="180" middleLine="solid"/>
+		<trafficIsland zebraLength="0.5" islandWidth="0.3" signDistance="0.25" zebraMarkingType="lines"/> 
+		<line length="3"/> 
+		<leftArc radius="1" angle="90"/>
+	</sequence>
+</template>

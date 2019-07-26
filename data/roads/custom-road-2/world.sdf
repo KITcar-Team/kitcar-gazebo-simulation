@@ -12,13 +12,7 @@
       </attenuation>
       <cast_shadows>1</cast_shadows>
     </light>
-
-		<include>
-      <uri>model://dr_drift</uri>
-    	<pose>0 0 0.05 0 0 0</pose>
-		</include>
-
-   
+    
     <model name='Tile/0-0'>
       <static>1</static>
       <link name='link'>
@@ -979,7 +973,7 @@
     </model>
     
     <model name='Obstacle/-18/0'>
-      <pose frame=''>1.8752908579756684 -0.6000000000000001 0.1 0 0 -0.0</pose>
+      <pose frame=''>2.305754918764758 -0.6000000000000001 0.1 0 0 -0.0</pose>
       <link name='link'>
         <inertial>
           <mass>10</mass>
@@ -995,7 +989,7 @@
         <collision name='collision'>
           <geometry>
             <box>
-              <size>0.1545817159513369 0.27999999999999997 0.2</size>
+              <size>0.0593585482185021 0.27999999999999997 0.2</size>
             </box>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -1015,7 +1009,7 @@
         <visual name='visual'>
           <geometry>
             <box>
-              <size>0.1545817159513369 0.27999999999999997 0.2</size>
+              <size>0.0593585482185021 0.27999999999999997 0.2</size>
             </box>
           </geometry>
           <material>
@@ -1031,60 +1025,7 @@
       </link>
     </model>
     
-    <model name='Obstacle/-19/0'>
-      <pose frame=''>2.1298725739270052 -0.6000000000000001 0.1 0 0 -0.0</pose>
-      <link name='link'>
-        <inertial>
-          <mass>10</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.1545817159513369 0.27999999999999997 0.2</size>
-            </box>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <box>
-              <size>0.1545817159513369 0.27999999999999997 0.2</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/White</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-    </model>
-    
-    <model name='Sign-Sign/-41'>
+    <model name='Sign-Sign/-40'>
       <link name='link'>
         <visual name='visual'>
           <cast_shadows>1</cast_shadows>
@@ -1108,7 +1049,7 @@
       <pose frame=''>1.6479999999999997 5.6 0.0 0 0 6.283185307179586</pose>
     </model>
     
-    <model name='Sign-Sign/-44'>
+    <model name='Sign-Sign/-43'>
       <link name='link'>
         <visual name='visual'>
           <cast_shadows>1</cast_shadows>
@@ -1132,7 +1073,7 @@
       <pose frame=''>0.4979999999999997 5.75 0.0 0 0 1.5707963267948966</pose>
     </model>
     
-    <model name='Sign-Sign/-59'>
+    <model name='Sign-Sign/-58'>
       <link name='link'>
         <visual name='visual'>
           <cast_shadows>1</cast_shadows>
@@ -1156,7 +1097,7 @@
       <pose frame=''>-1.0020000000000002 6.55 0.0 0 0 -3.141592653589793</pose>
     </model>
     
-    <model name='Sign-Sign/-60'>
+    <model name='Sign-Sign/-59'>
       <link name='link'>
         <visual name='visual'>
           <cast_shadows>1</cast_shadows>
