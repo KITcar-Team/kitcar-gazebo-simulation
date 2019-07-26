@@ -1,0 +1,429 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <model name='dr_drift'>
+    <link name='chassis'>
+        <pose frame=''>0.116762 0 0 -1.5708 -1.5708 3.14152</pose>
+        <visual name='visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file://media/dr_drift.stl</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <lighting>1</lighting>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+            <shader type='pixel'/>
+          </material>
+          <transparency>0</transparency>
+          <cast_shadows>1</cast_shadows>
+        </visual>
+        <collision name='collision'>
+          <laser_retro>0</laser_retro>
+          <max_contacts>10</max_contacts>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+            <uri>file://media/dr_drift.stl</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>1</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>1e+06</threshold>
+            </bounce>
+            <contact>
+              <collide_without_contact>0</collide_without_contact>
+              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+              <collide_bitmask>1</collide_bitmask>
+              <ode>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+                <max_vel>0.01</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+              <bullet>
+                <split_impulse>1</split_impulse>
+                <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+              </bullet>
+            </contact>
+          </surface>
+        </collision>
+
+      </link>
+    <link name='camera_ros::link'>
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.000166667</ixx>
+          <iyy>0.000166667</iyy>
+          <izz>0.000166667</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name='collision'>
+        <geometry>
+          <box>
+            <size>0.001 0.001 0.001</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='visual'>
+        <geometry>
+          <box>
+            <size>0.07 0.03 0.03</size>
+          </box>
+        </geometry>
+      </visual>
+      <sensor name='camera' type='camera'>
+        <camera name='__default__'>
+          <horizontal_fov>2.0769</horizontal_fov>
+          <image>
+            <width>1280</width>
+            <height>1024</height>
+            <format>L8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>20</far>
+          </clip>
+        </camera>
+        <plugin name='camera_plugin' filename='libgazebo_ros_camera.so'>
+          <alwaysOn>1</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <imageTopicName>/camera/image_uncropped_raw</imageTopicName>
+          <pointCloudTopicName>points</pointCloudTopicName>
+          <cameraInfoTopicName>/camera/camera_info</cameraInfoTopicName>
+          <frameName>world</frameName>
+          <pointCloudCutoff>0.5</pointCloudCutoff>
+          <distortion_k1>0.0</distortion_k1>
+          <distortion_k2>0.0</distortion_k2>
+          <distortion_k3>0.0</distortion_k3>
+          <distortion_t1>0.0</distortion_t1>
+          <distortion_t2>0.0</distortion_t2>
+        </plugin>
+        <always_on>1</always_on>
+        <update_rate>60</update_rate>
+        <visualize>1</visualize>
+      </sensor>
+      <pose frame=''>-0.071762 0 0.26 0 0.161 0</pose>
+    </link>
+    <joint name='camera_joint' type='fixed'>
+      <child>camera_ros::link</child>
+      <parent>chassis</parent>
+    </joint>
+
+    <link name='depth_camera_ros::link_back'>
+      <inertial>
+        <mass>0.1</mass>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+          <size>0.02 0.02 0.02</size>
+          </box>
+        </geometry>
+      </visual>
+      <sensor name="camera" type="depth">
+        <update_rate>20</update_rate>
+        <camera>
+          <horizontal_fov>0.436</horizontal_fov> <!-- 25 degrees -->
+          <image>
+            <width>10</width>
+            <height>10</height>
+            <format>L8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>2</far>
+          </clip>
+        </camera>
+
+      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+        <baseline>0.2</baseline>
+        <alwaysOn>true</alwaysOn>
+        <!-- Keep this zero, update_rate in the parent <sensor> tag
+          will control the frame rate. -->
+        <updateRate>0.0</updateRate>
+        <cameraName>camera_ir</cameraName>
+        <imageTopicName>/camera/depth_raw/back</imageTopicName>
+        <cameraInfoTopicName>/camera/depth_raw/back_info</cameraInfoTopicName>
+        <depthImageTopicName>/camera/depth_raw/back</depthImageTopicName>
+        <depthImageInfoTopicName>/camera/depth_raw/back_info</depthImageInfoTopicName>
+        <pointCloudTopicName>/camera/depth_raw/back_points</pointCloudTopicName>
+        <frameName>ir_back</frameName>
+        <pointCloudCutoff>0.005</pointCloudCutoff>
+        <distortionK1>0</distortionK1>
+        <distortionK2>0</distortionK2>
+        <distortionK3>0</distortionK3>
+        <distortionT1>0</distortionT1>
+        <distortionT2>0</distortionT2>
+        <CxPrime>0</CxPrime>
+        <Cx>0</Cx>
+        <Cy>0</Cy>
+        <focalLength>0</focalLength>
+        <hackBaseline>0</hackBaseline>
+      </plugin>
+
+      </sensor>
+      <pose frame=''>-0.116762 -0.112 0.08 0 0 -1.570796 </pose>
+    </link>
+
+    <joint name='depth_camera_joint_back' type='fixed'>
+      <child>depth_camera_ros::link_back</child>
+
+      <parent>chassis</parent>
+    </joint>
+
+    <link name='depth_camera_ros::link_middle'>
+      <inertial>
+        <mass>0.1</mass>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+          <size>0.02 0.02 0.02</size>
+          </box>
+        </geometry>
+      </visual>
+      <sensor name="camera" type="depth">
+        <update_rate>20</update_rate>
+        <camera>
+          <horizontal_fov>0.436</horizontal_fov> <!-- 25 degrees -->
+          <image>
+            <width>10</width>
+            <height>10</height>
+            <format>L8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>2</far>
+          </clip>
+        </camera>
+
+      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+        <baseline>0.2</baseline>
+        <alwaysOn>true</alwaysOn>
+        <!-- Keep this zero, update_rate in the parent <sensor> tag
+          will control the frame rate. -->
+        <updateRate>0.0</updateRate>
+        <cameraName>camera_ir</cameraName>
+        <imageTopicName>/camera/depth_raw/middle</imageTopicName>
+        <cameraInfoTopicName>/camera/depth_raw/middle_info</cameraInfoTopicName>
+        <depthImageTopicName>/camera/depth_raw/middle</depthImageTopicName>
+        <depthImageInfoTopicName>/camera/depth_raw/middle_info</depthImageInfoTopicName>
+        <pointCloudTopicName>/camera/depth_raw/middle_points</pointCloudTopicName>
+        <frameName>ir_middle</frameName>
+        <pointCloudCutoff>0.005</pointCloudCutoff>
+        <distortionK1>0</distortionK1>
+        <distortionK2>0</distortionK2>
+        <distortionK3>0</distortionK3>
+        <distortionT1>0</distortionT1>
+        <distortionT2>0</distortionT2>
+        <CxPrime>0</CxPrime>
+        <Cx>0</Cx>
+        <Cy>0</Cy>
+        <focalLength>0</focalLength>
+        <hackBaseline>0</hackBaseline>
+      </plugin>
+
+      </sensor>
+      <pose frame=''>-0.011762 -0.10 0.08 0 0 -1.570796 </pose>
+    </link>
+
+    <joint name='depth_camera_joint_middle' type='fixed'>
+      <child>depth_camera_ros::link_middle</child>
+
+      <parent>chassis</parent>
+    </joint>
+
+
+    <link name='depth_camera_ros::link_front'>
+      <inertial>
+        <mass>0.1</mass>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.02 0.02 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+          <size>0.02 0.02 0.02</size>
+          </box>
+        </geometry>
+      </visual>
+      <sensor name="camera" type="depth">
+        <update_rate>20</update_rate>
+        <camera>
+          <horizontal_fov>0.436</horizontal_fov> <!-- 25 degrees -->
+          <image>
+            <width>10</width>
+            <height>10</height>
+            <format>L8</format>
+          </image>
+          <clip>
+            <near>0.001</near>
+            <far>2</far>
+          </clip>
+        </camera>
+
+      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+        <baseline>0.2</baseline>
+        <alwaysOn>true</alwaysOn>
+        <!-- Keep this zero, update_rate in the parent <sensor> tag
+          will control the frame rate. -->
+        <updateRate>0.0</updateRate>
+        <cameraName>camera_ir</cameraName>
+        <imageTopicName>/camera/depth_raw/front</imageTopicName>
+        <cameraInfoTopicName>/camera/depth_raw/front_info</cameraInfoTopicName>
+        <depthImageTopicName>/camera/depth_raw/front</depthImageTopicName>
+        <depthImageInfoTopicName>/camera/depth_raw/front_info</depthImageInfoTopicName>
+        <pointCloudTopicName>/camera/depth_raw/front_points</pointCloudTopicName>
+        <frameName>ir_front</frameName>
+        <pointCloudCutoff>0.005</pointCloudCutoff>
+        <distortionK1>0</distortionK1>
+        <distortionK2>0</distortionK2>
+        <distortionK3>0</distortionK3>
+        <distortionT1>0</distortionT1>
+        <distortionT2>0</distortionT2>
+        <CxPrime>0</CxPrime>
+        <Cx>0</Cx>
+        <Cy>0</Cy>
+        <focalLength>0</focalLength>
+        <hackBaseline>0</hackBaseline>
+      </plugin>
+
+      </sensor>
+      <pose frame=''>0.052762 -0.11 0.08 0 0 -1.570796 </pose>
+    </link>
+
+    <joint name='depth_camera_joint_front' type='fixed'>
+      <child>depth_camera_ros::link_front</child>
+
+      <parent>chassis</parent>
+    </joint>
+
+    <link name='depth_camera_ros::link_ahead'>
+      <inertial>
+        <mass>0.1</mass>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.02 0.02 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+          <size>0.02 0.02 0.02</size>
+          </box>
+        </geometry>
+      </visual>
+      <sensor name="camera" type="depth">
+        <update_rate>20</update_rate>
+        <camera>
+          <horizontal_fov>0.436</horizontal_fov> <!-- 25 degrees -->
+          <image>
+            <width>10</width>
+            <height>10</height>
+            <format>L8</format>
+          </image>
+          <clip>
+            <near>0.001</near>
+            <far>2</far>
+          </clip>
+        </camera>
+
+      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+        <baseline>0.2</baseline>
+        <alwaysOn>true</alwaysOn>
+        <!-- Keep this zero, update_rate in the parent <sensor> tag
+          will control the frame rate. -->
+        <updateRate>0.0</updateRate>
+        <cameraName>camera_ir</cameraName>
+        <imageTopicName>/camera/depth_raw/ahead</imageTopicName>
+        <cameraInfoTopicName>/camera/depth_raw/ahead_info</cameraInfoTopicName>
+        <depthImageTopicName>/camera/depth_raw/ahead</depthImageTopicName>
+        <depthImageInfoTopicName>/camera/depth_raw/ahead_info</depthImageInfoTopicName>
+        <pointCloudTopicName>/camera/depth_raw/ahead_points</pointCloudTopicName>
+        <frameName>ir_ahead</frameName>
+        <pointCloudCutoff>0.005</pointCloudCutoff>
+        <distortionK1>0</distortionK1>
+        <distortionK2>0</distortionK2>
+        <distortionK3>0</distortionK3>
+        <distortionT1>0</distortionT1>
+        <distortionT2>0</distortionT2>
+        <CxPrime>0</CxPrime>
+        <Cx>0</Cx>
+        <Cy>0</Cy>
+        <focalLength>0</focalLength>
+        <hackBaseline>0</hackBaseline>
+      </plugin>
+
+      </sensor>
+      <pose frame=''>0.16962 0 0.08 0 0 0 </pose>
+    </link>
+
+    <joint name='depth_camera_joint_ahead' type='fixed'>
+      <child>depth_camera_ros::link_ahead</child>
+
+      <parent>chassis</parent>
+    </joint>
+
+    <plugin name='vehicle_simulation_link' filename='libvehicle_simulation_link.so'/>
+        <pose frame=''>-0.116762 0.006958 0 0 -0 0</pose>
+    <static>0</static>
+    <allow_auto_disable>1</allow_auto_disable>
+  </model>
+</sdf>

@@ -1,0 +1,21 @@
+<!-- KITcar launch script for tof_sensor_emulation -->
+<launch>
+
+<arg name="node_name" default="tof_sensor_emulation" />
+  <arg name="start_activated" default="true" />
+<arg name="sub_topic" default="/camera/depth_raw/back" />
+<arg name="pub_topic" default="infrared_sensor_back" />
+<arg name="frame_id" default="ir_back" />
+  <node ns="gazebo_simulation" pkg="gazebo_simulation" type="tof_sensor_emulation" output="screen" name="$(arg node_name)">
+
+   <rosparam file="$(find gazebo_simulation)/param/tof_sensor_emulation/default.yaml" command="load" ns="default" />
+   <rosparam file="$(find gazebo_simulation)/param/tof_sensor_emulation/free_ride_mode.yaml" command="load" ns="free_ride_mode" />
+   <rosparam file="$(find gazebo_simulation)/param/tof_sensor_emulation/obstacle_mode.yaml" command="load" ns="obstacle_mode" />
+   <rosparam file="$(find gazebo_simulation)/param/tof_sensor_emulation/parking_mode.yaml" command="load" ns="parking_mode" />
+
+   <param name="frame_id" value="$(arg frame_id)" />
+   <param name="sub_topic" value="$(arg sub_topic)" />
+   <param name="pub_topic" value="$(arg pub_topic)" />
+   <param name="start_activated" value="$(arg start_activated)" />
+  </node>
+</launch>

@@ -1,0 +1,70 @@
+<!-- Running all KITcar_brain software needed for the simulation -->
+<launch>
+  <arg name="car_name" default="dr_drift" />
+  
+  <include file="$(find gazebo_simulation)/launch/pre_cropping_node.launch"/>
+
+  <!-- Tof sensor on right side in the back -->
+  <include file="$(find gazebo_simulation)/launch/tof_sensor_emulation_node.launch">
+    <arg name="frame_id" value="ir_back" />
+    <arg name="sub_topic" value="/camera/depth_raw/back_points" />
+    <arg name="pub_topic" value="/controller_interface/controller_interface/ultrasonic_sensor_back" />
+    <arg name="node_name" value="tof_sensor_emulation_node_back"/>
+  </include>
+
+  <!-- Tof sensor on right side in the middle -->
+  <include file="$(find gazebo_simulation)/launch/tof_sensor_emulation_node.launch">
+    <arg name="frame_id" value="ir_middle" />
+    <arg name="sub_topic" value="/camera/depth_raw/middle_points" />
+    <arg name="pub_topic" value="/controller_interface/controller_interface/infrared_sensor_back" />
+    <arg name="node_name" value="tof_sensor_emulation_node_middle"/>
+  </include>
+
+  <!-- Tof sensor on right side in the front -->
+  <include file="$(find gazebo_simulation)/launch/tof_sensor_emulation_node.launch">
+    <arg name="frame_id" value="ir_front" />
+    <arg name="sub_topic" value="/camera/depth_raw/front_points" />
+    <arg name="pub_topic" value="/controller_interface/controller_interface/infrared_sensor_front" />
+    <arg name="node_name" value="tof_sensor_emulation_node_front"/>
+  </include>
+
+  <!-- Tof sensor looking ahead -->
+  <include file="$(find gazebo_simulation)/launch/tof_sensor_emulation_node.launch">
+    <arg name="frame_id" value="ir_ahead" />
+    <arg name="sub_topic" value="/camera/depth_raw/ahead_points" />
+    <arg name="pub_topic" value="/controller_interface/controller_interface/ultrasonic_sensor_front" />
+    <arg name="node_name" value="tof_sensor_emulation_node_ahead"/>
+
+  </include>
+
+  <include file="$(find mission_control)/launch/mission_control.launch" >
+    <arg name="car_name" value="$(arg car_name)" />
+  </include>
+
+
+  <include file="$(find perception)/launch/perception.launch">
+    <arg name="use_nodelet" value="true" />
+    <arg name="start_camera" value="false" />
+    <arg name="car_name" value="$(arg car_name)" />
+    <arg name="camera_parameters_prefix" value="$(find gazebo_simulation)/param/simulation_car_specs/$(arg car_name)" />
+  </include>
+
+  <include file="$(find control)/launch/lateral_controller_node.launch">
+       <arg name="car_name" value="$(arg car_name)" />
+  </include>
+  
+  <include file="$(find control)/launch/longitudinal_controller_node.launch">
+       <arg name="car_name" value="$(arg car_name)" />
+  </include>
+  
+  <include file="$(find navigation)/launch/navigation.launch">
+    <arg name="use_nodelet" value="true" />
+    <arg name="car_name" value="$(arg car_name)" />
+  </include>
+
+  <include file="$(find car_specs)/launch/load_coorinate_systems.launch">
+  <arg name="car_name" value="$(arg car_name)" />
+</include>
+
+</launch>
+

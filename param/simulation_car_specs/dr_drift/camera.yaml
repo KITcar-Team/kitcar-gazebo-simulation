@@ -1,0 +1,22 @@
+
+#Parameters calculated using given horizontal fov and width of image
+focal_length_x: 377
+focal_length_y: 377
+optical_center_x: 632.887968
+optical_center_y: 136.040646
+# y center is shifted because the actual camera used in dr_drift
+# captures images with a height of 1024 px but pre-crops to 650 px
+
+# Coordsys in back axle (vehicle coordsys)   
+r11: 0
+r12: -1
+r13: 0
+r21: -0.1603
+r22: 0
+r23: -0.9871
+r31: 0.9871
+r32: 0
+r33: -0.1603
+t1:  0
+t2:  256.9
+t3:  40.1

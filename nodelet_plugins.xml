@@ -1,0 +1,14 @@
+<library path="lib/libpre_cropping_nodelet">
+  <class name="gazebo_simulation/pre_cropping" type="NodeletBase<PreCroppingNode>" base_class_type="nodelet::Nodelet">
+  <description>
+    Precrops camera image outputted by Gazebo
+  </description>
+  </class>
+</library>
+<library path="lib/libtof_sensor_emulation_nodelet">
+  <class name="gazebo_simulation/tof_sensor_emulation" type="NodeletBase<TofSensorEmulationNode>" base_class_type="nodelet::Nodelet">
+  <description>
+    Used to publish time of flight sensors data in simulation
+  </description>
+  </class>
+</library>
