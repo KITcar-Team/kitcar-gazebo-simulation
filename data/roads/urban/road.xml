@@ -1,0 +1,37 @@
+<template>
+    <sequence>
+        <line length="1" isStart="true" />
+        <leftArc radius="1.4" angle="45" />
+        <repeat n="4">
+            <leftArc radius="1.4" angle="20" rightLine="missing" />
+            <trafficSign type="stvo-625-10" />
+            <select>
+                <case p="5">
+                    <staticObstacle length="0.2" width="0.3" position="-0.5" anchor="center" />
+                </case>
+                <case p="10">
+                    <staticObstacle length="0.2" width="0.2" position="-1" anchor="right" />
+                </case>
+            </select>
+        </repeat>
+        <line length="1" />
+        <intersection turn="straight" rule="stop" />
+        <rightArc radius="1.4" angle="90" />
+        <select>
+            <case p="20">
+                <line length="0.1" />
+            </case>
+            <case p="40">
+                <line length="0.2" />
+            </case>
+            <case p="40">
+                <line length="0.4" />
+            </case>
+        </select>
+        <quadBezier p1x="2" p1y="2" p2x="3" p2y="0" />
+        <trafficSign type="stvo-208" />
+        <line length="0.5" />
+        <blockedArea length="2" width="0.2" />
+        <line length="1" />
+    </sequence>
+</template>

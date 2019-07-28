@@ -1,0 +1,46 @@
+<template>
+    <sequence>
+        <line length="2" isStart="true" />
+        <shuffle>
+            <sequence>
+                <parkingObstacle width="0.28" length="0.2" />
+                <parkingLot length="0.55" />
+                <parkingObstacle width="0.28" length="0.2" />
+            </sequence>
+            <sequence>
+                <parkingObstacle width="0.28" length="0.2" />
+                <parkingLot length="0.63" />
+                <parkingObstacle width="0.28" length="0.2" />
+            </sequence>
+            <sequence>
+                <parkingObstacle width="0.28" length="0.2" />
+                <parkingLot length="0.70" />
+                <parkingObstacle width="0.28" length="0.2" />
+            </sequence>
+            <parkingObstacle width="0.28" length="0.2" />
+            <parkingObstacle width="0.28" length="0.4" />
+            <parkingObstacle width="0.20" length="0.2" />
+            <parkingObstacle width="0.20" length="0.3" />
+            <parkingObstacle width="0.10" length="0.2" />
+            <parkingObstacle width="0.10" length="0.4" />
+            <sequence>
+                <parkingObstacle width="0.15" length="0.2" />
+                <repeat min="3" max="5">
+                    <optional p="0.8">
+                        <select>
+                            <case w="1"><parkingLot length="0.10" /></case>
+                            <case w="1"><parkingLot length="0.20" /></case>
+                            <case w="1"><parkingLot length="0.40" /></case>
+                        </select>
+                    </optional>
+                    <select>
+                        <case w="1"><parkingObstacle width="0.28" length="0.2" /></case>
+                        <case w="1"><parkingObstacle width="0.20" length="0.2" /></case>
+                        <case w="1"><parkingObstacle width="0.15" length="0.2" /></case>
+                    </select>
+                </repeat>
+            </sequence>
+        </shuffle>
+        <line length="2" />
+    </sequence>
+</template>

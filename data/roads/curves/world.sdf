@@ -52,7 +52,7 @@
             <script>
               <uri>file://materials/scripts</uri>
               <uri>file://materials/textures</uri>
-              <name>Tile/eb2720a1c06a2cf697c86169c0140e2994547e6c497f6684e54f9bef3ebd5f7b</name>
+              <name>Tile/5eab350b8220ac9944dbdfa4ac3288c7c17e24c3bf5df0dfcf6173d64dae00a1</name>
             </script>
           </material>
         </visual>
@@ -60,7 +60,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>-2.5039999999999996 -1.7519999999999998 0 0 -0 0</pose>
+      <pose frame=''>-0.952 -4.3519999999999985 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/0-1'>
@@ -102,7 +102,7 @@
             <script>
               <uri>file://materials/scripts</uri>
               <uri>file://materials/textures</uri>
-              <name>Tile/96a77ad3c939c8d2e2bfb426b9954740b494c649a188a8ee2f62dda9f49eacd1</name>
+              <name>Tile/5464dcb0f52720152598694a64ea536d87527121c4a76b34749efdccdbd990fb</name>
             </script>
           </material>
         </visual>
@@ -110,7 +110,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>-2.5039999999999996 2.3440000000000003 0 0 -0 0</pose>
+      <pose frame=''>-0.952 -0.25599999999999845 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/0-2'>
@@ -152,56 +152,6 @@
             <script>
               <uri>file://materials/scripts</uri>
               <uri>file://materials/textures</uri>
-              <name>Tile/af20cbc51557a0244b5f2c2002153c6a56bb15b46ced28ca7908a3fdafde4365</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <pose frame=''>-2.5039999999999996 6.44 0 0 -0 0</pose>
-    </model>
-    
-    <model name='Tile/0-3'>
-      <static>1</static>
-      <link name='link'>
-        <collision name='collision'>
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>4.096 4.096</size>
-            </plane>
-          </geometry>
-          <surface>
-            <friction>
-              <ode>
-                <mu>100</mu>
-                <mu2>50</mu2>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
-        </collision>
-        <visual name='visual'>
-          <cast_shadows>0</cast_shadows>
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>4.096 4.096</size>
-            </plane>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://materials/scripts</uri>
-              <uri>file://materials/textures</uri>
               <name>Tile/5eab350b8220ac9944dbdfa4ac3288c7c17e24c3bf5df0dfcf6173d64dae00a1</name>
             </script>
           </material>
@@ -210,7 +160,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>-2.5039999999999996 10.536000000000001 0 0 -0 0</pose>
+      <pose frame=''>-0.952 3.8400000000000016 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/1-0'>
@@ -252,7 +202,7 @@
             <script>
               <uri>file://materials/scripts</uri>
               <uri>file://materials/textures</uri>
-              <name>Tile/c4d847aa78957dd4566212255f7a0f3e6a78be582ed6226a2eb9c2b2a4283b31</name>
+              <name>Tile/f92684b559df33366a6a08ecb2eaa94db42180a0f69d5204b896c3c403a61072</name>
             </script>
           </material>
         </visual>
@@ -260,7 +210,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>1.5920000000000005 -1.7519999999999998 0 0 -0 0</pose>
+      <pose frame=''>3.144 -4.3519999999999985 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/1-1'>
@@ -302,7 +252,7 @@
             <script>
               <uri>file://materials/scripts</uri>
               <uri>file://materials/textures</uri>
-              <name>Tile/440b29d9df7ae35030c2aceaf636022d8b6d85e8e52ce9bef4e21b2cf2f309c5</name>
+              <name>Tile/75f13c25b6de785d19dfb3476baeb7550a0d062c120e710c1f7bbe0488b269aa</name>
             </script>
           </material>
         </visual>
@@ -310,7 +260,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>1.5920000000000005 2.3440000000000003 0 0 -0 0</pose>
+      <pose frame=''>3.144 -0.25599999999999845 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/1-2'>
@@ -352,56 +302,6 @@
             <script>
               <uri>file://materials/scripts</uri>
               <uri>file://materials/textures</uri>
-              <name>Tile/08fa74547c8d401d3661d8262ecf0924c76f31f47328cd7db832b0da653aadca</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <pose frame=''>1.5920000000000005 6.44 0 0 -0 0</pose>
-    </model>
-    
-    <model name='Tile/1-3'>
-      <static>1</static>
-      <link name='link'>
-        <collision name='collision'>
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>4.096 4.096</size>
-            </plane>
-          </geometry>
-          <surface>
-            <friction>
-              <ode>
-                <mu>100</mu>
-                <mu2>50</mu2>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
-        </collision>
-        <visual name='visual'>
-          <cast_shadows>0</cast_shadows>
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>4.096 4.096</size>
-            </plane>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://materials/scripts</uri>
-              <uri>file://materials/textures</uri>
               <name>Tile/5eab350b8220ac9944dbdfa4ac3288c7c17e24c3bf5df0dfcf6173d64dae00a1</name>
             </script>
           </material>
@@ -410,7 +310,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>1.5920000000000005 10.536000000000001 0 0 -0 0</pose>
+      <pose frame=''>3.144 3.8400000000000016 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/2-0'>
@@ -452,7 +352,7 @@
             <script>
               <uri>file://materials/scripts</uri>
               <uri>file://materials/textures</uri>
-              <name>Tile/691dc381635580e068100bf99b68d1ed9f70c17aea0c80b060a0012d87821872</name>
+              <name>Tile/8153dcdb03186b36e7e26181a0a852195bc2ad3a83c48de22901fac9b255d118</name>
             </script>
           </material>
         </visual>
@@ -460,7 +360,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>5.688000000000001 -1.7519999999999998 0 0 -0 0</pose>
+      <pose frame=''>7.24 -4.3519999999999985 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/2-1'>
@@ -502,7 +402,7 @@
             <script>
               <uri>file://materials/scripts</uri>
               <uri>file://materials/textures</uri>
-              <name>Tile/d706cb23b1028f024059c6170fbc3fe19fb176794fa341cfda1062998c41f776</name>
+              <name>Tile/83af12805d0bfbdf2b14e5e7019508eeeefbd5b23d7e064d7e956b4fb87f54c2</name>
             </script>
           </material>
         </visual>
@@ -510,60 +410,10 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>5.688000000000001 2.3440000000000003 0 0 -0 0</pose>
+      <pose frame=''>7.24 -0.25599999999999845 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/2-2'>
-      <static>1</static>
-      <link name='link'>
-        <collision name='collision'>
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>4.096 4.096</size>
-            </plane>
-          </geometry>
-          <surface>
-            <friction>
-              <ode>
-                <mu>100</mu>
-                <mu2>50</mu2>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
-        </collision>
-        <visual name='visual'>
-          <cast_shadows>0</cast_shadows>
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>4.096 4.096</size>
-            </plane>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://materials/scripts</uri>
-              <uri>file://materials/textures</uri>
-              <name>Tile/e9be97fdb305f0501866bb07ee5f544444e779826ce93a89510f55978edbf6db</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <pose frame=''>5.688000000000001 6.44 0 0 -0 0</pose>
-    </model>
-    
-    <model name='Tile/2-3'>
       <static>1</static>
       <link name='link'>
         <collision name='collision'>
@@ -610,7 +460,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>5.688000000000001 10.536000000000001 0 0 -0 0</pose>
+      <pose frame=''>7.24 3.8400000000000016 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/3-0'>
@@ -660,7 +510,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>9.784 -1.7519999999999998 0 0 -0 0</pose>
+      <pose frame=''>11.336 -4.3519999999999985 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/3-1'>
@@ -702,7 +552,7 @@
             <script>
               <uri>file://materials/scripts</uri>
               <uri>file://materials/textures</uri>
-              <name>Tile/afe186d9a084b07d850b0ac933ea92be350a55f23bff8a590ab2408287604481</name>
+              <name>Tile/b56b2c030fcb9c19ce47bb6073598a627b5e440d93561695fe7d50ca125cf1e9</name>
             </script>
           </material>
         </visual>
@@ -710,7 +560,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>9.784 2.3440000000000003 0 0 -0 0</pose>
+      <pose frame=''>11.336 -0.25599999999999845 0 0 -0 0</pose>
     </model>
     
     <model name='Tile/3-2'>
@@ -760,364 +610,16 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>9.784 6.44 0 0 -0 0</pose>
+      <pose frame=''>11.336 3.8400000000000016 0 0 -0 0</pose>
     </model>
     
-    <model name='Tile/3-3'>
-      <static>1</static>
-      <link name='link'>
-        <collision name='collision'>
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>4.096 4.096</size>
-            </plane>
-          </geometry>
-          <surface>
-            <friction>
-              <ode>
-                <mu>100</mu>
-                <mu2>50</mu2>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
-        </collision>
-        <visual name='visual'>
-          <cast_shadows>0</cast_shadows>
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>4.096 4.096</size>
-            </plane>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://materials/scripts</uri>
-              <uri>file://materials/textures</uri>
-              <name>Tile/5eab350b8220ac9944dbdfa4ac3288c7c17e24c3bf5df0dfcf6173d64dae00a1</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <pose frame=''>9.784 10.536000000000001 0 0 -0 0</pose>
-    </model>
+    <include>
+        <uri>model://dr_drift</uri>
+        <pose>0 -0.2 0.01 0 0 0</pose>
+    </include>
     
-    <model name='Obstacle/-11/0'>
-      <pose frame=''>2.3480000000000003 0.6000000000000001 0.1 0 0 -0.0</pose>
-      <link name='link'>
-        <inertial>
-          <mass>10</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.24000000000000005 0.27999999999999997 0.2</size>
-            </box>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <box>
-              <size>0.24000000000000005 0.27999999999999997 0.2</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/White</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-    </model>
-    
-    <model name='Obstacle/-14/0'>
-      <pose frame=''>2.9480000000000004 0.6000000000000001 0.1 0 0 -0.0</pose>
-      <link name='link'>
-        <inertial>
-          <mass>10</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.24000000000000005 0.27999999999999997 0.2</size>
-            </box>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <box>
-              <size>0.24000000000000005 0.27999999999999997 0.2</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/White</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-    </model>
-    
-    <model name='Obstacle/-16/0'>
-      <pose frame=''>3.248 0.6000000000000001 0.1 0 0 -0.0</pose>
-      <link name='link'>
-        <inertial>
-          <mass>10</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.24000000000000005 0.27999999999999997 0.2</size>
-            </box>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <box>
-              <size>0.24000000000000005 0.27999999999999997 0.2</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/White</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-    </model>
-    
-    <model name='Obstacle/-18/0'>
-      <pose frame=''>2.313108686010222 -0.6000000000000001 0.1 0 0 -0.0</pose>
-      <link name='link'>
-        <inertial>
-          <mass>10</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.2767391240068145 0.27999999999999997 0.2</size>
-            </box>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <box>
-              <size>0.2767391240068145 0.27999999999999997 0.2</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/White</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-    </model>
-    
-    <model name='Sign-Sign/-40'>
-      <link name='link'>
-        <visual name='visual'>
-          <cast_shadows>1</cast_shadows>
-          <geometry>
-            <mesh>
-                <uri>file://meshes/Rechts_abbiegen.dae</uri>
-                <scale>0.001 0.001 0.001</scale>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-            <pose>-0.055 0 0.145 0 0 0</pose>
-            <geometry>
-                <box>
-                  <size>0.11 0.15 0.29</size>
-                </box>
-            </geometry>
-        </collision>
-        <self_collide>0</self_collide>
-      </link>
-      <pose frame=''>1.6479999999999997 5.6 0.0 0 0 6.283185307179586</pose>
-    </model>
-    
-    <model name='Sign-Sign/-43'>
-      <link name='link'>
-        <visual name='visual'>
-          <cast_shadows>1</cast_shadows>
-          <geometry>
-            <mesh>
-                <uri>file://meshes/Links_abbiegen.dae</uri>
-                <scale>0.001 0.001 0.001</scale>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-            <pose>-0.055 0 0.145 0 0 0</pose>
-            <geometry>
-                <box>
-                  <size>0.11 0.15 0.29</size>
-                </box>
-            </geometry>
-        </collision>
-        <self_collide>0</self_collide>
-      </link>
-      <pose frame=''>0.4979999999999997 5.75 0.0 0 0 1.5707963267948966</pose>
-    </model>
-    
-    <model name='Sign-Sign/-58'>
-      <link name='link'>
-        <visual name='visual'>
-          <cast_shadows>1</cast_shadows>
-          <geometry>
-            <mesh>
-                <uri>file://meshes/VorbeifahrtRechts_pedestrian.dae</uri>
-                <scale>0.001 0.001 0.001</scale>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-            <pose>-0.055 0 0.075 0 0 0</pose>
-            <geometry>
-                <box>
-                  <size>0.11 0.15 0.15</size>
-                </box>
-            </geometry>
-        </collision>
-        <self_collide>0</self_collide>
-      </link>
-      <pose frame=''>-1.0020000000000002 6.55 0.0 0 0 -3.141592653589793</pose>
-    </model>
-    
-    <model name='Sign-Sign/-59'>
-      <link name='link'>
-        <visual name='visual'>
-          <cast_shadows>1</cast_shadows>
-          <geometry>
-            <mesh>
-                <uri>file://meshes/VorbeifahrtRechts_pedestrian.dae</uri>
-                <scale>0.001 0.001 0.001</scale>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-            <pose>-0.055 0 0.075 0 0 0</pose>
-            <geometry>
-                <box>
-                  <size>0.11 0.15 0.15</size>
-                </box>
-            </geometry>
-        </collision>
-        <self_collide>0</self_collide>
-      </link>
-      <pose frame=''>-1.002 4.95 0.0 0 0 0.0</pose>
-    </model>
+    <include>
+        <uri>model://dr_drift</uri>
+        <pose>0 -0.2 0.01 0 0 0</pose>
+    </include>
     </world></sdf>

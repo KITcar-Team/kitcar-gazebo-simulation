@@ -1,0 +1,110 @@
+<template>
+    <sequence>
+        <line length="1" isStart="true" />
+        <repeat min="2" max="3">
+            <select>
+                <case w="1">
+                    <!-- urban area -->
+                    <trafficSign type="stvo-274.1" />
+                    <line length="1" />
+
+                    <repeat min="1" max="3">
+                        <select>
+                            <case w="1">
+                                <trafficSign type="stvo-350-10" />
+                                <line length="0.4" />
+                                <zebraCrossing length="0.4" />
+                                <line length="0.4" />
+                                <trafficSign type="stvo-350-10" on_opposite_side="true"/>
+                            </case>
+                            <case w="1">
+                                <trafficSign type="stvo-208" />
+                                <line length="0.5" />
+                                <blockedArea width="0.15" length="2" />
+                            </case>
+                        </select>
+                        <line length="1" />
+                    </repeat>
+                    <line length="1" />
+                    <trafficSign type="stvo-274.2" />
+                </case>
+                <case w="1">
+                    <trafficSign type="10_zone_beginn" />
+                    <line length="1" />
+                    <trafficSign type="ende_10_zone" />
+                </case>
+                <case w="1">
+                    <!-- static obstacles -->
+                    <repeat min="1" max="5">
+                        <select>
+                            <case w="1">
+                                <staticObstacle width="0.2" length="0.2"
+                                        position="-1" anchor="right" />
+                            </case>
+                            <case w="1">
+                                <staticObstacle width="0.4" length="0.2"
+                                        position="-1" anchor="right" />
+                            </case>
+                            <case w="1">
+                                <staticObstacle width="0.3" length="0.2"
+                                        position="0" anchor="right" />
+                            </case>
+                        </select>
+                        <line length="1" />
+                    </repeat>
+                </case>
+                <case w="0.5">
+                    <!-- sharp curve -->
+                    <trafficSign type="stvo-625-11" />
+                    <line length="1.5" />
+                    <trafficSign type="stvo-625-11" />
+                    <repeat min="3" max="5">
+                        <leftArc radius="1.4" angle="20" />
+                        <trafficSign type="stvo-625-10" />
+                    </repeat>
+                </case>
+                <case w="0.5">
+                    <intersection turn="left" rule="yield" />
+                </case>
+                <case w="0.5">
+                    <intersection turn="left" rule="priority-stop" />
+                </case>
+                <case w="0.5">
+                    <intersection turn="straight" rule="priority-stop" />
+                </case>
+                <case w="0.5">
+                    <intersection turn="right" rule="stop" />
+                </case>
+            </select>
+
+            <select>
+                <case w="1">
+                    <line length="1" />
+                    <trafficSign type="50_zone_beginn" />
+                    <line length="2" />
+                    <trafficSign type="ende_50_zone" />
+                </case>
+                <case w="1">
+                    <line length="2" />
+                </case>
+                <case w="1">
+                    <!-- ramp -->
+                    <!--<trafficSign type="stvo-110-10" />-->
+                    <!--<line length="1" />-->
+                    <ramp signDistance="1.0"/>
+                    <!--<line length="1" />-->
+                    <!--<trafficSign type="stvo-108-10" />-->
+                </case>
+                <case w="1">
+                    <trafficIsland zebraLength="0.4" islandWidth="0.35" signDistance="0.25" zebraMarkingType="lines"/>
+                </case>
+                <case w="1">
+                    <leftArc radius="1.4" angle="45" />
+                </case>
+                <case w="1">
+                    <rightArc radius="1.4" angle="45" />
+                </case>
+            </select>
+        </repeat>
+    </sequence>
+</template>
