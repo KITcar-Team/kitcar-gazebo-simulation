@@ -2,7 +2,7 @@
 
 ## Setup
 
-This repository can be used in combination with `kitcar-ros` and `kitcar-gazebo-simulation`. Therefore the init script must be called. Change into `kitcar-gazebo-generation` folder and run the script:
+This repository can be used in combination with `kitcar-ros` and `kitcar-gazebo-generation`. Therefore the init script must be called. Change into `kitcar-gazebo-simulation` folder and run the script:
 ```
 cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation
 ./init/init.sh
