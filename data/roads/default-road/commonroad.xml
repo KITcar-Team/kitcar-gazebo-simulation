@@ -1,5 +1,20 @@
 <?xml version="1.0" ?>
 <commonRoad commonRoadVersion="1.0">
+	<obstacle id="-11">
+		<role>static</role>
+		<type>parkedVehicle</type>
+		<shape>
+			<rectangle>
+				<length>0.24000000000000005</length>
+				<width>0.27999999999999997</width>
+				<orientation>0.0</orientation>
+				<centerPoint>
+					<x>2.3480000000000003</x>
+					<y>0.6000000000000001</y>
+				</centerPoint>
+			</rectangle>
+		</shape>
+	</obstacle>
 	<obstacle id="-13">
 		<role>static</role>
 		<type>parkedVehicle</type>
@@ -9,13 +24,28 @@
 				<width>0.27999999999999997</width>
 				<orientation>0.0</orientation>
 				<centerPoint>
-					<x>2.9480000000000004</x>
+					<x>2.648</x>
 					<y>0.6000000000000001</y>
 				</centerPoint>
 			</rectangle>
 		</shape>
 	</obstacle>
-	<obstacle id="-24">
+	<obstacle id="-17">
+		<role>static</role>
+		<type>parkedVehicle</type>
+		<shape>
+			<rectangle>
+				<length>0.2669578819466394</length>
+				<width>0.27999999999999997</width>
+				<orientation>0.0</orientation>
+				<centerPoint>
+					<x>2.314792711064661</x>
+					<y>-0.6000000000000001</y>
+				</centerPoint>
+			</rectangle>
+		</shape>
+	</obstacle>
+	<obstacle id="-26">
 		<role>static</role>
 		<type>blockedArea</type>
 		<shape>
@@ -197,7 +227,7 @@
 			<lanelet ref="-3"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-16"/>
+			<lanelet ref="-18"/>
 		</successor>
 		<adjacentLeft drivingDir="opposite" ref="-7"/>
 	</lanelet>
@@ -224,7 +254,7 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-17"/>
+			<lanelet ref="-19"/>
 		</predecessor>
 		<successor>
 			<lanelet ref="-4"/>
@@ -325,47 +355,24 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 	</lanelet>
-	<lanelet id="-11">
-		<leftBoundary>
-			<point>
-				<x>2.498</x>
-				<y>0.4</y>
-			</point>
-			<point>
-				<x>2.498</x>
-				<y>0.8</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>2.798</x>
-				<y>0.4</y>
-			</point>
-			<point>
-				<x>2.798</x>
-				<y>0.8</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-	</lanelet>
 	<lanelet id="-12">
 		<leftBoundary>
 			<point>
-				<x>2.798</x>
+				<x>2.498</x>
 				<y>0.4</y>
 			</point>
 			<point>
-				<x>2.798</x>
+				<x>2.498</x>
 				<y>0.8</y>
 			</point>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>3.0980000000000003</x>
+				<x>2.798</x>
 				<y>0.4</y>
 			</point>
 			<point>
-				<x>3.0980000000000003</x>
+				<x>2.798</x>
 				<y>0.8</y>
 			</point>
 			<lineMarking>solid</lineMarking>
@@ -374,6 +381,29 @@
 	<lanelet id="-14">
 		<leftBoundary>
 			<point>
+				<x>2.798</x>
+				<y>0.4</y>
+			</point>
+			<point>
+				<x>2.798</x>
+				<y>0.8</y>
+			</point>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>3.0980000000000003</x>
+				<y>0.4</y>
+			</point>
+			<point>
+				<x>3.0980000000000003</x>
+				<y>0.8</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+	</lanelet>
+	<lanelet id="-15">
+		<leftBoundary>
+			<point>
 				<x>3.0980000000000003</x>
 				<y>0.4</y>
 			</point>
@@ -394,7 +424,7 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 	</lanelet>
-	<lanelet id="-15">
+	<lanelet id="-16">
 		<leftBoundary>
 			<point>
 				<x>1.298</x>
@@ -450,7 +480,7 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 	</lanelet>
-	<lanelet id="-16">
+	<lanelet id="-18">
 		<leftBoundary>
 			<point>
 				<x>3.898</x>
@@ -477,11 +507,11 @@
 			<lanelet ref="-6"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-18"/>
+			<lanelet ref="-20"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-17"/>
+		<adjacentLeft drivingDir="opposite" ref="-19"/>
 	</lanelet>
-	<lanelet id="-17">
+	<lanelet id="-19">
 		<leftBoundary>
 			<point>
 				<x>4.898</x>
@@ -504,14 +534,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-19"/>
+			<lanelet ref="-21"/>
 		</predecessor>
 		<successor>
 			<lanelet ref="-7"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-16"/>
+		<adjacentLeft drivingDir="opposite" ref="-18"/>
 	</lanelet>
-	<lanelet id="-18">
+	<lanelet id="-20">
 		<leftBoundary>
 			<point>
 				<x>4.898</x>
@@ -3039,14 +3069,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-16"/>
+			<lanelet ref="-18"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-20"/>
+			<lanelet ref="-22"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-19"/>
+		<adjacentLeft drivingDir="opposite" ref="-21"/>
 	</lanelet>
-	<lanelet id="-19">
+	<lanelet id="-21">
 		<leftBoundary>
 			<point>
 				<x>4.9020612649371</x>
@@ -5573,67 +5603,6 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-21"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-17"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-18"/>
-	</lanelet>
-	<lanelet id="-20">
-		<leftBoundary>
-			<point>
-				<x>4.898</x>
-				<y>5.1</y>
-			</point>
-			<point>
-				<x>4.398</x>
-				<y>5.1</y>
-			</point>
-			<lineMarking>dashed</lineMarking>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>4.898</x>
-				<y>5.5</y>
-			</point>
-			<point>
-				<x>4.398</x>
-				<y>5.5</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
-			<lanelet ref="-18"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-22"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-21"/>
-	</lanelet>
-	<lanelet id="-21">
-		<leftBoundary>
-			<point>
-				<x>4.398</x>
-				<y>5.1</y>
-			</point>
-			<point>
-				<x>4.898</x>
-				<y>5.1</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>4.398</x>
-				<y>4.699999999999999</y>
-			</point>
-			<point>
-				<x>4.898</x>
-				<y>4.699999999999999</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
 			<lanelet ref="-23"/>
 		</predecessor>
 		<successor>
@@ -5644,6 +5613,67 @@
 	<lanelet id="-22">
 		<leftBoundary>
 			<point>
+				<x>4.898</x>
+				<y>5.1</y>
+			</point>
+			<point>
+				<x>4.398</x>
+				<y>5.1</y>
+			</point>
+			<lineMarking>dashed</lineMarking>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>4.898</x>
+				<y>5.5</y>
+			</point>
+			<point>
+				<x>4.398</x>
+				<y>5.5</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-20"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-24"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-23"/>
+	</lanelet>
+	<lanelet id="-23">
+		<leftBoundary>
+			<point>
+				<x>4.398</x>
+				<y>5.1</y>
+			</point>
+			<point>
+				<x>4.898</x>
+				<y>5.1</y>
+			</point>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>4.398</x>
+				<y>4.699999999999999</y>
+			</point>
+			<point>
+				<x>4.898</x>
+				<y>4.699999999999999</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-25"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-21"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-22"/>
+	</lanelet>
+	<lanelet id="-24">
+		<leftBoundary>
+			<point>
 				<x>4.398</x>
 				<y>5.1</y>
 			</point>
@@ -5665,14 +5695,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-20"/>
+			<lanelet ref="-22"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-25"/>
+			<lanelet ref="-27"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-23"/>
+		<adjacentLeft drivingDir="opposite" ref="-25"/>
 	</lanelet>
-	<lanelet id="-23">
+	<lanelet id="-25">
 		<leftBoundary>
 			<point>
 				<x>2.8979999999999997</x>
@@ -5695,250 +5725,250 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-26"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-21"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-22"/>
-	</lanelet>
-	<lanelet id="-25">
-		<leftBoundary>
-			<point>
-				<x>2.8979999999999997</x>
-				<y>5.1</y>
-			</point>
-			<point>
-				<x>1.8979999999999997</x>
-				<y>5.1</y>
-			</point>
-			<lineMarking>dashed</lineMarking>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>2.8979999999999997</x>
-				<y>5.5</y>
-			</point>
-			<point>
-				<x>1.8979999999999997</x>
-				<y>5.5</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
-			<lanelet ref="-22"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-27"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-26"/>
-	</lanelet>
-	<lanelet id="-26">
-		<leftBoundary>
-			<point>
-				<x>1.8979999999999997</x>
-				<y>5.1</y>
-			</point>
-			<point>
-				<x>2.8979999999999997</x>
-				<y>5.1</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>1.8979999999999997</x>
-				<y>4.699999999999999</y>
-			</point>
-			<point>
-				<x>2.8979999999999997</x>
-				<y>4.699999999999999</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
 			<lanelet ref="-28"/>
 		</predecessor>
 		<successor>
 			<lanelet ref="-23"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-25"/>
+		<adjacentLeft drivingDir="opposite" ref="-24"/>
 	</lanelet>
 	<lanelet id="-27">
 		<leftBoundary>
 			<point>
-				<x>1.8979999999999997</x>
+				<x>2.8979999999999997</x>
 				<y>5.1</y>
 			</point>
 			<point>
-				<x>1.3979999999999997</x>
+				<x>1.8979999999999997</x>
 				<y>5.1</y>
 			</point>
 			<lineMarking>dashed</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>1.8979999999999997</x>
+				<x>2.8979999999999997</x>
 				<y>5.5</y>
 			</point>
 			<point>
-				<x>1.3979999999999997</x>
+				<x>1.8979999999999997</x>
 				<y>5.5</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-25"/>
+			<lanelet ref="-24"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-35"/>
+			<lanelet ref="-29"/>
 		</successor>
 		<adjacentLeft drivingDir="opposite" ref="-28"/>
-		<stopLine>dashed</stopLine>
 	</lanelet>
 	<lanelet id="-28">
 		<leftBoundary>
 			<point>
-				<x>1.3979999999999997</x>
+				<x>1.8979999999999997</x>
 				<y>5.1</y>
 			</point>
 			<point>
-				<x>1.8979999999999997</x>
+				<x>2.8979999999999997</x>
 				<y>5.1</y>
 			</point>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>1.3979999999999997</x>
+				<x>1.8979999999999997</x>
 				<y>4.699999999999999</y>
 			</point>
 			<point>
-				<x>1.8979999999999997</x>
+				<x>2.8979999999999997</x>
 				<y>4.699999999999999</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-36"/>
+			<lanelet ref="-30"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-26"/>
+			<lanelet ref="-25"/>
 		</successor>
 		<adjacentLeft drivingDir="opposite" ref="-27"/>
 	</lanelet>
 	<lanelet id="-29">
 		<leftBoundary>
 			<point>
-				<x>0.5979999999999996</x>
+				<x>1.8979999999999997</x>
 				<y>5.1</y>
 			</point>
 			<point>
-				<x>0.09799999999999964</x>
+				<x>1.3979999999999997</x>
 				<y>5.1</y>
 			</point>
+			<lineMarking>dashed</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>0.5979999999999996</x>
+				<x>1.8979999999999997</x>
 				<y>5.5</y>
 			</point>
 			<point>
-				<x>0.09799999999999964</x>
+				<x>1.3979999999999997</x>
 				<y>5.5</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-27"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-37"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-30"/>
+		<stopLine>dashed</stopLine>
 	</lanelet>
 	<lanelet id="-30">
 		<leftBoundary>
 			<point>
-				<x>0.09799999999999964</x>
+				<x>1.3979999999999997</x>
 				<y>5.1</y>
 			</point>
 			<point>
-				<x>0.5979999999999996</x>
+				<x>1.8979999999999997</x>
 				<y>5.1</y>
 			</point>
-			<lineMarking>dashed</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>0.09799999999999964</x>
+				<x>1.3979999999999997</x>
 				<y>4.699999999999999</y>
 			</point>
 			<point>
-				<x>0.5979999999999996</x>
+				<x>1.8979999999999997</x>
 				<y>4.699999999999999</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
-		<stopLine>dashed</stopLine>
+		<predecessor>
+			<lanelet ref="-38"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-28"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-29"/>
 	</lanelet>
 	<lanelet id="-31">
 		<leftBoundary>
 			<point>
-				<x>0.9979999999999997</x>
+				<x>0.5979999999999996</x>
+				<y>5.1</y>
+			</point>
+			<point>
+				<x>0.09799999999999964</x>
+				<y>5.1</y>
+			</point>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>0.5979999999999996</x>
 				<y>5.5</y>
 			</point>
 			<point>
-				<x>0.9979999999999997</x>
-				<y>6.0</y>
+				<x>0.09799999999999964</x>
+				<y>5.5</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+	</lanelet>
+	<lanelet id="-32">
+		<leftBoundary>
+			<point>
+				<x>0.09799999999999964</x>
+				<y>5.1</y>
+			</point>
+			<point>
+				<x>0.5979999999999996</x>
+				<y>5.1</y>
 			</point>
 			<lineMarking>dashed</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>1.3979999999999997</x>
-				<y>5.5</y>
-			</point>
-			<point>
-				<x>1.3979999999999997</x>
-				<y>6.0</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
-			<lanelet ref="-35"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-41"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-32"/>
-	</lanelet>
-	<lanelet id="-32">
-		<leftBoundary>
-			<point>
-				<x>0.9979999999999997</x>
-				<y>6.0</y>
-			</point>
-			<point>
-				<x>0.9979999999999997</x>
-				<y>5.5</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>0.5979999999999996</x>
-				<y>6.0</y>
+				<x>0.09799999999999964</x>
+				<y>4.699999999999999</y>
 			</point>
 			<point>
 				<x>0.5979999999999996</x>
-				<y>5.5</y>
+				<y>4.699999999999999</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
-		<predecessor>
-			<lanelet ref="-42"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-36"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-31"/>
 		<stopLine>dashed</stopLine>
 	</lanelet>
 	<lanelet id="-33">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999997</x>
+				<y>5.5</y>
+			</point>
+			<point>
+				<x>0.9979999999999997</x>
+				<y>6.0</y>
+			</point>
+			<lineMarking>dashed</lineMarking>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>1.3979999999999997</x>
+				<y>5.5</y>
+			</point>
+			<point>
+				<x>1.3979999999999997</x>
+				<y>6.0</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-37"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-43"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-34"/>
+	</lanelet>
+	<lanelet id="-34">
+		<leftBoundary>
+			<point>
+				<x>0.9979999999999997</x>
+				<y>6.0</y>
+			</point>
+			<point>
+				<x>0.9979999999999997</x>
+				<y>5.5</y>
+			</point>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>0.5979999999999996</x>
+				<y>6.0</y>
+			</point>
+			<point>
+				<x>0.5979999999999996</x>
+				<y>5.5</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-44"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-38"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-33"/>
+		<stopLine>dashed</stopLine>
+	</lanelet>
+	<lanelet id="-35">
+		<leftBoundary>
+			<point>
+				<x>0.9979999999999997</x>
 				<y>4.699999999999999</y>
 			</point>
 			<point>
@@ -5959,7 +5989,7 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 	</lanelet>
-	<lanelet id="-34">
+	<lanelet id="-36">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999997</x>
@@ -5983,7 +6013,7 @@
 		</rightBoundary>
 		<stopLine>dashed</stopLine>
 	</lanelet>
-	<lanelet id="-35">
+	<lanelet id="-37">
 		<leftBoundary>
 			<point>
 				<x>1.3979999999999997</x>
@@ -6070,14 +6100,14 @@
 			</point>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-27"/>
+			<lanelet ref="-29"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-31"/>
+			<lanelet ref="-33"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-36"/>
+		<adjacentLeft drivingDir="opposite" ref="-38"/>
 	</lanelet>
-	<lanelet id="-36">
+	<lanelet id="-38">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999997</x>
@@ -6164,14 +6194,14 @@
 			<lineMarking>dashed</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-32"/>
+			<lanelet ref="-34"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-28"/>
+			<lanelet ref="-30"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-35"/>
+		<adjacentLeft drivingDir="opposite" ref="-37"/>
 	</lanelet>
-	<lanelet id="-41">
+	<lanelet id="-43">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999997</x>
@@ -6195,14 +6225,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-31"/>
+			<lanelet ref="-33"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-43"/>
+			<lanelet ref="-45"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-42"/>
+		<adjacentLeft drivingDir="opposite" ref="-44"/>
 	</lanelet>
-	<lanelet id="-42">
+	<lanelet id="-44">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999998</x>
@@ -6225,14 +6255,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-44"/>
+			<lanelet ref="-46"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-32"/>
+			<lanelet ref="-34"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-41"/>
+		<adjacentLeft drivingDir="opposite" ref="-43"/>
 	</lanelet>
-	<lanelet id="-43">
+	<lanelet id="-45">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999998</x>
@@ -8760,14 +8790,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-41"/>
+			<lanelet ref="-43"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-45"/>
+			<lanelet ref="-47"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-44"/>
+		<adjacentLeft drivingDir="opposite" ref="-46"/>
 	</lanelet>
-	<lanelet id="-44">
+	<lanelet id="-46">
 		<leftBoundary>
 			<point>
 				<x>-1.0019987317275398</x>
@@ -11294,68 +11324,6 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-46"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-42"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-43"/>
-	</lanelet>
-	<lanelet id="-45">
-		<leftBoundary>
-			<point>
-				<x>-1.0020000000000002</x>
-				<y>7.0</y>
-			</point>
-			<point>
-				<x>-1.0020000000000002</x>
-				<y>6.8</y>
-			</point>
-			<lineMarking>dashed</lineMarking>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>-1.4020000000000001</x>
-				<y>7.0</y>
-			</point>
-			<point>
-				<x>-1.4020000000000001</x>
-				<y>6.8</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
-			<lanelet ref="-43"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-47"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-46"/>
-	</lanelet>
-	<lanelet id="-46">
-		<leftBoundary>
-			<point>
-				<x>-1.0020000000000002</x>
-				<y>6.8</y>
-			</point>
-			<point>
-				<x>-1.0020000000000002</x>
-				<y>7.0</y>
-			</point>
-			<lineMarking>dashed</lineMarking>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>-0.6020000000000002</x>
-				<y>6.8</y>
-			</point>
-			<point>
-				<x>-0.6020000000000002</x>
-				<y>7.0</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
 			<lanelet ref="-48"/>
 		</predecessor>
 		<successor>
@@ -11364,6 +11332,68 @@
 		<adjacentLeft drivingDir="opposite" ref="-45"/>
 	</lanelet>
 	<lanelet id="-47">
+		<leftBoundary>
+			<point>
+				<x>-1.0020000000000002</x>
+				<y>7.0</y>
+			</point>
+			<point>
+				<x>-1.0020000000000002</x>
+				<y>6.8</y>
+			</point>
+			<lineMarking>dashed</lineMarking>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>-1.4020000000000001</x>
+				<y>7.0</y>
+			</point>
+			<point>
+				<x>-1.4020000000000001</x>
+				<y>6.8</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-45"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-49"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-48"/>
+	</lanelet>
+	<lanelet id="-48">
+		<leftBoundary>
+			<point>
+				<x>-1.0020000000000002</x>
+				<y>6.8</y>
+			</point>
+			<point>
+				<x>-1.0020000000000002</x>
+				<y>7.0</y>
+			</point>
+			<lineMarking>dashed</lineMarking>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>-0.6020000000000002</x>
+				<y>6.8</y>
+			</point>
+			<point>
+				<x>-0.6020000000000002</x>
+				<y>7.0</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-50"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-46"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-47"/>
+	</lanelet>
+	<lanelet id="-49">
 		<leftBoundary>
 			<point>
 				<x>-1.0020000000000002</x>
@@ -12179,12 +12209,12 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-45"/>
+			<lanelet ref="-47"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-49"/>
+			<lanelet ref="-51"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-48"/>
+		<adjacentLeft drivingDir="opposite" ref="-50"/>
 		<stopLine>dashed</stopLine>
 		<stopLineAttributes>
 			<lineWidth>0.02</lineWidth>
@@ -12192,7 +12222,7 @@
 			<segmentGap>0.04</segmentGap>
 		</stopLineAttributes>
 	</lanelet>
-	<lanelet id="-48">
+	<lanelet id="-50">
 		<leftBoundary>
 			<point>
 				<x>-0.8520447000000002</x>
@@ -13008,14 +13038,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-50"/>
+			<lanelet ref="-52"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-46"/>
+			<lanelet ref="-48"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-47"/>
+		<adjacentLeft drivingDir="opposite" ref="-49"/>
 	</lanelet>
-	<lanelet id="-49">
+	<lanelet id="-51">
 		<leftBoundary>
 			<point>
 				<x>-1.1520000000000001</x>
@@ -13039,12 +13069,12 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-47"/>
+			<lanelet ref="-49"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-51"/>
+			<lanelet ref="-53"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-50"/>
+		<adjacentLeft drivingDir="opposite" ref="-52"/>
 		<stopLine>dashed</stopLine>
 		<stopLineAttributes>
 			<lineWidth>0.02</lineWidth>
@@ -13052,7 +13082,7 @@
 			<segmentGap>0.04</segmentGap>
 		</stopLineAttributes>
 	</lanelet>
-	<lanelet id="-50">
+	<lanelet id="-52">
 		<leftBoundary>
 			<point>
 				<x>-0.8520000000000001</x>
@@ -13076,12 +13106,12 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-52"/>
+			<lanelet ref="-54"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-48"/>
+			<lanelet ref="-50"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-49"/>
+		<adjacentLeft drivingDir="opposite" ref="-51"/>
 		<stopLine>dashed</stopLine>
 		<stopLineAttributes>
 			<lineWidth>0.02</lineWidth>
@@ -13089,7 +13119,7 @@
 			<segmentGap>0.04</segmentGap>
 		</stopLineAttributes>
 	</lanelet>
-	<lanelet id="-51">
+	<lanelet id="-53">
 		<leftBoundary>
 			<point>
 				<x>-1.1520000000000001</x>
@@ -13905,14 +13935,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-49"/>
+			<lanelet ref="-51"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-53"/>
+			<lanelet ref="-55"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-52"/>
+		<adjacentLeft drivingDir="opposite" ref="-54"/>
 	</lanelet>
-	<lanelet id="-52">
+	<lanelet id="-54">
 		<leftBoundary>
 			<point>
 				<x>-1.0019553</x>
@@ -14728,12 +14758,12 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-54"/>
+			<lanelet ref="-56"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-50"/>
+			<lanelet ref="-52"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-51"/>
+		<adjacentLeft drivingDir="opposite" ref="-53"/>
 		<stopLine>dashed</stopLine>
 		<stopLineAttributes>
 			<lineWidth>0.02</lineWidth>
@@ -14741,7 +14771,7 @@
 			<segmentGap>0.04</segmentGap>
 		</stopLineAttributes>
 	</lanelet>
-	<lanelet id="-53">
+	<lanelet id="-55">
 		<leftBoundary>
 			<point>
 				<x>-1.002</x>
@@ -14765,14 +14795,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-51"/>
+			<lanelet ref="-53"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-59"/>
+			<lanelet ref="-61"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-54"/>
+		<adjacentLeft drivingDir="opposite" ref="-56"/>
 	</lanelet>
-	<lanelet id="-54">
+	<lanelet id="-56">
 		<leftBoundary>
 			<point>
 				<x>-1.002</x>
@@ -14796,14 +14826,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-60"/>
+			<lanelet ref="-62"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-52"/>
+			<lanelet ref="-54"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-53"/>
+		<adjacentLeft drivingDir="opposite" ref="-55"/>
 	</lanelet>
-	<lanelet id="-59">
+	<lanelet id="-61">
 		<leftBoundary>
 			<point>
 				<x>-1.002</x>
@@ -14827,14 +14857,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-53"/>
+			<lanelet ref="-55"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-61"/>
+			<lanelet ref="-63"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-60"/>
+		<adjacentLeft drivingDir="opposite" ref="-62"/>
 	</lanelet>
-	<lanelet id="-60">
+	<lanelet id="-62">
 		<leftBoundary>
 			<point>
 				<x>-1.0019999999999998</x>
@@ -14857,14 +14887,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-62"/>
+			<lanelet ref="-64"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-54"/>
+			<lanelet ref="-56"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-59"/>
+		<adjacentLeft drivingDir="opposite" ref="-61"/>
 	</lanelet>
-	<lanelet id="-61">
+	<lanelet id="-63">
 		<leftBoundary>
 			<point>
 				<x>-1.0019999999999998</x>
@@ -16136,12 +16166,12 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-59"/>
+			<lanelet ref="-61"/>
 		</predecessor>
 		<successor/>
-		<adjacentLeft drivingDir="opposite" ref="-62"/>
+		<adjacentLeft drivingDir="opposite" ref="-64"/>
 	</lanelet>
-	<lanelet id="-62">
+	<lanelet id="-64">
 		<leftBoundary>
 			<point>
 				<x>-0.0027963267107317114</x>
@@ -17413,11 +17443,11 @@
 		</rightBoundary>
 		<predecessor/>
 		<successor>
-			<lanelet ref="-60"/>
+			<lanelet ref="-62"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-61"/>
+		<adjacentLeft drivingDir="opposite" ref="-63"/>
 	</lanelet>
-	<trafficSign id="-37">
+	<trafficSign id="-39">
 		<type>stvo-209-20</type>
 		<orientation>6.283185307179586</orientation>
 		<centerPoint>
@@ -17425,7 +17455,7 @@
 			<y>5.6</y>
 		</centerPoint>
 	</trafficSign>
-	<trafficSign id="-40">
+	<trafficSign id="-42">
 		<type>stvo-209-10</type>
 		<orientation>1.5707963267948966</orientation>
 		<centerPoint>
@@ -17433,7 +17463,7 @@
 			<y>5.75</y>
 		</centerPoint>
 	</trafficSign>
-	<trafficSign id="-55">
+	<trafficSign id="-57">
 		<type>stvo-222</type>
 		<orientation>-3.141592653589793</orientation>
 		<centerPoint>
@@ -17441,7 +17471,7 @@
 			<y>6.55</y>
 		</centerPoint>
 	</trafficSign>
-	<trafficSign id="-56">
+	<trafficSign id="-58">
 		<type>stvo-222</type>
 		<orientation>0.0</orientation>
 		<centerPoint>
@@ -17597,7 +17627,7 @@
 			<y>5.5</y>
 		</point>
 	</islandJunction>
-	<roadMarking id="-38">
+	<roadMarking id="-40">
 		<type>turn_left</type>
 		<orientation>4.71238898038469</orientation>
 		<centerPoint>
@@ -17605,7 +17635,7 @@
 			<y>5.335999999999999</y>
 		</centerPoint>
 	</roadMarking>
-	<roadMarking id="-39">
+	<roadMarking id="-41">
 		<type>turn_right</type>
 		<orientation>6.283185307179586</orientation>
 		<centerPoint>
