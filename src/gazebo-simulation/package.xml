@@ -15,6 +15,7 @@
   <depend>gazebo-plugins</depend>
   <depend>roscpp</depend>
   <depend>eigen</depend>
+  <depend>opencv</depend>
   <depend>common</depend>
   <depend>state_estimation_msgs</depend>
   <depend>control_debug</depend>
@@ -22,10 +23,4 @@
   <depend>perception</depend>
   <depend>rqt_mission_mode</depend>
   <!-- The export tag contains other, unspecified, tags -->
-  <export>
-    <gazebo_ros plugin_path="${prefix}/lib" />
-    <gazebo_ros gazebo_media_path="${prefix}/data:${prefix}/media" />
-    <gazebo_ros gazebo_model_path="${prefix}/data/models/vehicles:${prefix}/data/models/sensors:${prefix}/data/models/misc:${prefix}/data/models/objects" />
-    <gazebo_ros gazebo_resource_path="${prefix}/data" />
-  </export>
 </package>

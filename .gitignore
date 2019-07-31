@@ -58,3 +58,6 @@ msg-tags
 
 # Code::Blocks
 *.cbp
+
+# Ignore Datasets folder
+datasets

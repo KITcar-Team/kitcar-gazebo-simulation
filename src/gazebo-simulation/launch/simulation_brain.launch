@@ -4,6 +4,7 @@
   
   <include file="$(find gazebo_simulation)/launch/pre_cropping_node.launch"/>
 
+  <include file="$(find gazebo_simulation)/launch/segmentation_node.launch"/>
   <!-- Tof sensor on right side in the back -->
   <include file="$(find gazebo_simulation)/launch/tof_sensor_emulation_node.launch">
     <arg name="frame_id" value="ir_back" />

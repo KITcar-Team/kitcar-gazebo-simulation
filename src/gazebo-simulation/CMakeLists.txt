@@ -115,7 +115,7 @@ include_directories(SYSTEM {OpenCV_INCLUDE_DIRS})
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES gazebo_simulation
+#  LIBRARIES pre_cropping
 #  CATKIN_DEPENDS gazebo_ros_pkgs
   DEPENDS roscpp gazebo_ros
 )
@@ -159,6 +159,7 @@ add_subdirectory(src/model_plugins/vehicle_simulation_link)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 INCLUDE(src/pre_cropping/CMakeLists.txt)
+INCLUDE(src/segmentation/CMakeLists.txt)
 INCLUDE(src/tof_sensor_emulation/CMakeLists.txt)
 
 
