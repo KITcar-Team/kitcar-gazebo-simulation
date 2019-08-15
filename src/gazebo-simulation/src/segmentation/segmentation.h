@@ -41,6 +41,7 @@ class Segmentation {
 
   void storeImages(cv::Mat default_image, cv::Mat segmentation_image);
 
+  std::string genRandom(uint max_length = 15, std::string char_index = "abcdefghijklmnaoqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
 
  private:
   /*!

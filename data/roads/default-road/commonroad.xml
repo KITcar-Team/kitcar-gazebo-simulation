@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <commonRoad commonRoadVersion="1.0">
-	<obstacle id="-10">
+	<obstacle id="-13">
 		<role>static</role>
 		<type>parkedVehicle</type>
 		<shape>
@@ -9,13 +9,13 @@
 				<width>0.27999999999999997</width>
 				<orientation>0.0</orientation>
 				<centerPoint>
-					<x>2.048</x>
+					<x>2.9480000000000004</x>
 					<y>0.6000000000000001</y>
 				</centerPoint>
 			</rectangle>
 		</shape>
 	</obstacle>
-	<obstacle id="-12">
+	<obstacle id="-15">
 		<role>static</role>
 		<type>parkedVehicle</type>
 		<shape>
@@ -24,23 +24,23 @@
 				<width>0.27999999999999997</width>
 				<orientation>0.0</orientation>
 				<centerPoint>
-					<x>2.3480000000000003</x>
+					<x>3.248</x>
 					<y>0.6000000000000001</y>
 				</centerPoint>
 			</rectangle>
 		</shape>
 	</obstacle>
-	<obstacle id="-14">
+	<obstacle id="-17">
 		<role>static</role>
 		<type>parkedVehicle</type>
 		<shape>
 			<rectangle>
-				<length>0.24000000000000005</length>
+				<length>0.3149577299517752</length>
 				<width>0.27999999999999997</width>
 				<orientation>0.0</orientation>
 				<centerPoint>
-					<x>2.648</x>
-					<y>0.6000000000000001</y>
+					<x>1.9554788649758876</x>
+					<y>-0.6000000000000001</y>
 				</centerPoint>
 			</rectangle>
 		</shape>
@@ -50,11 +50,11 @@
 		<type>parkedVehicle</type>
 		<shape>
 			<rectangle>
-				<length>0.21818597836218534</length>
+				<length>0.3287737375695795</length>
 				<width>0.27999999999999997</width>
 				<orientation>0.0</orientation>
 				<centerPoint>
-					<x>2.258003312491008</x>
+					<x>2.377344598736565</x>
 					<y>-0.6000000000000001</y>
 				</centerPoint>
 			</rectangle>
@@ -65,11 +65,11 @@
 		<type>parkedVehicle</type>
 		<shape>
 			<rectangle>
-				<length>0.38337652509301273</length>
+				<length>0.20689792460750128</length>
 				<width>0.27999999999999997</width>
 				<orientation>0.0</orientation>
 				<centerPoint>
-					<x>2.658784564218607</x>
+					<x>2.7451804298251057</x>
 					<y>-0.6000000000000001</y>
 				</centerPoint>
 			</rectangle>
@@ -309,14 +309,10 @@
 				<x>3.798</x>
 				<y>0.4</y>
 			</point>
-			<lineMarking>solid</lineMarking>
+			<lineMarking>parking</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>1.498</x>
-				<y>0.4</y>
-			</point>
-			<point>
 				<x>1.8980000000000001</x>
 				<y>0.4</y>
 			</point>
@@ -332,11 +328,7 @@
 				<x>3.398</x>
 				<y>0.4</y>
 			</point>
-			<point>
-				<x>3.798</x>
-				<y>0.4</y>
-			</point>
-			<lineMarking>solid</lineMarking>
+			<lineMarking>parking</lineMarking>
 		</rightBoundary>
 	</lanelet>
 	<lanelet id="-9">
@@ -359,35 +351,35 @@
 				<x>2.198</x>
 				<y>0.8</y>
 			</point>
-			<lineMarking>solid</lineMarking>
+			<lineMarking>parking</lineMarking>
+		</rightBoundary>
+	</lanelet>
+	<lanelet id="-10">
+		<leftBoundary>
+			<point>
+				<x>2.198</x>
+				<y>0.4</y>
+			</point>
+			<point>
+				<x>2.198</x>
+				<y>0.8</y>
+			</point>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>2.498</x>
+				<y>0.4</y>
+			</point>
+			<point>
+				<x>2.498</x>
+				<y>0.8</y>
+			</point>
+			<lineMarking>parking</lineMarking>
 		</rightBoundary>
 	</lanelet>
 	<lanelet id="-11">
 		<leftBoundary>
 			<point>
-				<x>2.198</x>
-				<y>0.4</y>
-			</point>
-			<point>
-				<x>2.198</x>
-				<y>0.8</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>2.498</x>
-				<y>0.4</y>
-			</point>
-			<point>
-				<x>2.498</x>
-				<y>0.8</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-	</lanelet>
-	<lanelet id="-13">
-		<leftBoundary>
-			<point>
 				<x>2.498</x>
 				<y>0.4</y>
 			</point>
@@ -405,10 +397,10 @@
 				<x>2.798</x>
 				<y>0.8</y>
 			</point>
-			<lineMarking>solid</lineMarking>
+			<lineMarking>parking</lineMarking>
 		</rightBoundary>
 	</lanelet>
-	<lanelet id="-15">
+	<lanelet id="-12">
 		<leftBoundary>
 			<point>
 				<x>2.798</x>
@@ -428,44 +420,40 @@
 				<x>3.0980000000000003</x>
 				<y>0.8</y>
 			</point>
-			<lineMarking>solid</lineMarking>
+			<lineMarking>parking</lineMarking>
+		</rightBoundary>
+	</lanelet>
+	<lanelet id="-14">
+		<leftBoundary>
+			<point>
+				<x>3.0980000000000003</x>
+				<y>0.4</y>
+			</point>
+			<point>
+				<x>3.0980000000000003</x>
+				<y>0.8</y>
+			</point>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>3.398</x>
+				<y>0.4</y>
+			</point>
+			<point>
+				<x>3.398</x>
+				<y>0.8</y>
+			</point>
+			<lineMarking>parking</lineMarking>
 		</rightBoundary>
 	</lanelet>
 	<lanelet id="-16">
 		<leftBoundary>
 			<point>
-				<x>3.0980000000000003</x>
-				<y>0.4</y>
-			</point>
-			<point>
-				<x>3.0980000000000003</x>
-				<y>0.8</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>3.398</x>
-				<y>0.4</y>
-			</point>
-			<point>
-				<x>3.398</x>
-				<y>0.8</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-	</lanelet>
-	<lanelet id="-17">
-		<leftBoundary>
-			<point>
 				<x>1.298</x>
 				<y>-0.4</y>
 			</point>
 			<point>
 				<x>3.298</x>
-				<y>-0.4</y>
-			</point>
-			<point>
-				<x>1.298</x>
 				<y>-0.4</y>
 			</point>
 			<point>
@@ -484,11 +472,7 @@
 				<x>2.898</x>
 				<y>-0.4</y>
 			</point>
-			<point>
-				<x>3.298</x>
-				<y>-0.4</y>
-			</point>
-			<lineMarking>solid</lineMarking>
+			<lineMarking>parking</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
@@ -507,7 +491,7 @@
 				<x>3.298</x>
 				<y>-0.4</y>
 			</point>
-			<lineMarking>solid</lineMarking>
+			<lineMarking>parking</lineMarking>
 		</rightBoundary>
 	</lanelet>
 	<lanelet id="-20">
