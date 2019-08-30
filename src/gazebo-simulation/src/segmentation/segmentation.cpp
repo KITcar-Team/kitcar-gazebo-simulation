@@ -22,15 +22,16 @@ void Segmentation::modifyImage(const cv::Mat& image_uncropped, cv::Mat& image_cr
 
 void Segmentation::storeImages(cv::Mat default_image, cv::Mat segmentation_image){
 
-  std::string path = "/home/ditschuk/kitcar/kitcar-gazebo-simulation/datasets/segmentation/";
+  std::string path(std::getenv("KITCAR_SIM`_DATA_PATH"));
+  path = path.append("/segmented/");
 
   int time = int(ros::Time::now().toSec() * 10);
 
   std::string file = std::to_string(time);
 
-  cv::imwrite(path + "data/" + file + ".png",default_image);
+  cv::imwrite(path + "input/" + file + ".png",default_image);
 
-  cv::imwrite(path + "labels/" +  file + ".png",segmentation_image);
+  cv::imwrite(path + "mask/" +  file + ".png",segmentation_image);
 }
 
 
