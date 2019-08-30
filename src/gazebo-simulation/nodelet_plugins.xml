@@ -12,10 +12,4 @@
   </description>
   </class>
 </library>
-<library path="lib/libsegmentation_nodelet">
-  <class name="gazebo_simulation/segmentation" type="NodeletBase<SegmentationNode>" base_class_type="nodelet::Nodelet">
-  <description>
-    Used to retrieve segmentation dataset
-  </description>
-  </class>
-</library>
+
