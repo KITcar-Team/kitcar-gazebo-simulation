@@ -1,10 +1,12 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
+  <!-- See also: KITcar_brain/src/car_specs/param/dr_drift/static_coordinate_systems.yaml -->
+  <!-- See also: wiki.kitcar-team.de/doku.php?id=konzept_und_umsetzung:car_specs:koordinatensysteme -->
   <model name='dr_drift'>
     <link name='chassis'>
-      <pose frame=''>0 0 0.06 0 0 0</pose>
+      <pose frame=''>0 0 0 0 0 0</pose>
       <visual name='visual'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
+        <pose frame=''>0.09 0 0.06 0 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://dr_drift/meshes/dr_drift.stl</uri>
@@ -13,6 +15,7 @@
         </geometry>
       </visual>
       <collision name='collision'>
+        <pose frame=''>0.11 0 0.06 0 0 0</pose>
         <geometry>
           <box>
             <size>0.368 0.218 0.12</size>
@@ -77,7 +80,7 @@
         <update_rate>60</update_rate>
         <visualize>1</visualize>
       </sensor>
-      <pose frame=''>-0.071762 0 0.26 0 0.161 0</pose>
+      <pose frame=''>0.03 0 0.26 0 0.161 0</pose>
     </link>
     <joint name='camera_joint' type='fixed'>
       <child>camera_ros::link</child>
@@ -141,7 +144,7 @@
           <hackBaseline>0</hackBaseline>
         </plugin>
       </sensor>
-      <pose frame=''>-0.116762 -0.112 0.08 0 0 -1.570796 </pose>
+      <pose frame=''>0 -0.112 0.08 0 0 -1.570796 </pose>
     </link>
     <joint name='depth_camera_joint_back' type='fixed'>
       <child>depth_camera_ros::link_back</child>
@@ -205,7 +208,7 @@
           <hackBaseline>0</hackBaseline>
         </plugin>
       </sensor>
-      <pose frame=''>-0.011762 -0.10 0.08 0 0 -1.570796 </pose>
+      <pose frame=''>0.105 -0.1 0.08 0 0 -1.570796 </pose>
     </link>
     <joint name='depth_camera_joint_middle' type='fixed'>
       <child>depth_camera_ros::link_middle</child>
@@ -269,7 +272,7 @@
           <hackBaseline>0</hackBaseline>
         </plugin>
       </sensor>
-      <pose frame=''>0.052762 -0.11 0.08 0 0 -1.570796 </pose>
+      <pose frame=''>0.168 -0.1 0.08 0 0 -1.570796 </pose>
     </link>
     <joint name='depth_camera_joint_front' type='fixed'>
       <child>depth_camera_ros::link_front</child>
@@ -333,14 +336,13 @@
           <hackBaseline>0</hackBaseline>
         </plugin>
       </sensor>
-      <pose frame=''>0.16962 0 0.08 0 0 0 </pose>
+      <pose frame=''>0.26962 0 0.08 0 0 0 </pose>
     </link>
     <joint name='depth_camera_joint_ahead' type='fixed'>
       <child>depth_camera_ros::link_ahead</child>
       <parent>chassis</parent>
     </joint>
     <plugin name='vehicle_simulation_link' filename='libvehicle_simulation_link.so' />
-    <pose frame=''>-0.116762 0.006958 0 0 -0 0</pose>
     <static>0</static>
     <allow_auto_disable>1</allow_auto_disable>
   </model>
