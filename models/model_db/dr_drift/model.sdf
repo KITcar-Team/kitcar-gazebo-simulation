@@ -2,25 +2,24 @@
 <sdf version='1.6'>
   <model name='dr_drift'>
     <link name='chassis'>
-        <pose frame=''>0 0 0.06 0 0 0</pose>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-							<uri>model://dr_drift/meshes/dr_drift.stl</uri>
-              <scale>1 1 1</scale>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.368 0.218 0.12</size>
-            </box>
-          </geometry>
-        </collision>
-
-      </link>
+      <pose frame=''>0 0 0.06 0 0 0</pose>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>file://media/dr_drift.stl</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <geometry>
+          <box>
+            <size>0.368 0.218 0.12</size>
+          </box>
+        </geometry>
+      </collision>
+    </link>
     <link name='camera_ros::link'>
       <inertial>
         <mass>0.1</mass>
@@ -84,7 +83,6 @@
       <child>camera_ros::link</child>
       <parent>chassis</parent>
     </joint>
-
     <link name='depth_camera_ros::link_back'>
       <inertial>
         <mass>0.1</mass>
@@ -117,43 +115,38 @@
             <far>2</far>
           </clip>
         </camera>
-
-      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
-        <baseline>0.2</baseline>
-        <alwaysOn>true</alwaysOn>
-        <!-- Keep this zero, update_rate in the parent <sensor> tag
-          will control the frame rate. -->
-        <updateRate>0.0</updateRate>
-        <cameraName>camera_ir</cameraName>
-        <imageTopicName>/camera/depth_raw/back</imageTopicName>
-        <cameraInfoTopicName>/camera/depth_raw/back_info</cameraInfoTopicName>
-        <depthImageTopicName>/camera/depth_raw/back</depthImageTopicName>
-        <depthImageInfoTopicName>/camera/depth_raw/back_info</depthImageInfoTopicName>
-        <pointCloudTopicName>/camera/depth_raw/back_points</pointCloudTopicName>
-        <frameName>ir_back</frameName>
-        <pointCloudCutoff>0.005</pointCloudCutoff>
-        <distortionK1>0</distortionK1>
-        <distortionK2>0</distortionK2>
-        <distortionK3>0</distortionK3>
-        <distortionT1>0</distortionT1>
-        <distortionT2>0</distortionT2>
-        <CxPrime>0</CxPrime>
-        <Cx>0</Cx>
-        <Cy>0</Cy>
-        <focalLength>0</focalLength>
-        <hackBaseline>0</hackBaseline>
-      </plugin>
-
+        <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+          <!-- Keep this zero, update_rate in the parent <sensor> tag
+               will control the frame rate. -->
+          <updateRate>0.0</updateRate>
+          <cameraName>camera_ir</cameraName>
+          <imageTopicName>/camera/depth_raw/back</imageTopicName>
+          <cameraInfoTopicName>/camera/depth_raw/back_info</cameraInfoTopicName>
+          <depthImageTopicName>/camera/depth_raw/back</depthImageTopicName>
+          <depthImageInfoTopicName>/camera/depth_raw/back_info</depthImageInfoTopicName>
+          <pointCloudTopicName>/camera/depth_raw/back_points</pointCloudTopicName>
+          <frameName>ir_back</frameName>
+          <pointCloudCutoff>0.005</pointCloudCutoff>
+          <distortionK1>0</distortionK1>
+          <distortionK2>0</distortionK2>
+          <distortionK3>0</distortionK3>
+          <distortionT1>0</distortionT1>
+          <distortionT2>0</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
+        </plugin>
       </sensor>
       <pose frame=''>-0.116762 -0.112 0.08 0 0 -1.570796 </pose>
     </link>
-
     <joint name='depth_camera_joint_back' type='fixed'>
       <child>depth_camera_ros::link_back</child>
-
       <parent>chassis</parent>
     </joint>
-
     <link name='depth_camera_ros::link_middle'>
       <inertial>
         <mass>0.1</mass>
@@ -186,44 +179,38 @@
             <far>2</far>
           </clip>
         </camera>
-
-      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
-        <baseline>0.2</baseline>
-        <alwaysOn>true</alwaysOn>
-        <!-- Keep this zero, update_rate in the parent <sensor> tag
-          will control the frame rate. -->
-        <updateRate>0.0</updateRate>
-        <cameraName>camera_ir</cameraName>
-        <imageTopicName>/camera/depth_raw/middle</imageTopicName>
-        <cameraInfoTopicName>/camera/depth_raw/middle_info</cameraInfoTopicName>
-        <depthImageTopicName>/camera/depth_raw/middle</depthImageTopicName>
-        <depthImageInfoTopicName>/camera/depth_raw/middle_info</depthImageInfoTopicName>
-        <pointCloudTopicName>/camera/depth_raw/middle_points</pointCloudTopicName>
-        <frameName>ir_middle</frameName>
-        <pointCloudCutoff>0.005</pointCloudCutoff>
-        <distortionK1>0</distortionK1>
-        <distortionK2>0</distortionK2>
-        <distortionK3>0</distortionK3>
-        <distortionT1>0</distortionT1>
-        <distortionT2>0</distortionT2>
-        <CxPrime>0</CxPrime>
-        <Cx>0</Cx>
-        <Cy>0</Cy>
-        <focalLength>0</focalLength>
-        <hackBaseline>0</hackBaseline>
-      </plugin>
-
+        <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+          <!-- Keep this zero, update_rate in the parent <sensor> tag
+               will control the frame rate. -->
+          <updateRate>0.0</updateRate>
+          <cameraName>camera_ir</cameraName>
+          <imageTopicName>/camera/depth_raw/middle</imageTopicName>
+          <cameraInfoTopicName>/camera/depth_raw/middle_info</cameraInfoTopicName>
+          <depthImageTopicName>/camera/depth_raw/middle</depthImageTopicName>
+          <depthImageInfoTopicName>/camera/depth_raw/middle_info</depthImageInfoTopicName>
+          <pointCloudTopicName>/camera/depth_raw/middle_points</pointCloudTopicName>
+          <frameName>ir_middle</frameName>
+          <pointCloudCutoff>0.005</pointCloudCutoff>
+          <distortionK1>0</distortionK1>
+          <distortionK2>0</distortionK2>
+          <distortionK3>0</distortionK3>
+          <distortionT1>0</distortionT1>
+          <distortionT2>0</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
+        </plugin>
       </sensor>
       <pose frame=''>-0.011762 -0.10 0.08 0 0 -1.570796 </pose>
     </link>
-
     <joint name='depth_camera_joint_middle' type='fixed'>
       <child>depth_camera_ros::link_middle</child>
-
       <parent>chassis</parent>
     </joint>
-
-
     <link name='depth_camera_ros::link_front'>
       <inertial>
         <mass>0.1</mass>
@@ -256,43 +243,38 @@
             <far>2</far>
           </clip>
         </camera>
-
-      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
-        <baseline>0.2</baseline>
-        <alwaysOn>true</alwaysOn>
-        <!-- Keep this zero, update_rate in the parent <sensor> tag
-          will control the frame rate. -->
-        <updateRate>0.0</updateRate>
-        <cameraName>camera_ir</cameraName>
-        <imageTopicName>/camera/depth_raw/front</imageTopicName>
-        <cameraInfoTopicName>/camera/depth_raw/front_info</cameraInfoTopicName>
-        <depthImageTopicName>/camera/depth_raw/front</depthImageTopicName>
-        <depthImageInfoTopicName>/camera/depth_raw/front_info</depthImageInfoTopicName>
-        <pointCloudTopicName>/camera/depth_raw/front_points</pointCloudTopicName>
-        <frameName>ir_front</frameName>
-        <pointCloudCutoff>0.005</pointCloudCutoff>
-        <distortionK1>0</distortionK1>
-        <distortionK2>0</distortionK2>
-        <distortionK3>0</distortionK3>
-        <distortionT1>0</distortionT1>
-        <distortionT2>0</distortionT2>
-        <CxPrime>0</CxPrime>
-        <Cx>0</Cx>
-        <Cy>0</Cy>
-        <focalLength>0</focalLength>
-        <hackBaseline>0</hackBaseline>
-      </plugin>
-
+        <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+          <!-- Keep this zero, update_rate in the parent <sensor> tag
+               will control the frame rate. -->
+          <updateRate>0.0</updateRate>
+          <cameraName>camera_ir</cameraName>
+          <imageTopicName>/camera/depth_raw/front</imageTopicName>
+          <cameraInfoTopicName>/camera/depth_raw/front_info</cameraInfoTopicName>
+          <depthImageTopicName>/camera/depth_raw/front</depthImageTopicName>
+          <depthImageInfoTopicName>/camera/depth_raw/front_info</depthImageInfoTopicName>
+          <pointCloudTopicName>/camera/depth_raw/front_points</pointCloudTopicName>
+          <frameName>ir_front</frameName>
+          <pointCloudCutoff>0.005</pointCloudCutoff>
+          <distortionK1>0</distortionK1>
+          <distortionK2>0</distortionK2>
+          <distortionK3>0</distortionK3>
+          <distortionT1>0</distortionT1>
+          <distortionT2>0</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
+        </plugin>
       </sensor>
       <pose frame=''>0.052762 -0.11 0.08 0 0 -1.570796 </pose>
     </link>
-
     <joint name='depth_camera_joint_front' type='fixed'>
       <child>depth_camera_ros::link_front</child>
-
       <parent>chassis</parent>
     </joint>
-
     <link name='depth_camera_ros::link_ahead'>
       <inertial>
         <mass>0.1</mass>
@@ -325,45 +307,40 @@
             <far>2</far>
           </clip>
         </camera>
-
-      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
-        <baseline>0.2</baseline>
-        <alwaysOn>true</alwaysOn>
-        <!-- Keep this zero, update_rate in the parent <sensor> tag
-          will control the frame rate. -->
-        <updateRate>0.0</updateRate>
-        <cameraName>camera_ir</cameraName>
-        <imageTopicName>/camera/depth_raw/ahead</imageTopicName>
-        <cameraInfoTopicName>/camera/depth_raw/ahead_info</cameraInfoTopicName>
-        <depthImageTopicName>/camera/depth_raw/ahead</depthImageTopicName>
-        <depthImageInfoTopicName>/camera/depth_raw/ahead_info</depthImageInfoTopicName>
-        <pointCloudTopicName>/camera/depth_raw/ahead_points</pointCloudTopicName>
-        <frameName>ir_ahead</frameName>
-        <pointCloudCutoff>0.005</pointCloudCutoff>
-        <distortionK1>0</distortionK1>
-        <distortionK2>0</distortionK2>
-        <distortionK3>0</distortionK3>
-        <distortionT1>0</distortionT1>
-        <distortionT2>0</distortionT2>
-        <CxPrime>0</CxPrime>
-        <Cx>0</Cx>
-        <Cy>0</Cy>
-        <focalLength>0</focalLength>
-        <hackBaseline>0</hackBaseline>
-      </plugin>
-
+        <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+          <!-- Keep this zero, update_rate in the parent <sensor> tag
+               will control the frame rate. -->
+          <updateRate>0.0</updateRate>
+          <cameraName>camera_ir</cameraName>
+          <imageTopicName>/camera/depth_raw/ahead</imageTopicName>
+          <cameraInfoTopicName>/camera/depth_raw/ahead_info</cameraInfoTopicName>
+          <depthImageTopicName>/camera/depth_raw/ahead</depthImageTopicName>
+          <depthImageInfoTopicName>/camera/depth_raw/ahead_info</depthImageInfoTopicName>
+          <pointCloudTopicName>/camera/depth_raw/ahead_points</pointCloudTopicName>
+          <frameName>ir_ahead</frameName>
+          <pointCloudCutoff>0.005</pointCloudCutoff>
+          <distortionK1>0</distortionK1>
+          <distortionK2>0</distortionK2>
+          <distortionK3>0</distortionK3>
+          <distortionT1>0</distortionT1>
+          <distortionT2>0</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
+        </plugin>
       </sensor>
       <pose frame=''>0.16962 0 0.08 0 0 0 </pose>
     </link>
-
     <joint name='depth_camera_joint_ahead' type='fixed'>
       <child>depth_camera_ros::link_ahead</child>
-
       <parent>chassis</parent>
     </joint>
-
-    <plugin name='vehicle_simulation_link' filename='libvehicle_simulation_link.so'/>
-        <pose frame=''>-0.116762 0.006958 0 0 -0 0</pose>
+    <plugin name='vehicle_simulation_link' filename='libvehicle_simulation_link.so' />
+    <pose frame=''>-0.116762 0.006958 0 0 -0 0</pose>
     <static>0</static>
     <allow_auto_disable>1</allow_auto_disable>
   </model>
