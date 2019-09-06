@@ -7,7 +7,7 @@
         <pose frame=''>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/dr_drift.stl</uri>
+            <uri>model://dr_drift/meshes/dr_drift.stl</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
