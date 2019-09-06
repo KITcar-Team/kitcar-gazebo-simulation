@@ -90,13 +90,6 @@
       <inertial>
         <mass>0.1</mass>
       </inertial>
-      <collision name="collision">
-        <geometry>
-          <box>
-            <size>0.01 0.01 0.01</size>
-          </box>
-        </geometry>
-      </collision>
       <visual name="visual">
         <geometry>
           <box>
@@ -154,13 +147,6 @@
       <inertial>
         <mass>0.1</mass>
       </inertial>
-      <collision name="collision">
-        <geometry>
-          <box>
-            <size>0.01 0.01 0.01</size>
-          </box>
-        </geometry>
-      </collision>
       <visual name="visual">
         <geometry>
           <box>
@@ -218,13 +204,6 @@
       <inertial>
         <mass>0.1</mass>
       </inertial>
-      <collision name="collision">
-        <geometry>
-          <box>
-            <size>0.02 0.02 0.02</size>
-          </box>
-        </geometry>
-      </collision>
       <visual name="visual">
         <geometry>
           <box>
@@ -282,13 +261,6 @@
       <inertial>
         <mass>0.1</mass>
       </inertial>
-      <collision name="collision">
-        <geometry>
-          <box>
-            <size>0.02 0.02 0.02</size>
-          </box>
-        </geometry>
-      </collision>
       <visual name="visual">
         <geometry>
           <box>
