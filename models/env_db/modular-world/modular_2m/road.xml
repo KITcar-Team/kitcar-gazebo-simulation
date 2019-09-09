@@ -12,12 +12,10 @@
 		<rightArc radius="1.0" angle="90"/>
 		
 		<!--Intersection block-->
-		<line length="0.1"/>
-		<intersection rule="equal" turn="straight"/>
-		<line length="0.1"/>
+		<intersection rule="equal" turn="straight" size="2.0"/>
 
-		<line length="0.5"/>
-		<trafficIsland zebraLength="0.5" islandWidth="0.3" signDistance="0.25" zebraMarkingType="lines"/> 
-		<line length="0.5"/>	
+		<!--line length="0.5"/-->
+		<trafficIsland zebraLength="0.4" islandWidth="0.3" signDistance="0.25" zebraMarkingType="lines"/> 
+		<!--line length="0.5"/-->	
 	</sequence>
 </template>

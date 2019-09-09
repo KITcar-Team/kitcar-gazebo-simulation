@@ -9,7 +9,7 @@
 		<line length="0.5"/>
 		<blockedArea width="0.3" length="1.5"/>
 		<line length="1"/>
-		<intersection rule="equal" turn="right"/>
+		<intersection rule="equal" turn="right" size="1.8"/>
 		<line length="1"/>
 		<leftArc radius="1" angle="180" middleLine="solid"/>
 		<trafficIsland zebraLength="0.5" islandWidth="0.3" signDistance="0.25" zebraMarkingType="lines"/> 
