@@ -6,13 +6,11 @@
 		<leftArc radius="0.75" angle="90" />
 		<line length="1.5"/>
 		<leftArc radius="0.75" angle="90" />
-
+		<line length="1.5"/>
 		<rightArc radius="0.75" angle="90"/>		<!--Intersection block-->
 		<!--line length="0.05"/-->
-		<intersection rule="equal" turn="straight"/>
+		<intersection size="1.5" rule="equal" turn="straight"/>
 		<!--line length="0.05"/-->
-		
-		<line length="1.5"/>
 		<rightArc radius="0.75" angle="90"/>
 
 		<line length="0.25"/>
