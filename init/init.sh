@@ -10,7 +10,7 @@ case "$option" in
       exit 1
     fi
     
-    # initialize ros-onboarding
+    # initialize kitcar-gazebo-simulation
     echo "add kitcar-gazebo-simulation bashrc to your bashrc"
     echo "source $KITCAR_REPO_PATH/kitcar-gazebo-simulation/init/bashrc # for kitcar-gazebo-simulation repository" >> ~/.bashrc
     
@@ -24,7 +24,7 @@ case "$option" in
 	  #chmod +x $KITCAR_REPO_PATH/kitcar-ros/.git/hooks/pre-commit
   ;;
 
-  2) # do clenup
+  2) # do cleanup
     echo "remove kitcar-gazebo-simulation entry from bashrc"
     sed '/source .*kitcar-gazebo-simulation/d' -i ~/.bashrc
 

@@ -12,8 +12,8 @@
 		<intersection rule="equal" turn="right" size="1.8"/>
 		<line length="1"/>
 		<leftArc radius="1" angle="180" middleLine="solid"/>
-		<trafficIsland zebraLength="0.5" islandWidth="0.3" signDistance="0.25" zebraMarkingType="lines"/> 
-		<line length="3"/> 
+		<trafficIsland zebraLength="0.45" islandWidth="0.3" signDistance="0.25" zebraMarkingType="lines"/> 
+		<line length="3.05"/> 
 		<leftArc radius="1" angle="90"/>
 	</sequence>
 </template>
