@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.79.0</authoring_tool>
+    </contributor>
+    <created>2019-03-14T14:26:45</created>
+    <modified>2019-03-14T14:26:45</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images/>
+  <library_effects>
+    <effect id="Plastic_-_Glossy__Black_-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.64 0.64 0.64 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="Plastic_-_Glossy__Black_-material" name="Plastic_-_Glossy__Black_">
+      <instance_effect url="#Plastic_-_Glossy__Black_-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="Body1-mesh" name="Body1">
+      <mesh>
+        <source id="Body1-mesh-positions">
+          <float_array id="Body1-mesh-positions-array" count="60">-1800.083 500 139.2908 3.19e-4 500 139.2908 -1800.083 520 139.2908 3.19e-4 520 139.2908 3.19e-4 500 -0.709215 -400.0415 500 39.29079 -1400.041 500 39.29079 -1800.083 500 -0.709215 3.19e-4 520 -0.709215 -1800.083 520 -0.709215 3.19e-4 -500 -0.709215 -400.0415 -500 39.29079 3.19e-4 -500 139.2908 -1400.041 -500 39.29079 -1800.083 -500 139.2908 -1800.083 -500 -0.709215 3.19e-4 -520 139.2908 -1800.083 -520 139.2908 -1800.083 -520 -0.709215 3.19e-4 -520 -0.709215</float_array>
+          <technique_common>
+            <accessor source="#Body1-mesh-positions-array" count="20" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Body1-mesh-normals">
+          <float_array id="Body1-mesh-normals-array" count="48">0 0 1 0 -1 0 1 0 0 0 1 0 -1 0 0 0 1 5.5855e-7 0 1 0 0 1 0 -0.09949338 0 0.9950383 -0.09949338 0 0.9950382 -0.09949338 0 0.9950383 0 0 -1 0.09949344 0 0.9950383 0.09949338 0 0.9950382 0.09949338 0 0.9950382 0.09949338 0 0.9950383</float_array>
+          <technique_common>
+            <accessor source="#Body1-mesh-normals-array" count="16" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Body1-mesh-map-0">
+          <float_array id="Body1-mesh-map-0-array" count="216">-90.00418 -1 90.00418 -1 -90.00418 1 -90.00418 1 90.00418 -1 90.00418 1 0 4 0 -10 40.00418 0 40.00418 0 0 -10 180.0084 -10 40.00418 0 180.0084 -10 140.0042 0 140.0042 0 180.0084 -10 180.0084 4 2 4 0 4 2 -10 2 -10 0 4 0 -10 180.0084 4 0 4 180.0084 -10 180.0084 -10 0 4 0 -10 2 4 0 4 2 -10 2 -10 0 4 0 -10 180.0084 4 140.0042 0 180.0084 -10 180.0084 -10 140.0042 0 40.00418 0 180.0084 -10 40.00418 0 0 -10 0 -10 40.00418 0 0 4 90.00418 1 -90.00418 1 90.00418 -1 90.00418 -1 -90.00418 1 -90.00418 -1 2 4 0 4 2 -10 2 -10 0 4 0 -10 180.0084 4 0 4 180.0084 -10 180.0084 -10 0 4 0 -10 2 4 0 4 2 -10 2 -10 0 4 0 -10 40.20366 50 0 50 40.20366 -50 40.20366 -50 0 50 0 -50 180.0084 50 0 50 180.0084 -50 180.0084 -50 0 50 0 -50 180.0084 -50 0 -50 180.0084 -52 180.0084 -52 0 -50 0 -52 180.0084 52 0 52 180.0084 50 180.0084 50 0 52 0 50 40.20366 50 0 50 40.20366 -50 40.20366 -50 0 50 0 -50 100 50 0 50 100 -50 100 -50 0 50 0 -50</float_array>
+          <technique_common>
+            <accessor source="#Body1-mesh-map-0-array" count="108" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Body1-mesh-vertices">
+          <input semantic="POSITION" source="#Body1-mesh-positions"/>
+        </vertices>
+        <triangles material="Plastic_-_Glossy__Black_-material" count="36">
+          <input semantic="VERTEX" source="#Body1-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Body1-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Body1-mesh-map-0" offset="2" set="0"/>
+          <p>0 0 0 1 0 1 2 0 2 2 0 3 1 0 4 3 0 5 4 1 6 1 1 7 5 1 8 5 1 9 1 1 10 0 1 11 5 1 12 0 1 13 6 1 14 6 1 15 0 1 16 7 1 17 4 2 18 8 2 19 1 2 20 1 2 21 8 2 22 3 2 23 8 3 24 9 3 25 3 3 26 3 3 27 9 3 28 2 3 29 9 4 30 7 4 31 2 4 32 2 4 33 7 4 34 0 4 35 10 3 36 11 5 37 12 6 38 12 6 39 11 5 40 13 7 41 12 6 42 13 7 43 14 3 44 14 3 45 13 7 46 15 3 47 12 0 48 14 0 49 16 0 50 16 0 51 14 0 52 17 0 53 15 4 54 18 4 55 14 4 56 14 4 57 18 4 58 17 4 59 18 1 60 19 1 61 17 1 62 17 1 63 19 1 64 16 1 65 19 2 66 10 2 67 16 2 68 16 2 69 10 2 70 12 2 71 6 8 72 7 9 73 13 9 74 13 9 75 7 9 76 15 10 77 7 11 78 4 11 79 15 11 80 15 11 81 4 11 82 10 11 83 15 11 84 10 11 85 18 11 86 18 11 87 10 11 88 19 11 89 9 11 90 8 11 91 7 11 92 7 11 93 8 11 94 4 11 95 4 12 96 5 13 97 10 14 98 10 14 99 5 13 100 11 15 101 5 0 102 6 0 103 11 0 104 11 0 105 6 0 106 13 0 107</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers/>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Body1" name="Body1" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <instance_geometry url="#Body1-mesh" name="Body1">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Plastic_-_Glossy__Black_-material" target="#Plastic_-_Glossy__Black_-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>
