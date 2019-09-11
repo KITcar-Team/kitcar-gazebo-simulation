@@ -26,7 +26,7 @@
         <inertia>
           <ixx>0.000166667</ixx>
           <iyy>0.000166667</iyy>
-          <izz>0.000166667</izz>
+          <izz>1</izz>
           <ixy>0</ixy>
           <ixz>0</ixz>
           <iyz>0</iyz>
