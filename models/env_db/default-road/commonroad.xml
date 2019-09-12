@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <commonRoad commonRoadVersion="1.0">
-	<obstacle id="-11">
+	<obstacle id="-10">
 		<role>static</role>
 		<type>parkedVehicle</type>
 		<shape>
@@ -9,58 +9,13 @@
 				<width>0.27999999999999997</width>
 				<orientation>0.0</orientation>
 				<centerPoint>
-					<x>2.3480000000000003</x>
+					<x>2.048</x>
 					<y>0.6000000000000001</y>
 				</centerPoint>
 			</rectangle>
 		</shape>
 	</obstacle>
-	<obstacle id="-14">
-		<role>static</role>
-		<type>parkedVehicle</type>
-		<shape>
-			<rectangle>
-				<length>0.24000000000000005</length>
-				<width>0.27999999999999997</width>
-				<orientation>0.0</orientation>
-				<centerPoint>
-					<x>2.9480000000000004</x>
-					<y>0.6000000000000001</y>
-				</centerPoint>
-			</rectangle>
-		</shape>
-	</obstacle>
-	<obstacle id="-16">
-		<role>static</role>
-		<type>parkedVehicle</type>
-		<shape>
-			<rectangle>
-				<length>0.24000000000000005</length>
-				<width>0.27999999999999997</width>
-				<orientation>0.0</orientation>
-				<centerPoint>
-					<x>3.248</x>
-					<y>0.6000000000000001</y>
-				</centerPoint>
-			</rectangle>
-		</shape>
-	</obstacle>
-	<obstacle id="-18">
-		<role>static</role>
-		<type>parkedVehicle</type>
-		<shape>
-			<rectangle>
-				<length>0.25503318464732977</length>
-				<width>0.27999999999999997</width>
-				<orientation>0.0</orientation>
-				<centerPoint>
-					<x>2.371124710297793</x>
-					<y>-0.6000000000000001</y>
-				</centerPoint>
-			</rectangle>
-		</shape>
-	</obstacle>
-	<obstacle id="-27">
+	<obstacle id="-24">
 		<role>static</role>
 		<type>blockedArea</type>
 		<shape>
@@ -242,7 +197,7 @@
 			<lanelet ref="-3"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-19"/>
+			<lanelet ref="-16"/>
 		</successor>
 		<adjacentLeft drivingDir="opposite" ref="-7"/>
 	</lanelet>
@@ -269,7 +224,7 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-20"/>
+			<lanelet ref="-17"/>
 		</predecessor>
 		<successor>
 			<lanelet ref="-4"/>
@@ -339,7 +294,7 @@
 			<lineMarking>parking</lineMarking>
 		</rightBoundary>
 	</lanelet>
-	<lanelet id="-10">
+	<lanelet id="-11">
 		<leftBoundary>
 			<point>
 				<x>2.198</x>
@@ -408,32 +363,32 @@
 			<lineMarking>parking</lineMarking>
 		</rightBoundary>
 	</lanelet>
+	<lanelet id="-14">
+		<leftBoundary>
+			<point>
+				<x>3.0980000000000003</x>
+				<y>0.4</y>
+			</point>
+			<point>
+				<x>3.0980000000000003</x>
+				<y>0.8</y>
+			</point>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>3.398</x>
+				<y>0.4</y>
+			</point>
+			<point>
+				<x>3.398</x>
+				<y>0.8</y>
+			</point>
+			<lineMarking>parking</lineMarking>
+		</rightBoundary>
+	</lanelet>
 	<lanelet id="-15">
 		<leftBoundary>
 			<point>
-				<x>3.0980000000000003</x>
-				<y>0.4</y>
-			</point>
-			<point>
-				<x>3.0980000000000003</x>
-				<y>0.8</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>3.398</x>
-				<y>0.4</y>
-			</point>
-			<point>
-				<x>3.398</x>
-				<y>0.8</y>
-			</point>
-			<lineMarking>parking</lineMarking>
-		</rightBoundary>
-	</lanelet>
-	<lanelet id="-17">
-		<leftBoundary>
-			<point>
 				<x>1.298</x>
 				<y>-0.4</y>
 			</point>
@@ -479,7 +434,7 @@
 			<lineMarking>parking</lineMarking>
 		</rightBoundary>
 	</lanelet>
-	<lanelet id="-19">
+	<lanelet id="-16">
 		<leftBoundary>
 			<point>
 				<x>3.898</x>
@@ -506,11 +461,11 @@
 			<lanelet ref="-6"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-21"/>
+			<lanelet ref="-18"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-20"/>
+		<adjacentLeft drivingDir="opposite" ref="-17"/>
 	</lanelet>
-	<lanelet id="-20">
+	<lanelet id="-17">
 		<leftBoundary>
 			<point>
 				<x>4.898</x>
@@ -533,14 +488,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-22"/>
+			<lanelet ref="-19"/>
 		</predecessor>
 		<successor>
 			<lanelet ref="-7"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-19"/>
+		<adjacentLeft drivingDir="opposite" ref="-16"/>
 	</lanelet>
-	<lanelet id="-21">
+	<lanelet id="-18">
 		<leftBoundary>
 			<point>
 				<x>4.898</x>
@@ -3068,14 +3023,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-19"/>
+			<lanelet ref="-16"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-23"/>
+			<lanelet ref="-20"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-22"/>
+		<adjacentLeft drivingDir="opposite" ref="-19"/>
 	</lanelet>
-	<lanelet id="-22">
+	<lanelet id="-19">
 		<leftBoundary>
 			<point>
 				<x>4.9020612649371</x>
@@ -5602,14 +5557,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-24"/>
+			<lanelet ref="-21"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-20"/>
+			<lanelet ref="-17"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-21"/>
+		<adjacentLeft drivingDir="opposite" ref="-18"/>
 	</lanelet>
-	<lanelet id="-23">
+	<lanelet id="-20">
 		<leftBoundary>
 			<point>
 				<x>4.898</x>
@@ -5633,63 +5588,32 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-21"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-25"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-24"/>
-	</lanelet>
-	<lanelet id="-24">
-		<leftBoundary>
-			<point>
-				<x>4.398</x>
-				<y>5.1</y>
-			</point>
-			<point>
-				<x>4.898</x>
-				<y>5.1</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>4.398</x>
-				<y>4.699999999999999</y>
-			</point>
-			<point>
-				<x>4.898</x>
-				<y>4.699999999999999</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
-			<lanelet ref="-26"/>
+			<lanelet ref="-18"/>
 		</predecessor>
 		<successor>
 			<lanelet ref="-22"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-23"/>
+		<adjacentLeft drivingDir="opposite" ref="-21"/>
 	</lanelet>
-	<lanelet id="-25">
+	<lanelet id="-21">
 		<leftBoundary>
 			<point>
 				<x>4.398</x>
 				<y>5.1</y>
 			</point>
 			<point>
-				<x>2.8979999999999997</x>
+				<x>4.898</x>
 				<y>5.1</y>
 			</point>
-			<lineMarking>dashed</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
 				<x>4.398</x>
-				<y>5.5</y>
+				<y>4.699999999999999</y>
 			</point>
 			<point>
-				<x>2.8979999999999997</x>
-				<y>5.5</y>
+				<x>4.898</x>
+				<y>4.699999999999999</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
@@ -5697,11 +5621,42 @@
 			<lanelet ref="-23"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-28"/>
+			<lanelet ref="-19"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-26"/>
+		<adjacentLeft drivingDir="opposite" ref="-20"/>
 	</lanelet>
-	<lanelet id="-26">
+	<lanelet id="-22">
+		<leftBoundary>
+			<point>
+				<x>4.398</x>
+				<y>5.1</y>
+			</point>
+			<point>
+				<x>2.8979999999999997</x>
+				<y>5.1</y>
+			</point>
+			<lineMarking>dashed</lineMarking>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>4.398</x>
+				<y>5.5</y>
+			</point>
+			<point>
+				<x>2.8979999999999997</x>
+				<y>5.5</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-20"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-25"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-23"/>
+	</lanelet>
+	<lanelet id="-23">
 		<leftBoundary>
 			<point>
 				<x>2.8979999999999997</x>
@@ -5724,14 +5679,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-29"/>
+			<lanelet ref="-26"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-24"/>
+			<lanelet ref="-21"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-25"/>
+		<adjacentLeft drivingDir="opposite" ref="-22"/>
 	</lanelet>
-	<lanelet id="-28">
+	<lanelet id="-25">
 		<leftBoundary>
 			<point>
 				<x>2.8979999999999997</x>
@@ -5750,6 +5705,67 @@
 			</point>
 			<point>
 				<x>1.8979999999999997</x>
+				<y>5.5</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-22"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-27"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-26"/>
+	</lanelet>
+	<lanelet id="-26">
+		<leftBoundary>
+			<point>
+				<x>1.8979999999999997</x>
+				<y>5.1</y>
+			</point>
+			<point>
+				<x>2.8979999999999997</x>
+				<y>5.1</y>
+			</point>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>1.8979999999999997</x>
+				<y>4.699999999999999</y>
+			</point>
+			<point>
+				<x>2.8979999999999997</x>
+				<y>4.699999999999999</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-28"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-23"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-25"/>
+	</lanelet>
+	<lanelet id="-27">
+		<leftBoundary>
+			<point>
+				<x>1.8979999999999997</x>
+				<y>5.1</y>
+			</point>
+			<point>
+				<x>1.3979999999999997</x>
+				<y>5.1</y>
+			</point>
+			<lineMarking>dashed</lineMarking>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>1.8979999999999997</x>
+				<y>5.5</y>
+			</point>
+			<point>
+				<x>1.3979999999999997</x>
 				<y>5.5</y>
 			</point>
 			<lineMarking>solid</lineMarking>
@@ -5758,261 +5774,200 @@
 			<lanelet ref="-25"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-30"/>
+			<lanelet ref="-35"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-29"/>
+		<adjacentLeft drivingDir="opposite" ref="-28"/>
+		<stopLine>dashed</stopLine>
 	</lanelet>
-	<lanelet id="-29">
+	<lanelet id="-28">
 		<leftBoundary>
 			<point>
-				<x>1.8979999999999997</x>
+				<x>1.3979999999999997</x>
 				<y>5.1</y>
 			</point>
 			<point>
-				<x>2.8979999999999997</x>
+				<x>1.8979999999999997</x>
 				<y>5.1</y>
 			</point>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>1.8979999999999997</x>
+				<x>1.3979999999999997</x>
 				<y>4.699999999999999</y>
 			</point>
 			<point>
-				<x>2.8979999999999997</x>
+				<x>1.8979999999999997</x>
 				<y>4.699999999999999</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-31"/>
+			<lanelet ref="-36"/>
 		</predecessor>
 		<successor>
 			<lanelet ref="-26"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-28"/>
+		<adjacentLeft drivingDir="opposite" ref="-27"/>
+	</lanelet>
+	<lanelet id="-29">
+		<leftBoundary>
+			<point>
+				<x>0.5979999999999996</x>
+				<y>5.1</y>
+			</point>
+			<point>
+				<x>0.09799999999999964</x>
+				<y>5.1</y>
+			</point>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>0.5979999999999996</x>
+				<y>5.5</y>
+			</point>
+			<point>
+				<x>0.09799999999999964</x>
+				<y>5.5</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
 	</lanelet>
 	<lanelet id="-30">
 		<leftBoundary>
 			<point>
-				<x>1.8979999999999997</x>
+				<x>0.09799999999999964</x>
 				<y>5.1</y>
 			</point>
 			<point>
-				<x>1.3979999999999997</x>
+				<x>0.5979999999999996</x>
 				<y>5.1</y>
 			</point>
 			<lineMarking>dashed</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>1.8979999999999997</x>
-				<y>5.5</y>
+				<x>0.09799999999999964</x>
+				<y>4.699999999999999</y>
 			</point>
 			<point>
-				<x>1.3979999999999997</x>
-				<y>5.5</y>
+				<x>0.5979999999999996</x>
+				<y>4.699999999999999</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
-		<predecessor>
-			<lanelet ref="-28"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-38"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-31"/>
 		<stopLine>dashed</stopLine>
 	</lanelet>
 	<lanelet id="-31">
 		<leftBoundary>
 			<point>
-				<x>1.3979999999999997</x>
-				<y>5.1</y>
-			</point>
-			<point>
-				<x>1.8979999999999997</x>
-				<y>5.1</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>1.3979999999999997</x>
-				<y>4.699999999999999</y>
-			</point>
-			<point>
-				<x>1.8979999999999997</x>
-				<y>4.699999999999999</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
-			<lanelet ref="-39"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-29"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-30"/>
-	</lanelet>
-	<lanelet id="-32">
-		<leftBoundary>
-			<point>
-				<x>0.5979999999999996</x>
-				<y>5.1</y>
-			</point>
-			<point>
-				<x>0.09799999999999964</x>
-				<y>5.1</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>0.5979999999999996</x>
+				<x>0.9979999999999997</x>
 				<y>5.5</y>
 			</point>
 			<point>
-				<x>0.09799999999999964</x>
-				<y>5.5</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-	</lanelet>
-	<lanelet id="-33">
-		<leftBoundary>
-			<point>
-				<x>0.09799999999999964</x>
-				<y>5.1</y>
-			</point>
-			<point>
-				<x>0.5979999999999996</x>
-				<y>5.1</y>
+				<x>0.9979999999999997</x>
+				<y>6.0</y>
 			</point>
 			<lineMarking>dashed</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>0.09799999999999964</x>
+				<x>1.3979999999999997</x>
+				<y>5.5</y>
+			</point>
+			<point>
+				<x>1.3979999999999997</x>
+				<y>6.0</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-35"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-41"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-32"/>
+	</lanelet>
+	<lanelet id="-32">
+		<leftBoundary>
+			<point>
+				<x>0.9979999999999997</x>
+				<y>6.0</y>
+			</point>
+			<point>
+				<x>0.9979999999999997</x>
+				<y>5.5</y>
+			</point>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>0.5979999999999996</x>
+				<y>6.0</y>
+			</point>
+			<point>
+				<x>0.5979999999999996</x>
+				<y>5.5</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-42"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-36"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-31"/>
+		<stopLine>dashed</stopLine>
+	</lanelet>
+	<lanelet id="-33">
+		<leftBoundary>
+			<point>
+				<x>0.9979999999999997</x>
 				<y>4.699999999999999</y>
 			</point>
+			<point>
+				<x>0.9979999999999997</x>
+				<y>4.199999999999999</y>
+			</point>
+			<lineMarking>dashed</lineMarking>
+		</leftBoundary>
+		<rightBoundary>
 			<point>
 				<x>0.5979999999999996</x>
 				<y>4.699999999999999</y>
 			</point>
+			<point>
+				<x>0.5979999999999996</x>
+				<y>4.199999999999999</y>
+			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
-		<stopLine>dashed</stopLine>
 	</lanelet>
 	<lanelet id="-34">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999997</x>
-				<y>5.5</y>
+				<y>4.199999999999999</y>
 			</point>
 			<point>
 				<x>0.9979999999999997</x>
-				<y>6.0</y>
+				<y>4.699999999999999</y>
 			</point>
-			<lineMarking>dashed</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
 				<x>1.3979999999999997</x>
-				<y>5.5</y>
+				<y>4.199999999999999</y>
 			</point>
 			<point>
 				<x>1.3979999999999997</x>
-				<y>6.0</y>
+				<y>4.699999999999999</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
-		<predecessor>
-			<lanelet ref="-38"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-44"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-35"/>
+		<stopLine>dashed</stopLine>
 	</lanelet>
 	<lanelet id="-35">
-		<leftBoundary>
-			<point>
-				<x>0.9979999999999997</x>
-				<y>6.0</y>
-			</point>
-			<point>
-				<x>0.9979999999999997</x>
-				<y>5.5</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>0.5979999999999996</x>
-				<y>6.0</y>
-			</point>
-			<point>
-				<x>0.5979999999999996</x>
-				<y>5.5</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
-			<lanelet ref="-45"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-39"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-34"/>
-		<stopLine>dashed</stopLine>
-	</lanelet>
-	<lanelet id="-36">
-		<leftBoundary>
-			<point>
-				<x>0.9979999999999997</x>
-				<y>4.699999999999999</y>
-			</point>
-			<point>
-				<x>0.9979999999999997</x>
-				<y>4.199999999999999</y>
-			</point>
-			<lineMarking>dashed</lineMarking>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>0.5979999999999996</x>
-				<y>4.699999999999999</y>
-			</point>
-			<point>
-				<x>0.5979999999999996</x>
-				<y>4.199999999999999</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-	</lanelet>
-	<lanelet id="-37">
-		<leftBoundary>
-			<point>
-				<x>0.9979999999999997</x>
-				<y>4.199999999999999</y>
-			</point>
-			<point>
-				<x>0.9979999999999997</x>
-				<y>4.699999999999999</y>
-			</point>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>1.3979999999999997</x>
-				<y>4.199999999999999</y>
-			</point>
-			<point>
-				<x>1.3979999999999997</x>
-				<y>4.699999999999999</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<stopLine>dashed</stopLine>
-	</lanelet>
-	<lanelet id="-38">
 		<leftBoundary>
 			<point>
 				<x>1.3979999999999997</x>
@@ -6099,14 +6054,14 @@
 			</point>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-30"/>
+			<lanelet ref="-27"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-34"/>
+			<lanelet ref="-31"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-39"/>
+		<adjacentLeft drivingDir="opposite" ref="-36"/>
 	</lanelet>
-	<lanelet id="-39">
+	<lanelet id="-36">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999997</x>
@@ -6193,14 +6148,14 @@
 			<lineMarking>dashed</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-35"/>
+			<lanelet ref="-32"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-31"/>
+			<lanelet ref="-28"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-38"/>
+		<adjacentLeft drivingDir="opposite" ref="-35"/>
 	</lanelet>
-	<lanelet id="-44">
+	<lanelet id="-41">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999997</x>
@@ -6224,14 +6179,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-34"/>
+			<lanelet ref="-31"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-46"/>
+			<lanelet ref="-43"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-45"/>
+		<adjacentLeft drivingDir="opposite" ref="-42"/>
 	</lanelet>
-	<lanelet id="-45">
+	<lanelet id="-42">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999998</x>
@@ -6254,14 +6209,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-47"/>
+			<lanelet ref="-44"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-35"/>
+			<lanelet ref="-32"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-44"/>
+		<adjacentLeft drivingDir="opposite" ref="-41"/>
 	</lanelet>
-	<lanelet id="-46">
+	<lanelet id="-43">
 		<leftBoundary>
 			<point>
 				<x>0.9979999999999998</x>
@@ -8789,14 +8744,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-44"/>
+			<lanelet ref="-41"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-48"/>
+			<lanelet ref="-45"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-47"/>
+		<adjacentLeft drivingDir="opposite" ref="-44"/>
 	</lanelet>
-	<lanelet id="-47">
+	<lanelet id="-44">
 		<leftBoundary>
 			<point>
 				<x>-1.0019987317275398</x>
@@ -11323,45 +11278,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-49"/>
-		</predecessor>
-		<successor>
-			<lanelet ref="-45"/>
-		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-46"/>
-	</lanelet>
-	<lanelet id="-48">
-		<leftBoundary>
-			<point>
-				<x>-1.0020000000000002</x>
-				<y>7.0</y>
-			</point>
-			<point>
-				<x>-1.0020000000000002</x>
-				<y>7.0</y>
-			</point>
-			<lineMarking>dashed</lineMarking>
-		</leftBoundary>
-		<rightBoundary>
-			<point>
-				<x>-1.4020000000000001</x>
-				<y>7.0</y>
-			</point>
-			<point>
-				<x>-1.4020000000000001</x>
-				<y>7.0</y>
-			</point>
-			<lineMarking>solid</lineMarking>
-		</rightBoundary>
-		<predecessor>
 			<lanelet ref="-46"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-50"/>
+			<lanelet ref="-42"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-49"/>
+		<adjacentLeft drivingDir="opposite" ref="-43"/>
 	</lanelet>
-	<lanelet id="-49">
+	<lanelet id="-45">
 		<leftBoundary>
 			<point>
 				<x>-1.0020000000000002</x>
@@ -11375,24 +11299,55 @@
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>-0.6020000000000002</x>
+				<x>-1.4020000000000001</x>
 				<y>7.0</y>
 			</point>
 			<point>
-				<x>-0.6020000000000002</x>
+				<x>-1.4020000000000001</x>
 				<y>7.0</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-51"/>
+			<lanelet ref="-43"/>
 		</predecessor>
 		<successor>
 			<lanelet ref="-47"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-48"/>
+		<adjacentLeft drivingDir="opposite" ref="-46"/>
 	</lanelet>
-	<lanelet id="-50">
+	<lanelet id="-46">
+		<leftBoundary>
+			<point>
+				<x>-1.0020000000000002</x>
+				<y>7.0</y>
+			</point>
+			<point>
+				<x>-1.0020000000000002</x>
+				<y>7.0</y>
+			</point>
+			<lineMarking>dashed</lineMarking>
+		</leftBoundary>
+		<rightBoundary>
+			<point>
+				<x>-0.6020000000000002</x>
+				<y>7.0</y>
+			</point>
+			<point>
+				<x>-0.6020000000000002</x>
+				<y>7.0</y>
+			</point>
+			<lineMarking>solid</lineMarking>
+		</rightBoundary>
+		<predecessor>
+			<lanelet ref="-48"/>
+		</predecessor>
+		<successor>
+			<lanelet ref="-44"/>
+		</successor>
+		<adjacentLeft drivingDir="opposite" ref="-45"/>
+	</lanelet>
+	<lanelet id="-47">
 		<leftBoundary>
 			<point>
 				<x>-1.0020000000000002</x>
@@ -12208,12 +12163,12 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-48"/>
+			<lanelet ref="-45"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-52"/>
+			<lanelet ref="-49"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-51"/>
+		<adjacentLeft drivingDir="opposite" ref="-48"/>
 		<stopLine>dashed</stopLine>
 		<stopLineAttributes>
 			<lineWidth>0.02</lineWidth>
@@ -12221,7 +12176,7 @@
 			<segmentGap>0.04</segmentGap>
 		</stopLineAttributes>
 	</lanelet>
-	<lanelet id="-51">
+	<lanelet id="-48">
 		<leftBoundary>
 			<point>
 				<x>-0.8520447000000002</x>
@@ -13037,14 +12992,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-53"/>
+			<lanelet ref="-50"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-49"/>
+			<lanelet ref="-46"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-50"/>
+		<adjacentLeft drivingDir="opposite" ref="-47"/>
 	</lanelet>
-	<lanelet id="-52">
+	<lanelet id="-49">
 		<leftBoundary>
 			<point>
 				<x>-1.1520000000000001</x>
@@ -13068,12 +13023,12 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-50"/>
+			<lanelet ref="-47"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-54"/>
+			<lanelet ref="-51"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-53"/>
+		<adjacentLeft drivingDir="opposite" ref="-50"/>
 		<stopLine>dashed</stopLine>
 		<stopLineAttributes>
 			<lineWidth>0.02</lineWidth>
@@ -13081,7 +13036,7 @@
 			<segmentGap>0.04</segmentGap>
 		</stopLineAttributes>
 	</lanelet>
-	<lanelet id="-53">
+	<lanelet id="-50">
 		<leftBoundary>
 			<point>
 				<x>-0.8520000000000001</x>
@@ -13105,12 +13060,12 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-55"/>
+			<lanelet ref="-52"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-51"/>
+			<lanelet ref="-48"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-52"/>
+		<adjacentLeft drivingDir="opposite" ref="-49"/>
 		<stopLine>dashed</stopLine>
 		<stopLineAttributes>
 			<lineWidth>0.02</lineWidth>
@@ -13118,7 +13073,7 @@
 			<segmentGap>0.04</segmentGap>
 		</stopLineAttributes>
 	</lanelet>
-	<lanelet id="-54">
+	<lanelet id="-51">
 		<leftBoundary>
 			<point>
 				<x>-1.1520000000000001</x>
@@ -13934,14 +13889,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-52"/>
+			<lanelet ref="-49"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-56"/>
+			<lanelet ref="-53"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-55"/>
+		<adjacentLeft drivingDir="opposite" ref="-52"/>
 	</lanelet>
-	<lanelet id="-55">
+	<lanelet id="-52">
 		<leftBoundary>
 			<point>
 				<x>-1.0019553</x>
@@ -14757,12 +14712,12 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-57"/>
+			<lanelet ref="-54"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-53"/>
+			<lanelet ref="-50"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-54"/>
+		<adjacentLeft drivingDir="opposite" ref="-51"/>
 		<stopLine>dashed</stopLine>
 		<stopLineAttributes>
 			<lineWidth>0.02</lineWidth>
@@ -14770,7 +14725,7 @@
 			<segmentGap>0.04</segmentGap>
 		</stopLineAttributes>
 	</lanelet>
-	<lanelet id="-56">
+	<lanelet id="-53">
 		<leftBoundary>
 			<point>
 				<x>-1.002</x>
@@ -14794,14 +14749,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-54"/>
+			<lanelet ref="-51"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-62"/>
+			<lanelet ref="-59"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-57"/>
+		<adjacentLeft drivingDir="opposite" ref="-54"/>
 	</lanelet>
-	<lanelet id="-57">
+	<lanelet id="-54">
 		<leftBoundary>
 			<point>
 				<x>-1.002</x>
@@ -14825,14 +14780,14 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-63"/>
+			<lanelet ref="-60"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-55"/>
+			<lanelet ref="-52"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-56"/>
+		<adjacentLeft drivingDir="opposite" ref="-53"/>
 	</lanelet>
-	<lanelet id="-62">
+	<lanelet id="-59">
 		<leftBoundary>
 			<point>
 				<x>-1.002</x>
@@ -14840,7 +14795,7 @@
 			</point>
 			<point>
 				<x>-1.0019999999999998</x>
-				<y>1.8999999999999995</y>
+				<y>0.9999999999999991</y>
 			</point>
 			<lineMarking>dashed</lineMarking>
 		</leftBoundary>
@@ -14850,24 +14805,24 @@
 				<y>4.949999999999999</y>
 			</point>
 			<point>
-				<x>-1.402</x>
-				<y>1.8999999999999995</y>
+				<x>-1.4019999999999997</x>
+				<y>0.9999999999999991</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-56"/>
+			<lanelet ref="-53"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-64"/>
+			<lanelet ref="-61"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-63"/>
+		<adjacentLeft drivingDir="opposite" ref="-60"/>
 	</lanelet>
-	<lanelet id="-63">
+	<lanelet id="-60">
 		<leftBoundary>
 			<point>
 				<x>-1.0019999999999998</x>
-				<y>1.8999999999999995</y>
+				<y>0.9999999999999991</y>
 			</point>
 			<point>
 				<x>-1.002</x>
@@ -14876,8 +14831,8 @@
 		</leftBoundary>
 		<rightBoundary>
 			<point>
-				<x>-0.6019999999999999</x>
-				<y>1.8999999999999995</y>
+				<x>-0.6019999999999998</x>
+				<y>0.9999999999999991</y>
 			</point>
 			<point>
 				<x>-0.602</x>
@@ -14886,2567 +14841,2567 @@
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-65"/>
+			<lanelet ref="-62"/>
 		</predecessor>
 		<successor>
-			<lanelet ref="-57"/>
+			<lanelet ref="-54"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-62"/>
+		<adjacentLeft drivingDir="opposite" ref="-59"/>
 	</lanelet>
-	<lanelet id="-64">
+	<lanelet id="-61">
 		<leftBoundary>
 			<point>
 				<x>-1.0019999999999998</x>
-				<y>1.8999999999999995</y>
+				<y>0.999999999999999</y>
 			</point>
 			<point>
 				<x>-1.001950000416665</x>
-				<y>1.8900001666658328</y>
+				<y>0.9900001666658323</y>
 			</point>
 			<point>
 				<x>-1.0018000066665775</x>
-				<y>1.8800013333066663</y>
+				<y>0.980001333306666</y>
 			</point>
 			<point>
 				<x>-1.0015500337489873</x>
-				<y>1.8700044997975038</y>
+				<y>0.9700044997975034</y>
 			</point>
 			<point>
 				<x>-1.0012001066609777</x>
-				<y>1.8600106658133653</y>
+				<y>0.9600106658133648</y>
 			</point>
 			<point>
 				<x>-1.000750260394966</x>
-				<y>1.850020830729321</y>
+				<y>0.9500208307293206</y>
 			</point>
 			<point>
 				<x>-1.0002005399352039</x>
-				<y>1.8400359935205548</y>
+				<y>0.9400359935205544</y>
 			</point>
 			<point>
 				<x>-0.9995510002532794</x>
-				<y>1.8300571526624665</y>
+				<y>0.9300571526624662</y>
 			</point>
 			<point>
 				<x>-0.9988017063026191</x>
-				<y>1.8200853060308266</y>
+				<y>0.9200853060308263</y>
 			</point>
 			<point>
 				<x>-0.997952733011994</x>
-				<y>1.8101214508019883</y>
+				<y>0.9101214508019879</y>
 			</point>
 			<point>
 				<x>-0.9970041652780255</x>
-				<y>1.8001665833531713</y>
+				<y>0.9001665833531708</y>
 			</point>
 			<point>
 				<x>-0.9959560979566966</x>
-				<y>1.7902216991628248</y>
+				<y>0.8902216991628243</y>
 			</point>
 			<point>
 				<x>-0.994808635853866</x>
-				<y>1.78028779271108</y>
+				<y>0.8802877927110798</y>
 			</point>
 			<point>
 				<x>-0.9935618937147879</x>
-				<y>1.7703658573803047</y>
+				<y>0.8703658573803044</y>
 			</point>
 			<point>
 				<x>-0.992215996212637</x>
-				<y>1.760456885355763</y>
+				<y>0.8604568853557627</y>
 			</point>
 			<point>
 				<x>-0.990771077936042</x>
-				<y>1.7505618675264003</y>
+				<y>0.8505618675264</y>
 			</point>
 			<point>
 				<x>-0.9892272833756267</x>
-				<y>1.7406817933857535</y>
+				<y>0.8406817933857531</y>
 			</point>
 			<point>
 				<x>-0.9875847669095605</x>
-				<y>1.7308176509330035</y>
+				<y>0.8308176509330031</y>
 			</point>
 			<point>
 				<x>-0.9858436927881212</x>
-				<y>1.7209704265741752</y>
+				<y>0.820970426574175</y>
 			</point>
 			<point>
 				<x>-0.9840042351172701</x>
-				<y>1.7111411050234988</y>
+				<y>0.8111411050234986</y>
 			</point>
 			<point>
 				<x>-0.9820665778412414</x>
-				<y>1.7013306692049381</y>
+				<y>0.8013306692049379</y>
 			</point>
 			<point>
 				<x>-0.980030914724148</x>
-				<y>1.6915401001538999</y>
+				<y>0.7915401001538995</y>
 			</point>
 			<point>
 				<x>-0.9778974493306053</x>
-				<y>1.6817703769191301</y>
+				<y>0.7817703769191298</y>
 			</point>
 			<point>
 				<x>-0.9756663950053746</x>
-				<y>1.672022476464811</y>
+				<y>0.7720224764648107</y>
 			</point>
 			<point>
 				<x>-0.9733379748520293</x>
-				<y>1.6622973735728648</y>
+				<y>0.7622973735728644</y>
 			</point>
 			<point>
 				<x>-0.9709124217106445</x>
-				<y>1.6525960407454765</y>
+				<y>0.7525960407454761</y>
 			</point>
 			<point>
 				<x>-0.968389978134513</x>
-				<y>1.6429194481078442</y>
+				<y>0.7429194481078439</y>
 			</point>
 			<point>
 				<x>-0.9657708963658903</x>
-				<y>1.6332685633111683</y>
+				<y>0.733268563311168</y>
 			</point>
 			<point>
 				<x>-0.9630554383107707</x>
-				<y>1.6236443514358856</y>
+				<y>0.7236443514358852</y>
 			</point>
 			<point>
 				<x>-0.960243875512697</x>
-				<y>1.6140477748951638</y>
+				<y>0.7140477748951635</y>
 			</point>
 			<point>
 				<x>-0.9573364891256058</x>
-				<y>1.6044797933386599</y>
+				<y>0.7044797933386595</y>
 			</point>
 			<point>
 				<x>-0.9543335698857132</x>
-				<y>1.594941363556556</y>
+				<y>0.6949413635565556</y>
 			</point>
 			<point>
 				<x>-0.9512354180824406</x>
-				<y>1.5854334393838816</y>
+				<y>0.6854334393838812</y>
 			</point>
 			<point>
 				<x>-0.9480423435283867</x>
-				<y>1.575956971605131</y>
+				<y>0.6759569716051306</y>
 			</point>
 			<point>
 				<x>-0.944754665528346</x>
-				<y>1.566512907859185</y>
+				<y>0.6665129078591846</y>
 			</point>
 			<point>
 				<x>-0.9413727128473787</x>
-				<y>1.5571021925445478</y>
+				<y>0.6571021925445476</y>
 			</point>
 			<point>
 				<x>-0.9378968236779346</x>
-				<y>1.5477257667249094</y>
+				<y>0.647725766724909</y>
 			</point>
 			<point>
 				<x>-0.9343273456060341</x>
-				<y>1.5383845680350374</y>
+				<y>0.638384568035037</y>
 			</point>
 			<point>
 				<x>-0.9306646355765099</x>
-				<y>1.5290795305870166</y>
+				<y>0.6290795305870163</y>
 			</point>
 			<point>
 				<x>-0.9269090598573128</x>
-				<y>1.5198115848768379</y>
+				<y>0.6198115848768375</y>
 			</point>
 			<point>
 				<x>-0.9230609940028848</x>
-				<y>1.5105816576913487</y>
+				<y>0.6105816576913484</y>
 			</point>
 			<point>
 				<x>-0.9191208228166048</x>
-				<y>1.5013906720155763</y>
+				<y>0.601390672015576</y>
 			</point>
 			<point>
 				<x>-0.9150889403123079</x>
-				<y>1.492239546940429</y>
+				<y>0.5922395469404287</y>
 			</point>
 			<point>
 				<x>-0.9109657496748849</x>
-				<y>1.4831291975707885</y>
+				<y>0.5831291975707882</y>
 			</point>
 			<point>
 				<x>-0.9067516632199631</x>
-				<y>1.4740605349339997</y>
+				<y>0.5740605349339993</y>
 			</point>
 			<point>
 				<x>-0.9024471023526766</x>
-				<y>1.465034465888769</y>
+				<y>0.5650344658887687</y>
 			</point>
 			<point>
 				<x>-0.898052497525525</x>
-				<y>1.4560518930344795</y>
+				<y>0.5560518930344791</y>
 			</point>
 			<point>
 				<x>-0.8935682881953286</x>
-				<y>1.447113714620931</y>
+				<y>0.5471137146209306</y>
 			</point>
 			<point>
 				<x>-0.8889949227792838</x>
-				<y>1.4382208244585164</y>
+				<y>0.538220824458516</y>
 			</point>
 			<point>
 				<x>-0.8843328586101211</x>
-				<y>1.4293741118288412</y>
+				<y>0.5293741118288409</y>
 			</point>
 			<point>
 				<x>-0.8795825618903723</x>
-				<y>1.4205744613957962</y>
+				<y>0.5205744613957959</y>
 			</point>
 			<point>
 				<x>-0.8747445076457508</x>
-				<y>1.4118227531170917</y>
+				<y>0.5118227531170914</y>
 			</point>
 			<point>
 				<x>-0.8698191796776495</x>
-				<y>1.4031198621562626</y>
+				<y>0.5031198621562621</y>
 			</point>
 			<point>
 				<x>-0.8648070705147607</x>
-				<y>1.3944666587951522</y>
+				<y>0.49446665879515184</y>
 			</point>
 			<point>
 				<x>-0.8597086813638237</x>
-				<y>1.385864008346886</y>
+				<y>0.4858640083468857</y>
 			</point>
 			<point>
 				<x>-0.8545245220595054</x>
-				<y>1.37731277106934</y>
+				<y>0.47731277106933967</y>
 			</point>
 			<point>
 				<x>-0.8492551110134158</x>
-				<y>1.3688138020791158</y>
+				<y>0.4688138020791154</y>
 			</point>
 			<point>
 				<x>-0.8439009751622684</x>
-				<y>1.36036795126603</y>
+				<y>0.4603679512660296</y>
 			</point>
 			<point>
 				<x>-0.8384626499151865</x>
-				<y>1.3519760632081255</y>
+				<y>0.4519760632081252</y>
 			</point>
 			<point>
 				<x>-0.8329406791001631</x>
-				<y>1.3436389770872155</y>
+				<y>0.443638977087215</y>
 			</point>
 			<point>
 				<x>-0.8273356149096779</x>
-				<y>1.3353575266049638</y>
+				<y>0.4353575266049634</y>
 			</point>
 			<point>
 				<x>-0.821648017845479</x>
-				<y>1.3271325398995177</y>
+				<y>0.4271325398995175</y>
 			</point>
 			<point>
 				<x>-0.8158784566625334</x>
-				<y>1.318964839462694</y>
+				<y>0.4189648394626937</y>
 			</point>
 			<point>
 				<x>-0.8100275083121514</x>
-				<y>1.3108552420577295</y>
+				<y>0.4108552420577293</y>
 			</point>
 			<point>
 				<x>-0.8040957578842921</x>
-				<y>1.3028045586376071</y>
+				<y>0.4028045586376068</y>
 			</point>
 			<point>
 				<x>-0.7980837985490553</x>
-				<y>1.2948135942639596</y>
+				<y>0.39481359426395923</y>
 			</point>
 			<point>
 				<x>-0.7919922314973646</x>
-				<y>1.2868831480265652</y>
+				<y>0.386883148026565</y>
 			</point>
 			<point>
 				<x>-0.7858216658808488</x>
-				<y>1.2790140129634393</y>
+				<y>0.37901401296343906</y>
 			</point>
 			<point>
 				<x>-0.7795727187509275</x>
-				<y>1.2712069759815305</y>
+				<y>0.3712069759815303</y>
 			</point>
 			<point>
 				<x>-0.7732460149971061</x>
-				<y>1.2634628177780312</y>
+				<y>0.3634628177780308</y>
 			</point>
 			<point>
 				<x>-0.7668421872844879</x>
-				<y>1.255782312762308</y>
+				<y>0.35578231276230765</y>
 			</point>
 			<point>
 				<x>-0.7603618759905076</x>
-				<y>1.2481662289784623</y>
+				<y>0.34816622897846206</y>
 			</point>
 			<point>
 				<x>-0.7538057291408945</x>
-				<y>1.240615328028526</y>
+				<y>0.34061532802852557</y>
 			</point>
 			<point>
 				<x>-0.7471744023448699</x>
-				<y>1.2331303649963012</y>
+				<y>0.3331303649963009</y>
 			</point>
 			<point>
 				<x>-0.7404685587295874</x>
-				<y>1.225712088371854</y>
+				<y>0.3257120883718537</y>
 			</point>
 			<point>
 				<x>-0.7336888688738203</x>
-				<y>1.218361239976665</y>
+				<y>0.31836123997666455</y>
 			</point>
 			<point>
 				<x>-0.7268360107409046</x>
-				<y>1.2110785548894478</y>
+				<y>0.31107855488944736</y>
 			</point>
 			<point>
 				<x>-0.7199106696109427</x>
-				<y>1.2038647613726423</y>
+				<y>0.30386476137264196</y>
 			</point>
 			<point>
 				<x>-0.7129135380122766</x>
-				<y>1.1967205807995889</y>
+				<y>0.2967205807995885</y>
 			</point>
 			<point>
 				<x>-0.7058453156522355</x>
-				<y>1.1896467275823914</y>
+				<y>0.28964672758239096</y>
 			</point>
 			<point>
 				<x>-0.6987067093471648</x>
-				<y>1.1826439091004763</y>
+				<y>0.282643909100476</y>
 			</point>
 			<point>
 				<x>-0.6914984329517464</x>
-				<y>1.1757128256298566</y>
+				<y>0.2757128256298562</y>
 			</point>
 			<point>
 				<x>-0.6842212072876128</x>
-				<y>1.1688541702731032</y>
+				<y>0.2688541702731029</y>
 			</point>
 			<point>
 				<x>-0.6768757600712665</x>
-				<y>1.1620686288900364</y>
+				<y>0.262068628890036</y>
 			</point>
 			<point>
 				<x>-0.6694628258413073</x>
-				<y>1.1553568800291396</y>
+				<y>0.25535688002913937</y>
 			</point>
 			<point>
 				<x>-0.6619831458849814</x>
-				<y>1.1487195948597064</y>
+				<y>0.24871959485970607</y>
 			</point>
 			<point>
 				<x>-0.654437468164051</x>
-				<y>1.142157437104722</y>
+				<y>0.2421574371047217</y>
 			</point>
 			<point>
 				<x>-0.6468265472400005</x>
-				<y>1.135671062974494</y>
+				<y>0.23567106297449358</y>
 			</point>
 			<point>
 				<x>-0.6391511441985795</x>
-				<y>1.1292611211010297</y>
+				<y>0.22926112110102947</y>
 			</point>
 			<point>
 				<x>-0.6314120265736962</x>
-				<y>1.1229282524731752</y>
+				<y>0.22292825247317483</y>
 			</point>
 			<point>
 				<x>-0.6236099682706637</x>
-				<y>1.1166730903725157</y>
+				<y>0.21667309037251536</y>
 			</point>
 			<point>
 				<x>-0.6157457494888108</x>
-				<y>1.1104962603100486</y>
+				<y>0.2104962603100483</y>
 			</point>
 			<point>
 				<x>-0.607820156643462</x>
-				<y>1.104398379963633</y>
+				<y>0.20439837996363264</y>
 			</point>
 			<point>
 				<x>-0.5998339822872973</x>
-				<y>1.0983800591162218</y>
+				<y>0.19838005911622159</y>
 			</point>
 			<point>
 				<x>-0.5917880250310974</x>
-				<y>1.0924418995948848</y>
+				<y>0.19244189959488445</y>
 			</point>
 			<point>
 				<x>-0.5836830894638827</x>
-				<y>1.0865844952106252</y>
+				<y>0.18658449521062492</y>
 			</point>
 			<point>
 				<x>-0.5755199860724558</x>
-				<y>1.0808084316990008</y>
+				<y>0.1808084316990004</y>
 			</point>
 			<point>
 				<x>-0.5672995311603535</x>
-				<y>1.075114286661549</y>
+				<y>0.1751142866615487</y>
 			</point>
 			<point>
 				<x>-0.5590225467662164</x>
-				<y>1.0695026295080288</y>
+				<y>0.1695026295080283</y>
 			</point>
 			<point>
 				<x>-0.5506898605815866</x>
-				<y>1.0639740213994786</y>
+				<y>0.16397402139947825</y>
 			</point>
 			<point>
 				<x>-0.5423023058681389</x>
-				<y>1.0585290151921025</y>
+				<y>0.15852901519210216</y>
 			</point>
 			<point>
 				<x>-0.5338607213743545</x>
-				<y>1.053168155381984</y>
+				<y>0.15316815538198358</y>
 			</point>
 			<point>
 				<x>-0.5253659512516486</x>
-				<y>1.0478919780506362</y>
+				<y>0.1478919780506358</y>
 			</point>
 			<point>
 				<x>-0.5168188449699544</x>
-				<y>1.0427010108113957</y>
+				<y>0.1427010108113953</y>
 			</point>
 			<point>
 				<x>-0.5082202572327774</x>
-				<y>1.0375957727566607</y>
+				<y>0.13759577275666035</y>
 			</point>
 			<point>
 				<x>-0.4995710478917261</x>
-				<y>1.0325767744059822</y>
+				<y>0.1325767744059818</y>
 			</point>
 			<point>
 				<x>-0.49087208186052667</x>
-				<y>1.0276445176550129</y>
+				<y>0.1276445176550125</y>
 			</point>
 			<point>
 				<x>-0.48212422902853325</x>
-				<y>1.0227994957253175</y>
+				<y>0.12279949572531712</y>
 			</point>
 			<point>
 				<x>-0.47332836417373914</x>
-				<y>1.0180421931150516</y>
+				<y>0.11804219311505126</y>
 			</point>
 			<point>
 				<x>-0.46448536687529995</x>
-				<y>1.0133730855505119</y>
+				<y>0.11337308555051151</y>
 			</point>
 			<point>
 				<x>-0.4555961214255764</x>
-				<y>1.0087926399385636</y>
+				<y>0.10879263993856336</y>
 			</point>
 			<point>
 				<x>-0.44666151674170584</x>
-				<y>1.0043013143199515</y>
+				<y>0.10430131431995115</y>
 			</point>
 			<point>
 				<x>-0.43768244627671127</x>
-				<y>0.9998995578234942</y>
+				<y>0.0998995578234938</y>
 			</point>
 			<point>
 				<x>-0.42865980793015634</x>
-				<y>0.9955878106211732</y>
+				<y>0.09558781062117283</y>
 			</point>
 			<point>
 				<x>-0.41959450395835696</x>
-				<y>0.9913665038841158</y>
+				<y>0.09136650388411549</y>
 			</point>
 			<point>
 				<x>-0.41048744088415623</x>
-				<y>0.987236059739478</y>
+				<y>0.08723605973947768</y>
 			</point>
 			<point>
 				<x>-0.40133952940627204</x>
-				<y>0.9831968912282322</y>
+				<y>0.08319689122823182</y>
 			</point>
 			<point>
 				<x>-0.392151684308229</x>
-				<y>0.9792494022638635</y>
+				<y>0.07924940226386312</y>
 			</point>
 			<point>
 				<x>-0.3829248243668807</x>
-				<y>0.9753939875919788</y>
+				<y>0.07539398759197846</y>
 			</point>
 			<point>
 				<x>-0.37365987226053177</x>
-				<y>0.9716310327508324</y>
+				<y>0.07163103275083205</y>
 			</point>
 			<point>
 				<x>-0.3643577544766724</x>
-				<y>0.9679609140327727</y>
+				<y>0.06796091403277238</y>
 			</point>
 			<point>
 				<x>-0.3550194012193292</x>
-				<y>0.9643839984466133</y>
+				<y>0.06438399844661291</y>
 			</point>
 			<point>
 				<x>-0.34564574631604583</x>
-				<y>0.9609006436809315</y>
+				<y>0.06090064368093118</y>
 			</point>
 			<point>
 				<x>-0.3362377271245014</x>
-				<y>0.9575111980683016</y>
+				<y>0.057511198068301295</y>
 			</point>
 			<point>
 				<x>-0.32679628443877495</x>
-				<y>0.9542160005504602</y>
+				<y>0.05421600055045983</y>
 			</point>
 			<point>
 				<x>-0.31732236239526745</x>
-				<y>0.9510153806444129</y>
+				<y>0.05101538064441258</y>
 			</point>
 			<point>
 				<x>-0.3078169083782881</x>
-				<y>0.9479096584094834</y>
+				<y>0.047909658409483025</y>
 			</point>
 			<point>
 				<x>-0.29828087292531746</x>
-				<y>0.944899144415307</y>
+				<y>0.044899144415306624</y>
 			</point>
 			<point>
 				<x>-0.2887152096319542</x>
-				<y>0.9419841397107742</y>
+				<y>0.04198413971077386</y>
 			</point>
 			<point>
 				<x>-0.27912087505655636</x>
-				<y>0.9391649357939266</y>
+				<y>0.039164935793926214</y>
 			</point>
 			<point>
 				<x>-0.2694988286245862</x>
-				<y>0.9364418145828063</y>
+				<y>0.03644181458280593</y>
 			</point>
 			<point>
 				<x>-0.25985003253266836</x>
-				<y>0.9338150483872651</y>
+				<y>0.03381504838726479</y>
 			</point>
 			<point>
 				<x>-0.25017545165237165</x>
-				<y>0.9312848998817339</y>
+				<y>0.03128489988173355</y>
 			</point>
 			<point>
 				<x>-0.24047605343372191</x>
-				<y>0.9288516220789547</y>
+				<y>0.02885162207895431</y>
 			</point>
 			<point>
 				<x>-0.23075280780845808</x>
-				<y>0.9265154583046799</y>
+				<y>0.026515458304679496</y>
 			</point>
 			<point>
 				<x>-0.22100668709304028</x>
-				<y>0.9242766421733402</y>
+				<y>0.024276642173339802</y>
 			</point>
 			<point>
 				<x>-0.21123866589141804</x>
-				<y>0.9221353975646831</y>
+				<y>0.022135397564682746</y>
 			</point>
 			<point>
 				<x>-0.20144972099757164</x>
-				<y>0.920091938601385</y>
+				<y>0.020091938601384696</y>
 			</point>
 			<point>
 				<x>-0.19164083129783294</x>
-				<y>0.9181464696276396</y>
+				<y>0.018146469627639217</y>
 			</point>
 			<point>
 				<x>-0.1818129776729981</x>
-				<y>0.9162991851887228</y>
+				<y>0.01629918518872242</y>
 			</point>
 			<point>
 				<x>-0.1719671429002395</x>
-				<y>0.9145502700115391</y>
+				<y>0.014550270011538746</y>
 			</point>
 			<point>
 				<x>-0.16210431155482985</x>
-				<y>0.912899898986149</y>
+				<y>0.012899898986148628</y>
 			</point>
 			<point>
 				<x>-0.1522254699116844</x>
-				<y>0.9113482371482795</y>
+				<y>0.01134823714827915</y>
 			</point>
 			<point>
 				<x>-0.1423316058467352</x>
-				<y>0.9098954396628215</y>
+				<y>0.009895439662821137</y>
 			</point>
 			<point>
 				<x>-0.13242370873814402</x>
-				<y>0.9085416518083128</y>
+				<y>0.008541651808312456</y>
 			</point>
 			<point>
 				<x>-0.12250276936736515</x>
-				<y>0.9072870089624109</y>
+				<y>0.007287008962410524</y>
 			</point>
 			<point>
 				<x>-0.1125697798200681</x>
-				<y>0.9061316365883545</y>
+				<y>0.006131636588354139</y>
 			</point>
 			<point>
 				<x>-0.10262573338693026</x>
-				<y>0.9050756502224184</y>
+				<y>0.005075650222418071</y>
 			</point>
 			<point>
 				<x>-0.09267162446430821</x>
-				<y>0.9041191554623594</y>
+				<y>0.004119155462359081</y>
 			</point>
 			<point>
 				<x>-0.08270844845479908</x>
-				<y>0.9032622479568561</y>
+				<y>0.0032622479568557017</y>
 			</point>
 			<point>
 				<x>-0.07273720166770137</x>
-				<y>0.902505013395945</y>
+				<y>0.0025050133959446663</y>
 			</point>
 			<point>
 				<x>-0.06275888121938444</x>
-				<y>0.9018475275024513</y>
+				<y>0.0018475275024509852</y>
 			</point>
 			<point>
 				<x>-0.052774484933577726</x>
-				<y>0.9012898560244165</y>
+				<y>0.001289856024416114</y>
 			</point>
 			<point>
 				<x>-0.04278501124158951</x>
-				<y>0.9008320547285236</y>
+				<y>0.0008320547285232127</y>
 			</point>
 			<point>
 				<x>-0.032791459082464613</x>
-				<y>0.9004741693945205</y>
+				<y>0.00047416939452016305</y>
 			</point>
 			<point>
 				<x>-0.022794827803090945</x>
-				<y>0.9002162358106426</y>
+				<y>0.00021623581064222908</y>
 			</point>
 			<point>
 				<x>-0.012796117058265888</x>
-				<y>0.9000582797700333</y>
+				<y>5.827977003292073e-05</y>
 			</point>
 			<point>
 				<x>-0.0027963267107317114</x>
-				<y>0.900000317068165</y>
+				<y>3.1706816461252174e-07</y>
 			</point>
 			<lineMarking>dashed</lineMarking>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
 				<x>-1.4019950000104164</x>
-				<y>1.8980000083333217</y>
+				<y>0.9980000083333214</y>
 			</point>
 			<point>
 				<x>-1.4019050012604088</x>
-				<y>1.8840003916633012</y>
+				<y>0.9840003916633008</y>
 			</point>
 			<point>
 				<x>-1.4016750131768587</x>
-				<y>1.8700023749407833</y>
+				<y>0.970002374940783</y>
 			</point>
 			<point>
 				<x>-1.4013050587583828</x>
-				<y>1.8560073579557672</y>
+				<y>0.9560073579557669</y>
 			</point>
 			<point>
 				<x>-1.4007951750001149</x>
-				<y>1.8420167401983034</y>
+				<y>0.9420167401983032</y>
 			</point>
 			<point>
 				<x>-1.4001454128900055</x>
-				<y>1.8280319207184934</y>
+				<y>0.928031920718493</y>
 			</point>
 			<point>
 				<x>-1.3993558374037245</x>
-				<y>1.8140542979866412</y>
+				<y>0.9140542979866408</y>
 			</point>
 			<point>
 				<x>-1.3984265274981622</x>
-				<y>1.800085269753367</y>
+				<y>0.9000852697533666</y>
 			</point>
 			<point>
 				<x>-1.3973575761035355</x>
-				<y>1.7861262329098633</y>
+				<y>0.8861262329098629</y>
 			</point>
 			<point>
 				<x>-1.396149090114092</x>
-				<y>1.7721785833481623</y>
+				<y>0.872178583348162</y>
 			</point>
 			<point>
 				<x>-1.3948011903774244</x>
-				<y>1.758243715821618</y>
+				<y>0.8582437158216177</y>
 			</point>
 			<point>
 				<x>-1.3933140116823832</x>
-				<y>1.7443230238053604</y>
+				<y>0.8443230238053602</y>
 			</point>
 			<point>
 				<x>-1.3916877027455978</x>
-				<y>1.7304178993569912</y>
+				<y>0.8304178993569907</y>
 			</point>
 			<point>
 				<x>-1.3899224261966072</x>
-				<y>1.7165297329773657</y>
+				<y>0.8165297329773653</y>
 			</point>
 			<point>
 				<x>-1.3880183585615944</x>
-				<y>1.7026599134715485</y>
+				<y>0.8026599134715482</y>
 			</point>
 			<point>
 				<x>-1.385975690245738</x>
-				<y>1.688809827809944</y>
+				<y>0.7888098278099436</y>
 			</point>
 			<point>
 				<x>-1.3837946255141662</x>
-				<y>1.674980860989564</y>
+				<y>0.7749808609895635</y>
 			</point>
 			<point>
 				<x>-1.3814753824715338</x>
-				<y>1.6611743958955645</y>
+				<y>0.7611743958955641</y>
 			</point>
 			<point>
 				<x>-1.3790181930402134</x>
-				<y>1.647391813162957</y>
+				<y>0.7473918131629567</y>
 			</point>
 			<point>
 				<x>-1.3764233029371011</x>
-				<y>1.6336344910385305</y>
+				<y>0.7336344910385303</y>
 			</point>
 			<point>
 				<x>-1.3736909716490437</x>
-				<y>1.6199038052430281</y>
+				<y>0.7199038052430277</y>
 			</point>
 			<point>
 				<x>-1.370821472406893</x>
-				<y>1.6062011288335871</y>
+				<y>0.7062011288335868</y>
 			</point>
 			<point>
 				<x>-1.3678150921581818</x>
-				<y>1.5925278320664287</y>
+				<y>0.6925278320664283</y>
 			</point>
 			<point>
 				<x>-1.3646721315384318</x>
-				<y>1.5788852822598447</y>
+				<y>0.6788852822598443</y>
 			</point>
 			<point>
 				<x>-1.3613929048410836</x>
-				<y>1.5652748436574364</y>
+				<y>0.6652748436574359</y>
 			</point>
 			<point>
 				<x>-1.3579777399860753</x>
-				<y>1.551697877291727</y>
+				<y>0.6516978772917266</y>
 			</point>
 			<point>
 				<x>-1.3544269784870453</x>
-				<y>1.5381557408480355</y>
+				<y>0.6381557408480351</y>
 			</point>
 			<point>
 				<x>-1.3507409754171849</x>
-				<y>1.5246497885287207</y>
+				<y>0.6246497885287203</y>
 			</point>
 			<point>
 				<x>-1.346920099373732</x>
-				<y>1.5111813709177708</y>
+				<y>0.6111813709177706</y>
 			</point>
 			<point>
 				<x>-1.3429647324411018</x>
-				<y>1.4977518348457044</y>
+				<y>0.597751834845704</y>
 			</point>
 			<point>
 				<x>-1.338875270152697</x>
-				<y>1.4843625232549562</y>
+				<y>0.584362523254956</y>
 			</point>
 			<point>
 				<x>-1.3346521214513343</x>
-				<y>1.4710147750655138</y>
+				<y>0.5710147750655135</y>
 			</point>
 			<point>
 				<x>-1.3302957086483667</x>
-				<y>1.4577099250410803</y>
+				<y>0.55770992504108</y>
 			</point>
 			<point>
 				<x>-1.3258064673814443</x>
-				<y>1.4444493036555708</y>
+				<y>0.5444493036555704</y>
 			</point>
 			<point>
 				<x>-1.3211848465709515</x>
-				<y>1.4312342369600692</y>
+				<y>0.5312342369600688</y>
 			</point>
 			<point>
 				<x>-1.316431308375118</x>
-				<y>1.4180660464502333</y>
+				<y>0.5180660464502329</y>
 			</point>
 			<point>
 				<x>-1.311546328143804</x>
-				<y>1.404946048934145</y>
+				<y>0.5049460489341446</y>
 			</point>
 			<point>
 				<x>-1.306530394370959</x>
-				<y>1.3918755564006164</y>
+				<y>0.491875556400616</y>
 			</point>
 			<point>
 				<x>-1.3013840086457844</x>
-				<y>1.3788558758880178</y>
+				<y>0.47885587588801737</y>
 			</point>
 			<point>
 				<x>-1.2961076856025595</x>
-				<y>1.3658883093535394</y>
+				<y>0.4658883093535391</y>
 			</point>
 			<point>
 				<x>-1.2907019528691943</x>
-				<y>1.3529741535430357</y>
+				<y>0.4529741535430355</y>
 			</point>
 			<point>
 				<x>-1.285167351014457</x>
-				<y>1.340114699861325</y>
+				<y>0.44011469986132457</y>
 			</point>
 			<point>
 				<x>-1.279504433493923</x>
-				<y>1.3273112342430626</y>
+				<y>0.4273112342430624</y>
 			</point>
 			<point>
 				<x>-1.2737137665946194</x>
-				<y>1.314565037024129</y>
+				<y>0.4145650370241287</y>
 			</point>
 			<point>
 				<x>-1.2677959293784142</x>
-				<y>1.3018773828136325</y>
+				<y>0.40187738281363206</y>
 			</point>
 			<point>
 				<x>-1.2617515136241026</x>
-				<y>1.2892495403664315</y>
+				<y>0.389249540366431</y>
 			</point>
 			<point>
 				<x>-1.2555811237682124</x>
-				<y>1.2766827724562244</y>
+				<y>0.37668277245622395</y>
 			</point>
 			<point>
 				<x>-1.249285376844595</x>
-				<y>1.2641783357493472</y>
+				<y>0.36417833574934677</y>
 			</point>
 			<point>
 				<x>-1.2428649024226952</x>
-				<y>1.2517374806790476</y>
+				<y>0.3517374806790472</y>
 			</point>
 			<point>
 				<x>-1.236320342544602</x>
-				<y>1.2393614513204594</y>
+				<y>0.33936145132045903</y>
 			</point>
 			<point>
 				<x>-1.2296523516608528</x>
-				<y>1.2270514852662122</y>
+				<y>0.32705148526621186</y>
 			</point>
 			<point>
 				<x>-1.222861596564978</x>
-				<y>1.21480881350265</y>
+				<y>0.31480881350264966</y>
 			</point>
 			<point>
 				<x>-1.2159487563268272</x>
-				<y>1.2026346602867455</y>
+				<y>0.302634660286745</y>
 			</point>
 			<point>
 				<x>-1.2089145222246611</x>
-				<y>1.1905302430236708</y>
+				<y>0.2905302430236705</y>
 			</point>
 			<point>
 				<x>-1.2017595976760362</x>
-				<y>1.1784967721450794</y>
+				<y>0.2784967721450792</y>
 			</point>
 			<point>
 				<x>-1.194484698167439</x>
-				<y>1.1665354509880215</y>
+				<y>0.2665354509880211</y>
 			</point>
 			<point>
 				<x>-1.187090551182756</x>
-				<y>1.1546474756746408</y>
+				<y>0.2546474756746405</y>
 			</point>
 			<point>
 				<x>-1.1795778961305292</x>
-				<y>1.1428340349925716</y>
+				<y>0.2428340349925714</y>
 			</point>
 			<point>
 				<x>-1.1719474842700028</x>
-				<y>1.1310963102760365</y>
+				<y>0.23109631027603617</y>
 			</point>
 			<point>
 				<x>-1.1642000786359987</x>
-				<y>1.119435475287717</y>
+				<y>0.21943547528771667</y>
 			</point>
 			<point>
 				<x>-1.1563364539626284</x>
-				<y>1.1078526961014017</y>
+				<y>0.20785269610140145</y>
 			</point>
 			<point>
 				<x>-1.148357396605808</x>
-				<y>1.096349130985359</y>
+				<y>0.19634913098535867</y>
 			</point>
 			<point>
 				<x>-1.1402637044646209</x>
-				<y>1.0849259302865097</y>
+				<y>0.1849259302865094</y>
 			</point>
 			<point>
 				<x>-1.1320561869015346</x>
-				<y>1.0735842363154022</y>
+				<y>0.17358423631540176</y>
 			</point>
 			<point>
 				<x>-1.123735664661473</x>
-				<y>1.0623251832319913</y>
+				<y>0.16232518323199085</y>
 			</point>
 			<point>
 				<x>-1.1153029697897205</x>
-				<y>1.0511498969321957</y>
+				<y>0.15114989693219538</y>
 			</point>
 			<point>
 				<x>-1.1067589455487357</x>
-				<y>1.04005949493533</y>
+				<y>0.14005949493532965</y>
 			</point>
 			<point>
 				<x>-1.0981044463338274</x>
-				<y>1.0290550862723593</y>
+				<y>0.12905508627235895</y>
 			</point>
 			<point>
 				<x>-1.089340337587703</x>
-				<y>1.0181377713749764</y>
+				<y>0.11813777137497605</y>
 			</point>
 			<point>
 				<x>-1.0804674957139344</x>
-				<y>1.0073086419655735</y>
+				<y>0.1073086419655731</y>
 			</point>
 			<point>
 				<x>-1.0714868079893112</x>
-				<y>0.9965687809480634</y>
+				<y>0.0965687809480631</y>
 			</point>
 			<point>
 				<x>-1.0623991724751298</x>
-				<y>0.9859192622996076</y>
+				<y>0.08591926229960722</y>
 			</point>
 			<point>
 				<x>-1.053205497927359</x>
-				<y>0.9753611509631843</y>
+				<y>0.07536115096318396</y>
 			</point>
 			<point>
 				<x>-1.0439067037058005</x>
-				<y>0.964895502741139</y>
+				<y>0.06489550274113864</y>
 			</point>
 			<point>
 				<x>-1.034503719682125</x>
-				<y>0.9545233641895693</y>
+				<y>0.054523364189568935</y>
 			</point>
 			<point>
 				<x>-1.0249974861468958</x>
-				<y>0.9442457725136837</y>
+				<y>0.044245772513683335</y>
 			</point>
 			<point>
 				<x>-1.015388953715545</x>
-				<y>0.9340637554640852</y>
+				<y>0.0340637554640848</y>
 			</point>
 			<point>
 				<x>-1.0056790832333153</x>
-				<y>0.9239783312340011</y>
+				<y>0.023978331234000727</y>
 			</point>
 			<point>
 				<x>-0.9958688456791558</x>
-				<y>0.9139905083574416</y>
+				<y>0.0139905083574412</y>
 			</point>
 			<point>
 				<x>-0.9859592220686516</x>
-				<y>0.904101285608377</y>
+				<y>0.004101285608376637</y>
 			</point>
 			<point>
 				<x>-0.9759512033559022</x>
-				<y>0.8943116519008367</y>
+				<y>-0.0056883480991636315</y>
 			</point>
 			<point>
 				<x>-0.9658457903344406</x>
-				<y>0.8846225861900356</y>
+				<y>-0.015377413809964713</y>
 			</point>
 			<point>
 				<x>-0.9556439935371495</x>
-				<y>0.8750350573744723</y>
+				<y>-0.024964942625528064</y>
 			</point>
 			<point>
 				<x>-0.9453468331352034</x>
-				<y>0.865550024199035</y>
+				<y>-0.034449975800965316</y>
 			</point>
 			<point>
 				<x>-0.9349553388360625</x>
-				<y>0.8561684351591385</y>
+				<y>-0.043831564840861814</y>
 			</point>
 			<point>
 				<x>-0.924470549780502</x>
-				<y>0.8468912284058725</y>
+				<y>-0.05310877159412786</y>
 			</point>
 			<point>
 				<x>-0.9138935144386853</x>
-				<y>0.8377193316521772</y>
+				<y>-0.0622806683478232</y>
 			</point>
 			<point>
 				<x>-0.9032252905053277</x>
-				<y>0.8286536620800808</y>
+				<y>-0.07134633791991951</y>
 			</point>
 			<point>
 				<x>-0.8924669447939474</x>
-				<y>0.8196951262489987</y>
+				<y>-0.0803048737510017</y>
 			</point>
 			<point>
 				<x>-0.8816195531301318</x>
-				<y>0.8108446200050328</y>
+				<y>-0.08915537999496759</y>
 			</point>
 			<point>
 				<x>-0.8706842002440243</x>
-				<y>0.8021030283914461</y>
+				<y>-0.09789697160855426</y>
 			</point>
 			<point>
 				<x>-0.859661979661793</x>
-				<y>0.7934712255601086</y>
+				<y>-0.10652877443989173</y>
 			</point>
 			<point>
 				<x>-0.848553993596304</x>
-				<y>0.7849500746841049</y>
+				<y>-0.11504992531589542</y>
 			</point>
 			<point>
 				<x>-0.8373613528369244</x>
-				<y>0.7765404278714354</y>
+				<y>-0.12345957212856495</y>
 			</point>
 			<point>
 				<x>-0.8260851766383877</x>
-				<y>0.7682431260797611</y>
+				<y>-0.13175687392023927</y>
 			</point>
 			<point>
 				<x>-0.814726592608924</x>
-				<y>0.7600589990323525</y>
+				<y>-0.13994100096764783</y>
 			</point>
 			<point>
 				<x>-0.803286736597464</x>
-				<y>0.7519888651350892</y>
+				<y>-0.14801113486491113</y>
 			</point>
 			<point>
 				<x>-0.7917667525800914</x>
-				<y>0.7440335313946469</y>
+				<y>-0.15596646860535346</y>
 			</point>
 			<point>
 				<x>-0.7801677925455895</x>
-				<y>0.7361937933377574</y>
+				<y>-0.163806206662243</y>
 			</point>
 			<point>
 				<x>-0.7684910163803103</x>
-				<y>0.728470434931703</y>
+				<y>-0.1715295650682973</y>
 			</point>
 			<point>
 				<x>-0.7567375917521234</x>
-				<y>0.7208642285058775</y>
+				<y>-0.17913577149412285</y>
 			</point>
 			<point>
 				<x>-0.7449086939937197</x>
-				<y>0.7133759346745996</y>
+				<y>-0.18662406532540077</y>
 			</point>
 			<point>
 				<x>-0.7330055059849968</x>
-				<y>0.7060063022609988</y>
+				<y>-0.19399369773900155</y>
 			</point>
 			<point>
 				<x>-0.7210292180348445</x>
-				<y>0.6987560682221807</y>
+				<y>-0.20124393177781963</y>
 			</point>
 			<point>
 				<x>-0.7089810277620837</x>
-				<y>0.6916259575755104</y>
+				<y>-0.20837404242448998</y>
 			</point>
 			<point>
 				<x>-0.696862139975688</x>
-				<y>0.6846166833261031</y>
+				<y>-0.2153833166738972</y>
 			</point>
 			<point>
 				<x>-0.6846737665543521</x>
-				<y>0.6777289463955516</y>
+				<y>-0.22227105360444877</y>
 			</point>
 			<point>
 				<x>-0.6724171263252483</x>
-				<y>0.6709634355518017</y>
+				<y>-0.22903656444819864</y>
 			</point>
 			<point>
 				<x>-0.6600934449421925</x>
-				<y>0.6643208273403036</y>
+				<y>-0.23567917265969673</y>
 			</point>
 			<point>
 				<x>-0.6477039547630525</x>
-				<y>0.6578017860163428</y>
+				<y>-0.2421982139836576</y>
 			</point>
 			<point>
 				<x>-0.6352498947265186</x>
-				<y>0.651406963478617</y>
+				<y>-0.24859303652138331</y>
 			</point>
 			<point>
 				<x>-0.6227325102282242</x>
-				<y>0.6451369992040559</y>
+				<y>-0.2548630007959445</y>
 			</point>
 			<point>
 				<x>-0.6101530529961783</x>
-				<y>0.6389925201838564</y>
+				<y>-0.2610074798161439</y>
 			</point>
 			<point>
 				<x>-0.597512780965624</x>
-				<y>0.6329741408608018</y>
+				<y>-0.2670258591391985</y>
 			</point>
 			<point>
 				<x>-0.5848129581532359</x>
-				<y>0.6270824630678118</y>
+				<y>-0.27291753693218856</y>
 			</point>
 			<point>
 				<x>-0.5720548545307054</x>
-				<y>0.6213180759677523</y>
+				<y>-0.278681924032248</y>
 			</point>
 			<point>
 				<x>-0.5592397458977647</x>
-				<y>0.615681555994531</y>
+				<y>-0.28431844400546935</y>
 			</point>
 			<point>
 				<x>-0.5463689137546037</x>
-				<y>0.6101734667954504</y>
+				<y>-0.28982653320455</y>
 			</point>
 			<point>
 				<x>-0.5334436451737052</x>
-				<y>0.6047943591748377</y>
+				<y>-0.29520564082516265</y>
 			</point>
 			<point>
 				<x>-0.5204652326711554</x>
-				<y>0.5995447710389723</y>
+				<y>-0.30045522896102805</y>
 			</point>
 			<point>
 				<x>-0.5074349740773885</x>
-				<y>0.5944252273422928</y>
+				<y>-0.3055747726577076</y>
 			</point>
 			<point>
 				<x>-0.49435417240741863</x>
-				<y>0.5894362400349076</y>
+				<y>-0.3105637599650928</y>
 			</point>
 			<point>
 				<x>-0.48122413573049094</x>
-				<y>0.584578308011382</y>
+				<y>-0.31542169198861836</y>
 			</point>
 			<point>
 				<x>-0.46804617703934714</x>
-				<y>0.5798519170608762</y>
+				<y>-0.3201480829391241</y>
 			</point>
 			<point>
 				<x>-0.4548216141188727</x>
-				<y>0.5752575398185453</y>
+				<y>-0.32474246018145503</y>
 			</point>
 			<point>
 				<x>-0.44155176941433194</x>
-				<y>0.5707956357182826</y>
+				<y>-0.32920436428171773</y>
 			</point>
 			<point>
 				<x>-0.4282379698991394</x>
-				<y>0.5664666509467808</y>
+				<y>-0.3335333490532195</y>
 			</point>
 			<point>
 				<x>-0.4148815469421617</x>
-				<y>0.5622710183989128</y>
+				<y>-0.33772898160108755</y>
 			</point>
 			<point>
 				<x>-0.40148383617455063</x>
-				<y>0.5582091576344324</y>
+				<y>-0.341790842365568</y>
 			</point>
 			<point>
 				<x>-0.38804617735622726</x>
-				<y>0.5542814748360345</y>
+				<y>-0.34571852516396584</y>
 			</point>
 			<point>
 				<x>-0.3745699142418737</x>
-				<y>0.5504883627687245</y>
+				<y>-0.3495116372312759</y>
 			</point>
 			<point>
 				<x>-0.36105639444656534</x>
-				<y>0.5468302007405474</y>
+				<y>-0.3531697992594529</y>
 			</point>
 			<point>
 				<x>-0.347506969311025</x>
-				<y>0.5433073545646585</y>
+				<y>-0.35669264543534185</y>
 			</point>
 			<point>
 				<x>-0.33392299376647827</x>
-				<y>0.5399201765227406</y>
+				<y>-0.36007982347725975</y>
 			</point>
 			<point>
 				<x>-0.3203058261991567</x>
-				<y>0.5366690053297742</y>
+				<y>-0.3633309946702261</y>
 			</point>
 			<point>
 				<x>-0.30665682831446484</x>
-				<y>0.5335541661001688</y>
+				<y>-0.36644583389983154</y>
 			</point>
 			<point>
 				<x>-0.29297736500082716</x>
-				<y>0.5305759703152533</y>
+				<y>-0.3694240296847471</y>
 			</point>
 			<point>
 				<x>-0.2792688041931648</x>
-				<y>0.5277347157921224</y>
+				<y>-0.37226528420787797</y>
 			</point>
 			<point>
 				<x>-0.26553251673614287</x>
-				<y>0.5250306866538623</y>
+				<y>-0.37496931334613803</y>
 			</point>
 			<point>
 				<x>-0.2517698762470578</x>
-				<y>0.5224641533011332</y>
+				<y>-0.3775358466988672</y>
 			</point>
 			<point>
 				<x>-0.23798225897848468</x>
-				<y>0.5200353723851303</y>
+				<y>-0.37996462761487004</y>
 			</point>
 			<point>
 				<x>-0.2241710436806693</x>
-				<y>0.517744586781923</y>
+				<y>-0.3822554132180773</y>
 			</point>
 			<point>
 				<x>-0.21033761146362495</x>
-				<y>0.5155920255681614</y>
+				<y>-0.38440797443183894</y>
 			</point>
 			<point>
 				<x>-0.19648334565904946</x>
-				<y>0.5135779039981736</y>
+				<y>-0.38642209600182675</y>
 			</point>
 			<point>
 				<x>-0.18260963168197253</x>
-				<y>0.5117024234824377</y>
+				<y>-0.3882975765175627</y>
 			</point>
 			<point>
 				<x>-0.1687178568922444</x>
-				<y>0.5099657715674439</y>
+				<y>-0.3900342284325564</y>
 			</point>
 			<point>
 				<x>-0.1548094104557518</x>
-				<y>0.5083681219169345</y>
+				<y>-0.3916318780830659</y>
 			</point>
 			<point>
 				<x>-0.14088568320555261</x>
-				<y>0.5069096342945438</y>
+				<y>-0.3930903657054565</y>
 			</point>
 			<point>
 				<x>-0.1269480675027772</x>
-				<y>0.5055904545478196</y>
+				<y>-0.39440954545218077</y>
 			</point>
 			<point>
 				<x>-0.1129979570973687</x>
-				<y>0.5044107145936361</y>
+				<y>-0.3955892854063643</y>
 			</point>
 			<point>
 				<x>-0.09903674698875065</x>
-				<y>0.5033705324050062</y>
+				<y>-0.3966294675949942</y>
 			</point>
 			<point>
 				<x>-0.08506583328629669</x>
-				<y>0.5024700119992818</y>
+				<y>-0.3975299880007186</y>
 			</point>
 			<point>
 				<x>-0.07108661306973219</x>
-				<y>0.5017092434277526</y>
+				<y>-0.3982907565722478</y>
 			</point>
 			<point>
 				<x>-0.05710048424944114</x>
-				<y>0.5010883027666428</y>
+				<y>-0.3989116972333575</y>
 			</point>
 			<point>
 				<x>-0.043108845426638065</x>
-				<y>0.5006072521095004</y>
+				<y>-0.39939274789049994</y>
 			</point>
 			<point>
 				<x>-0.029113095753546814</x>
-				<y>0.50026613956099</y>
+				<y>-0.3997338604390104</y>
 			</point>
 			<point>
 				<x>-0.015114634793476744</x>
-				<y>0.5000649992320827</y>
+				<y>-0.39993500076791766</y>
 			</point>
 			<point>
 				<x>-0.005114844445942568</x>
-				<y>0.5000070365302145</y>
+				<y>-0.39999296346978586</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor>
-			<lanelet ref="-62"/>
+			<lanelet ref="-59"/>
 		</predecessor>
 		<successor/>
-		<adjacentLeft drivingDir="opposite" ref="-65"/>
+		<adjacentLeft drivingDir="opposite" ref="-62"/>
 	</lanelet>
-	<lanelet id="-65">
+	<lanelet id="-62">
 		<leftBoundary>
 			<point>
 				<x>-0.0027963267107317114</x>
-				<y>0.900000317068165</y>
+				<y>3.1706816461252174e-07</y>
 			</point>
 			<point>
 				<x>-0.012796117058265888</x>
-				<y>0.9000582797700333</y>
+				<y>5.827977003292073e-05</y>
 			</point>
 			<point>
 				<x>-0.022794827803090945</x>
-				<y>0.9002162358106426</y>
+				<y>0.00021623581064222908</y>
 			</point>
 			<point>
 				<x>-0.032791459082464613</x>
-				<y>0.9004741693945205</y>
+				<y>0.00047416939452016305</y>
 			</point>
 			<point>
 				<x>-0.04278501124158951</x>
-				<y>0.9008320547285236</y>
+				<y>0.0008320547285232127</y>
 			</point>
 			<point>
 				<x>-0.052774484933577726</x>
-				<y>0.9012898560244165</y>
+				<y>0.001289856024416114</y>
 			</point>
 			<point>
 				<x>-0.06275888121938444</x>
-				<y>0.9018475275024513</y>
+				<y>0.0018475275024509852</y>
 			</point>
 			<point>
 				<x>-0.07273720166770137</x>
-				<y>0.902505013395945</y>
+				<y>0.0025050133959446663</y>
 			</point>
 			<point>
 				<x>-0.08270844845479908</x>
-				<y>0.9032622479568561</y>
+				<y>0.0032622479568557017</y>
 			</point>
 			<point>
 				<x>-0.09267162446430821</x>
-				<y>0.9041191554623594</y>
+				<y>0.004119155462359081</y>
 			</point>
 			<point>
 				<x>-0.10262573338693026</x>
-				<y>0.9050756502224184</y>
+				<y>0.005075650222418071</y>
 			</point>
 			<point>
 				<x>-0.1125697798200681</x>
-				<y>0.9061316365883545</y>
+				<y>0.006131636588354139</y>
 			</point>
 			<point>
 				<x>-0.12250276936736515</x>
-				<y>0.9072870089624109</y>
+				<y>0.007287008962410524</y>
 			</point>
 			<point>
 				<x>-0.13242370873814402</x>
-				<y>0.9085416518083128</y>
+				<y>0.008541651808312456</y>
 			</point>
 			<point>
 				<x>-0.1423316058467352</x>
-				<y>0.9098954396628215</y>
+				<y>0.009895439662821137</y>
 			</point>
 			<point>
 				<x>-0.1522254699116844</x>
-				<y>0.9113482371482795</y>
+				<y>0.01134823714827915</y>
 			</point>
 			<point>
 				<x>-0.16210431155482985</x>
-				<y>0.912899898986149</y>
+				<y>0.012899898986148628</y>
 			</point>
 			<point>
 				<x>-0.1719671429002395</x>
-				<y>0.9145502700115391</y>
+				<y>0.014550270011538746</y>
 			</point>
 			<point>
 				<x>-0.1818129776729981</x>
-				<y>0.9162991851887228</y>
+				<y>0.01629918518872242</y>
 			</point>
 			<point>
 				<x>-0.19164083129783294</x>
-				<y>0.9181464696276396</y>
+				<y>0.018146469627639217</y>
 			</point>
 			<point>
 				<x>-0.20144972099757164</x>
-				<y>0.920091938601385</y>
+				<y>0.020091938601384696</y>
 			</point>
 			<point>
 				<x>-0.21123866589141804</x>
-				<y>0.9221353975646831</y>
+				<y>0.022135397564682746</y>
 			</point>
 			<point>
 				<x>-0.22100668709304028</x>
-				<y>0.9242766421733402</y>
+				<y>0.024276642173339802</y>
 			</point>
 			<point>
 				<x>-0.23075280780845808</x>
-				<y>0.9265154583046799</y>
+				<y>0.026515458304679496</y>
 			</point>
 			<point>
 				<x>-0.24047605343372191</x>
-				<y>0.9288516220789547</y>
+				<y>0.02885162207895431</y>
 			</point>
 			<point>
 				<x>-0.25017545165237165</x>
-				<y>0.9312848998817339</y>
+				<y>0.03128489988173355</y>
 			</point>
 			<point>
 				<x>-0.25985003253266836</x>
-				<y>0.9338150483872651</y>
+				<y>0.03381504838726479</y>
 			</point>
 			<point>
 				<x>-0.2694988286245862</x>
-				<y>0.9364418145828063</y>
+				<y>0.03644181458280593</y>
 			</point>
 			<point>
 				<x>-0.27912087505655636</x>
-				<y>0.9391649357939266</y>
+				<y>0.039164935793926214</y>
 			</point>
 			<point>
 				<x>-0.2887152096319542</x>
-				<y>0.9419841397107742</y>
+				<y>0.04198413971077386</y>
 			</point>
 			<point>
 				<x>-0.29828087292531746</x>
-				<y>0.944899144415307</y>
+				<y>0.044899144415306624</y>
 			</point>
 			<point>
 				<x>-0.3078169083782881</x>
-				<y>0.9479096584094834</y>
+				<y>0.047909658409483025</y>
 			</point>
 			<point>
 				<x>-0.31732236239526745</x>
-				<y>0.9510153806444129</y>
+				<y>0.05101538064441258</y>
 			</point>
 			<point>
 				<x>-0.32679628443877495</x>
-				<y>0.9542160005504602</y>
+				<y>0.05421600055045983</y>
 			</point>
 			<point>
 				<x>-0.3362377271245014</x>
-				<y>0.9575111980683016</y>
+				<y>0.057511198068301295</y>
 			</point>
 			<point>
 				<x>-0.34564574631604583</x>
-				<y>0.9609006436809315</y>
+				<y>0.06090064368093118</y>
 			</point>
 			<point>
 				<x>-0.3550194012193292</x>
-				<y>0.9643839984466133</y>
+				<y>0.06438399844661291</y>
 			</point>
 			<point>
 				<x>-0.3643577544766724</x>
-				<y>0.9679609140327727</y>
+				<y>0.06796091403277238</y>
 			</point>
 			<point>
 				<x>-0.37365987226053177</x>
-				<y>0.9716310327508324</y>
+				<y>0.07163103275083205</y>
 			</point>
 			<point>
 				<x>-0.3829248243668807</x>
-				<y>0.9753939875919788</y>
+				<y>0.07539398759197846</y>
 			</point>
 			<point>
 				<x>-0.392151684308229</x>
-				<y>0.9792494022638635</y>
+				<y>0.07924940226386312</y>
 			</point>
 			<point>
 				<x>-0.40133952940627204</x>
-				<y>0.9831968912282322</y>
+				<y>0.08319689122823182</y>
 			</point>
 			<point>
 				<x>-0.41048744088415623</x>
-				<y>0.987236059739478</y>
+				<y>0.08723605973947768</y>
 			</point>
 			<point>
 				<x>-0.41959450395835696</x>
-				<y>0.9913665038841158</y>
+				<y>0.09136650388411549</y>
 			</point>
 			<point>
 				<x>-0.42865980793015634</x>
-				<y>0.9955878106211732</y>
+				<y>0.09558781062117283</y>
 			</point>
 			<point>
 				<x>-0.43768244627671127</x>
-				<y>0.9998995578234942</y>
+				<y>0.0998995578234938</y>
 			</point>
 			<point>
 				<x>-0.44666151674170584</x>
-				<y>1.0043013143199515</y>
+				<y>0.10430131431995115</y>
 			</point>
 			<point>
 				<x>-0.4555961214255764</x>
-				<y>1.0087926399385636</y>
+				<y>0.10879263993856336</y>
 			</point>
 			<point>
 				<x>-0.46448536687529995</x>
-				<y>1.0133730855505119</y>
+				<y>0.11337308555051151</y>
 			</point>
 			<point>
 				<x>-0.47332836417373914</x>
-				<y>1.0180421931150516</y>
+				<y>0.11804219311505126</y>
 			</point>
 			<point>
 				<x>-0.48212422902853325</x>
-				<y>1.0227994957253175</y>
+				<y>0.12279949572531712</y>
 			</point>
 			<point>
 				<x>-0.49087208186052667</x>
-				<y>1.0276445176550129</y>
+				<y>0.1276445176550125</y>
 			</point>
 			<point>
 				<x>-0.4995710478917261</x>
-				<y>1.0325767744059822</y>
+				<y>0.1325767744059818</y>
 			</point>
 			<point>
 				<x>-0.5082202572327774</x>
-				<y>1.0375957727566607</y>
+				<y>0.13759577275666035</y>
 			</point>
 			<point>
 				<x>-0.5168188449699544</x>
-				<y>1.0427010108113957</y>
+				<y>0.1427010108113953</y>
 			</point>
 			<point>
 				<x>-0.5253659512516486</x>
-				<y>1.0478919780506362</y>
+				<y>0.1478919780506358</y>
 			</point>
 			<point>
 				<x>-0.5338607213743545</x>
-				<y>1.053168155381984</y>
+				<y>0.15316815538198358</y>
 			</point>
 			<point>
 				<x>-0.5423023058681389</x>
-				<y>1.0585290151921025</y>
+				<y>0.15852901519210216</y>
 			</point>
 			<point>
 				<x>-0.5506898605815866</x>
-				<y>1.0639740213994786</y>
+				<y>0.16397402139947825</y>
 			</point>
 			<point>
 				<x>-0.5590225467662164</x>
-				<y>1.0695026295080288</y>
+				<y>0.1695026295080283</y>
 			</point>
 			<point>
 				<x>-0.5672995311603535</x>
-				<y>1.075114286661549</y>
+				<y>0.1751142866615487</y>
 			</point>
 			<point>
 				<x>-0.5755199860724558</x>
-				<y>1.0808084316990008</y>
+				<y>0.1808084316990004</y>
 			</point>
 			<point>
 				<x>-0.5836830894638827</x>
-				<y>1.0865844952106252</y>
+				<y>0.18658449521062492</y>
 			</point>
 			<point>
 				<x>-0.5917880250310974</x>
-				<y>1.0924418995948848</y>
+				<y>0.19244189959488445</y>
 			</point>
 			<point>
 				<x>-0.5998339822872973</x>
-				<y>1.0983800591162218</y>
+				<y>0.19838005911622159</y>
 			</point>
 			<point>
 				<x>-0.607820156643462</x>
-				<y>1.104398379963633</y>
+				<y>0.20439837996363264</y>
 			</point>
 			<point>
 				<x>-0.6157457494888108</x>
-				<y>1.1104962603100486</y>
+				<y>0.2104962603100483</y>
 			</point>
 			<point>
 				<x>-0.6236099682706637</x>
-				<y>1.1166730903725157</y>
+				<y>0.21667309037251536</y>
 			</point>
 			<point>
 				<x>-0.6314120265736962</x>
-				<y>1.1229282524731752</y>
+				<y>0.22292825247317483</y>
 			</point>
 			<point>
 				<x>-0.6391511441985795</x>
-				<y>1.1292611211010297</y>
+				<y>0.22926112110102947</y>
 			</point>
 			<point>
 				<x>-0.6468265472400005</x>
-				<y>1.135671062974494</y>
+				<y>0.23567106297449358</y>
 			</point>
 			<point>
 				<x>-0.654437468164051</x>
-				<y>1.142157437104722</y>
+				<y>0.2421574371047217</y>
 			</point>
 			<point>
 				<x>-0.6619831458849814</x>
-				<y>1.1487195948597064</y>
+				<y>0.24871959485970607</y>
 			</point>
 			<point>
 				<x>-0.6694628258413073</x>
-				<y>1.1553568800291396</y>
+				<y>0.25535688002913937</y>
 			</point>
 			<point>
 				<x>-0.6768757600712665</x>
-				<y>1.1620686288900364</y>
+				<y>0.262068628890036</y>
 			</point>
 			<point>
 				<x>-0.6842212072876128</x>
-				<y>1.1688541702731032</y>
+				<y>0.2688541702731029</y>
 			</point>
 			<point>
 				<x>-0.6914984329517464</x>
-				<y>1.1757128256298566</y>
+				<y>0.2757128256298562</y>
 			</point>
 			<point>
 				<x>-0.6987067093471648</x>
-				<y>1.1826439091004763</y>
+				<y>0.282643909100476</y>
 			</point>
 			<point>
 				<x>-0.7058453156522355</x>
-				<y>1.1896467275823914</y>
+				<y>0.28964672758239096</y>
 			</point>
 			<point>
 				<x>-0.7129135380122766</x>
-				<y>1.1967205807995889</y>
+				<y>0.2967205807995885</y>
 			</point>
 			<point>
 				<x>-0.7199106696109427</x>
-				<y>1.2038647613726423</y>
+				<y>0.30386476137264196</y>
 			</point>
 			<point>
 				<x>-0.7268360107409046</x>
-				<y>1.2110785548894478</y>
+				<y>0.31107855488944736</y>
 			</point>
 			<point>
 				<x>-0.7336888688738203</x>
-				<y>1.218361239976665</y>
+				<y>0.31836123997666455</y>
 			</point>
 			<point>
 				<x>-0.7404685587295874</x>
-				<y>1.225712088371854</y>
+				<y>0.3257120883718537</y>
 			</point>
 			<point>
 				<x>-0.7471744023448699</x>
-				<y>1.2331303649963012</y>
+				<y>0.3331303649963009</y>
 			</point>
 			<point>
 				<x>-0.7538057291408945</x>
-				<y>1.240615328028526</y>
+				<y>0.34061532802852557</y>
 			</point>
 			<point>
 				<x>-0.7603618759905076</x>
-				<y>1.2481662289784623</y>
+				<y>0.34816622897846206</y>
 			</point>
 			<point>
 				<x>-0.7668421872844879</x>
-				<y>1.255782312762308</y>
+				<y>0.35578231276230765</y>
 			</point>
 			<point>
 				<x>-0.7732460149971061</x>
-				<y>1.2634628177780312</y>
+				<y>0.3634628177780308</y>
 			</point>
 			<point>
 				<x>-0.7795727187509275</x>
-				<y>1.2712069759815305</y>
+				<y>0.3712069759815303</y>
 			</point>
 			<point>
 				<x>-0.7858216658808488</x>
-				<y>1.2790140129634393</y>
+				<y>0.37901401296343906</y>
 			</point>
 			<point>
 				<x>-0.7919922314973646</x>
-				<y>1.2868831480265652</y>
+				<y>0.386883148026565</y>
 			</point>
 			<point>
 				<x>-0.7980837985490553</x>
-				<y>1.2948135942639596</y>
+				<y>0.39481359426395923</y>
 			</point>
 			<point>
 				<x>-0.8040957578842921</x>
-				<y>1.3028045586376071</y>
+				<y>0.4028045586376068</y>
 			</point>
 			<point>
 				<x>-0.8100275083121514</x>
-				<y>1.3108552420577295</y>
+				<y>0.4108552420577293</y>
 			</point>
 			<point>
 				<x>-0.8158784566625334</x>
-				<y>1.318964839462694</y>
+				<y>0.4189648394626937</y>
 			</point>
 			<point>
 				<x>-0.821648017845479</x>
-				<y>1.3271325398995177</y>
+				<y>0.4271325398995175</y>
 			</point>
 			<point>
 				<x>-0.8273356149096779</x>
-				<y>1.3353575266049638</y>
+				<y>0.4353575266049634</y>
 			</point>
 			<point>
 				<x>-0.8329406791001631</x>
-				<y>1.3436389770872155</y>
+				<y>0.443638977087215</y>
 			</point>
 			<point>
 				<x>-0.8384626499151865</x>
-				<y>1.3519760632081255</y>
+				<y>0.4519760632081252</y>
 			</point>
 			<point>
 				<x>-0.8439009751622684</x>
-				<y>1.36036795126603</y>
+				<y>0.4603679512660296</y>
 			</point>
 			<point>
 				<x>-0.8492551110134158</x>
-				<y>1.3688138020791158</y>
+				<y>0.4688138020791154</y>
 			</point>
 			<point>
 				<x>-0.8545245220595054</x>
-				<y>1.37731277106934</y>
+				<y>0.47731277106933967</y>
 			</point>
 			<point>
 				<x>-0.8597086813638237</x>
-				<y>1.385864008346886</y>
+				<y>0.4858640083468857</y>
 			</point>
 			<point>
 				<x>-0.8648070705147607</x>
-				<y>1.3944666587951522</y>
+				<y>0.49446665879515184</y>
 			</point>
 			<point>
 				<x>-0.8698191796776495</x>
-				<y>1.4031198621562626</y>
+				<y>0.5031198621562621</y>
 			</point>
 			<point>
 				<x>-0.8747445076457508</x>
-				<y>1.4118227531170917</y>
+				<y>0.5118227531170914</y>
 			</point>
 			<point>
 				<x>-0.8795825618903723</x>
-				<y>1.4205744613957962</y>
+				<y>0.5205744613957959</y>
 			</point>
 			<point>
 				<x>-0.8843328586101211</x>
-				<y>1.4293741118288412</y>
+				<y>0.5293741118288409</y>
 			</point>
 			<point>
 				<x>-0.8889949227792838</x>
-				<y>1.4382208244585164</y>
+				<y>0.538220824458516</y>
 			</point>
 			<point>
 				<x>-0.8935682881953286</x>
-				<y>1.447113714620931</y>
+				<y>0.5471137146209306</y>
 			</point>
 			<point>
 				<x>-0.898052497525525</x>
-				<y>1.4560518930344795</y>
+				<y>0.5560518930344791</y>
 			</point>
 			<point>
 				<x>-0.9024471023526766</x>
-				<y>1.465034465888769</y>
+				<y>0.5650344658887687</y>
 			</point>
 			<point>
 				<x>-0.9067516632199631</x>
-				<y>1.4740605349339997</y>
+				<y>0.5740605349339993</y>
 			</point>
 			<point>
 				<x>-0.9109657496748849</x>
-				<y>1.4831291975707885</y>
+				<y>0.5831291975707882</y>
 			</point>
 			<point>
 				<x>-0.9150889403123079</x>
-				<y>1.492239546940429</y>
+				<y>0.5922395469404287</y>
 			</point>
 			<point>
 				<x>-0.9191208228166048</x>
-				<y>1.5013906720155763</y>
+				<y>0.601390672015576</y>
 			</point>
 			<point>
 				<x>-0.9230609940028848</x>
-				<y>1.5105816576913487</y>
+				<y>0.6105816576913484</y>
 			</point>
 			<point>
 				<x>-0.9269090598573128</x>
-				<y>1.5198115848768379</y>
+				<y>0.6198115848768375</y>
 			</point>
 			<point>
 				<x>-0.9306646355765099</x>
-				<y>1.5290795305870166</y>
+				<y>0.6290795305870163</y>
 			</point>
 			<point>
 				<x>-0.9343273456060341</x>
-				<y>1.5383845680350374</y>
+				<y>0.638384568035037</y>
 			</point>
 			<point>
 				<x>-0.9378968236779346</x>
-				<y>1.5477257667249094</y>
+				<y>0.647725766724909</y>
 			</point>
 			<point>
 				<x>-0.9413727128473787</x>
-				<y>1.5571021925445478</y>
+				<y>0.6571021925445476</y>
 			</point>
 			<point>
 				<x>-0.944754665528346</x>
-				<y>1.566512907859185</y>
+				<y>0.6665129078591846</y>
 			</point>
 			<point>
 				<x>-0.9480423435283867</x>
-				<y>1.575956971605131</y>
+				<y>0.6759569716051306</y>
 			</point>
 			<point>
 				<x>-0.9512354180824406</x>
-				<y>1.5854334393838816</y>
+				<y>0.6854334393838812</y>
 			</point>
 			<point>
 				<x>-0.9543335698857132</x>
-				<y>1.594941363556556</y>
+				<y>0.6949413635565556</y>
 			</point>
 			<point>
 				<x>-0.9573364891256058</x>
-				<y>1.6044797933386599</y>
+				<y>0.7044797933386595</y>
 			</point>
 			<point>
 				<x>-0.960243875512697</x>
-				<y>1.6140477748951638</y>
+				<y>0.7140477748951635</y>
 			</point>
 			<point>
 				<x>-0.9630554383107707</x>
-				<y>1.6236443514358856</y>
+				<y>0.7236443514358852</y>
 			</point>
 			<point>
 				<x>-0.9657708963658903</x>
-				<y>1.6332685633111683</y>
+				<y>0.733268563311168</y>
 			</point>
 			<point>
 				<x>-0.968389978134513</x>
-				<y>1.6429194481078442</y>
+				<y>0.7429194481078439</y>
 			</point>
 			<point>
 				<x>-0.9709124217106445</x>
-				<y>1.6525960407454765</y>
+				<y>0.7525960407454761</y>
 			</point>
 			<point>
 				<x>-0.9733379748520293</x>
-				<y>1.6622973735728648</y>
+				<y>0.7622973735728644</y>
 			</point>
 			<point>
 				<x>-0.9756663950053746</x>
-				<y>1.672022476464811</y>
+				<y>0.7720224764648107</y>
 			</point>
 			<point>
 				<x>-0.9778974493306053</x>
-				<y>1.6817703769191301</y>
+				<y>0.7817703769191298</y>
 			</point>
 			<point>
 				<x>-0.980030914724148</x>
-				<y>1.6915401001538999</y>
+				<y>0.7915401001538995</y>
 			</point>
 			<point>
 				<x>-0.9820665778412414</x>
-				<y>1.7013306692049381</y>
+				<y>0.8013306692049379</y>
 			</point>
 			<point>
 				<x>-0.9840042351172701</x>
-				<y>1.7111411050234988</y>
+				<y>0.8111411050234986</y>
 			</point>
 			<point>
 				<x>-0.9858436927881212</x>
-				<y>1.7209704265741752</y>
+				<y>0.820970426574175</y>
 			</point>
 			<point>
 				<x>-0.9875847669095605</x>
-				<y>1.7308176509330035</y>
+				<y>0.8308176509330031</y>
 			</point>
 			<point>
 				<x>-0.9892272833756267</x>
-				<y>1.7406817933857535</y>
+				<y>0.8406817933857531</y>
 			</point>
 			<point>
 				<x>-0.990771077936042</x>
-				<y>1.7505618675264003</y>
+				<y>0.8505618675264</y>
 			</point>
 			<point>
 				<x>-0.992215996212637</x>
-				<y>1.760456885355763</y>
+				<y>0.8604568853557627</y>
 			</point>
 			<point>
 				<x>-0.9935618937147879</x>
-				<y>1.7703658573803047</y>
+				<y>0.8703658573803044</y>
 			</point>
 			<point>
 				<x>-0.994808635853866</x>
-				<y>1.78028779271108</y>
+				<y>0.8802877927110798</y>
 			</point>
 			<point>
 				<x>-0.9959560979566966</x>
-				<y>1.7902216991628248</y>
+				<y>0.8902216991628243</y>
 			</point>
 			<point>
 				<x>-0.9970041652780255</x>
-				<y>1.8001665833531713</y>
+				<y>0.9001665833531708</y>
 			</point>
 			<point>
 				<x>-0.997952733011994</x>
-				<y>1.8101214508019883</y>
+				<y>0.9101214508019879</y>
 			</point>
 			<point>
 				<x>-0.9988017063026191</x>
-				<y>1.8200853060308266</y>
+				<y>0.9200853060308263</y>
 			</point>
 			<point>
 				<x>-0.9995510002532794</x>
-				<y>1.8300571526624665</y>
+				<y>0.9300571526624662</y>
 			</point>
 			<point>
 				<x>-1.0002005399352039</x>
-				<y>1.8400359935205548</y>
+				<y>0.9400359935205544</y>
 			</point>
 			<point>
 				<x>-1.000750260394966</x>
-				<y>1.850020830729321</y>
+				<y>0.9500208307293206</y>
 			</point>
 			<point>
 				<x>-1.0012001066609777</x>
-				<y>1.8600106658133653</y>
+				<y>0.9600106658133648</y>
 			</point>
 			<point>
 				<x>-1.0015500337489873</x>
-				<y>1.8700044997975038</y>
+				<y>0.9700044997975034</y>
 			</point>
 			<point>
 				<x>-1.0018000066665775</x>
-				<y>1.8800013333066663</y>
+				<y>0.980001333306666</y>
 			</point>
 			<point>
 				<x>-1.001950000416665</x>
-				<y>1.8900001666658328</y>
+				<y>0.9900001666658323</y>
 			</point>
 			<point>
 				<x>-1.0019999999999998</x>
-				<y>1.8999999999999995</y>
+				<y>0.999999999999999</y>
 			</point>
 		</leftBoundary>
 		<rightBoundary>
 			<point>
 				<x>-0.0004778089755210768</x>
-				<y>1.2999935976061154</y>
+				<y>0.3999935976061151</y>
 			</point>
 			<point>
 				<x>-0.010477599323055142</x>
-				<y>1.3000515603079839</y>
+				<y>0.4000515603079834</y>
 			</point>
 			<point>
 				<x>-0.016476559852635186</x>
-				<y>1.3001663320602952</y>
+				<y>0.4001663320602947</y>
 			</point>
 			<point>
 				<x>-0.022474072738291273</x>
-				<y>1.3003410866795404</y>
+				<y>0.40034108667954016</y>
 			</point>
 			<point>
 				<x>-0.02846953823373799</x>
-				<y>1.300575806690404</y>
+				<y>0.4005758066904038</y>
 			</point>
 			<point>
 				<x>-0.03446235679742338</x>
-				<y>1.3008704686210804</y>
+				<y>0.4008704686210799</y>
 			</point>
 			<point>
 				<x>-0.04045192915247231</x>
-				<y>1.301225043005621</y>
+				<y>0.40122504300562056</y>
 			</point>
 			<point>
 				<x>-0.0464376563466522</x>
-				<y>1.3016394943868839</y>
+				<y>0.4016394943868835</y>
 			</point>
 			<point>
 				<x>-0.05241893981222956</x>
-				<y>1.302113781320076</y>
+				<y>0.4021137813200756</y>
 			</point>
 			<point>
 				<x>-0.058395181425839326</x>
-				<y>1.302647856376899</y>
+				<y>0.4026478563768988</y>
 			</point>
 			<point>
 				<x>-0.06436578356830802</x>
-				<y>1.303241666150293</y>
+				<y>0.4032416661502928</y>
 			</point>
 			<point>
 				<x>-0.07033014918438452</x>
-				<y>1.3038951512597747</y>
+				<y>0.40389515125977427</y>
 			</point>
 			<point>
 				<x>-0.07628768184248602</x>
-				<y>1.304608246357378</y>
+				<y>0.4046082463573777</y>
 			</point>
 			<point>
 				<x>-0.08223778579431562</x>
-				<y>1.3053808801341882</y>
+				<y>0.4053808801341878</y>
 			</point>
 			<point>
 				<x>-0.08817986603442107</x>
-				<y>1.3062129753274694</y>
+				<y>0.40621297532746914</y>
 			</point>
 			<point>
 				<x>-0.09411332835974395</x>
-				<y>1.3071044487283978</y>
+				<y>0.40710444872839735</y>
 			</point>
 			<point>
 				<x>-0.1000375794289905</x>
-				<y>1.308055211190375</y>
+				<y>0.4080552111903746</y>
 			</point>
 			<point>
 				<x>-0.10595202682199445</x>
-				<y>1.309065167637948</y>
+				<y>0.40906516763794754</y>
 			</point>
 			<point>
 				<x>-0.11185607909893847</x>
-				<y>1.3101342170763124</y>
+				<y>0.41013421707631204</y>
 			</point>
 			<point>
 				<x>-0.11774914585952312</x>
-				<y>1.3112622526014168</y>
+				<y>0.41126225260141647</y>
 			</point>
 			<point>
 				<x>-0.12363063780197858</x>
-				<y>1.3124491614106477</y>
+				<y>0.41244916141064736</y>
 			</point>
 			<point>
 				<x>-0.12949996678200903</x>
-				<y>1.313694824814113</y>
+				<y>0.41369482481411257</y>
 			</point>
 			<point>
 				<x>-0.13535654587161583</x>
-				<y>1.3149991182465115</y>
+				<y>0.41499911824651126</y>
 			</point>
 			<point>
 				<x>-0.14119978941775957</x>
-				<y>1.3163619112795852</y>
+				<y>0.416361911279585</y>
 			</point>
 			<point>
 				<x>-0.14702911310096567</x>
-				<y>1.3177830676351687</y>
+				<y>0.41778306763516837</y>
 			</point>
 			<point>
 				<x>-0.15284393399371843</x>
-				<y>1.3192624451988093</y>
+				<y>0.41926244519880895</y>
 			</point>
 			<point>
 				<x>-0.1586436706187715</x>
-				<y>1.3207998960339828</y>
+				<y>0.4207998960339825</y>
 			</point>
 			<point>
 				<x>-0.1644277430072988</x>
-				<y>1.3223952663968879</y>
+				<y>0.4223952663968876</y>
 			</point>
 			<point>
 				<x>-0.17019557275688557</x>
-				<y>1.3240483967518188</y>
+				<y>0.4240483967518184</y>
 			</point>
 			<point>
 				<x>-0.17594658308935784</x>
-				<y>1.325759121787116</y>
+				<y>0.4257591217871156</y>
 			</point>
 			<point>
 				<x>-0.1816801989084733</x>
-				<y>1.3275272704317012</y>
+				<y>0.4275272704317008</y>
 			</point>
 			<point>
 				<x>-0.18739584685743693</x>
-				<y>1.329352665872186</y>
+				<y>0.42935266587218557</y>
 			</point>
 			<point>
 				<x>-0.19309295537620308</x>
-				<y>1.3312351255705432</y>
+				<y>0.4312351255705429</y>
 			</point>
 			<point>
 				<x>-0.19877095475867734</x>
-				<y>1.333174461282375</y>
+				<y>0.4331744612823747</y>
 			</point>
 			<point>
 				<x>-0.20442927720965576</x>
-				<y>1.3351704790757273</y>
+				<y>0.4351704790757268</y>
 			</point>
 			<point>
 				<x>-0.21006735690160083</x>
-				<y>1.337222979350481</y>
+				<y>0.4372229793504807</y>
 			</point>
 			<point>
 				<x>-0.21568463003123983</x>
-				<y>1.3393317568583187</y>
+				<y>0.4393317568583185</y>
 			</point>
 			<point>
 				<x>-0.22128053487595656</x>
-				<y>1.3414966007232527</y>
+				<y>0.4414966007232525</y>
 			</point>
 			<point>
 				<x>-0.22685451184990824</x>
-				<y>1.3437172944626925</y>
+				<y>0.44371729446269215</y>
 			</point>
 			<point>
 				<x>-0.23240600356005636</x>
-				<y>1.34599361600912</y>
+				<y>0.4459936160091196</y>
 			</point>
 			<point>
 				<x>-0.23793445486185438</x>
-				<y>1.3483253377322766</y>
+				<y>0.44832533773227623</y>
 			</point>
 			<point>
 				<x>-0.2434393129147795</x>
-				<y>1.3507122264619333</y>
+				<y>0.450712226461933</y>
 			</point>
 			<point>
 				<x>-0.2489200272376073</x>
-				<y>1.3531540435112037</y>
+				<y>0.45315404351120336</y>
 			</point>
 			<point>
 				<x>-0.25437604976347816</x>
-				<y>1.3556505447004201</y>
+				<y>0.45565054470041966</y>
 			</point>
 			<point>
 				<x>-0.2598068348946887</x>
-				<y>1.3582014803815445</y>
+				<y>0.4582014803815442</y>
 			</point>
 			<point>
 				<x>-0.26521183955724414</x>
-				<y>1.3608065954631319</y>
+				<y>0.4608065954631315</y>
 			</point>
 			<point>
 				<x>-0.2705905232551874</x>
-				<y>1.3634656294358471</y>
+				<y>0.4634656294358468</y>
 			</point>
 			<point>
 				<x>-0.27594234812463414</x>
-				<y>1.3661783163985104</y>
+				<y>0.46617831639851004</y>
 			</point>
 			<point>
 				<x>-0.28126677898754726</x>
-				<y>1.368944385084681</y>
+				<y>0.4689443850846806</y>
 			</point>
 			<point>
 				<x>-0.2865632834052857</x>
-				<y>1.3717635588897996</y>
+				<y>0.47176355888979926</y>
 			</point>
 			<point>
 				<x>-0.2918313317318182</x>
-				<y>1.3746355558988332</y>
+				<y>0.4746355558988329</y>
 			</point>
 			<point>
 				<x>-0.29707039716670125</x>
-				<y>1.3775600889144741</y>
+				<y>0.47756008891447377</y>
 			</point>
 			<point>
 				<x>-0.30227995580776423</x>
-				<y>1.3805368654858612</y>
+				<y>0.48053686548586083</y>
 			</point>
 			<point>
 				<x>-0.30745948670347123</x>
-				<y>1.383565587937811</y>
+				<y>0.4835655879378107</y>
 			</point>
 			<point>
 				<x>-0.31260847190506436</x>
-				<y>1.3866459534006106</y>
+				<y>0.48664595340061023</y>
 			</point>
 			<point>
 				<x>-0.3177263965183006</x>
-				<y>1.3897776538402735</y>
+				<y>0.48977765384027305</y>
 			</point>
 			<point>
 				<x>-0.32281274875498944</x>
-				<y>1.392960376089368</y>
+				<y>0.4929603760893678</y>
 			</point>
 			<point>
 				<x>-0.32786701998415424</x>
-				<y>1.3961938018783275</y>
+				<y>0.4961938018783272</y>
 			</point>
 			<point>
 				<x>-0.33288870478286314</x>
-				<y>1.3994776078672542</y>
+				<y>0.4994776078672538</y>
 			</point>
 			<point>
 				<x>-0.33787730098684343</x>
-				<y>1.4028114656783</y>
+				<y>0.5028114656782996</y>
 			</point>
 			<point>
 				<x>-0.3428323097406154</x>
-				<y>1.4061950419284512</y>
+				<y>0.5061950419284509</y>
 			</point>
 			<point>
 				<x>-0.34775323554744775</x>
-				<y>1.4096279982629125</y>
+				<y>0.5096279982629122</y>
 			</point>
 			<point>
 				<x>-0.3526395863188413</x>
-				<y>1.413109991388898</y>
+				<y>0.5131099913888978</y>
 			</point>
 			<point>
 				<x>-0.35749087342380736</x>
-				<y>1.4166406731100087</y>
+				<y>0.5166406731100083</y>
 			</point>
 			<point>
 				<x>-0.36230661173767054</x>
-				<y>1.4202196903610087</y>
+				<y>0.5202196903610083</y>
 			</point>
 			<point>
 				<x>-0.3670863196906201</x>
-				<y>1.423846685243161</y>
+				<y>0.5238466852431607</y>
 			</point>
 			<point>
 				<x>-0.3718295193158285</x>
-				<y>1.427521295059989</y>
+				<y>0.5275212950599886</y>
 			</point>
 			<point>
 				<x>-0.3765357362973031</x>
-				<y>1.4312431523535853</y>
+				<y>0.531243152353585</y>
 			</point>
 			<point>
 				<x>-0.3812045000172606</x>
-				<y>1.4350118849413176</y>
+				<y>0.5350118849413172</y>
 			</point>
 			<point>
 				<x>-0.3858353436032116</x>
-				<y>1.4388271159530612</y>
+				<y>0.5388271159530609</y>
 			</point>
 			<point>
 				<x>-0.39042780397467325</x>
-				<y>1.4426884638689073</y>
+				<y>0.5426884638689068</y>
 			</point>
 			<point>
 				<x>-0.394981421889417</x>
-				<y>1.446595542557267</y>
+				<y>0.5465955425572667</y>
 			</point>
 			<point>
 				<x>-0.3994957419894609</x>
-				<y>1.4505479613135404</y>
+				<y>0.55054796131354</y>
 			</point>
 			<point>
 				<x>-0.4039703128465524</x>
-				<y>1.454545324899141</y>
+				<y>0.5545453248991407</y>
 			</point>
 			<point>
 				<x>-0.40840468700732946</x>
-				<y>1.4585872335810377</y>
+				<y>0.5585872335810373</y>
 			</point>
 			<point>
 				<x>-0.4127984210380764</x>
-				<y>1.4626732831717342</y>
+				<y>0.5626732831717338</y>
 			</point>
 			<point>
 				<x>-0.41715107556905207</x>
-				<y>1.4668030650696775</y>
+				<y>0.5668030650696771</y>
 			</point>
 			<point>
 				<x>-0.4214622153384273</x>
-				<y>1.470976166300116</y>
+				<y>0.5709761663001156</y>
 			</point>
 			<point>
 				<x>-0.4257314092358193</x>
-				<y>1.4751921695564056</y>
+				<y>0.5751921695564054</y>
 			</point>
 			<point>
 				<x>-0.4299582303453977</x>
-				<y>1.4794506532417362</y>
+				<y>0.5794506532417358</y>
 			</point>
 			<point>
 				<x>-0.4341422559885699</x>
-				<y>1.4837511915112835</y>
+				<y>0.5837511915112832</y>
 			</point>
 			<point>
 				<x>-0.43828306776626413</x>
-				<y>1.4880933543148105</y>
+				<y>0.58809335431481</y>
 			</point>
 			<point>
 				<x>-0.4423802516007447</x>
-				<y>1.4924767074396463</y>
+				<y>0.5924767074396459</y>
 			</point>
 			<point>
 				<x>-0.4464333977770498</x>
-				<y>1.496900812554139</y>
+				<y>0.5969008125541386</y>
 			</point>
 			<point>
 				<x>-0.4504421009839392</x>
-				<y>1.5013652272514635</y>
+				<y>0.6013652272514631</y>
 			</point>
 			<point>
 				<x>-0.4544059603544299</x>
-				<y>1.5058695050938675</y>
+				<y>0.6058695050938672</y>
 			</point>
 			<point>
 				<x>-0.45832457950588523</x>
-				<y>1.5104131956573172</y>
+				<y>0.6104131956573169</y>
 			</point>
 			<point>
 				<x>-0.4621975665796645</x>
-				<y>1.5149958445765526</y>
+				<y>0.6149958445765522</y>
 			</point>
 			<point>
 				<x>-0.4660245342802778</x>
-				<y>1.5196169935904889</y>
+				<y>0.6196169935904885</y>
 			</point>
 			<point>
 				<x>-0.46980509991415176</x>
-				<y>1.524276180588085</y>
+				<y>0.6242761805880847</y>
 			</point>
 			<point>
 				<x>-0.47353888542787015</x>
-				<y>1.5289729396545195</y>
+				<y>0.6289729396545192</y>
 			</point>
 			<point>
 				<x>-0.4772255174459936</x>
-				<y>1.5337068011178008</y>
+				<y>0.6337068011178004</y>
 			</point>
 			<point>
 				<x>-0.48086462730838997</x>
-				<y>1.5384772915957234</y>
+				<y>0.6384772915957231</y>
 			</point>
 			<point>
 				<x>-0.4844558511071113</x>
-				<y>1.5432839340432232</y>
+				<y>0.6432839340432228</y>
 			</point>
 			<point>
 				<x>-0.487998829722768</x>
-				<y>1.5481262478000573</y>
+				<y>0.6481262478000569</y>
 			</point>
 			<point>
 				<x>-0.4914932088604459</x>
-				<y>1.5530037486388784</y>
+				<y>0.6530037486388781</y>
 			</point>
 			<point>
 				<x>-0.49493863908515</x>
-				<y>1.5579159488136767</y>
+				<y>0.6579159488136763</y>
 			</point>
 			<point>
 				<x>-0.49833477585672714</x>
-				<y>1.5628623571085258</y>
+				<y>0.6628623571085255</y>
 			</point>
 			<point>
 				<x>-0.5016812795643275</x>
-				<y>1.5678424788867138</y>
+				<y>0.6678424788867134</y>
 			</point>
 			<point>
 				<x>-0.5049778155603701</x>
-				<y>1.5728558161402146</y>
+				<y>0.6728558161402143</y>
 			</point>
 			<point>
 				<x>-0.5082240541940074</x>
-				<y>1.5779018675394882</y>
+				<y>0.6779018675394879</y>
 			</point>
 			<point>
 				<x>-0.5114196708440754</x>
-				<y>1.5829801284835907</y>
+				<y>0.6829801284835904</y>
 			</point>
 			<point>
 				<x>-0.5145643459515715</x>
-				<y>1.5880900911506586</y>
+				<y>0.6880900911506582</y>
 			</point>
 			<point>
 				<x>-0.5176577650516112</x>
-				<y>1.5932312445486927</y>
+				<y>0.6932312445486923</y>
 			</point>
 			<point>
 				<x>-0.5206996188048602</x>
-				<y>1.5984030745666336</y>
+				<y>0.6984030745666332</y>
 			</point>
 			<point>
 				<x>-0.5236896030284719</x>
-				<y>1.6036050640257797</y>
+				<y>0.7036050640257794</y>
 			</point>
 			<point>
 				<x>-0.5266274187265236</x>
-				<y>1.6088366927315334</y>
+				<y>0.708836692731533</y>
 			</point>
 			<point>
 				<x>-0.5295127721198918</x>
-				<y>1.6140974375253803</y>
+				<y>0.7140974375253799</y>
 			</point>
 			<point>
 				<x>-0.5323453746756401</x>
-				<y>1.619386772337223</y>
+				<y>0.7193867723372226</y>
 			</point>
 			<point>
 				<x>-0.5351249431358723</x>
-				<y>1.6247041682379852</y>
+				<y>0.7247041682379848</y>
 			</point>
 			<point>
 				<x>-0.5378511995460622</x>
-				<y>1.630049093492515</y>
+				<y>0.7300490934925146</y>
 			</point>
 			<point>
 				<x>-0.5405238712828374</x>
-				<y>1.6354210136127347</y>
+				<y>0.7354210136127344</y>
 			</point>
 			<point>
 				<x>-0.5431426910812504</x>
-				<y>1.6408193914111069</y>
+				<y>0.7408193914111065</y>
 			</point>
 			<point>
 				<x>-0.5457073970615121</x>
-				<y>1.6462436870543669</y>
+				<y>0.7462436870543665</y>
 			</point>
 			<point>
 				<x>-0.5482177327551503</x>
-				<y>1.651693358117448</y>
+				<y>0.7516933581174476</y>
 			</point>
 			<point>
 				<x>-0.5506734471306929</x>
-				<y>1.6571678596377954</y>
+				<y>0.7571678596377951</y>
 			</point>
 			<point>
 				<x>-0.5530742946187526</x>
-				<y>1.662666644169828</y>
+				<y>0.7626666441698275</y>
 			</point>
 			<point>
 				<x>-0.5554200351365752</x>
-				<y>1.6681891618396616</y>
+				<y>0.7681891618396613</y>
 			</point>
 			<point>
 				<x>-0.557710434112066</x>
-				<y>1.6737348604001363</y>
+				<y>0.773734860400136</y>
 			</point>
 			<point>
 				<x>-0.5599452625072353</x>
-				<y>1.6793031852860154</y>
+				<y>0.7793031852860152</y>
 			</point>
 			<point>
 				<x>-0.5621242968411091</x>
-				<y>1.6848935796694584</y>
+				<y>0.784893579669458</y>
 			</point>
 			<point>
 				<x>-0.5642473192120652</x>
-				<y>1.6905054845156737</y>
+				<y>0.7905054845156734</y>
 			</point>
 			<point>
 				<x>-0.5663141173196393</x>
-				<y>1.6961383386388627</y>
+				<y>0.7961383386388623</y>
 			</point>
 			<point>
 				<x>-0.5683244844857405</x>
-				<y>1.701791578758301</y>
+				<y>0.8017915787583004</y>
 			</point>
 			<point>
 				<x>-0.5702782196753291</x>
-				<y>1.7074646395546913</y>
+				<y>0.8074646395546908</y>
 			</point>
 			<point>
 				<x>-0.5721751275165146</x>
-				<y>1.7131569537266829</y>
+				<y>0.8131569537266826</y>
 			</point>
 			<point>
 				<x>-0.574015018320092</x>
-				<y>1.7188679520475978</y>
+				<y>0.8188679520475975</y>
 			</point>
 			<point>
 				<x>-0.5757977080985146</x>
-				<y>1.7245970634223633</y>
+				<y>0.8245970634223629</y>
 			</point>
 			<point>
 				<x>-0.5775230185842921</x>
-				<y>1.7303437149446232</y>
+				<y>0.830343714944623</y>
 			</point>
 			<point>
 				<x>-0.5791907772478093</x>
-				<y>1.7361073319540004</y>
+				<y>0.836107331954</y>
 			</point>
 			<point>
 				<x>-0.5808008173145958</x>
-				<y>1.741887338093616</y>
+				<y>0.8418873380936156</y>
 			</point>
 			<point>
 				<x>-0.5823529777819806</x>
-				<y>1.7476831553676533</y>
+				<y>0.8476831553676529</y>
 			</point>
 			<point>
 				<x>-0.5838471034352137</x>
-				<y>1.753494204199226</y>
+				<y>0.8534942041992257</y>
 			</point>
 			<point>
 				<x>-0.5852830448629751</x>
-				<y>1.7593199034882934</y>
+				<y>0.859319903488293</y>
 			</point>
 			<point>
 				<x>-0.5866606584723173</x>
-				<y>1.7651596706697774</y>
+				<y>0.8651596706697771</y>
 			</point>
 			<point>
 				<x>-0.5879798065030287</x>
-				<y>1.7710129217718316</y>
+				<y>0.8710129217718312</y>
 			</point>
 			<point>
 				<x>-0.589240357041403</x>
-				<y>1.7768790714742126</y>
+				<y>0.8768790714742123</y>
 			</point>
 			<point>
 				<x>-0.5904421840334391</x>
-				<y>1.7827575331668484</y>
+				<y>0.882757533166848</y>
 			</point>
 			<point>
 				<x>-0.591585167297439</x>
-				<y>1.788647719008467</y>
+				<y>0.8886477190084668</y>
 			</point>
 			<point>
 				<x>-0.5926691925360289</x>
-				<y>1.7945490399853936</y>
+				<y>0.8945490399853933</y>
 			</point>
 			<point>
 				<x>-0.5936941513475873</x>
-				<y>1.8004609059704424</y>
+				<y>0.9004609059704421</y>
 			</point>
 			<point>
 				<x>-0.5946599412370871</x>
-				<y>1.8063827257819431</y>
+				<y>0.9063827257819428</y>
 			</point>
 			<point>
 				<x>-0.595566465626346</x>
-				<y>1.8123139072428565</y>
+				<y>0.9123139072428562</y>
 			</point>
 			<point>
 				<x>-0.5964136338636796</x>
-				<y>1.8182538572399776</y>
+				<y>0.9182538572399772</y>
 			</point>
 			<point>
 				<x>-0.5972013612329686</x>
-				<y>1.8242019817832438</y>
+				<y>0.9242019817832433</y>
 			</point>
 			<point>
 				<x>-0.5979295689621341</x>
-				<y>1.8301576860651692</y>
+				<y>0.9301576860651689</y>
 			</point>
 			<point>
 				<x>-0.5985981842310101</x>
-				<y>1.836120374520289</y>
+				<y>0.9361203745202886</y>
 			</point>
 			<point>
 				<x>-0.5992071401786265</x>
-				<y>1.8420894508847243</y>
+				<y>0.9420894508847238</y>
 			</point>
 			<point>
 				<x>-0.5997563759098962</x>
-				<y>1.8480643182558143</y>
+				<y>0.9480643182558138</y>
 			</point>
 			<point>
 				<x>-0.6002458365017026</x>
-				<y>1.85404437915179</y>
+				<y>0.9540443791517896</y>
 			</point>
 			<point>
 				<x>-0.6006754730083965</x>
-				<y>1.8600290355715663</y>
+				<y>0.9600290355715658</y>
 			</point>
 			<point>
 				<x>-0.6010452424666836</x>
-				<y>1.8660176890544684</y>
+				<y>0.9660176890544679</y>
 			</point>
 			<point>
 				<x>-0.6013551078999266</x>
-				<y>1.8720097407401486</y>
+				<y>0.9720097407401482</y>
 			</point>
 			<point>
 				<x>-0.6016050383218405</x>
-				<y>1.878004591428427</y>
+				<y>0.9780045914284266</y>
 			</point>
 			<point>
 				<x>-0.6017950087395919</x>
-				<y>1.8840016416392402</y>
+				<y>0.9840016416392399</y>
 			</point>
 			<point>
 				<x>-0.6019250001562964</x>
-				<y>1.8900002916725493</y>
+				<y>0.990000291672549</y>
 			</point>
 			<point>
 				<x>-0.6019949995729214</x>
-				<y>1.8959999416683644</y>
+				<y>0.9959999416683639</y>
 			</point>
 			<point>
 				<x>-0.6020049999895831</x>
-				<y>1.901999991666677</y>
+				<y>1.0019999916666766</y>
 			</point>
 			<lineMarking>solid</lineMarking>
 		</rightBoundary>
 		<predecessor/>
 		<successor>
-			<lanelet ref="-63"/>
+			<lanelet ref="-60"/>
 		</successor>
-		<adjacentLeft drivingDir="opposite" ref="-64"/>
+		<adjacentLeft drivingDir="opposite" ref="-61"/>
 	</lanelet>
-	<trafficSign id="-40">
+	<trafficSign id="-37">
 		<type>stvo-209-20</type>
 		<orientation>6.283185307179586</orientation>
 		<centerPoint>
@@ -17454,7 +17409,7 @@
 			<y>5.6</y>
 		</centerPoint>
 	</trafficSign>
-	<trafficSign id="-43">
+	<trafficSign id="-40">
 		<type>stvo-209-10</type>
 		<orientation>1.5707963267948966</orientation>
 		<centerPoint>
@@ -17462,7 +17417,7 @@
 			<y>5.75</y>
 		</centerPoint>
 	</trafficSign>
-	<trafficSign id="-58">
+	<trafficSign id="-55">
 		<type>stvo-222</type>
 		<orientation>-3.141592653589793</orientation>
 		<centerPoint>
@@ -17470,7 +17425,7 @@
 			<y>6.75</y>
 		</centerPoint>
 	</trafficSign>
-	<trafficSign id="-59">
+	<trafficSign id="-56">
 		<type>stvo-222</type>
 		<orientation>0.0</orientation>
 		<centerPoint>
@@ -17626,7 +17581,7 @@
 			<y>5.75</y>
 		</point>
 	</islandJunction>
-	<roadMarking id="-41">
+	<roadMarking id="-38">
 		<type>turn_left</type>
 		<orientation>4.71238898038469</orientation>
 		<centerPoint>
@@ -17634,7 +17589,7 @@
 			<y>5.335999999999999</y>
 		</centerPoint>
 	</roadMarking>
-	<roadMarking id="-42">
+	<roadMarking id="-39">
 		<type>turn_right</type>
 		<orientation>6.283185307179586</orientation>
 		<centerPoint>

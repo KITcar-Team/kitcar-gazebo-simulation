@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #Define gazebo-simulation and gazebo-utils-path
-$KITCAR_GAZEBO_SIM_PATH = $KITCAR_REPO_PATH/kitcar-gazebo-simulation
-$KITCAR_GAZEBO_UTILS_PATH = $KITCAR_REPO_PATH/kitcar-gazebo-utils
+KITCAR_GAZEBO_SIM_PATH=$KITCAR_REPO_PATH/kitcar-gazebo-simulation
+KITCAR_GAZEBO_UTILS_PATH=$KITCAR_REPO_PATH/kitcar-gazebo-utils
 
 ROAD=$KITCAR_GAZEBO_SIM_PATH/models/env_db/$1
 python3 $KITCAR_GAZEBO_UTILS_PATH/road-generation/road-generator.py $ROAD/road.xml -o $ROAD/commonroad.xml  
