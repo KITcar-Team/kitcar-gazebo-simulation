@@ -7,6 +7,10 @@ This repository can be used in combination with `kitcar-ros` and `kitcar-gazebo-
 cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation
 ./init/init.sh
 ```
-Furthermore the package must be build with `catkin_make`.
+Furthermore the following packages must be installed:
+```
+sudo apt-get install ros-melodic-gazebo-ros-control ros-melodic-gazebo-ros-pkgs
+```
+and `kitcar-gazebo-simulation` build with `catkin_make`.
 Other information can be found in [KITcar-Gazebo-Simulation Wiki](https://wiki.kitcar-team.de/doku.php?id=konzept_und_umsetzung:gazebo_simulation:kitcar-gazebo-simulation).
 
