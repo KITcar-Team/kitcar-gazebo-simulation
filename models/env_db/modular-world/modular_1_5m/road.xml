@@ -13,8 +13,8 @@
 		<!--line length="0.05"/-->
 		<rightArc radius="0.75" angle="90"/>
 
-		<line length="0.25"/>
-		<trafficIsland zebraLength="0.5" islandWidth="0.3" signDistance="0.25" zebraMarkingType="lines"/> 
-		<line length="0.25"/>
+		<line length="0.5"/>
+		<trafficIsland zebraLength="0.4" islandWidth="0.3" signDistance="0.25" zebraMarkingType="lines"/> 
+		<line length="0.5"/>
 	</sequence>
 </template>
