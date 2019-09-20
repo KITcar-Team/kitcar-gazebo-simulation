@@ -1,0 +1,14 @@
+<template>
+	<sequence>
+		<line length="4"/>
+		<intersection rule="equal" turn="straight" alpha="0" closing="left" />
+		<line length="1"/>
+		<intersection rule="equal" turn="right" alpha="0" closing="straight"/>
+		<line length="1"/>
+		<intersection rule="equal" turn="left" alpha="-0.5" size="3" />
+		<line length="1"/>
+		<intersection rule="equal" turn="left" alpha="0.5" size="3" closing="right" />
+		<line length="1"/>
+		<intersection rule="equal" turn="straight" alpha="-0.3"/>	
+	</sequence>
+</template>
