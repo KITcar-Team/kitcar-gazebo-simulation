@@ -1,0 +1,8 @@
+<!-- KITcar launch script for pre_cropping -->
+<launch>
+  <arg name="start_activated" default="true" />
+
+  <node name="pytalker" ns="gazebo_simulation" pkg="gazebo_simulation" type="pytalker.py" output="screen">
+		<param name="start_activated" value="$(arg start_activated)" />
+  </node>
+</launch>
