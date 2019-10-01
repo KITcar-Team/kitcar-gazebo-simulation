@@ -2,7 +2,7 @@
 import sys
 import unittest
 import rospy
-from simulation_groundtruth.drive_logger import DriveState
+from gazebo_groundtruth.drive_logger import DriveState
 from std_msgs.msg import Int8
 
 import pdb
