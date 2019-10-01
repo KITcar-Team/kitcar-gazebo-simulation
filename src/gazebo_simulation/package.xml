@@ -4,13 +4,16 @@
   <version>0.0.0</version>
   <description>The gazebo_simulation package</description>
 
-  <maintainer email="fabian.reister@posteo.de">Fabian Reister</maintainer>
+  <maintainer email="kditschuneit@icloud.com">Kosntantin Ditschuneit</maintainer>
   <url>https://wiki.kitcar-team.de/doku.php?id=konzept_und_umsetzung:gazebo_simulation:start</url>
 
   <license>TODO</license>
   <!-- <url type="website">http://wiki.ros.org/gazebo_simulation</url> -->
 
-  <buildtool_depend>catkin</buildtool_depend>
+	<buildtool_depend>catkin</buildtool_depend>
+	<build_depend>message_generation</build_depend>
+	<build_depend>rostest</build_depend>	
+	<exec_depend>message_runtime</exec_depend>
   <depend>gazebo_ros</depend>
   <depend>gazebo-plugins</depend>
   <depend>roscpp</depend>

@@ -1,5 +1,7 @@
+
 <template>
-    <sequence>
+	<seed>saidjlkxzczio1</seed>
+	<sequence>
         <line length="1" isStart="true" />
         <repeat min="5" max="20">
             <select>
@@ -29,6 +31,7 @@
                     </repeat>
                 </case>
             </select>
-        </repeat>
+					</repeat>
+					<line length="1"/>
     </sequence>
 </template>
