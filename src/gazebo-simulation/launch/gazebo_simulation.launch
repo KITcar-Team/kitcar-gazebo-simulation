@@ -33,9 +33,7 @@
     <arg name="car_name" value="$(arg car_name)"/>
   </include>
 
-  <node pkg="rqt_mission_mode" type="rqt_mission_mode" name="rqt_mission_mode" output="screen"/>
-
-  <include file="$(find gazebo_simulation)/launch/world.launch">
+	<include file="$(find gazebo_simulation)/launch/world.launch">
     <arg name="world_name" value="$(arg world_name)"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
@@ -50,6 +48,12 @@
   </include>
 
   <!-- Visualisation -->
+
+  <group if="$(arg gui)">  
+		<node pkg="rqt_mission_mode" type="rqt_mission_mode" name="rqt_mission_mode" output="screen"/>
+	</group>
+
+
   <group if="$(arg rviz)">
     <include file="$(find visualization)/launch/visualization.launch" />
     <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-f front_axle -d  $(find navigation_debug)/../../res/rviz/navigation_validation_w_camera.rviz -s $(find navigation_debug)/../../res/rviz/kitcar_logo.png"/>

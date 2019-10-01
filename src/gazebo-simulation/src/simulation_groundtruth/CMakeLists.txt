@@ -33,8 +33,3 @@ target_link_libraries(groundtruth_publisher_nodelet
 target_link_libraries(groundtruth_publisher ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${common_LIBRARIES})
 target_link_libraries(groundtruth_publisher_nodelet ${catkin_LIBRARIES} ${common_LIBRARIES} ${PCL_LIBRARIES})
 
-catkin_add_gtest(groundtruth_publisher_test
-  test/test_groundtruth_publisher.cpp
-  src/groundtruth_publisher/groundtruth_publisher.cpp
-)
-
