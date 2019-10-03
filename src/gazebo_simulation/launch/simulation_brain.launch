@@ -1,0 +1,55 @@
+<!-- Running all KITcar_brain software needed for the simulation -->
+<launch>
+  <arg name="car_name" default="dr_drift" />
+  
+  <include file="$(find gazebo_simulation)/launch/pre_cropping_node.launch"/>
+
+  <include file="$(find gazebo_simulation)/launch/tof_sensor_emulation_node.launch">
+		<arg name="name" value="back"/> 
+		<arg name="topic" value="ultrasonic_sensor_back"/>
+	</include>
+  <include file="$(find gazebo_simulation)/launch/tof_sensor_emulation_node.launch">
+		<arg name="name" value="middle"/> 
+		<arg name="topic" value="infrared_sensor_back"/>
+	</include> 
+  <include file="$(find gazebo_simulation)/launch/tof_sensor_emulation_node.launch">
+		<arg name="name" value="front"/> 
+		<arg name="topic" value="infrared_sensor_front"/>
+	</include>
+  <include file="$(find gazebo_simulation)/launch/tof_sensor_emulation_node.launch">
+		<arg name="name" value="ahead"/> 
+		<arg name="topic" value="ultrasonic_sensor_front"/>
+	</include> 
+
+
+	<include file="$(find mission_control)/launch/mission_control.launch" >
+    <arg name="car_name" value="$(arg car_name)" />
+  </include>
+
+
+  <include file="$(find perception)/launch/perception.launch">
+    <arg name="use_nodelet" value="true" />
+    <arg name="start_camera" value="false" />
+    <arg name="car_name" value="$(arg car_name)" />
+    <arg name="camera_parameters_prefix" value="$(find gazebo_simulation)/param/simulation_car_specs/$(arg car_name)"/>
+  </include>
+
+  <include file="$(find control)/launch/lateral_controller_node.launch">
+       <arg name="car_name" value="$(arg car_name)" />
+  </include>
+  
+  <include file="$(find control)/launch/longitudinal_controller_node.launch">
+       <arg name="car_name" value="$(arg car_name)" />
+  </include>
+  
+  <include file="$(find navigation)/launch/navigation.launch">
+    <arg name="use_nodelet" value="true" />
+    <arg name="car_name" value="$(arg car_name)" />
+  </include>
+
+  <include file="$(find car_specs)/launch/load_coorinate_systems.launch">
+    <arg name="car_name" value="$(arg car_name)" />
+  </include>
+
+</launch>
+
