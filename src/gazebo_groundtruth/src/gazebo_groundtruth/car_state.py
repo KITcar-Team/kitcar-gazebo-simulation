@@ -117,6 +117,8 @@ class CarState:
 
         self.current_frame = self.transform_car_frame(pose)
         self.current_polygon = self.get_current_polygon(self.groundtruth.corridors)
+
+        #print(self.current_frame)
         
     def transform_car_frame(self, car_pose):
         """

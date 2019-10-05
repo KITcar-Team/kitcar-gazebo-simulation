@@ -4,8 +4,8 @@
 
   <arg name="car_name" default="dr_drift" />
  
-  <arg name="world_name" default="curves"/>
-	<arg name="gui" default="true"/>
+  <arg name="name" default="curves"/>
+	<arg name="gui" default="false"/>
   <arg name="recording" default="false"/>
   <arg name="debug" default="false"/>
   <arg name="physics" default="ode"/>
@@ -14,9 +14,9 @@
 	<arg name="tolerance" default="0.1"/>
 
 
-	<include file="$(find gazebo_simulation)/launch/gazebo_simulation.launch">
+	<include file="$(find gazebo_simulation)/launch/road.launch">
 		<arg name="car_name" value="$(arg car_name)"/>
-		<arg name="world_name" value="$(arg world_name)"/>
+		<arg name="name" value="$(arg name)"/>
 		<arg name="gui" value="$(arg gui)"/>
     <arg name="recording" value="$(arg recording)"/>
     <arg name="debug" value="$(arg debug)"/>
@@ -25,12 +25,12 @@
 
 	<node name="car_state_node" ns="gazebo_simulation" pkg="gazebo_groundtruth" type="car_state_node" output="screen">
 		<param name="start_activated" value="$(arg start_activated)" />
-		<param name="road" value="$(arg world_name)"/>
+		<param name="road" value="$(arg name)"/>
 		<param name="car_name" value="$(arg car_name)"/>
   </node>  
 	<node name="drive_logger_node" ns="gazebo_simulation" pkg="gazebo_groundtruth" type="drive_logger_node" output="screen">
 		<param name="start_activated" value="$(arg start_activated)" />
-		<param name="road" value="$(arg world_name)"/>
+		<param name="road" value="$(arg name)"/>
 		<param name="car_name" value="$(arg car_name)"/>
 		<param name="tolerance" value="$(arg tolerance)"/>
   </node>
