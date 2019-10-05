@@ -11,7 +11,7 @@
   <arg name="physics" default="ode"/>
   <arg name="verbose" default="false"/>
 	<arg name="rviz" default="false"/>
-	<arg name="tolerance" default="0.1"/>
+	<arg name="tolerance" default="0.5"/>
 
 
 	<include file="$(find gazebo_simulation)/launch/road.launch">
@@ -35,6 +35,6 @@
 		<param name="tolerance" value="$(arg tolerance)"/>
   </node>
 
-	<test test-name="test_automatic_state" pkg="gazebo_groundtruth" time-limit="200" type="automatic_simulation_test"/>
+	<test test-name="test_automatic_state" pkg="gazebo_groundtruth" time-limit="120" type="automatic_simulation_test"/>
 
 </launch>

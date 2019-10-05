@@ -32,7 +32,7 @@ class AutomaticSimulationTest(unittest.TestCase):
                 break
             rospy.rostime.wallsleep(0.5)
 
-        self.assertEqual(self.state,DriveState.COMPLETED)
+        self.assertEqual(self.state.value,DriveState.COMPLETED.value)
 
 
 print(__name__)

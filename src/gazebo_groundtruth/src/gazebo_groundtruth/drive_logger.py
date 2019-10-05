@@ -83,6 +83,8 @@ class SimulationDriveLoggerNode:
         self.publish_state()
  
     def update_state(self, progress):
+        print(progress)
+
         if self.state != DriveState.IN_PROGRESS:
             return
 
@@ -91,10 +93,10 @@ class SimulationDriveLoggerNode:
             self.state = DriveState.COMPLETED
             
             return
-
+        print( rospy.Time.now().to_sec(), self.last_on_track.to_sec()) 
         if progress != -1:
-            self.last_on_track = rospy.Time()
-        elif rospy.Time().to_sec() - self.last_on_track.to_sec() > self.tolerance:
+            self.last_on_track = rospy.Time.now()
+        elif rospy.Time().now().to_sec() - self.last_on_track.to_sec() > self.tolerance:
             self.state = DriveState.FAILED
             return
 
