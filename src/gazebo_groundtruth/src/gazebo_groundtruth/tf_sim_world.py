@@ -77,41 +77,42 @@ class SimulationTransform:
     
     def simulation_to_world(self, car_pose):
         
-
-        vehicle_to_world_tf = None
         try:
             #Get transformation from vehicle to world
-
-            vehicle_to_world = self.buffer.lookup_transform('world','vehicle',rospy.Time())
+            world_to_vehicle = self.buffer.lookup_transform('world','vehicle',rospy.Time())
         except Exception as e:
             print(e)
             return None
 
-        vw_tf = vehicle_to_world.transform
+        wv_tf = world_to_vehicle.transform
         
-        vw_translation, vw_rotation = vw_tf.translation, vw_tf.rotation
-
-        car_translation, car_rotation = car_pose.position, car_pose.orientation
-
-        vw_q = Quaternion(vw_rotation.w,vw_rotation.x,vw_rotation.y,vw_rotation.z)
-        car_q = Quaternion(car_rotation.w,car_rotation.x,car_rotation.y,car_rotation.z)
+        wv_world_translation, wv_rotation = wv_tf.translation, wv_tf.rotation 
         
-        translation = geometry_msgs.msg.Point()
-        translation.x = car_translation.x - vw_translation.x
-        translation.y= car_translation.y - vw_translation.y
-        translation.z = car_translation.z - car_translation.z
+        sv_sim_translation, sv_rotation = car_pose.position, car_pose.orientation
+        
+        wv_q = Quaternion(wv_rotation.w,wv_rotation.x,wv_rotation.y,wv_rotation.z)
+        sv_q = Quaternion(sv_rotation.w,sv_rotation.x,sv_rotation.y,sv_rotation.z)
+        
+        
 
         #print(vehicle_to_world_tf, car_pose)
         #print(car_q,vw_q)
       
         q = Quaternion()
-        q = car_q / vw_q
+        q = sv_q / wv_q
 
         rotation = geometry_msgs.msg.Quaternion()
         rotation.x = q.x
         rotation.y = q.y
         rotation.z = q.z
         rotation.w = q.w
+
+        wv_sim_translation_list = q.inverse().rotate([wv_world_translation.x,wv_world_translation.y,wv_world_translation.z])
+
+        translation = geometry_msgs.msg.Point()
+        translation.x = sv_sim_translation.x - wv_sim_translation_list[0]       
+        translation.y = sv_sim_translation.y - wv_sim_translation_list[1]       
+        translation.z = sv_sim_translation.z - wv_sim_translation_list[2]
 
         return (translation, rotation)
 

@@ -77,8 +77,13 @@ class CarStateNode:
         @model_states:ModelStates 
         """
 
-        #Find information for current car in model_states and give to self.car_state
-        idx = model_states.name.index(self.car_name)
+        try: 
+            #Find information for current car in model_states and give to self.car_state
+            idx = model_states.name.index(self.car_name)
+        except:
+            print(f"Failed to find {self.car_name} in gazebo models.")
+            return
+
         pose = model_states.pose[idx]
         twist = model_states.twist[idx]
         self.car_state.receive_update(pose,twist)
