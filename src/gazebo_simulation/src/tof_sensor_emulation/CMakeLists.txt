@@ -33,8 +33,3 @@ target_link_libraries(tof_sensor_emulation_nodelet
 target_link_libraries(tof_sensor_emulation ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${common_LIBRARIES})
 target_link_libraries(tof_sensor_emulation_nodelet ${catkin_LIBRARIES} ${common_LIBRARIES} ${PCL_LIBRARIES})
 
-catkin_add_gtest(tof_sensor_emulation_test
-  test/test_tof_sensor_emulation.cpp
-  src/tof_sensor_emulation/tof_sensor_emulation.cpp
-)
-

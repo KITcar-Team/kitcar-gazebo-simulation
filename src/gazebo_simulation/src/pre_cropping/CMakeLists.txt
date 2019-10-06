@@ -32,8 +32,3 @@ target_link_libraries(pre_cropping_nodelet
 target_link_libraries(pre_cropping ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${common_LIBRARIES})
 target_link_libraries(pre_cropping_nodelet ${catkin_LIBRARIES} ${common_LIBRARIES} ${OpenCV_LIBRARIES})
 
-catkin_add_gtest(pre_cropping_test
-  test/test_pre_cropping.cpp
-  src/pre_cropping/pre_cropping.cpp
-)
-
