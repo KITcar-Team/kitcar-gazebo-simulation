@@ -52,12 +52,48 @@
 					<updateRate>0</updateRate>
 					<imageTopicName>/camera/image_uncropped_raw</imageTopicName>
 					<cameraInfoTopicName>/camera/camera_info</cameraInfoTopicName>
-					<frameName>world</frameName>
+					<frameName>vehicle</frameName>
 				</plugin>
 			</sensor>
 		</link>
 		<joint name="camera_joint" type="fixed">
 			<child>camera_ros::link</child>
+			<parent>chassis</parent>
+		</joint>
+		<link name="depth_camera_ros::link">
+			<pose frame="">0.00428937 0.0114112 0.21946 0.0 0.2016281 0.0</pose>
+			<visual name="visual">
+				<geometry>
+					<box>
+						<size>0.07 0.03 0.03</size>
+					</box>
+				</geometry>
+			</visual>
+			<sensor name="camera" type="depth">
+				<update_rate>60</update_rate>
+				<camera name="__default__">
+					<horizontal_fov>1.465630203573013</horizontal_fov>
+					<image>
+						<width>360</width>
+						<height>240</height>
+						<format>L8</format>
+					</image>
+					<clip>
+						<near>0.1</near>
+						<far>3</far>
+					</clip>
+				</camera>
+				<plugin filename="libgazebo_ros_openni_kinect.so" name="camera_plugin">
+					<alwaysOn>1</alwaysOn>
+					<updateRate>0</updateRate>
+					<imageTopicName>/depth_camera/raw</imageTopicName>
+					<cameraInfoTopicName>/depth_camera/camera_info</cameraInfoTopicName>
+					<frameName>vehicle</frameName>
+				</plugin>
+			</sensor>
+		</link>
+		<joint name="depth_camera_joint" type="fixed">
+			<child>depth_camera_ros::link</child>
 			<parent>chassis</parent>
 		</joint>
 		<link name="depth_camera_ros::link_back">
@@ -85,7 +121,7 @@
 				<plugin filename="libgazebo_ros_openni_kinect.so" name="camera_plugin">
 					<alwaysOn>1</alwaysOn>
 					<updateRate>0</updateRate>
-					<cameraName>camera_ir</cameraName>
+					<cameraName>tof_back</cameraName>
 					<depthImageTopicName>/camera/depth_raw/back</depthImageTopicName>
 					<depthImageInfoTopicName>/camera/depth_raw/back_info</depthImageInfoTopicName>
 					<pointCloudTopicName>/camera/depth_raw/back_points</pointCloudTopicName>
@@ -123,7 +159,7 @@
 				<plugin filename="libgazebo_ros_openni_kinect.so" name="camera_plugin">
 					<alwaysOn>1</alwaysOn>
 					<updateRate>0</updateRate>
-					<cameraName>camera_ir</cameraName>
+					<cameraName>tof_middle</cameraName>
 					<depthImageTopicName>/camera/depth_raw/middle</depthImageTopicName>
 					<depthImageInfoTopicName>/camera/depth_raw/middle_info</depthImageInfoTopicName>
 					<pointCloudTopicName>/camera/depth_raw/middle_points</pointCloudTopicName>
@@ -161,7 +197,7 @@
 				<plugin filename="libgazebo_ros_openni_kinect.so" name="camera_plugin">
 					<alwaysOn>1</alwaysOn>
 					<updateRate>0</updateRate>
-					<cameraName>camera_ir</cameraName>
+					<cameraName>tof_front</cameraName>
 					<depthImageTopicName>/camera/depth_raw/front</depthImageTopicName>
 					<depthImageInfoTopicName>/camera/depth_raw/front_info</depthImageInfoTopicName>
 					<pointCloudTopicName>/camera/depth_raw/front_points</pointCloudTopicName>
@@ -199,7 +235,7 @@
 				<plugin filename="libgazebo_ros_openni_kinect.so" name="camera_plugin">
 					<alwaysOn>1</alwaysOn>
 					<updateRate>0</updateRate>
-					<cameraName>camera_ir</cameraName>
+					<cameraName>tof_ahead</cameraName>
 					<depthImageTopicName>/camera/depth_raw/ahead</depthImageTopicName>
 					<depthImageInfoTopicName>/camera/depth_raw/ahead_info</depthImageInfoTopicName>
 					<pointCloudTopicName>/camera/depth_raw/ahead_points</pointCloudTopicName>

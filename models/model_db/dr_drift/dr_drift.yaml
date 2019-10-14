@@ -23,9 +23,32 @@
             'near':0.1,
             'far':20
         },
-        ros: {'imageTopicName':'/camera/image_uncropped_raw','cameraInfoTopicName':'/camera/camera_info','frameName':'world'},
+        ros: {'imageTopicName':'/camera/image_uncropped_raw','cameraInfoTopicName':'/camera/camera_info','frameName':'vehicle'},
         update_rate: 60
     },
+   depth_camera: {
+     translation: [0.00428937, 0.0114112, 0.21946],
+    'angle': 0.2016281,
+        size: [0.07, 0.03, 0.03],
+        'focal_length': 200,
+        capture: {
+            'width':360,
+            'height':240,
+            'format': 'L8'
+        },
+        output: {
+            'width':360,
+            'height':240,
+            'format':'L8'
+        },
+        clip: {
+            'near':0.1,
+            'far':3
+        },
+        ros: {'imageTopicName':'/depth_camera/raw','cameraInfoTopicName':'/depth_camera/camera_info','frameName':'vehicle'},
+        update_rate: 60
+    },
+
     time_of_flight: {
         'horizontal_fov':0.436,
         capture: {
