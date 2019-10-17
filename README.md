@@ -11,6 +11,10 @@ Furthermore the following packages must be installed:
 ```
 sudo apt-get install ros-melodic-gazebo-ros-control ros-melodic-gazebo-ros-pkgs
 ```
-and `kitcar-gazebo-simulation` build with `catkin_make`.
-Other information can be found in [KITcar-Gazebo-Simulation Wiki](https://wiki.kitcar-team.de/doku.php?id=konzept_und_umsetzung:gazebo_simulation:kitcar-gazebo-simulation).
+and the python requirements installed:
+```
+pip3 install -r requirements.txt
+```
+Then build with `catkin_make`.
+Other information can be found in [KITcar-Gazebo-Simulation Wiki](https://wiki.kitcar-team.de/doku.php?id=technik:repos:kitcar-gazebo-simulation:start).
 

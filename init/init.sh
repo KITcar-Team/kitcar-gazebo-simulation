@@ -20,8 +20,8 @@ case "$option" in
 
     # set commit hook
     echo "setting commit hook to check formatting when creating new commit ..."
-    #ln -sf ../../check_formatting.sh $KITCAR_REPO_PATH/kitcar-gazebo-simulation/.git/hooks/pre-commit
-	  #chmod +x $KITCAR_REPO_PATH/kitcar-ros/.git/hooks/pre-commit
+    ln -sf ../../check_formatting.sh $KITCAR_REPO_PATH/kitcar-gazebo-simulation/.git/hooks/pre-commit
+	  chmod +x $KITCAR_REPO_PATH/kitcar-gazebo-simulation/.git/hooks/pre-commit
   ;;
 
   2) # do cleanup
