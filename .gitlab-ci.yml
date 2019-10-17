@@ -62,7 +62,7 @@ setup:
     paths:
       - kitcar-gazebo-utils
       - kitcar-ros
-    
+    expire_in: 4 hrs
 
 build-external:
   stage: pretest-build-1
@@ -105,7 +105,7 @@ build-debugger:
   artifacts:
     paths:
       - kitcar-ros/KITcar_debugger
-    expire_in: 4 hrs
+    expire_in: 6 hrs
 
 
 
