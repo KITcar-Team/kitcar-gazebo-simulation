@@ -1,0 +1,8 @@
+leak:class_loader
+leak:libstdc++.so
+leak:libroscpp.so
+leak:libboost_thread.so
+leak:basic_string
+leak:libimage_transport_plugins
+leak:libtbb
+leak:libzbar

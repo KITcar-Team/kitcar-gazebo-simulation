@@ -1,0 +1,36 @@
+Checks: "bugprone-*,\
+clang-analyzer-*,\
+modernize-*,\
+-modernize-use-bool-literals,\
+-modernize-pass-by-value,\
+-modernize-use-auto,\
+-modernize-raw-string-literal,\
+-modernize-return-braced-init-list,\
+cppcoreguidelines-*,\
+-cppcoreguidelines-pro-type-vararg,\
+-cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
+misc-*,\
+llvm-namespace-comment,\
+readability-*,\
+-readability-implicit-bool-cast,\
+-readability-else-after-return,\
+-readability-redundant-declaration,\
+-readability-named-parameter,\
+-readability-braces-around-statements,\
+-readability-implicit-bool-conversion,\
+performance-*,\
+-clang-analyzer-core.CallAndMessage,\
+-clang-analyzer-security.FloatLoopCounter,\
+-clang-diagnostic-zero-as-null-pointer-constant,\
+-clang-diagnostic-c99-extensions,\
+-clang-diagnostic-double-promotion,\
+google-explicit-constructor"
+
+#cppcoreguidelines-pro-type-vararg is raised by ROS_INFO/ROS_WARN etc.
+#cppcoreguidelines-pro-bounds-array-to-pointer-decay is raised by ROS_INFO/ROS_WARN etc.
+#clang-analyzer-core.CallAndMessage is raised by localization for strange reasons.
+#clang-diagnostic-c99-extensions is raised by designated initializer lists.
+
+#Note: there is a local .clang-tidy-file in navigation/path_planning because ceres forces us
+# to use pointer arithmetric. cppcoreguidelines-warnings about this are disabled there. If 
+# you change this file you should also adapt the .clang-tidy-file of in navigation/path_planning.

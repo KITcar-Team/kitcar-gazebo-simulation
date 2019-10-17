@@ -1,0 +1,7 @@
+BasedOnStyle: Google
+PenaltyExcessCharacter: 1
+BinPackArguments: false
+BinPackParameters: false
+AllowShortIfStatementsOnASingleLine: false
+MaxEmptyLinesToKeep: 3
+KeepEmptyLinesAtTheStartOfBlocks: true
