@@ -1,0 +1,108 @@
+image: ditschuk/docker-gazebo-build:latest
+
+variables:
+  CCACHE_DIR: "ccache"
+  GIT_STRATEGY: clone
+  PIP3_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - ccache
+    - .cache/pip
+    - venv/
+
+before_script: 
+  - mkdir -p .pip
+  - python3 -V               # Print out python version for debugging
+  - pip3 install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - pip3 install -r requirements.txt
+  - mkdir -p ccache
+    #Install python packages
+  #- ls $KITCAR_REPO_PATH
+  #- git lfs pull
+  - export KITCAR_REPO_PATH=/builds/kitcar/
+  - if [ -d "kitcar-gazebo-utils" ]; then
+  - mv kitcar-gazebo-utils $KITCAR_REPO_PATH/kitcar-gazebo-utils
+  - fi
+  - if [ -d "kitcar-ros" ]; then
+  - mv kitcar-ros $KITCAR_REPO_PATH/kitcar-ros
+  - fi
+after_script:
+  - export KITCAR_REPO_PATH=/builds/kitcar/
+  - if [ -d "$KITCAR_REPO_PATH/kitcar-gazebo-utils" ]; then
+  - mv $KITCAR_REPO_PATH/kitcar-gazebo-utils kitcar-gazebo-utils 
+  - fi
+  - if [ -d "$KITCAR_REPO_PATH/kitcar-ros" ]; then
+  - mv $KITCAR_REPO_PATH/kitcar-ros kitcar-ros
+  - fi
+  - ls $KITCAR_REPO_PATH
+
+stages:
+  - setup
+  - test
+    # - test-simulation
+
+setup-utils:
+  stage: setup
+  script: &setup
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-gazebo-utils.git $KITCAR_REPO_PATH/kitcar-gazebo-utils
+    #Also clone kitcar-ros
+  artifacts:
+    paths:
+      - kitcar-gazebo-utils
+    expire_in: 4 hrs
+  
+build:
+    stage: setup
+    script: &build-all
+        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-ros.git $KITCAR_REPO_PATH/kitcar-ros
+        - cd $KITCAR_REPO_PATH/kitcar-ros
+        - git submodule sync --recursive
+        - git submodule update --init --recursive
+        - git clean -d -f -f KITcar_external/src
+        #External
+        - echo "CCACHE_DIR=$CCACHE_DIR"
+        - cd $KITCAR_REPO_PATH/kitcar-ros/KITcar_external
+        - catkin_make #-DCMAKE_BUILD_TYPE=Coverage
+        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash --extend
+        #Brain
+        - cd $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain
+        - catkin_make  #-DCMAKE_BUILD_TYPE=Coverage
+        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
+        - cd  $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger
+        - catkin_make #-DCMAKE_BUILD_TYPE=Coverage
+        - cd  $KITCAR_REPO_PATH/kitcar-gazebo-simulation
+    artifacts:
+        paths:
+        - kitcar-ros
+        - devel
+        - build
+        expire_in: 6 hrs
+
+#test-utils:
+#  stage: pretest-build-1
+#  dependencies:
+#    - setup
+#  script: &test-utils
+#    - cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation/models/env_db
+#    - ./generate.sh -r default-road
+    
+
+test-road:
+  stage: test
+  dependencies:
+    - setup-utils
+    - build
+  script: &test-road
+    - source init/bashrc # The order of these source commands seems relevant?
+    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash --extend
+    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
+    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger/devel/setup.bash --extend
+    - Xvfb :1 -screen 0 1600x1200x16  & # Needed for Gazebo
+    - cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation/models/env_db
+    - ./generate.sh -r curves
+    - rostest gazebo_groundtruth road.test name:=curves # Still not functioning correctly yet / issues with lsan
+
