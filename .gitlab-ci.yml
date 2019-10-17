@@ -42,106 +42,59 @@ after_script:
 
 stages:
   - setup
-  - pretest-build-1
-  - build-2
-  - build-3
   - test
     # - test-simulation
 
-setup:
+setup-utils:
   stage: setup
   script: &setup
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-gazebo-utils.git $KITCAR_REPO_PATH/kitcar-gazebo-utils
     #Also clone kitcar-ros
-    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-ros.git $KITCAR_REPO_PATH/kitcar-ros
-    - cd $KITCAR_REPO_PATH/kitcar-ros
-    - git submodule sync --recursive
-    - git submodule update --init --recursive
-    - git clean -d -f -f KITcar_external/src
   artifacts:
     paths:
       - kitcar-gazebo-utils
-      - kitcar-ros
     expire_in: 4 hrs
-
-build-external:
-  stage: pretest-build-1
-  dependencies:
-    - setup
-  script: &KITcar_external
-    - echo "CCACHE_DIR=$CCACHE_DIR"
-    - cd $KITCAR_REPO_PATH/kitcar-ros/KITcar_external
-    - catkin_make #-DCMAKE_BUILD_TYPE=Coverage
-  artifacts:
-    paths:
-      - kitcar-ros/KITcar_external
-    expire_in: 4 hrs
-
-build-brain:
-  stage: build-2
-  dependencies:
-    - setup
-    - build-external
-  script: &KITcar_brain
-    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash --extend
-    - cd $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain
-    - catkin_make  #-DCMAKE_BUILD_TYPE=Coverage
-  artifacts:
-    paths:
-      - kitcar-ros/KITcar_brain
-    expire_in: 6 hrs
-    
-build-debugger:
-  stage: build-3
-  dependencies:
-    - setup
-    - build-external
-    - build-brain
-  script: &KITcar_debugger
-    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash --extend
-    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
-    - cd  $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger
-    - catkin_make #-DCMAKE_BUILD_TYPE=Coverage
-  artifacts:
-    paths:
-      - kitcar-ros/KITcar_debugger
-    expire_in: 6 hrs
-
-
-
+  
 build:
-  stage: build-3
-  dependencies:
-    - setup
-    - build-external
-    - build-brain
-  script: &kitcar-gazebo-simulation
-    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash --extend
-    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
-    #- source devel/setup.bash --extend
-    - catkin_make #-DCMAKE_BUILD_TYPE=Coverage
-  artifacts:
-    paths:
-      - devel
-      - build
-    expire_in: 6 hrs
+    stage: setup
+    script: &build-all
+        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-ros.git $KITCAR_REPO_PATH/kitcar-ros
+        - cd $KITCAR_REPO_PATH/kitcar-ros
+        - git submodule sync --recursive
+        - git submodule update --init --recursive
+        - git clean -d -f -f KITcar_external/src
+        #External
+        - echo "CCACHE_DIR=$CCACHE_DIR"
+        - cd $KITCAR_REPO_PATH/kitcar-ros/KITcar_external
+        - catkin_make #-DCMAKE_BUILD_TYPE=Coverage
+        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash --extend
+        #Brain
+        - cd $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain
+        - catkin_make  #-DCMAKE_BUILD_TYPE=Coverage
+        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
+        - cd  $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger
+        - catkin_make #-DCMAKE_BUILD_TYPE=Coverage
+        - cd  $KITCAR_REPO_PATH/kitcar-gazebo-simulation
+    artifacts:
+        paths:
+        - kitcar-ros
+        - devel
+        - build
+        expire_in: 6 hrs
 
-test-utils:
-  stage: pretest-build-1
-  dependencies:
-    - setup
-  script: &test-utils
-    - cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation/models/env_db
-    - ./generate.sh -r default-road
+#test-utils:
+#  stage: pretest-build-1
+#  dependencies:
+#    - setup
+#  script: &test-utils
+#    - cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation/models/env_db
+#    - ./generate.sh -r default-road
     
 
 test-road:
   stage: test
   dependencies:
-    - setup
-    - build-external
-    - build-debugger
-    - build-brain
+    - setup-utils
     - build
   script: &test-road
     - source init/bashrc # The order of these source commands seems relevant?
