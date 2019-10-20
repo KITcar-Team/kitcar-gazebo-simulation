@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GENERATION=$KITCAR_REPO_PATH/kitcar-gazebo-utils/car_model/generate_dr_drift.py
+GENERATION=$KITCAR_REPO_PATH/kitcar-gazebo-simulation/utils/car_model/generate_dr_drift.py
 INPUT_YAML=$(pwd)/dr_drift.yaml
 OUT_CAM_YAML=$KITCAR_REPO_PATH/kitcar-gazebo-simulation/src/gazebo_simulation/param/simulation_car_specs/dr_drift/camera.yaml
 OUT_DEPTH_CAM_YAML=$KITCAR_REPO_PATH/kitcar-gazebo-simulation/src/gazebo_simulation/param/simulation_car_specs/dr_drift/depth_camera.yaml

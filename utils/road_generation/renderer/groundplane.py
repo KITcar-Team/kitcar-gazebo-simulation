@@ -17,8 +17,8 @@ from gi.repository import Rsvg
 import shutil
 
 import sys
-sys.path.insert(1, os.path.join(os.environ['KITCAR_REPO_PATH'],'kitcar-gazebo-utils','machine-learning'))
-import color_classes
+sys.path.append(os.path.join(os.environ.get('KITCAR_REPO_PATH'),'kitcar-gazebo-simulation','utils','machine_learning'))
+import machine_learning.color_classes as color_classes
 
 PIXEL_PER_UNIT = 500
 PADDING = 3
