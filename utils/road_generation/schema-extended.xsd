@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <!-- distance in meter (positive floats) -->
+    <xs:simpleType name="distance">
+        <xs:restriction base="xs:float">
+            <xs:minExclusive value="0.0"></xs:minExclusive>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!--
+        Example:
+        <xxx>
+            <exact>0.0</exact>
+            ... or ...
+            <intervalStart>0.0</intervalStart>
+            <intervalEnd>1.0</intervalEnd>
+        </xxx>
+    -->
+    <xs:complexType name="floatInterval">
+        <xs:choice>
+            <xs:element name="exact" type="xs:float" />
+            <xs:sequence>
+                <xs:element name="intervalStart" type="xs:float" />
+                <xs:element name="intervalEnd" type="xs:float" />
+            </xs:sequence>
+        </xs:choice>
+    </xs:complexType>
+
+    <!--
+        Example:
+        <point>
+            <x>1.2</x>
+            <y>3.4</y>
+        </point>
+    -->
+    <xs:complexType name="point">
+        <xs:sequence>
+            <xs:element name="x" type="xs:float" />
+            <xs:element name="y" type="xs:float" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--
+        Example:
+        <rectangle>
+            <length>4</length>
+            <width>2</width>
+            <orientation>0.8</orientation>
+            <centerPoint>
+                <x>1.2</x>
+                <y>3.4</y>
+            </centerPoint>
+        </rectangle>
+    -->
+    <xs:complexType name="rectangle">
+        <xs:sequence>
+            <xs:element name="length" type="distance" />
+            <xs:element name="width" type="distance" />
+            <xs:element name="orientation" type="xs:float" />
+            <xs:element name="centerPoint" type="point" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--
+        Example:
+        <circle>
+            <radius>1.3</radius>
+            <centerPoint>
+                <x>0.0</x>
+                <y>0.0</y>
+            </centerPoint>
+        </circle>
+    -->
+    <xs:complexType name="circle">
+        <xs:sequence>
+            <xs:element name="radius" type="distance" />
+            <xs:element name="centerPoint" type="point" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--
+        Example:
+        <polygon>
+            <point>
+                <x>0</x>
+                <y>0</y>
+            </point>
+            <point>
+                <x>1</x>
+                <y>0</y>
+            </point>
+            <point>
+                <x>1</x>
+                <y>1</y>
+            </point>
+            ...
+        </polygon>
+    -->
+    <xs:complexType name="polygon">
+        <xs:sequence>
+            <xs:element minOccurs="3" maxOccurs="unbounded" name="point"
+                type="point" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--
+        Example:
+        <shape>
+            <rectangle>...</rectangle>
+            ...
+            <circle>...</circle>
+            ...
+            <polygon>...</polygon>
+            ...
+        </shape>
+    -->
+    <xs:complexType name="shape">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="rectangle" type="rectangle" />
+            <xs:element name="circle" type="circle" />
+            <xs:element name="polygon" type="polygon" />
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="occupancy">
+        <xs:sequence>
+            <xs:element name="shape" type="shape" />
+            <xs:element name="time" type="floatInterval" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="state">
+        <xs:sequence>
+            <xs:element name="position">
+                <xs:complexType>
+                    <xs:choice>
+                        <xs:element name="point" type="point" />
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element name="rectangle" type="rectangle" />
+                            <xs:element name="circle" type="circle" />
+                            <xs:element name="polygon" type="polygon" />
+                        </xs:choice>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="orientation" type="floatInterval" />
+            <xs:element name="time" type="floatInterval" />
+            <xs:element name="velocity" type="floatInterval" minOccurs="0" />
+            <xs:element name="acceleration" type="floatInterval" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="obstacleRole">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="static" />
+            <xs:enumeration value="dynamic" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="obstacleType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="unknown" />
+            <!-- static -->
+            <xs:enumeration value="parkedVehicle" />
+            <xs:enumeration value="constructionZone" />
+            <xs:enumeration value="roadBoundary" />
+            <!-- dynamic -->
+            <xs:enumeration value="car" />
+            <xs:enumeration value="truck" />
+            <xs:enumeration value="bus" />
+            <xs:enumeration value="bicycle" />
+            <xs:enumeration value="pedestrian" />
+            <xs:enumeration value="priorityVehicle" />
+            <!-- EXTENSION -->
+            <xs:enumeration value="blockedArea" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="obstacle">
+        <xs:sequence>
+            <xs:element name="role" type="obstacleRole" />
+            <xs:element name="type" type="obstacleType" />
+            <xs:element name="shape" type="shape" />
+            <xs:choice minOccurs="0">
+                <xs:element name="trajectory">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="state" type="state"
+                                maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="occupancySet">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="occupancy" type="occupancy"
+                                maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <xs:simpleType name="lineMarking">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="dashed" />
+            <xs:enumeration value="solid" />
+            <xs:enumeration value="parking" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="boundary">
+        <xs:sequence>
+            <xs:element name="point" type="point"
+                maxOccurs="unbounded" />
+            <xs:element name="lineMarking" type="lineMarking"
+                minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="lineMarkingAttributes">
+        <xs:sequence>
+            <xs:element name="lineWidth" type="xs:float" />
+            <xs:element name="segmentLength" type="xs:float" />
+            <xs:element name="segmentGap" type="xs:float" />
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="laneletRef">
+        <xs:attribute name="ref" type="xs:integer"
+            use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="laneletRefList">
+        <xs:sequence>
+            <xs:element name="lanelet" type="laneletRef" minOccurs="0"
+                maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="drivingDir">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="same" />
+            <xs:enumeration value="opposite" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="laneletAdjacentRef">
+        <xs:attribute name="ref" type="xs:integer" use="required" />
+        <xs:attribute name="drivingDir" type="drivingDir"
+            use="required" />
+    </xs:complexType>
+
+    <xs:simpleType name="laneletType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="road" />
+            <xs:enumeration value="sidewalk" />
+            <xs:enumeration value="zebraCrossing" />
+            <xs:enumeration value="startLane" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="lanelet">
+        <xs:sequence>
+            <xs:element name="type" type="laneletType" minOccurs="0" default="road" />
+            <xs:element name="isStart" type="xs:boolean" minOccurs="0" />
+            <xs:element name="leftBoundary" type="boundary" />
+            <xs:element name="rightBoundary" type="boundary" />
+            <xs:element name="predecessor" type="laneletRefList"
+                minOccurs="0" />
+            <xs:element name="successor" type="laneletRefList"
+                minOccurs="0" />
+            <xs:element name="adjacentLeft" type="laneletAdjacentRef"
+                minOccurs="0" />
+            <xs:element name="adjacentRight" type="laneletAdjacentRef"
+                minOccurs="0" />
+            <!-- EXTENSION -->
+            <xs:element name="stopLine" type="lineMarking" minOccurs="0" />
+            <xs:element name="stopLineAttributes" type="lineMarkingAttributes" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="egoVehicle">
+        <xs:sequence>
+            <xs:element name="type" type="obstacleType" />
+            <xs:element name="shape" type="shape" />
+            <xs:element name="initialState" type="state" />
+            <xs:element name="goalRegion">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="state" type="state"
+                            maxOccurs="unbounded" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <!-- EXTENSION -->
+    <xs:complexType name="parkingLot">
+        <xs:sequence>
+            <xs:element name="shape" type="shape" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="parkingLotStart">
+        <xs:sequence>
+            <xs:element name="shape" type="shape" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="trafficIslandJunction">
+        <xs:sequence>
+            <xs:element name="point" type="point" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="roadMarkingType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="10_zone_beginn" />
+            <xs:enumeration value="20_zone_beginn" />
+            <xs:enumeration value="40_zone_beginn" />
+            <xs:enumeration value="50_zone_beginn" />
+            <xs:enumeration value="60_zone_beginn" />
+            <xs:enumeration value="70_zone_beginn" />
+            <xs:enumeration value="80_zone_beginn" />
+            <xs:enumeration value="90_zone_beginn" />
+            <xs:enumeration value="ende_10_zone" />
+            <xs:enumeration value="ende_20_zone" />
+            <xs:enumeration value="ende_40_zone" />
+            <xs:enumeration value="ende_50_zone" />
+            <xs:enumeration value="ende_60_zone" />
+            <xs:enumeration value="ende_70_zone" />
+            <xs:enumeration value="ende_80_zone" />
+            <xs:enumeration value="ende_90_zone" />
+            <xs:enumeration value="stvo-274.1" />
+            <xs:enumeration value="stvo-274.2" />
+            <xs:enumeration value="turn_left" />
+            <xs:enumeration value="turn_right" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="roadMarking">
+        <xs:sequence>
+            <xs:element name="type" type="roadMarkingType" />
+            <xs:element name="orientation" type="xs:float" />
+            <xs:element name="centerPoint" type="point" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <!-- EXTENSION -->
+    <xs:complexType name="trafficSign">
+        <xs:sequence>
+            <xs:element name="type">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="10_zone_beginn" />
+                        <xs:enumeration value="20_zone_beginn" />
+                        <xs:enumeration value="40_zone_beginn" />
+                        <xs:enumeration value="50_zone_beginn" />
+                        <xs:enumeration value="60_zone_beginn" />
+                        <xs:enumeration value="70_zone_beginn" />
+                        <xs:enumeration value="80_zone_beginn" />
+                        <xs:enumeration value="90_zone_beginn" />
+                        <xs:enumeration value="ende_10_zone" />
+                        <xs:enumeration value="ende_20_zone" />
+                        <xs:enumeration value="ende_40_zone" />
+                        <xs:enumeration value="ende_50_zone" />
+                        <xs:enumeration value="ende_60_zone" />
+                        <xs:enumeration value="ende_70_zone" />
+                        <xs:enumeration value="ende_80_zone" />
+                        <xs:enumeration value="ende_90_zone" />
+                        <xs:enumeration value="stvo-108-10" />
+                        <xs:enumeration value="stvo-110-10" />
+                        <xs:enumeration value="stvo-306" />
+                        <xs:enumeration value="stvo-205" />
+                        <xs:enumeration value="stvo-206" />
+                        <xs:enumeration value="stvo-208" />
+                        <xs:enumeration value="stvo-222" />
+                        <xs:enumeration value="stvo-276" />
+                        <xs:enumeration value="stvo-280" />
+                        <xs:enumeration value="stvo-274.1" />
+                        <xs:enumeration value="stvo-274.2" />
+                        <xs:enumeration value="stvo-314" />
+                        <xs:enumeration value="stvo-331.1" />
+                        <xs:enumeration value="stvo-331.2" />
+                        <xs:enumeration value="stvo-350-10" />
+                        <xs:enumeration value="stvo-209-10" />
+                        <xs:enumeration value="stvo-209-20" />
+                        <xs:enumeration value="stvo-625-10" />
+                        <xs:enumeration value="stvo-625-11" />
+                        <xs:enumeration value="stvo-625-20" />
+                        <xs:enumeration value="stvo-625-21" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="orientation" type="xs:float" />
+            <xs:element name="centerPoint" type="point" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="ramp">
+        <xs:sequence>
+            <xs:element name="orientation" type="xs:float" />
+            <xs:element name="centerPoint" type="point" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <!-- EXTENSION -->
+    <xs:complexType name="intersection">
+        <xs:attribute name="size" type="xs:float" use="optional" default="1.8"/>
+        <xs:sequence>
+            <xs:element name="composition" type="laneletRefList" />
+            <xs:element name="priority" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="low" type="xs:integer" use="required" />
+                    <xs:attribute name="high" type="xs:integer" use="required" />
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="CommonRoad">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="obstacle" type="obstacle"
+                maxOccurs="unbounded" />
+            <xs:element name="lanelet" type="lanelet"
+                maxOccurs="unbounded" />
+            <xs:element name="egoVehicle" type="egoVehicle"
+                maxOccurs="unbounded" />
+            <xs:element name="parkingLot" type="parkingLot"
+                maxOccurs="unbounded" />
+            <xs:element name="trafficSign" type="trafficSign"
+                maxOccurs="unbounded" />
+            <xs:element name="ramp" type="ramp"
+                maxOccurs="unbounded" />
+            <xs:element name="intersection" type="intersection"
+                maxOccurs="unbounded" />
+            <xs:element name="islandJunction" type="trafficIslandJunction"
+                maxOccurs="unbounded" />
+            <xs:element name="roadMarking" type="roadMarking"
+                maxOccurs="unbounded" />
+        </xs:choice>
+        <xs:attribute name="commonRoadVersion" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="1.0" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="benchmarkID" type="xs:string" />
+        <xs:attribute name="date" type="xs:date" />
+        <xs:attribute name="timeStepSize" type="xs:float" />
+    </xs:complexType>
+
+    <!-- Root element -->
+    <xs:element name="commonRoad" type="CommonRoad">
+        <xs:key name="id">
+            <xs:selector xpath="./*" />
+            <xs:field xpath="@id" />
+        </xs:key>
+        <xs:keyref name="idref" refer="id">
+            <xs:selector xpath=".//*" />
+            <xs:field xpath="@ref" />
+        </xs:keyref>
+        <xs:keyref name="idhigh" refer="id">
+            <xs:selector xpath="./intersection/priority" />
+            <xs:field xpath="@high" />
+        </xs:keyref>
+        <xs:keyref name="idlow" refer="id">
+            <xs:selector xpath="./intersection/priority" />
+            <xs:field xpath="@low" />
+        </xs:keyref>
+    </xs:element>
+</xs:schema>
