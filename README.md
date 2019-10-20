@@ -9,7 +9,10 @@ cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation
 ```
 Furthermore the following packages must be installed:
 ```
-sudo apt-get install ros-melodic-gazebo-ros-control ros-melodic-gazebo-ros-pkgs
+sudo apt-get install -y \
+ros-melodic-gazebo-ros-control ros-melodic-gazebo-ros-pkgs \
+python3 gazebo9 libgazebo9-dev python-opencv python3-pip \
+libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0
 ```
 and the python requirements installed:
 ```
