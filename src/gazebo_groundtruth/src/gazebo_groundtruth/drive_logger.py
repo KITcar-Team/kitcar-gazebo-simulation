@@ -58,7 +58,7 @@ class SimulationDriveLoggerNode:
         pass
 
     def start_test(self):
-        self.last_on_track = rospy.Time()
+        self.last_on_track = 0
         self.change_mission_mode(MissionMode.FREE_RIDE)
         self.start_time = rospy.Time()
         self.state = DriveState.IN_PROGRESS
@@ -88,13 +88,19 @@ class SimulationDriveLoggerNode:
             return
 
         if progress == 1:
-            self.completion_time = rospy.Time()
+            self.completion_time = rospy.Time.now()
             self.state = DriveState.COMPLETED
             
             return
+
+        if progress == -1 and self.last_on_track != 0 : 
+            print(f"Off-track for {rospy.Time().now().to_sec() - self.last_on_track.to_sec()} secs")
+
         
         if progress != -1:
             self.last_on_track = rospy.Time.now()
+        elif self.last_on_track == 0:
+            return
         elif rospy.Time().now().to_sec() - self.last_on_track.to_sec() > self.tolerance:
             self.state = DriveState.FAILED
             return

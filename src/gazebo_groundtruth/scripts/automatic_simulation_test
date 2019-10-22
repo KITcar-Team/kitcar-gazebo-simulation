@@ -5,6 +5,8 @@ import rospy
 from gazebo_groundtruth.drive_logger import DriveState
 from std_msgs.msg import Int8
 
+#from src.gazebo_groundtruth.drive_logger import DriveState
+
 import pdb
 
 PKG = 'gazebo_simulation'
