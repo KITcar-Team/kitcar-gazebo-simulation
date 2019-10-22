@@ -12,7 +12,7 @@
         capture: {
             'width':1280,
             'height':1024,
-            'format':'RGB8'
+            'format':'R8G8B8'
         },
         output: {
             'width':1280,

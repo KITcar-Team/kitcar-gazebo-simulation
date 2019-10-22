@@ -40,7 +40,7 @@
 					<image>
 						<width>1280</width>
 						<height>1024</height>
-						<format>RGB8</format>
+						<format>R8G8B8</format>
 					</image>
 					<clip>
 						<near>0.1</near>
