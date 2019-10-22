@@ -3,7 +3,7 @@
 """Example Python node to publish on a specific topic."""
 
 import sys,os
-sys.path.insert(1, os.path.join(os.environ['KITCAR_REPO_PATH'],'kitcar-gazebo-utils','road-generation'))
+sys.path.insert(1, os.path.join(os.environ['KITCAR_REPO_PATH'],'kitcar-gazebo-simulation','utils'))
 
 
 # Import required Python code.
@@ -11,9 +11,9 @@ import rospy
 # Give ourselves the ability to run a dynamic reconfigure server.
 from dynamic_reconfigure.server import Server as DynamicReconfigureServer
 
-import commonroad.generator.primitive as primitive
-from commonroad.generator.primitive import RoadElement
-import commonroad.generator.road_generation as road_generation
+import road_generation.generator.primitive as primitive
+from road_generation.generator.primitive import RoadElement
+import road_generation.generator.road_generation as road_generation
 
 import numpy as np
 
@@ -23,7 +23,7 @@ import xml.dom.minidom
 import pkg_resources
 
 SCHEMA = etree.XMLSchema(etree.parse(pkg_resources.resource_stream(
-    "commonroad.generator", "template-schema.xsd")))
+    "road_generation.generator", "template-schema.xsd")))
 
 
 from visualization_msgs.msg import Marker
@@ -90,9 +90,9 @@ class SimulationGroundtruthNode:
 class SimulationGroundtruth:
     """ Extracts and stores information about the track used in simulation 
 
-    @road_elements: [commonroad.groundtruth.RoadElement] containing line markings corresponding to road 
+    @road_elements: [road_generation.groundtruth.RoadElement] containing line markings corresponding to road 
     
-    @corridors: [commonroad.groundtruth.corridor] which holds points of a polygon. The polygons in total describe the drivable path the vehicle can take
+    @corridors: [road_generation.groundtruth.corridor] which holds points of a polygon. The polygons in total describe the drivable path the vehicle can take
 
     """
 
@@ -115,7 +115,7 @@ class SimulationGroundtruth:
 
         
     def parse_primitives(self, road_file):
-        """ Load and parse commonroad.generator.primitive(s) from file @road_path. 
+        """ Load and parse road_generation.generator.primitive(s) from file @road_path. 
 
         Return: List of primitives, that make up the road.
         
@@ -155,7 +155,7 @@ class SimulationGroundtruthUpdater:
         for idx,line in enumerate(lines):
 
             marker = Marker()
-            marker.header.frame_id = "simulation"
+            marker.header.frame_id = "world"
             marker.header.stamp = rospy.get_rostime()
             marker.ns = "simulation/line"
             marker.lifetime = rospy.Duration(secs = 10)

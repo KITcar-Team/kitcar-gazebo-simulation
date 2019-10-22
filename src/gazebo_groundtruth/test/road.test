@@ -23,12 +23,12 @@
 		<arg name="rviz" value="$(arg rviz)" />
 	</include>
 
-	<node name="car_state_node" ns="gazebo_simulation" pkg="gazebo_groundtruth" type="car_state_node" output="screen">
+	<node name="car_state_node" ns="gazebo_groundtruth" pkg="gazebo_groundtruth" type="car_state_node" output="screen">
 		<param name="start_activated" value="$(arg start_activated)" />
 		<param name="road" value="$(arg name)"/>
 		<param name="car_name" value="$(arg car_name)"/>
   </node>  
-	<node name="drive_logger_node" ns="gazebo_simulation" pkg="gazebo_groundtruth" type="drive_logger_node" output="screen">
+	<node name="drive_logger_node" ns="gazebo_groundtruth" pkg="gazebo_groundtruth" type="drive_logger_node" output="screen">
 		<param name="start_activated" value="$(arg start_activated)" />
 		<param name="road" value="$(arg name)"/>
 		<param name="car_name" value="$(arg car_name)"/>
