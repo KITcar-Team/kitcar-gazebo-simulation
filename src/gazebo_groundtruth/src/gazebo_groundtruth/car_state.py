@@ -175,7 +175,7 @@ class CarState:
         if point_count < 4:
             self.failures += 1
             self.continous_failures += 1
-            print(f"{self.failures} in total, {self.continous_failures} in a row")
+           # print(f"{self.failures} in total, {self.continous_failures} in a row")
         else:
             self.continous_failures = 0
 

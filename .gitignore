@@ -61,3 +61,7 @@ msg-tags
 
 # Ignore Datasets folder
 datasets
+
+models/env_db/default-road/model.config
+
+models/env_db/default-road/commonroad.xml

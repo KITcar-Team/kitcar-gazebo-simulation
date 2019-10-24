@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROAD_GENERATION_PATH=$KITCAR_REPO_PATH/kitcar-gazebo-utils/road-generation #Path to road-generation folder
+ROAD_GENERATION_PATH=$KITCAR_REPO_PATH/kitcar-gazebo-simulation/utils #Path to road-generation folder
 #Read input flags
 FLAGS=""
 while getopts "st:br:" option

@@ -24,39 +24,38 @@ before_script:
   #- ls $KITCAR_REPO_PATH
   #- git lfs pull
   - export KITCAR_REPO_PATH=/builds/kitcar/
-  - if [ -d "kitcar-gazebo-utils" ]; then
-  - mv kitcar-gazebo-utils $KITCAR_REPO_PATH/kitcar-gazebo-utils
-  - fi
   - if [ -d "kitcar-ros" ]; then
   - mv kitcar-ros $KITCAR_REPO_PATH/kitcar-ros
   - fi
 after_script:
   - export KITCAR_REPO_PATH=/builds/kitcar/
-  - if [ -d "$KITCAR_REPO_PATH/kitcar-gazebo-utils" ]; then
-  - mv $KITCAR_REPO_PATH/kitcar-gazebo-utils kitcar-gazebo-utils 
-  - fi
   - if [ -d "$KITCAR_REPO_PATH/kitcar-ros" ]; then
   - mv $KITCAR_REPO_PATH/kitcar-ros kitcar-ros
   - fi
   - ls $KITCAR_REPO_PATH
 
 stages:
-  - setup
+  - prebuild-test # Some tests are performed before building, to filter easy mistakes
+  - build
   - test
-    # - test-simulation
 
-setup-utils:
-  stage: setup
-  script: &setup
-    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-gazebo-utils.git $KITCAR_REPO_PATH/kitcar-gazebo-utils
-    #Also clone kitcar-ros
-  artifacts:
-    paths:
-      - kitcar-gazebo-utils
-    expire_in: 4 hrs
-  
+
+# Test if dr_drift generation script works
+test-dr_drift:
+    stage: prebuild-test
+    script: &prebuild-dr_drift
+        - cd models/model_db/dr_drift
+        - ./generate.sh
+        #TODO: Also test if the calibration is actually correct.
+
+test-road-generation:
+  stage: prebuild-test
+  script: &prebuild-generation
+    - cd models/env_db
+    - ./generate.sh -r default-road
+
 build:
-    stage: setup
+    stage: build
     script: &build-all
         - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-ros.git $KITCAR_REPO_PATH/kitcar-ros
         - cd $KITCAR_REPO_PATH/kitcar-ros
@@ -75,6 +74,7 @@ build:
         - cd  $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger
         - catkin_make #-DCMAKE_BUILD_TYPE=Coverage
         - cd  $KITCAR_REPO_PATH/kitcar-gazebo-simulation
+        - catkin_make
     artifacts:
         paths:
         - kitcar-ros
@@ -94,13 +94,13 @@ build:
 test-road:
   stage: test
   dependencies:
-    - setup-utils
     - build
   script: &test-road
     - source init/bashrc # The order of these source commands seems relevant?
     - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash --extend
     - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
     - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger/devel/setup.bash --extend
+    - source devel/setup.bash --extend
     - Xvfb :1 -screen 0 1600x1200x16  & # Needed for Gazebo
     - cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation/models/env_db
     - ./generate.sh -r curves
