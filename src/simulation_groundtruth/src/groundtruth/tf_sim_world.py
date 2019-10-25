@@ -98,8 +98,8 @@ class SimulationTransform:
         #print(vehicle_to_world_tf, car_pose)
         #print(car_q,vw_q)
       
-        q = Quaternion()
-        q = sv_q / wv_q
+        q = sv_q.rotate(wv_q.inverse)
+        #q = sv_q / wv_q
 
         rotation = geometry_msgs.msg.Quaternion()
         rotation.x = q.x
