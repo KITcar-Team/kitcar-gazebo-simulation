@@ -66,9 +66,13 @@ def create_camera_sensor(el,camera_type, plugin_type, plugin_att, horizontal_fov
     add_tag_dict(plugin,default_plugin_attrib)
     
 
-def create_chassis(el, pose, size, mass):
+def create_chassis(el, pose, size, origin,mass):
     chassis = SubElement(el,"link",{'name':'chassis'})
-    add_tag_dict(chassis, {'mass':mass})
+    add_list_text(chassis, 'origin',origin)
+
+    #inertial 
+    inertial = SubElement(chassis,'inertial')
+    add_tag_dict(inertial,{'mass':mass})
 
     #Create visual element / include the dr drift mesh file
     visual = SubElement(chassis,'visual',{'name':'visual'})

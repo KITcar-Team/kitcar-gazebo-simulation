@@ -24,6 +24,7 @@
 
 	<include file="$(find mission_control)/launch/mission_control.launch" >
     <arg name="car_name" value="$(arg car_name)" />
+		<arg name="simulation_mode" value="true" />
   </include>
 
 
