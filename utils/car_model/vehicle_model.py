@@ -66,22 +66,6 @@ def create_camera_sensor(el,camera_type, plugin_type, plugin_att, horizontal_fov
     add_tag_dict(plugin,default_plugin_attrib)
     
 
-def create_chassis(el, pose, size, mass):
-    chassis = SubElement(el,"link",{'name':'chassis'})
-    add_tag_dict(chassis, {'mass':mass})
-
-    #Create visual element / include the dr drift mesh file
-    visual = SubElement(chassis,'visual',{'name':'visual'})
-    add_pose(visual,pose)
-    geom = SubElement(visual,'geometry')
-    mesh = SubElement(geom,'mesh')
-    SubElement(mesh,'uri').text = "model://dr_drift/meshes/dr_drift.stl"
-    add_list_text(mesh,'scale',[1,1,1])
-
-    #Create colision box
-    collision = SubElement(chassis,'collision',{'name':'collision'})
-    add_box(collision, pose, size)
-
 def create_front_camera(el,pose,size, horizontal_fov, capture,clip, ros, attributes):
     camera = SubElement(el,'link',{'name':'camera_ros::link'})
     add_pose(camera,pose)
@@ -145,17 +129,11 @@ def create_tof_camera(el, name, pose, horizontal_fov, capture,clip):
     joint = SubElement(el,'joint',{'name':'depth_camera_joint_'+name,'type':'fixed'})
     add_tag_dict(joint,{'child':'depth_camera_ros::link_'+name,'parent':'chassis'})
 
-def create_dr_drift(data, cam_horizontal_fov, depth_cam_horizontal_fov):
-    root = ET.Element("sdf")
-    root.set('version','1.6')
+def extend_dr_drift(base, data, cam_horizontal_fov, depth_cam_horizontal_fov):
+    tree = ET.parse(base)
+    root = tree.getroot()
 
-    model = ET.SubElement(root,"model")
-    model.set('name','dr_drift')
-
-    SubElement(model,'plugin',{'filename':'libvehicle_simulation_link.so','name':'vehicle_simulation_link'})
-    add_tag_dict(model,{'static':0,'allow_auto_disable':1})
-
-    create_chassis(model,**data['chassis'])
+    model = root.find("model")
 
     # Camera mount angle
     cam_angle = data['front_camera']['angle']
@@ -170,8 +148,6 @@ def create_dr_drift(data, cam_horizontal_fov, depth_cam_horizontal_fov):
 
     SubElement(model,'plugin',{'filename':'libvehicle_simulation_link.so','name':'vehicle_simulation_link'})
     add_tag_dict(model,{'static':0,'allow_auto_disable':1})
-
-    create_chassis(model,**data['chassis'])
 
     front_camera_dict = dict()
     front_camera_dict['pose'] = np.append(np.array(data['front_camera']['translation']),
