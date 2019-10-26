@@ -140,15 +140,6 @@ def extend_dr_drift(base, data, cam_horizontal_fov, depth_cam_horizontal_fov):
     # Camera position in vehicle coordinate system
     cam_translation = np.array(data['front_camera']['translation'])
 
-    root = ET.Element("sdf")
-    root.set('version','1.6')
-
-    model = ET.SubElement(root,"model")
-    model.set('name','dr_drift')
-
-    SubElement(model,'plugin',{'filename':'libvehicle_simulation_link.so','name':'vehicle_simulation_link'})
-    add_tag_dict(model,{'static':0,'allow_auto_disable':1})
-
     front_camera_dict = dict()
     front_camera_dict['pose'] = np.append(np.array(data['front_camera']['translation']),
 [0,data['front_camera']['angle'], 0])
