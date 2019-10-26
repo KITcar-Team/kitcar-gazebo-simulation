@@ -96,5 +96,5 @@ test-road:
     - Xvfb :1 -screen 0 1600x1200x16  & # Needed for Gazebo
     - cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation/models/env_db
     - ./generate.sh -r curves
-    - rostest gazebo_groundtruth road.test name:=curves # Still not functioning correctly yet / issues with lsan
+    - rostest simulation_groundtruth road.test name:=curves # Still not functioning correctly yet / issues with lsan
   when: manual

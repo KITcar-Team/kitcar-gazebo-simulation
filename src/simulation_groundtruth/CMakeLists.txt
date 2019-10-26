@@ -203,5 +203,5 @@ include_directories(
 # catkin_add_nosetests(test)
 if(CATKIN_ENABLE_TESTING)
 	find_package(rostest REQUIRED)
-	add_rostest(test/road.test)
+	#add_rostest(test/road.test)
 endif()

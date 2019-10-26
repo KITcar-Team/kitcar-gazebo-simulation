@@ -18,7 +18,7 @@ import shapely.ops as ops
 
 import pyquaternion
 
-from gazebo_groundtruth.groundtruth import SimulationGroundtruth
+from groundtruth.groundtruth import SimulationGroundtruth
 
 
 class CarStateNode:
