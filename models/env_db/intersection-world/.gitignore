@@ -1,3 +1,5 @@
 materials
 model.sdf
+model.config
 lines.csv
+commonroad.xml

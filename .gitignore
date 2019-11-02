@@ -65,3 +65,9 @@ datasets
 models/env_db/default-road/model.config
 
 models/env_db/default-road/commonroad.xml
+
+models/env_db/curves/model.config
+
+models/env_db/intersection-world/commonroad.xml
+
+models/env_db/intersection-world/model.config
