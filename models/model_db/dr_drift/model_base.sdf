@@ -5,7 +5,10 @@
 		<static>0</static>
 		<allow_auto_disable>1</allow_auto_disable>
 		<link name="chassis">
-			<mass>1</mass>
+			<origin>0 0 0 0 0 0</origin>
+			<inertial>
+				<mass>1</mass>
+			</inertial>
 			<visual name="visual">
 				<pose frame="">0.11 0 0.06 0 0 0</pose>
 				<geometry>
