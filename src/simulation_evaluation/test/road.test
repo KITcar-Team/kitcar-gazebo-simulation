@@ -1,6 +1,7 @@
 <!-- KITcar launch script for pre_cropping -->
 <launch>
   <arg name="start_activated" default="true" />
+	<arg name="pkg" default="simulation_evaluation"/>
 
   <arg name="car_name" default="dr_drift" />
  
@@ -23,18 +24,18 @@
 		<arg name="rviz" value="$(arg rviz)" />
 	</include>
 
-	<node name="car_state_node" ns="gazebo_groundtruth" pkg="gazebo_groundtruth" type="car_state_node" output="screen">
+	<node name="car_state_node" pkg="$(arg pkg)" type="car_state_node" output="screen">
 		<param name="start_activated" value="$(arg start_activated)" />
 		<param name="road" value="$(arg name)"/>
 		<param name="car_name" value="$(arg car_name)"/>
   </node>  
-	<node name="drive_logger_node" ns="gazebo_groundtruth" pkg="gazebo_groundtruth" type="drive_logger_node" output="screen">
+	<node name="drive_logger_node" pkg="$(arg pkg)" type="drive_logger_node" output="screen">
 		<param name="start_activated" value="$(arg start_activated)" />
 		<param name="road" value="$(arg name)"/>
 		<param name="car_name" value="$(arg car_name)"/>
 		<param name="tolerance" value="$(arg tolerance)"/>
   </node>
 
-	<test test-name="test_automatic_state" pkg="gazebo_groundtruth" time-limit="120" type="automatic_simulation_test"/>
+	<test test-name="test_automatic_state" pkg="$(arg pkg)" time-limit="120" type="automatic_simulation_test"/>
 
 </launch>

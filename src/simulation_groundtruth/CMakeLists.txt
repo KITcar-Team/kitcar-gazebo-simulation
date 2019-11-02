@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-project(gazebo_groundtruth)
+project(simulation_groundtruth)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,10 +8,13 @@ project(gazebo_groundtruth)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-#find_package(catkin REQUIRED COMPONENT
-#	common
-#  state_estimation_msgs
-#  )
+find_package(catkin REQUIRED COMPONENTS
+	roscpp
+	rospy
+	std_msgs
+	message_generation
+	geometry_msgs
+  )
 
 ## System dependencies are found with CMake's conventions
 
@@ -46,6 +49,22 @@ find_package(gazebo REQUIRED)
 ##     and list every .msg/.srv/.action file to be processed
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
+
+#Setup python
+catkin_python_setup()
+
+
+
+add_message_files(
+	FILES
+	RoadSectionMsg.msg
+)
+
+generate_messages(
+	DEPENDENCIES
+	std_msgs
+	geometry_msgs
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -94,7 +113,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES pre_cropping
 #  CATKIN_DEPENDS gazebo_ros_pkgs
-#	CATKIN_DEPENDS message_runtime
+	CATKIN_DEPENDS message_runtime
 #  DEPENDS roscpp gazebo_ros
 )
 
@@ -112,7 +131,6 @@ include_directories(
 	#  ${Eigen_INCLUDE_DIRS}
 	#  ${PCL_INCLUDE_DIRS}
 )
-
 #add_subdirectory(src/model_plugins/vehicle_simulation_link)
 #add_subdirectory(src/pre_cropping)
 
@@ -144,10 +162,6 @@ include_directories(
 #############
 ## Install ##
 #############
-
-#Setup python
-catkin_python_setup()
-
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
@@ -189,5 +203,5 @@ catkin_python_setup()
 # catkin_add_nosetests(test)
 if(CATKIN_ENABLE_TESTING)
 	find_package(rostest REQUIRED)
-	add_rostest(test/road.test)
+	#add_rostest(test/road.test)
 endif()

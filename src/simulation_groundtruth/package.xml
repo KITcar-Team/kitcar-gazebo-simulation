@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>gazebo_groundtruth</name>
+  <name>simulation_groundtruth</name>
   <version>0.0.0</version>
-  <description>The gazebo_groundtruth package</description>
+  <description>The simulation_groundtruth package</description>
 
   <maintainer email="kditschuneit@icloud.com">Kosntantin Ditschuneit</maintainer>
   <url>https://wiki.kitcar-team.de/doku.php?id=konzept_und_umsetzung:gazebo_simulation:start</url>

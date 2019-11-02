@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>simulation_evaluation</name>
+  <version>0.0.0</version>
+  <description>The simulation_evaluation package</description>
+
+  <maintainer email="kditschuneit@icloud.com">Kosntantin Ditschuneit</maintainer>
+  <url>https://wiki.kitcar-team.de/doku.php?id=konzept_und_umsetzung:gazebo_simulation:start</url>
+
+	<license>TODO</license>
+	<buildtool_depend>catkin</buildtool_depend>
+	<build_depend>message_generation</build_depend>
+	<build_depend>rostest</build_depend>	
+	<exec_depend>message_runtime</exec_depend>
+	<depend>gazebo_ros</depend>
+	<depend>common</depend>
+  <depend>state_estimation_msgs</depend>
+  <depend>control_debug</depend>
+	<depend>mission_control</depend>
+	<!-- The export tag contains other, unspecified, tags -->
+</package>
