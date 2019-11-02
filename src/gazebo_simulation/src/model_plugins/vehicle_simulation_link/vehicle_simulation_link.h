@@ -48,6 +48,9 @@ class VehicleSimulationLink : public ModelPlugin, public NodeBase {
   //! \param msg incoming state estimate
   //!
   void stateCallback(const state_estimation_msgs::StateConstPtr &msg);
+	
+
+	void simulationWorldTransformation(const geometry_msgs::TransformStamped wv_stamped);
 
   //!
   //! \brief obtains the robot's pose from /tf

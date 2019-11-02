@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+
+import sys
+import unittest
+import rospy
+
+from simulation_groundtruth.msg import RoadSectionMsg
+from geometry_msgs.msg import Point32
+
+
+from std_msgs.msg import String
+
+import pdb
+
+class VisualizationNodeTest:
+
+    def publish(self, count):
+        print("publishing " + str(count) + " points")
+
+        msg = RoadSectionMsg()
+			
+        left_points = []
+        middle_points = []
+        right_points = []
+
+        for i in range(count):
+            left_point = Point32()
+            left_point.x = float(i)
+            left_point.y = float(i - 0.4)
+            left_points.append(left_point)
+
+
+            middle_point = Point32()
+            middle_point.x = float(i)
+            middle_point.y = float(i)
+            middle_points.append(middle_point)
+
+            right_point = Point32()
+            right_point.x = float(i)
+            right_point.y = float(i + 0.4)
+            right_points.append(right_point)
+
+        msg.left_line = left_points
+        msg.middle_line = middle_points
+        msg.right_line = right_points
+
+        self.publisher.publish(msg)
+        
+    def __init__(self):
+        rospy.init_node("visualization_debug_node")
+            
+        self.publisher = rospy.Publisher("/simulation/groundtruth/road_sections", RoadSectionMsg, queue_size=1)
+        
+        pdb.set_trace()
+            
+        rospy.spin()
+	
+
+if __name__ == '__main__':
+    # Initialize the node and name it.
+
+    try:
+        VisualizationNodeTest()
+				
+    except rospy.ROSInterruptException:
+        pass

@@ -18,7 +18,7 @@ import shapely.ops as ops
 
 import pyquaternion
 
-from gazebo_groundtruth.groundtruth import SimulationGroundtruth
+from groundtruth.groundtruth import SimulationGroundtruth
 
 
 class CarStateNode:
@@ -41,7 +41,7 @@ class CarStateNode:
         self.car_name = rospy.get_param('~car_name')
 
         #Read optional parameters
-        self.topic_env = rospy.get_param('~topic_environment','/simulation/car_state/')
+        self.topic_env = rospy.get_param('~topic_environment','/simulation/evaluation/car_state/')
         self.start_activated = rospy.get_param('~start_activated', True)
 
         road_file = os.path.join(os.environ.get('KITCAR_REPO_PATH'),'kitcar-gazebo-simulation','models','env_db',road,'road.xml')

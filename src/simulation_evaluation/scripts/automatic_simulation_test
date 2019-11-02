@@ -2,16 +2,14 @@
 import sys
 import unittest
 import rospy
-from gazebo_groundtruth.drive_logger import DriveState
+
+from evaluation.drive_logger import DriveState
+
 from std_msgs.msg import Int8
 
-#from src.gazebo_groundtruth.drive_logger import DriveState
+PKG = 'simulation_evaluation'
 
 import pdb
-
-PKG = 'gazebo_simulation'
-
-#import roslib; roslib.load_manifest(PKG)
 
 class AutomaticSimulationTest(unittest.TestCase):    
 
@@ -27,7 +25,7 @@ class AutomaticSimulationTest(unittest.TestCase):
 
         self.state = DriveState.IN_PROGRESS
 
-        rospy.Subscriber('/simulation/drive_logger/state',Int8,callback=self.state_cb)
+        rospy.Subscriber('/simulation/evaluation/state',Int8,callback=self.state_cb)
         
         while not rospy.core.is_shutdown():
             if self.state != DriveState.IN_PROGRESS:
