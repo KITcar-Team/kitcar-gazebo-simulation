@@ -1,8 +1,0 @@
-<template>
-	<sequence>
-		<line length="1" isStart="true" />
-		<leftArc radius="0.45" angle="180" />
-		<rightArc radius="0.45" angle="180" />
-		<line length="1"/>
-  </sequence>
-</template>
