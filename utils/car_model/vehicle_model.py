@@ -104,7 +104,7 @@ def create_depth_camera(el,pose,size, horizontal_fov, capture,clip, ros, attribu
     add_tag_dict(joint,{'child':'depth_camera_ros::link','parent':'chassis'})
 
 
-def create_tof_camera(el, name, pose, horizontal_fov, capture,clip):
+def create_tof_camera(el, name, pose, horizontal_fov, capture,clip, topic_base, topic_info_base):
     tof = SubElement(el, 'link',{'name':'depth_camera_ros::link_' + name})
     add_pose(tof,pose)
 
@@ -114,9 +114,9 @@ def create_tof_camera(el, name, pose, horizontal_fov, capture,clip):
 
     plugin_dict = dict()
     plugin_dict['cameraName'] = 'tof_' + name 
-    plugin_dict['depthImageTopicName'] = '/camera/depth_raw/' + name
-    plugin_dict['depthImageInfoTopicName'] = '/camera/depth_raw/' + name + '_info'
-    plugin_dict['pointCloudTopicName'] = '/camera/depth_raw/' + name + '_points'
+    plugin_dict['depthImageTopicName'] = topic_base + name
+    plugin_dict['depthImageInfoTopicName'] = topic_info_base + name
+    plugin_dict['pointCloudTopicName'] = topic_base + name + '_points'
     plugin_dict['frame_name'] = 'ir_' + name
     plugin_dict['pointCloudCutoff'] = 0.005
 

@@ -1,0 +1,40 @@
+<!-- Start nodes which are used to connect Gazebo and KITcar_brain -->
+<launch>
+  <arg name="car_name" default="dr_drift" /> 
+  <arg name="link_pose" default="true"/>
+  <arg name="link_twist" default="true"/>
+
+  <param name="gazebo/vehicle_simulation_link/start_activated" value="true"/>
+  <param name="gazebo/vehicle_simulation_link/set_pose" value="$(arg link_pose)"/>
+  <param name="gazebo/vehicle_simulation_link/set_twist" value="$(arg link_twist)"/>
+
+ 
+	<!-- Remap simulated sensors to the topics used in KITcar brain -->
+	<remap from="/simulation/sensors/prepared/camera" to="/camera/image_raw"/>
+	<remap from="/simulation/sensors/prepared/depth_camera" to="/depth_camera/image_raw"/>
+	<remap from="/simulation/sensors/prepared/ultrasonic_sensor_back" to="/controller_interface/controller_interface/ultrasonic_sensor_back"/>
+	<remap from="/simulation/sensors/prepared/ultrasonic_sensor_front" to="/controller_interface/controller_interface/ultrasonic_sensor_front"/>
+	<remap from="/simulation/sensors/prepared/infrared_sensor_back" to="/controller_interface/controller_interface/infrared_sensor_back"/>
+	<remap from="/simulation/sensors/prepared/infrared_sensor_front" to="/controller_interface/controller_interface/infrared_sensor_front"/>
+
+
+	<include file="$(find gazebo_simulation)/launch/sensor_camera_node.launch"/>
+
+  <include file="$(find gazebo_simulation)/launch/sensor_tof_node.launch">
+		<arg name="name" value="back"/> 
+		<arg name="topic" value="ultrasonic_sensor_back"/>
+	</include>
+  <include file="$(find gazebo_simulation)/launch/sensor_tof_node.launch">
+		<arg name="name" value="middle"/> 
+		<arg name="topic" value="infrared_sensor_back"/>
+	</include> 
+  <include file="$(find gazebo_simulation)/launch/sensor_tof_node.launch">
+		<arg name="name" value="front"/> 
+		<arg name="topic" value="infrared_sensor_front"/>
+	</include>
+  <include file="$(find gazebo_simulation)/launch/sensor_tof_node.launch">
+		<arg name="name" value="ahead"/> 
+		<arg name="topic" value="ultrasonic_sensor_front"/>
+	</include> 
+
+</launch>

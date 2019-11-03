@@ -1,5 +1,5 @@
-#ifndef TOF_SENSOR_EMULATION_H
-#define TOF_SENSOR_EMULATION_H
+#ifndef SENSOR_TOF_H
+#define SENSOR_TOF_H
 
 #include <common/macros.h>
 
@@ -14,16 +14,16 @@ THIRD_PARTY_HEADERS_END
 /*!
  * \brief Used to publish time of flight sensors data in simulation
  */
-class TofSensorEmulation {
+class SensorTof {
  public:
   /*!
-  * \brief TofSensorEmulation is the consstructor. A ros indipendent
+  * \brief SensorTof is the consstructor. A ros indipendent
   * functionality containing
   * class needs a pointer to a ParameterInterface (in fact a ParameterHandler)
   * to get access to parameters.
   * \param parameters the ParameterInterface
   */
-  TofSensorEmulation(ParameterInterface *parameters);
+  SensorTof(ParameterInterface *parameters);
 
   /*!
    * \brief preprocessImage
@@ -42,4 +42,4 @@ class TofSensorEmulation {
   ParameterInterface *parameters_ptr_;
 };
 
-#endif  // TOF_SENSOR_EMULATION_H
+#endif  // SENSOR_TOF_H

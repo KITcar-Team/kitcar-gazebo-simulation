@@ -1,32 +1,88 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
+	
+	
 	<model name="dr_drift">
+		
+		
 		<plugin filename="libvehicle_simulation_link.so" name="vehicle_simulation_link"/>
+		
+		
 		<static>0</static>
+		
+		
 		<allow_auto_disable>1</allow_auto_disable>
+		
+		
 		<link name="chassis">
+			
+			
 			<origin>0 0 0 0 0 0</origin>
+			
+			
 			<inertial>
+				
+				
 				<mass>1</mass>
+				
+			
 			</inertial>
+			
+			
 			<visual name="visual">
+				
+				
 				<pose frame="">0.11 0 0.06 0 0 0</pose>
+				
+				
 				<geometry>
+					
+					
 					<mesh>
+						
+						
 						<uri>model://dr_drift/meshes/dr_drift.stl</uri>
+						
+						
 						<scale>1 1 1</scale>
+						
+					
 					</mesh>
+					
+				
 				</geometry>
+				
+			
 			</visual>
+			
+			
 			<collision name="collision">
+				
+				
 				<pose frame="">0.11 0 0.06 0 0 0</pose>
+				
+				
 				<geometry>
+					
+					
 					<box>
+						
+						
 						<size>0.368 0.218 0.12</size>
+						
+					
 					</box>
+					
+				
 				</geometry>
+				
+			
 			</collision>
+			
+		
 		</link>
+		
+	
 		<link name="camera_ros::link">
 			<pose frame="">0.03 0.0 0.26 0.0 0.161 0.0</pose>
 			<visual name="visual">
@@ -52,10 +108,11 @@
 				</camera>
 				<plugin filename="libgazebo_ros_camera.so" name="camera_plugin">
 					<alwaysOn>1</alwaysOn>
-					<updateRate>0</updateRate>
-					<imageTopicName>/camera/image_uncropped_raw</imageTopicName>
-					<cameraInfoTopicName>/camera/camera_info</cameraInfoTopicName>
-					<frameName>vehicle</frameName>
+					<updateRate>60</updateRate>
+					<imageTopicName>/simulation/sensors/raw/camera</imageTopicName>
+					<cameraInfoTopicName>/simulation/sensors/info/camera</cameraInfoTopicName>
+					<frameName>camera</frameName>
+					<cameraName>front_camera</cameraName>
 				</plugin>
 			</sensor>
 		</link>
@@ -72,7 +129,7 @@
 					</box>
 				</geometry>
 			</visual>
-			<sensor name="camera" type="depth">
+			<sensor name="camera_depth" type="depth">
 				<update_rate>60</update_rate>
 				<camera name="__default__">
 					<horizontal_fov>1.465630203573013</horizontal_fov>
@@ -87,11 +144,12 @@
 					</clip>
 				</camera>
 				<plugin filename="libgazebo_ros_openni_kinect.so" name="camera_plugin">
+					<cameraName>depth_camera</cameraName>
 					<alwaysOn>1</alwaysOn>
 					<updateRate>0</updateRate>
-					<imageTopicName>/depth_camera/raw</imageTopicName>
-					<cameraInfoTopicName>/depth_camera/camera_info</cameraInfoTopicName>
-					<frameName>vehicle</frameName>
+					<imageTopicName>/simulation/sensors/raw/depth_camera</imageTopicName>
+					<cameraInfoTopicName>/simulation/sensors/info/depth_camera</cameraInfoTopicName>
+					<frameName>depth_camera</frameName>
 				</plugin>
 			</sensor>
 		</link>
@@ -125,9 +183,9 @@
 					<alwaysOn>1</alwaysOn>
 					<updateRate>0</updateRate>
 					<cameraName>tof_back</cameraName>
-					<depthImageTopicName>/camera/depth_raw/back</depthImageTopicName>
-					<depthImageInfoTopicName>/camera/depth_raw/back_info</depthImageInfoTopicName>
-					<pointCloudTopicName>/camera/depth_raw/back_points</pointCloudTopicName>
+					<depthImageTopicName>/simulation/sensors/raw/distance_back</depthImageTopicName>
+					<depthImageInfoTopicName>/simulation/sensors/info/distance_back</depthImageInfoTopicName>
+					<pointCloudTopicName>/simulation/sensors/raw/distance_back_points</pointCloudTopicName>
 					<frame_name>ir_back</frame_name>
 					<pointCloudCutoff>0.005</pointCloudCutoff>
 				</plugin>
@@ -163,9 +221,9 @@
 					<alwaysOn>1</alwaysOn>
 					<updateRate>0</updateRate>
 					<cameraName>tof_middle</cameraName>
-					<depthImageTopicName>/camera/depth_raw/middle</depthImageTopicName>
-					<depthImageInfoTopicName>/camera/depth_raw/middle_info</depthImageInfoTopicName>
-					<pointCloudTopicName>/camera/depth_raw/middle_points</pointCloudTopicName>
+					<depthImageTopicName>/simulation/sensors/raw/distance_middle</depthImageTopicName>
+					<depthImageInfoTopicName>/simulation/sensors/info/distance_middle</depthImageInfoTopicName>
+					<pointCloudTopicName>/simulation/sensors/raw/distance_middle_points</pointCloudTopicName>
 					<frame_name>ir_middle</frame_name>
 					<pointCloudCutoff>0.005</pointCloudCutoff>
 				</plugin>
@@ -201,9 +259,9 @@
 					<alwaysOn>1</alwaysOn>
 					<updateRate>0</updateRate>
 					<cameraName>tof_front</cameraName>
-					<depthImageTopicName>/camera/depth_raw/front</depthImageTopicName>
-					<depthImageInfoTopicName>/camera/depth_raw/front_info</depthImageInfoTopicName>
-					<pointCloudTopicName>/camera/depth_raw/front_points</pointCloudTopicName>
+					<depthImageTopicName>/simulation/sensors/raw/distance_front</depthImageTopicName>
+					<depthImageInfoTopicName>/simulation/sensors/info/distance_front</depthImageInfoTopicName>
+					<pointCloudTopicName>/simulation/sensors/raw/distance_front_points</pointCloudTopicName>
 					<frame_name>ir_front</frame_name>
 					<pointCloudCutoff>0.005</pointCloudCutoff>
 				</plugin>
@@ -214,7 +272,7 @@
 			<parent>chassis</parent>
 		</joint>
 		<link name="depth_camera_ros::link_ahead">
-			<pose frame="">0.26962 0 0.08 0 0 0</pose>
+			<pose frame="">0.3 0 0.08 0 0 0</pose>
 			<visual name="visual">
 				<geometry>
 					<box>
@@ -239,9 +297,9 @@
 					<alwaysOn>1</alwaysOn>
 					<updateRate>0</updateRate>
 					<cameraName>tof_ahead</cameraName>
-					<depthImageTopicName>/camera/depth_raw/ahead</depthImageTopicName>
-					<depthImageInfoTopicName>/camera/depth_raw/ahead_info</depthImageInfoTopicName>
-					<pointCloudTopicName>/camera/depth_raw/ahead_points</pointCloudTopicName>
+					<depthImageTopicName>/simulation/sensors/raw/distance_ahead</depthImageTopicName>
+					<depthImageInfoTopicName>/simulation/sensors/info/distance_ahead</depthImageInfoTopicName>
+					<pointCloudTopicName>/simulation/sensors/raw/distance_ahead_points</pointCloudTopicName>
 					<frame_name>ir_ahead</frame_name>
 					<pointCloudCutoff>0.005</pointCloudCutoff>
 				</plugin>
@@ -252,4 +310,6 @@
 			<parent>chassis</parent>
 		</joint>
 	</model>
+	
+
 </sdf>

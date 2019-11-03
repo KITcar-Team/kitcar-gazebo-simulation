@@ -20,11 +20,16 @@
   <arg name="pub_clock_frequency" default="100"/>
   <arg name="rviz" default="false"/>
 
-  <param name="gazebo/vehicle_simulation_link/start_activated" value="true"/>
-  <param name="gazebo/vehicle_simulation_link/set_pose" value="$(arg link_pose)"/>
-  <param name="gazebo/vehicle_simulation_link/set_twist" value="$(arg link_twist)"/>
+	
+	<!-- Launch nodes to connect gazebo and kitcar brain -->
+  <include file="$(find gazebo_simulation)/launch/simulation_brain_link.launch">
+    <arg name="car_name" value="$(arg car_name)"/>
+    <arg name="link_pose" value="$(arg link_pose)"/>
+    <arg name="link_twist" value="$(arg link_twist)"/>
+	</include>
 
-  <include file="$(find gazebo_simulation)/launch/simulation_brain.launch">
+	<!-- Launch KITcar_brain -->
+  <include file="$(find gazebo_simulation)/launch/brain.launch">
     <arg name="car_name" value="$(arg car_name)"/>
   </include>
 
@@ -56,7 +61,7 @@
 
   <group if="$(arg rviz)">
     <include file="$(find visualization)/launch/visualization.launch" />
-    <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-f front_axle -d  $(find navigation_debug)/../../res/rviz/navigation_validation_w_camera.rviz -s $(find navigation_debug)/../../res/rviz/kitcar_logo.png"/>
+    <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-f simulation -d  $(find navigation_debug)/../../res/rviz/navigation_validation_w_camera.rviz -s $(find navigation_debug)/../../res/rviz/kitcar_logo.png"/>
   </group>
 
 </launch>

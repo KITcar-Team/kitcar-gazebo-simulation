@@ -1,5 +1,5 @@
-#ifndef TOF_SENSOR_EMULATION_NODE_H
-#define TOF_SENSOR_EMULATION_NODE_H
+#ifndef SENSOR_TOF_NODE_H
+#define SENSOR_TOF_NODE_H
 #include <common/macros.h>
 
 THIRD_PARTY_HEADERS_BEGIN
@@ -11,18 +11,18 @@ THIRD_PARTY_HEADERS_END
 
 #include "common/node_base.h"
 
-#include "tof_sensor_emulation.h"
+#include "sensor_tof.h"
 
 /*!
  * \brief Used to publish time of flight sensors data in simulation
  */
-class TofSensorEmulationNode : public NodeBase {
+class SensorTofNode : public NodeBase {
  public:
   /*!
-   * \brief TofSensorEmulationNode the constructor.
+   * \brief SensorTofNode the constructor.
    * \param node_handle the NodeHandle to be used.
    */
-  TofSensorEmulationNode(ros::NodeHandle& node_handle);
+  SensorTofNode(ros::NodeHandle& node_handle);
   /*!
    * \brief returns the name of the node. It is needed in main and onInit
    * (nodelet) method.
@@ -76,10 +76,10 @@ class TofSensorEmulationNode : public NodeBase {
 
 
   /*!
-   * \brief tof_sensor_emulation contains the ROS-indipendent implementation of
+   * \brief sensor_tof contains the ROS-indipendent implementation of
    * this node.
    */
-  TofSensorEmulation tof_sensor_emulation_;
+  SensorTof sensor_tof_;
 };
 
-#endif  // TOF_SENSOR_EMULATION_NODE_H
+#endif  // SENSOR_TOF_NODE_H
