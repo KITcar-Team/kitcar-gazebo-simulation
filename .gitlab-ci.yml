@@ -37,7 +37,7 @@ after_script:
 stages:
   - prebuild-test # Some tests are performed before building, to filter easy mistakes
   - build
-  - test
+
 
 
 # Test if dr_drift generation script works
@@ -83,18 +83,3 @@ build:
         expire_in: 6 hrs
     
 
-test-road:
-  stage: test
-  dependencies:
-    - build
-  script: &test-road
-    - source init/bashrc # The order of these source commands seems relevant?
-    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash --extend
-    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
-    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger/devel/setup.bash --extend
-    - source devel/setup.bash --extend
-    - Xvfb :1 -screen 0 1600x1200x16  & # Needed for Gazebo
-    - cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation/models/env_db
-    - ./generate.sh -r curves
-    - rostest simulation_groundtruth road.test name:=curves # Still not functioning correctly yet / issues with lsan
-  when: manual
