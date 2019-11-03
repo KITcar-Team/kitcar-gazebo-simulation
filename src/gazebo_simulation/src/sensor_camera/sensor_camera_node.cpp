@@ -1,4 +1,4 @@
-#include "pre_cropping_node.h"
+#include "sensor_camera_node.h"
 
 THIRD_PARTY_HEADERS_BEGIN
 #include <cv_bridge/cv_bridge.h>
@@ -12,8 +12,8 @@ THIRD_PARTY_HEADERS_END
 
 #include "common/node_creation_makros.h"
 
-PreCroppingNode::PreCroppingNode(ros::NodeHandle &node_handle)
-    : NodeBase(node_handle), pre_cropping_(&parameter_handler_) {
+SensorCameraNode::SensorCameraNode(ros::NodeHandle &node_handle)
+    : NodeBase(node_handle), sensor_camera_(&parameter_handler_) {
 
   // TODO: Load Cropping region!
 
@@ -22,27 +22,35 @@ PreCroppingNode::PreCroppingNode(ros::NodeHandle &node_handle)
   // parameter_handler_.registerParam(OUTPUT_QUEUE_SIZE);
 }
 
-void PreCroppingNode::startModule() {
+void SensorCameraNode::startModule() {
 
-  ROS_INFO("Starting module PreCroppingNode");
+  ROS_INFO("Starting module SensorCameraNode");
 
-  // const int output_queue_size =
-  // parameter_handler_.getParam(OUTPUT_QUEUE_SIZE);
-  rospub_image = node_handle_.advertise<sensor_msgs::Image>("/camera/image_raw", 1);
+	//Read sub and pub topics.
+	std::string sub_topic, pub_topic;
 
-  // const int input_queue_size = parameter_handler_.getParam(INPUT_QUEUE_SIZE);
+	node_handle_.param<std::string>(
+			"pub_topic",
+			pub_topic,
+			"/simulation/sensors/prepared/camera");
+	node_handle_.param<std::string>(
+			"sub_topic",
+			sub_topic,
+			"/simulation/sensors/raw/camera");
+
+  rospub_image = node_handle_.advertise<sensor_msgs::Image>(pub_topic, 1);
 
   image_transport::ImageTransport img_trans(node_handle_);
   rossub_uncropped_image = img_trans.subscribe(
-      "/camera/image_uncropped_raw", 1, &PreCroppingNode::handleImage, this);
+      sub_topic, 1, &SensorCameraNode::handleImage, this);
 }
 
-void PreCroppingNode::stopModule() {
+void SensorCameraNode::stopModule() {
   rossub_uncropped_image.shutdown();
   rospub_image.shutdown();
 }
 
-void PreCroppingNode::handleImage(const sensor_msgs::ImageConstPtr &msg) {
+void SensorCameraNode::handleImage(const sensor_msgs::ImageConstPtr &msg) {
 
   cv_bridge::CvImageConstPtr cv_ptr;
   try {
@@ -55,13 +63,13 @@ void PreCroppingNode::handleImage(const sensor_msgs::ImageConstPtr &msg) {
   out_msg.header = msg->header;
   out_msg.encoding = sensor_msgs::image_encodings::MONO8;
 
-  pre_cropping_.precropImage(cv_ptr->image, out_msg.image);
+  sensor_camera_.precropImage(cv_ptr->image, out_msg.image);
 
   sensor_msgs::ImagePtr out_ptr(out_msg.toImageMsg());
   rospub_image.publish(out_ptr);
 }
 
 
-std::string PreCroppingNode::getName() { return std::string("pre_cropping"); }
+std::string SensorCameraNode::getName() { return std::string("sensor_camera"); }
 
-CREATE_NODE(PreCroppingNode)
+CREATE_NODE(SensorCameraNode)

@@ -23,7 +23,7 @@
             'near':0.1,
             'far':20
         },
-        ros: {'imageTopicName':'/camera/image_uncropped_raw','cameraInfoTopicName':'/camera/camera_info','frameName':'vehicle'},
+        ros: {'imageTopicName':'/simulation/sensors/raw/camera','cameraInfoTopicName':'/simulation/sensors/info/camera','frameName':'camera'},
         update_rate: 60
     },
    depth_camera: {
@@ -45,7 +45,7 @@
             'near':0.1,
             'far':3
         },
-        ros: {'imageTopicName':'/depth_camera/raw','cameraInfoTopicName':'/depth_camera/camera_info','frameName':'vehicle'},
+        ros: {'imageTopicName':'/simulation/sensors/raw/depth_camera','cameraInfoTopicName':'/simulation/sensors/info/depth_camera','frameName':'depth_camera'},
         update_rate: 60
     },
 
@@ -60,11 +60,14 @@
             'near':0.01,
             'far':2
         },
+        topic_info_base: '/simulation/sensors/info/distance_',
+        topic_base: '/simulation/sensors/raw/distance_',
         sensors:{
             back: [0, -0.112, 0.08, 0, 0, -1.570796],
             middle: [0.105, -0.1, 0.08, 0, 0, -1.570796 ],
             front: [0.168, -0.1, 0.08, 0, 0, -1.570796] ,
-            ahead: [0.26962, 0, 0.08, 0, 0, 0,]
+            #ahead: [0.26962, 0, 0.08, 0, 0, 0,]
+            ahead: [0.3,0,0.08,0,0,0]
         }
 
     }

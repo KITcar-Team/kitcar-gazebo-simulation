@@ -1,6 +1,6 @@
-#include "pre_cropping.h"
+#include "sensor_camera.h"
 
-PreCropping::PreCropping(ParameterInterface* parameters)
+SensorCamera::SensorCamera(ParameterInterface* parameters)
     : parameters_ptr_(parameters) {
 
   /*image_limits.x = parameters_ptr_->getParam(ROI_START_LOC_X);
@@ -15,7 +15,7 @@ PreCropping::PreCropping(ParameterInterface* parameters)
   image_limits.height = 1024 - image_limits.y;
 }
 
-void PreCropping::precropImage(const cv::Mat& image_uncropped, cv::Mat& image_cropped) {
+void SensorCamera::precropImage(const cv::Mat& image_uncropped, cv::Mat& image_cropped) {
   // cutting out region of interest
   image_cropped = image_uncropped(image_limits);
 }

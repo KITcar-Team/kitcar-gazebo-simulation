@@ -153,9 +153,9 @@ add_subdirectory(src/model_plugins/vehicle_simulation_link)
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-INCLUDE(src/pre_cropping/CMakeLists.txt)
+INCLUDE(src/sensor_camera/CMakeLists.txt)
 
-INCLUDE(src/tof_sensor_emulation/CMakeLists.txt)
+INCLUDE(src/sensor_tof/CMakeLists.txt)
 
 
 #############

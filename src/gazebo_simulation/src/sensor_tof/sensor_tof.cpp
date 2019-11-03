@@ -1,4 +1,4 @@
-#include "tof_sensor_emulation.h"
+#include "sensor_tof.h"
 
 THIRD_PARTY_HEADERS_BEGIN
 #include <sensor_msgs/PointCloud2.h>
@@ -9,10 +9,10 @@ THIRD_PARTY_HEADERS_BEGIN
 
 THIRD_PARTY_HEADERS_END
 
-TofSensorEmulation::TofSensorEmulation(ParameterInterface* parameters)
+SensorTof::SensorTof(ParameterInterface* parameters)
     : parameters_ptr_(parameters) {}
 
-float TofSensorEmulation::processPointCloud(const sensor_msgs::PointCloud2 cloud) {
+float SensorTof::processPointCloud(const sensor_msgs::PointCloud2 cloud) {
 
   pcl::PointCloud<pcl::PointXYZ> c;
   pcl::fromROSMsg(cloud, c);

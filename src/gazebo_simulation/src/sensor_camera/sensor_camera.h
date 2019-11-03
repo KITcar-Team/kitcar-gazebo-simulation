@@ -1,5 +1,5 @@
-#ifndef PRE_CROPPING_H
-#define PRE_CROPPING_H
+#ifndef SENSOR_CAMERA_H
+#define SENSOR_CAMERA_H
 #include <common/macros.h>
 
 THIRD_PARTY_HEADERS_BEGIN
@@ -16,16 +16,16 @@ THIRD_PARTY_HEADERS_END
 /*!
  * \brief Precrops camera image outputted by Gazebo
  */
-class PreCropping {
+class SensorCamera {
  public:
   /*!
-   * \brief PreCropping is the consstructor. A ros indipendent functionality
+   * \brief SensorCamera is the consstructor. A ros indipendent functionality
    * containing
    * class needs a pointer to a ParameterInterface (in fact a ParameterHandler)
    * to get access to parameters.
    * \param parameters the ParameterInterface
    */
-  PreCropping(ParameterInterface* parameters);
+  SensorCamera(ParameterInterface* parameters);
 
   /*!
    * \brief precropImage
@@ -73,4 +73,4 @@ class PreCropping {
   cv::Rect image_limits;
 };
 
-#endif  // PRE_CROPPING_H
+#endif  // SENSOR_CAMERA_H

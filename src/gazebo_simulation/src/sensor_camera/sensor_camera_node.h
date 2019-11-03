@@ -1,5 +1,5 @@
-#ifndef PREPROCESSING_NODE_H
-#define PREPROCESSING_NODE_H
+#ifndef SENSOR_CAMERA_NODE_H
+#define SENSOR_CAMERA_NODE_H
 #include <common/macros.h>
 
 THIRD_PARTY_HEADERS_BEGIN
@@ -8,17 +8,17 @@ THIRD_PARTY_HEADERS_END
 
 #include "common/node_base.h"
 
-#include "pre_cropping.h"
+#include "sensor_camera.h"
 /*!
  * \brief Precrops camera image outputted by Gazebo
  */
-class PreCroppingNode : public NodeBase {
+class SensorCameraNode : public NodeBase {
  public:
   /*!
-   * \brief PreCroppingNode the constructor.
+   * \brief SensorCameraNode the constructor.
    * \param node_handle the NodeHandle to be used.
    */
-  PreCroppingNode(ros::NodeHandle& node_handle);
+  SensorCameraNode(ros::NodeHandle& node_handle);
   /*!
    * \brief returns the name of the node. It is needed in main and onInit
    * (nodelet) method.
@@ -72,10 +72,10 @@ class PreCroppingNode : public NodeBase {
 
 
   /*!
-   * \brief pre_cropping contains the ROS-indipendent implementation of this
+   * \brief sensor_camera contains the ROS-indipendent implementation of this
    * node.
    */
-  PreCropping pre_cropping_;
+  SensorCamera sensor_camera_;
 };
 
 #endif  // PRE_CROPPING_NODE_H
