@@ -18,12 +18,15 @@ python3 gazebo9 libgazebo9-dev python-opencv python3-pip \
 libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0
 ```
 
-and the python requirements installed:
+At this point make sure that you have the latest version of `libignition-math2` installed by running:
+```sudo apt upgrade libignition-math2```
+
+The next step is to install needed python packages by calling:
 
 ```
 pip3 install -r requirements.txt
 ```
-(*Ignore any error thrown by pip when trying to install pygobject, it seems to be irrelevant.*)
+(*Install pip3 if not already installed. Ignore any error thrown by pip when trying to install pygobject, it seems to be irrelevant.*)
 
 Then build `kitcar-gazebo-repository` by calling `catkin_make` in the root folder of this repository.
 
