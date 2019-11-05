@@ -1,4 +1,4 @@
-image: ditschuk/docker-gazebo-build:latest
+image: kitcar/docker-gazebo-build:latest
 
 variables:
   CCACHE_DIR: "ccache"
