@@ -37,6 +37,7 @@ after_script:
 stages:
   - prebuild-test # Some tests are performed before building, to filter easy mistakes
   - build
+  - test
 
 
 
@@ -53,6 +54,7 @@ test-road-generation:
   script: &prebuild-generation
     - cd models/env_db
     - ./generate.sh -r default-road
+    - ./generate.sh -r curves
 
 build:
     stage: build
@@ -81,5 +83,21 @@ build:
         - devel
         - build
         expire_in: 6 hrs
-    
+   
+
+test-start-process:
+    stage: test
+    script: &test-start
+        #Perform sourcing
+        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash 
+        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
+        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger/devel/setup.bash --extend
+        - source devel/setup.bash --extend
+        
+        # Generate road
+        - cd models/env_db
+        - ./generate.sh -r curves
+
+        # Run test
+        - rostest gazebo_simulation start_road.test
 
