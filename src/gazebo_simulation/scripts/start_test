@@ -1,0 +1,41 @@
+#!/usr/bin/env python2
+import sys
+import unittest
+import rospy
+import tf2_ros
+
+PKG = 'gazebo_simulation'
+
+class StartSimulationTest(unittest.TestCase): 
+    """ Simple python unittest that is started in combination with other basic simulation nodes and is supposed to check if the simulation launch process works.
+
+    Currently it just waits for the vehicle -> ir_back broadcast (Which is an indication that processes started since this broadcast is only done once gazebo is running.
+    """
+
+    def test_simulation_broadcast(self):
+        """ Create a tf listener for vehicle -> ir_back to test if processes of KITcar_brain are started. """
+
+        print('Starting test_simulation_broadcast')
+        rospy.init_node('start_simulation_broadcast_test')
+
+        tfBuffer = tf2_ros.Buffer()
+        listener = tf2_ros.TransformListener(tfBuffer)
+
+        rate = rospy.Rate(100.0)
+
+        while not rospy.core.is_shutdown():
+
+            print('looking for transform vehicle to ir....') 
+            try:
+                trans = tfBuffer.lookup_transform('vehicle','ir_back', rospy.Time())
+                print('Found tf.')
+                break 
+            except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+                rate.sleep()
+
+        self.assertIsNotNone(trans)
+                
+
+if __name__ == '__main__':
+    import rosunit
+    rosunit.unitrun(PKG,'test_start_simulation',StartSimulationTest)
