@@ -1,0 +1,20 @@
+<template>
+	<sequence>
+		<line length="2"/>
+		<cubicBezier p1x="10" p1y="0" p2x="0" p2y="10" p3x="10" p3y="10"/>
+		<leftArc radius="8" angle="90"/>
+		<line length="0.2"/>
+		<cubicBezier p1x="5" p1y="0" p2x="0" p2y="-5" p3x="10" p3y="-5"/>
+		<leftArc radius="8" angle="90"/>
+		<line length="4.6"/>
+		<cubicBezier p1x="10" p1y="0" p2x="0" p2y="10" p3x="10" p3y="10"/>
+		<leftArc radius="8" angle="90"/>
+		<cubicBezier p1x="5" p1y="0" p2x="0" p2y="-5" p3x="10" p3y="-5"/>
+		<leftArc radius="8" angle="90"/>
+		<line length="2"/>
+
+		<!--cubicBezier p1x="10" p1y="0" p2x="0" p2y="10" p3x="10" p3y="10"/>
+		<cubicBezier p1x="5" p1y="0" p2x="0" p2y="-5" p3x="10" p3y="-5"/>
+		<leftArc radius="8" angle="180"/-->
+	</sequence>
+</template>
