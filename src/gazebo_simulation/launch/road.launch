@@ -1,11 +1,11 @@
 <!-- Just for highlighting -->
 
 <launch>
+
   <arg name="link_pose" default="true"/>
   <arg name="link_twist" default="true"/>
 
-  <arg name="car_name" default="dr_drift" />
- 
+	<arg name="car_name" default="dr_drift" />
   <arg name="name" default="default-road"/>
   <arg name="paused" default="false"/>
   <arg name="use_sim_time" default="true"/>
@@ -21,23 +21,24 @@
   <arg name="rviz" default="false"/>
 	<arg name="include_brain" default="true"/>
 
+		
 	
 	<!-- Launch nodes to connect gazebo and kitcar brain -->
   <include file="$(find gazebo_simulation)/launch/simulation_brain_link.launch">
     <arg name="car_name" value="$(arg car_name)"/>
-    <arg name="link_pose" value="$(arg link_pose)"/>
-    <arg name="link_twist" value="$(arg link_twist)"/>
+   	 	<arg name="link_pose" value="$(arg link_pose)"/>
+   	 	<arg name="link_twist" value="$(arg link_twist)"/>
 	</include>
 
-	<!-- Launch KITcar_brain -->
-  <include file="$(find gazebo_simulation)/launch/brain.launch">
-    <arg name="car_name" value="$(arg car_name)"/>
-  </include>
 
-  <!-- Start the vehicle simulation -->
-  <include file="$(find control_debug)/launch/vehicle_simulation_node.launch">
-    <arg name="car_name" value="$(arg car_name)"/>
-  </include>
+	<!-- Launch KITcar_brain -->
+  
+	<group if="$(arg include_brain)">
+		<include file="$(find gazebo_simulation)/launch/brain.launch">
+    	<arg name="car_name" value="$(arg car_name)"/>
+  	</include>
+	</group>
+
 
 	<include file="$(find gazebo_simulation)/launch/world.launch">
     <arg name="world_name" value="$(arg name)"/>
