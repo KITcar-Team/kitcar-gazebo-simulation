@@ -12,7 +12,6 @@ numpy==1.16.5
 opencv-python==4.1.1.26
 pycairo==1.18.1
 pycparser==2.19
-PyGObject==3.34.0
 pyparsing==2.4.2
 pyquaternion==0.9.5
 PySide2==5.13.1
@@ -27,3 +26,4 @@ shiboken2==5.13.1
 six==1.12.0
 subprocess32==3.5.4
 tqdm==4.36.1
+PyGObject==3.34.0

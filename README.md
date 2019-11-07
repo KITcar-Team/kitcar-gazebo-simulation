@@ -2,7 +2,7 @@
 
 ## Setup
 
-Clone this repository in the same directory as `kitcar-ros` (*aka. $KITCAR_REPO_PATH*).
+Clone this repository in the same directory as `kitcar-ros`. Make sure that the path variable *$KITCAR_REPO_PATH* is set to the repository where your `kitcar-ros` installation is.
 
 Therefore the init script must be called. Change into `kitcar-gazebo-simulation` folder and run the script:
 ```
