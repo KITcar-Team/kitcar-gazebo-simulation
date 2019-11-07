@@ -19,6 +19,7 @@
   <arg name="use_clock_frequency" default="false"/>
   <arg name="pub_clock_frequency" default="100"/>
   <arg name="rviz" default="false"/>
+	<arg name="include_brain" default="true"/>
 
 	
 	<!-- Launch nodes to connect gazebo and kitcar brain -->
