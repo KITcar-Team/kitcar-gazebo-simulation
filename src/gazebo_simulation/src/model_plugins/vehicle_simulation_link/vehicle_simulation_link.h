@@ -18,6 +18,9 @@ THIRD_PARTY_HEADERS_BEGIN
 #include <gazebo/transport/TransportTypes.hh>
 
 #include <tf2_msgs/TFMessage.h>
+
+#include <std_msgs/Header.h>
+
 #include "state_estimation_msgs/State.h"
 THIRD_PARTY_HEADERS_END
 
@@ -48,15 +51,21 @@ class VehicleSimulationLink : public ModelPlugin, public NodeBase {
   //! \param msg incoming state estimate
   //!
   void stateCallback(const state_estimation_msgs::StateConstPtr &msg);
-	
 
-	void simulationWorldTransformation(const geometry_msgs::TransformStamped wv_stamped);
+
+  void simulationWorldTransformation(const geometry_msgs::TransformStamped wv_stamped);
 
   //!
   //! \brief obtains the robot's pose from /tf
   //! \param msgs tf message
   //!
   void tfCallback(const tf2_msgs::TFMessageConstPtr &msgs);
+
+  //!
+  //! \brief obtains the robot's pose from /tf
+  //! \param msgs tf message
+  //!
+  void resetCallback(const std_msgs::Header &msg);
 
   //!
   //! \brief startModule initializes publishers and subsribers and sets the
@@ -71,6 +80,8 @@ class VehicleSimulationLink : public ModelPlugin, public NodeBase {
 
   ros::Subscriber state_subscriber;
   ros::Subscriber tf_subscriber;
+  ros::Subscriber reset_subscriber;
+
 
   ros::Publisher reset_localization;  //! publisher to trigger a navigation localization reset
 
