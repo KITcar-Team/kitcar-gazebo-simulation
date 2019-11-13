@@ -19,3 +19,8 @@ void SensorCamera::precropImage(const cv::Mat& image_uncropped, cv::Mat& image_c
   // cutting out region of interest
   image_cropped = image_uncropped(image_limits);
 }
+
+
+void SensorCamera::randGaussianDeviation(..., )
+
+    void SensorCamera::randBlackWhite(...)

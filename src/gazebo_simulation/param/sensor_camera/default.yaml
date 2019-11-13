@@ -1,1 +1,9 @@
 # Default parameter of pre_cropping
+
+output_start_x: 0 
+output_end_x: 1280
+
+output_start_y: 374
+output_end_y: 1024
+
+random_noise: 0.2
