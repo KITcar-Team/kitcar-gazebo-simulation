@@ -3,6 +3,7 @@
 THIRD_PARTY_HEADERS_BEGIN
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
+#include <opencv2/core.hpp>
 #include <thread>
 
 
@@ -26,23 +27,19 @@ void SensorCameraNode::startModule() {
 
   ROS_INFO("Starting module SensorCameraNode");
 
-	//Read sub and pub topics.
-	std::string sub_topic, pub_topic;
+  // Read sub and pub topics.
+  std::string sub_topic, pub_topic;
 
-	node_handle_.param<std::string>(
-			"pub_topic",
-			pub_topic,
-			"/simulation/sensors/prepared/camera");
-	node_handle_.param<std::string>(
-			"sub_topic",
-			sub_topic,
-			"/simulation/sensors/raw/camera");
+  node_handle_.param<std::string>(
+      "pub_topic", pub_topic, "/simulation/sensors/prepared/camera");
+  node_handle_.param<std::string>(
+      "sub_topic", sub_topic, "/simulation/sensors/raw/camera");
 
   rospub_image = node_handle_.advertise<sensor_msgs::Image>(pub_topic, 1);
 
   image_transport::ImageTransport img_trans(node_handle_);
-  rossub_uncropped_image = img_trans.subscribe(
-      sub_topic, 1, &SensorCameraNode::handleImage, this);
+  rossub_uncropped_image =
+      img_trans.subscribe(sub_topic, 1, &SensorCameraNode::handleImage, this);
 }
 
 void SensorCameraNode::stopModule() {
@@ -64,6 +61,26 @@ void SensorCameraNode::handleImage(const sensor_msgs::ImageConstPtr &msg) {
   out_msg.encoding = sensor_msgs::image_encodings::MONO8;
 
   sensor_camera_.precropImage(cv_ptr->image, out_msg.image);
+
+  // Create noise matrix (height x width from image)
+  cv::Mat mat_noise = cv::Mat(
+      sensor_camera_.image_limits.height, sensor_camera_.image_limits.width, CV_16S);
+  cv::randn(mat_noise, 0, 150);
+
+  // // Loop over image
+  cv::Mat img = out_msg.image;
+  for (int j = 0; j < img.rows; j++) {
+    for (int i = 0; i < img.cols; i++) {
+      // Suptract noise value from image at each position in matrix
+      int val_noise = mat_noise.at<uchar>(j, i);
+      img.at<uchar>(j, i) -= val_noise;
+    }
+  }
+
+  // cv::subtract(out_msg.image, mat_noise, img, cv::Mat(), CV_16SC1);
+  // out_msg.image = img;
+
+  // cv::circle(out_msg.image, cv::Point(200, 200), 200, cv::Scalar(0, 255, 0));
 
   sensor_msgs::ImagePtr out_ptr(out_msg.toImageMsg());
   rospub_image.publish(out_ptr);

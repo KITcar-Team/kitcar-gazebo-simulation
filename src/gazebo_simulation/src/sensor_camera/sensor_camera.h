@@ -37,6 +37,7 @@ class SensorCamera {
    */
   void precropImage(const cv::Mat& image_uncropped, cv::Mat& image_cropped);
 
+  cv::Rect image_limits;
 
  private:
   /*!
@@ -69,8 +70,6 @@ class SensorCamera {
    * \brief parameters_ptr_ is needed for parameter access
    */
   ParameterInterface* parameters_ptr_;
-
-  cv::Rect image_limits;
 };
 
 #endif  // SENSOR_CAMERA_H
