@@ -1,30 +1,30 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-	<model name="dr_drift">
-		<plugin filename="libvehicle_simulation_link.so" name="vehicle_simulation_link"/>
-		<static>0</static>
-		<allow_auto_disable>1</allow_auto_disable>
-		<link name="chassis">
-			<inertial>
-				<mass>1</mass>
-			</inertial>
-			<visual name="visual">
-				<pose frame="">0.11 0 0.06 0 0 0</pose>
-				<geometry>
-					<mesh>
-						<uri>model://dr_drift/meshes/dr_drift.stl</uri>
-						<scale>1 1 1</scale>
-					</mesh>
-				</geometry>
-			</visual>
-			<collision name="collision">
-				<pose frame="">0.11 0 0.06 0 0 0</pose>
-				<geometry>
-					<box>
-						<size>0.368 0.218 0.12</size>
-					</box>
-				</geometry>
-			</collision>
-		</link>
-	</model>
+    <model name="dr_drift">
+        <plugin filename="libvehicle_simulation_link.so" name="vehicle_simulation_link"/>
+        <static>0</static>
+        <allow_auto_disable>1</allow_auto_disable>
+        <link name="chassis">
+            <inertial>
+                <mass>1</mass>
+            </inertial>
+            <visual name="visual">
+                <pose frame="">0.11 0 0.06 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://dr_drift/meshes/dr_drift.stl</uri>
+                        <scale>1 1 1</scale>
+                    </mesh>
+                </geometry>
+            </visual>
+            <collision name="collision">
+                <pose frame="">0.11 0 0.06 0 0 0</pose>
+                <geometry>
+                    <box>
+                        <size>0.368 0.218 0.12</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+    </model>
 </sdf>
