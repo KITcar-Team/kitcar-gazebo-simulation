@@ -53,14 +53,12 @@ void VehicleSimulationLink::onWorldUpdate() {
         pose.Rot().W(), pose.Rot().X(), pose.Rot().Y(), pose.Rot().Z());
     Eigen::Quaternion<double> vehicle_to_world = rotation.normalized();
     Eigen::Vector3d velocity_in_world = vehicle_to_world * speed;
-    Eigen::Vector3d angular_velocity_in_world =
-        vehicle_to_world * Eigen::Vector3d(0.0, 0.0, yaw_rate);
     ignition::math::Vector3 prev_velocity_in_world = model->WorldLinearVel();
     model->SetLinearVel(ignition::math::Vector3d(
         velocity_in_world.x(), velocity_in_world.y(), prev_velocity_in_world.Z()));
-    model->SetAngularVel(ignition::math::Vector3d(angular_velocity_in_world.x(),
-                                                  angular_velocity_in_world.y(),
-                                                  angular_velocity_in_world.z()));
+    ignition::math::Vector3 prev_angular_velocity_in_world = model->WorldAngularVel();
+    model->SetAngularVel(ignition::math::Vector3d(
+        prev_angular_velocity_in_world.X(), prev_angular_velocity_in_world.Y(), yaw_rate));
   }
 
   // Also publish simulation to world transformation
