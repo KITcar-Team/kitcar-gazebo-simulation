@@ -16,6 +16,7 @@ def prettify(elem):
     """
     rough_string = ET.tostring(elem, 'utf-8')
     reparsed = minidom.parseString(rough_string)
+    # Get rid of empty lines (introduced by parsing a pretty xml)
     return '\n'.join([line for line in reparsed.toprettyxml(indent=' '*4).split('\n') if line.strip()])
 
 def add_list_text(el,name, list_obj,args=dict()):
