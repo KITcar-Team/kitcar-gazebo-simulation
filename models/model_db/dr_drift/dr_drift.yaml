@@ -1,9 +1,4 @@
 {   
-    chassis: {
-        pose: [0.11, 0, 0.06, 0, 0, 0], 
-        size: [0.368, 0.218, 0.12],
-        mass: 1
-    },
     front_camera: {
         translation: [0.03, 0, 0.26],
         'angle': 0.161,
