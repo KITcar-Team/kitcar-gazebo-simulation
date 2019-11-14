@@ -5,7 +5,6 @@
         <static>0</static>
         <allow_auto_disable>1</allow_auto_disable>
         <link name="chassis">
-            <origin>0 0 0 0 0 0</origin>
             <inertial>
                 <mass>1</mass>
             </inertial>
