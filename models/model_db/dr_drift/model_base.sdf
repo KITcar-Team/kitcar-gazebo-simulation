@@ -6,7 +6,15 @@
         <allow_auto_disable>1</allow_auto_disable>
         <link name="chassis">
             <inertial>
-                <mass>1</mass>
+                <mass>4.8</mass>
+                <inertia>
+                    <ixx>0.1336</ixx>
+                    <ixy>0.0</ixy>
+                    <ixz>0.0</ixz>
+                    <iyy>0.15</iyy>
+                    <iyz>0.0</iyz>
+                    <izz>0.0177</izz>
+                </inertia>
             </inertial>
             <visual name="visual">
                 <pose frame="">0.11 0 0.06 0 0 0</pose>

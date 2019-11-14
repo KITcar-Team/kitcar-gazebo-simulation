@@ -39,6 +39,13 @@ def add_tag_dict(el, d):
         SubElement(el,key).text = str(d[key])
 
 
+def add_no_inertial(link):
+    inertial = SubElement(link,'inertial')
+    add_tag_dict(inertial,{'mass':1e-5})
+    inertia = SubElement(inertial,'inertia')
+    add_tag_dict(inertia,{'ixx':1e-5,'iyy':1e-5,'izz':1e-5,'ixy':0,'iyz':0,'ixz':0})
+
+
 def create_camera_sensor(el,camera_type, plugin_type, plugin_att, horizontal_fov, image_att, clip_att, attributes):
     sensor = SubElement(el,'sensor',{'name':'camera','type':camera_type})
     
@@ -69,6 +76,7 @@ def create_camera_sensor(el,camera_type, plugin_type, plugin_att, horizontal_fov
 def create_front_camera(el,pose,size, horizontal_fov, capture,clip, ros, attributes):
     camera = SubElement(el,'link',{'name':'camera_ros::link'})
     add_pose(camera,pose)
+    add_no_inertial(camera)
 
     #Create visual box
     visual = SubElement(camera,'visual',{'name':'visual'})
@@ -88,6 +96,7 @@ def create_front_camera(el,pose,size, horizontal_fov, capture,clip, ros, attribu
 def create_depth_camera(el,pose,size, horizontal_fov, capture,clip, ros, attributes):
     camera = SubElement(el,'link',{'name':'depth_camera_ros::link'})
     add_pose(camera,pose)
+    add_no_inertial(camera)
 
     #Create visual box
     visual = SubElement(camera,'visual',{'name':'visual'})
@@ -107,6 +116,7 @@ def create_depth_camera(el,pose,size, horizontal_fov, capture,clip, ros, attribu
 def create_tof_camera(el, name, pose, horizontal_fov, capture,clip, topic_base, topic_info_base):
     tof = SubElement(el, 'link',{'name':'depth_camera_ros::link_' + name})
     add_pose(tof,pose)
+    add_no_inertial(tof)
 
     #Create visual box
     visual = SubElement(tof,'visual',{'name':'visual'})
