@@ -1,9 +1,18 @@
 # Default parameter of pre_cropping
 
-output_start_x: 0 
+output_start_x: 0
 output_end_x: 1280
 
-output_start_y: 374
+output_start_y: 374       # 1024 - 650
 output_end_y: 1024
 
-random_noise: 0.2
+
+
+# Available noise types:
+# 0 -> soft noise
+# 1 -> hard noise
+noise_type: 1
+
+# Configure noise
+mean_value: 0
+standard_deviation: 150   # 0..255
