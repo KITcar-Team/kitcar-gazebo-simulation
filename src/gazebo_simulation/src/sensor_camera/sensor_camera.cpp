@@ -78,14 +78,13 @@ void SensorCamera::randImageNoise(const cv::Mat& image) {
 
 void SensorCamera::hardNoise(const cv::Mat& image) {
   // TODO: Create parameters for noise manipulation
-  // FIXME: Noise is only beeing displayed on left half of image
   int STEP = 40;
   int rand_idx = rand() % STEP;
 
   // Loop over image
   cv::Mat img = image;
   while (rand_idx < image.rows * image.cols) {
-    img.at<uchar>(rand_idx / image.cols, rand_idx % image.rows) = (rand() % 2) * 255;
+    img.at<uchar>(rand_idx / image.cols, rand_idx % image.cols) = (rand() % 2) * 255;
     rand_idx += rand() % STEP;
   }
 }
