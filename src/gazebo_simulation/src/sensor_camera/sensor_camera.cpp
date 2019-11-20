@@ -42,10 +42,10 @@ void SensorCamera::precropImage(const cv::Mat& image_uncropped, cv::Mat& image_c
   int noise_type = parameters_ptr_->getParam(NOISE_TYPE);
 
   switch (noise_type) {
-    case 0:
+    case 1:
       randImageNoise(image_cropped);
       break;
-    case 1:
+    case 2:
       hardNoise(image_cropped);
       break;
 

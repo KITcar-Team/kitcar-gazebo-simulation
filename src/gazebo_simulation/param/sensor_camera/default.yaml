@@ -9,9 +9,10 @@ output_end_y: 1024
 
 
 # Available noise types:
-# 0 -> soft noise
-# 1 -> hard noise
-noise_type: 1
+# 0 -> off
+# 1 -> soft noise
+# 2 -> hard noise
+noise_type: 0
 
 # Configure noise
 mean_value: 0
