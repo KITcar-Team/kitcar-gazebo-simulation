@@ -43,10 +43,10 @@ void SensorCamera::precropImage(const cv::Mat& image_uncropped, cv::Mat& image_c
 
   switch (noise_type) {
     case 1:
-      randImageNoise(image_cropped);
+      gaussianNoise(image_cropped);
       break;
     case 2:
-      hardNoise(image_cropped);
+      saltPepperNoise(image_cropped);
       break;
 
     default:
@@ -54,7 +54,7 @@ void SensorCamera::precropImage(const cv::Mat& image_uncropped, cv::Mat& image_c
   }
 }
 
-void SensorCamera::randImageNoise(const cv::Mat& image) {
+void SensorCamera::gaussianNoise(const cv::Mat& image) {
   // Get parameters for noise
   int mean_value = parameters_ptr_->getParam(MEAN_VALUE);
   int standard_deviation = parameters_ptr_->getParam(STANDARD_DEVIATION);
@@ -76,7 +76,7 @@ void SensorCamera::randImageNoise(const cv::Mat& image) {
   // cv::subtract(out_msg.image, mat_noise, img, cv::Mat(), CV_16SC1);
 }
 
-void SensorCamera::hardNoise(const cv::Mat& image) {
+void SensorCamera::saltPepperNoise(const cv::Mat& image) {
   // TODO: Create parameters for noise manipulation
   int STEP = 40;
   int rand_idx = rand() % STEP;

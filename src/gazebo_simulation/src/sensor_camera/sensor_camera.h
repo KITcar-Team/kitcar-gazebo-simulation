@@ -54,9 +54,9 @@ class SensorCamera {
    */
   ParameterInterface* parameters_ptr_;
 
-  void randImageNoise(const cv::Mat& image);
+  void gaussianNoise(const cv::Mat& image);
 
-  void hardNoise(const cv::Mat& image);
+  void saltPepperNoise(const cv::Mat& image);
 };
 
 #endif  // SENSOR_CAMERA_H
