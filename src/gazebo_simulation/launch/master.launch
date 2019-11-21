@@ -10,7 +10,7 @@
   <arg name="gui" default="true"/>
   <arg name="rviz" default="false"/>
 
-..<!-- params vehicle simulation -->
+  <!-- params vehicle simulation -->
   <arg name="link_pose" default="true"/>
   <arg name="link_twist" default="true"/>
 

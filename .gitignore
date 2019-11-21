@@ -62,4 +62,6 @@ msg-tags
 # Ignore Datasets folder
 datasets
 
-
+#Editors
+.vim/
+.vscode/
