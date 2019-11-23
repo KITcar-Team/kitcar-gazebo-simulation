@@ -48,6 +48,7 @@ class SensorCamera {
   static const ParameterString<int> NOISE_TYPE;
   static const ParameterString<int> MEAN_VALUE;
   static const ParameterString<int> STANDARD_DEVIATION;
+  static const ParameterString<int> STEP;
 
   /*!
    * \brief parameters_ptr_ is needed for parameter access

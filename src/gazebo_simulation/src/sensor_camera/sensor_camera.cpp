@@ -11,6 +11,7 @@ const ParameterString<int> SensorCamera::NOISE_TYPE("noise_type");
 const ParameterString<int> SensorCamera::MEAN_VALUE("mean_value");
 const ParameterString<int> SensorCamera::STANDARD_DEVIATION(
     "standard_deviation");
+const ParameterString<int> SensorCamera::STEP("step");
 
 
 SensorCamera::SensorCamera(ParameterInterface* parameters)
@@ -26,6 +27,7 @@ SensorCamera::SensorCamera(ParameterInterface* parameters)
   parameters_ptr_->registerParam(NOISE_TYPE);
   parameters_ptr_->registerParam(MEAN_VALUE);
   parameters_ptr_->registerParam(STANDARD_DEVIATION);
+  parameters_ptr_->registerParam(STEP);
 
 
   // Get parameters for image dimensions
@@ -77,14 +79,13 @@ void SensorCamera::gaussianNoise(const cv::Mat& image) {
 }
 
 void SensorCamera::saltPepperNoise(const cv::Mat& image) {
-  // TODO: Create parameters for noise manipulation
-  int STEP = 40;
-  int rand_idx = rand() % STEP;
+  int step = parameters_ptr_->getParam(STEP);
 
   // Loop over image
   cv::Mat img = image;
+  int rand_idx = rand() % step;
   while (rand_idx < image.rows * image.cols) {
     img.at<uchar>(rand_idx / image.cols, rand_idx % image.cols) = (rand() % 2) * 255;
-    rand_idx += rand() % STEP;
+    rand_idx += rand() % step;
   }
 }

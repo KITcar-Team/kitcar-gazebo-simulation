@@ -14,6 +14,8 @@ output_end_y: 1024
 # 2 -> salt pepper noise
 noise_type: 0
 
-# Configure noise
+# Options for gaussion noise
 mean_value: 0
 standard_deviation: 150   # 0..255
+# Options for salt pepper noise
+step: 100
