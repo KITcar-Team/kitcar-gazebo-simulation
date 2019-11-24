@@ -62,20 +62,10 @@ void SensorCamera::gaussianNoise(const cv::Mat& image) {
   int standard_deviation = parameters_ptr_->getParam(STANDARD_DEVIATION);
 
   // Create noise matrix (height x width from image)
-  cv::Mat mat_noise = cv::Mat(image_limits.height, image_limits.width, CV_16S);
+  cv::Mat mat_noise = cv::Mat(image_limits.size(), CV_16S);
   cv::randn(mat_noise, mean_value, standard_deviation);
 
-  // Loop over image
-  cv::Mat img = image;
-  for (int j = 0; j < img.rows; j++) {
-    for (int i = 0; i < img.cols; i++) {
-      // Subtract noise value from image at each position in matrix
-      int val_noise = mat_noise.at<uchar>(j, i);
-      img.at<uchar>(j, i) -= val_noise;
-    }
-  }
-  // TODO: Use subtract function instead of loop
-  // cv::subtract(out_msg.image, mat_noise, img, cv::Mat(), CV_16SC1);
+  cv::addWeighted(image, 1.0, mat_noise, 1.0, 0.0, image);  // Add noise to image
 }
 
 void SensorCamera::saltPepperNoise(const cv::Mat& image) {
