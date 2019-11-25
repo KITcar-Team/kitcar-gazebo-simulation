@@ -37,40 +37,27 @@ class SensorCamera {
    */
   void precropImage(const cv::Mat& image_uncropped, cv::Mat& image_cropped);
 
+  cv::Rect image_limits;
 
  private:
-  /*!
-   * \brief ROI_START_LOC_X
-   *
-   * Start location (x-axis) of the ROI area relative to recorded image size.
-   */
-  static const ParameterString<int> ROI_START_LOC_X;
-  /*!
-   * \brief ROI_START_LOC_Y
-   *
-   * Start location (y-axis) of the ROI area relative to recorded image size.
-   */
-  static const ParameterString<int> ROI_START_LOC_Y;
-  /*!
-   * \brief ROI_END_LOC_X
-   *
-   * End location (x-axis) of the ROI area relative to recorded image size.
-   */
-  static const ParameterString<int> ROI_END_LOC_X;
-  /*!
-   * \brief ROI_END_LOC_Y
-   *
-   * End location (y-axis) of the ROI area relative to recorded image size.
-   */
-  static const ParameterString<int> ROI_END_LOC_Y;
+  static const ParameterString<int> OUTPUT_START_X;
+  static const ParameterString<int> OUTPUT_END_X;
+  static const ParameterString<int> OUTPUT_START_Y;
+  static const ParameterString<int> OUTPUT_END_Y;
 
+  static const ParameterString<int> NOISE_TYPE;
+  static const ParameterString<int> MEAN_VALUE;
+  static const ParameterString<int> STANDARD_DEVIATION;
+  static const ParameterString<int> STEP;
 
   /*!
    * \brief parameters_ptr_ is needed for parameter access
    */
   ParameterInterface* parameters_ptr_;
 
-  cv::Rect image_limits;
+  void gaussianNoise(const cv::Mat& image);
+
+  void saltPepperNoise(const cv::Mat& image);
 };
 
 #endif  // SENSOR_CAMERA_H

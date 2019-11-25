@@ -3,6 +3,7 @@
 THIRD_PARTY_HEADERS_BEGIN
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
+#include <opencv2/core.hpp>
 #include <thread>
 
 
@@ -26,23 +27,19 @@ void SensorCameraNode::startModule() {
 
   ROS_INFO("Starting module SensorCameraNode");
 
-	//Read sub and pub topics.
-	std::string sub_topic, pub_topic;
+  // Read sub and pub topics.
+  std::string sub_topic, pub_topic;
 
-	node_handle_.param<std::string>(
-			"pub_topic",
-			pub_topic,
-			"/simulation/sensors/prepared/camera");
-	node_handle_.param<std::string>(
-			"sub_topic",
-			sub_topic,
-			"/simulation/sensors/raw/camera");
+  node_handle_.param<std::string>(
+      "pub_topic", pub_topic, "/simulation/sensors/prepared/camera");
+  node_handle_.param<std::string>(
+      "sub_topic", sub_topic, "/simulation/sensors/raw/camera");
 
   rospub_image = node_handle_.advertise<sensor_msgs::Image>(pub_topic, 1);
 
   image_transport::ImageTransport img_trans(node_handle_);
-  rossub_uncropped_image = img_trans.subscribe(
-      sub_topic, 1, &SensorCameraNode::handleImage, this);
+  rossub_uncropped_image =
+      img_trans.subscribe(sub_topic, 1, &SensorCameraNode::handleImage, this);
 }
 
 void SensorCameraNode::stopModule() {
