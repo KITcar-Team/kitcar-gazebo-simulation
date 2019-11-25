@@ -18,4 +18,4 @@ noise_type: 0
 mean_value: 0
 standard_deviation: 150   # 0..255
 # Options for salt pepper noise
-step: 100
+step: 40
