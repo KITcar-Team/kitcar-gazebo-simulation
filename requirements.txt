@@ -18,7 +18,7 @@ PySide2==5.13.1
 python-dateutil==2.8.0
 pytz==2019.2
 PyXB==1.2.6
-PyYAML==5.1.2
+PyYAML==3.12
 rospkg==1.1.10
 scipy==1.2.2
 Shapely==1.6.4.post2
