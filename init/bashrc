@@ -1,4 +1,4 @@
-echo 'exporting kitcar-gazebo-simulation path variables'
+#echo 'exporting kitcar-gazebo-simulation path variables'
 
 KITCAR_GAZEBO_SIM_PATH=$KITCAR_REPO_PATH/kitcar-gazebo-simulation
 
