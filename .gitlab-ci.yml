@@ -12,7 +12,10 @@ cache:
     - .cache/pip
     - venv/
 
-before_script: 
+before_script:
+  #Run the container start script to enable the pulseaudio & xserver
+  - bash /start_script.sh
+  #Install python packages
   - mkdir -p .pip
   - python3 -V               # Print out python version for debugging
   - pip3 install virtualenv
@@ -20,9 +23,7 @@ before_script:
   - source venv/bin/activate
   - pip3 install -r requirements.txt
   - mkdir -p ccache
-    #Install python packages
-  #- ls $KITCAR_REPO_PATH
-  #- git lfs pull
+  #Configure kitcar packages 
   - export KITCAR_REPO_PATH=/builds/kitcar/
   - if [ -d "kitcar-ros" ]; then
   - mv kitcar-ros $KITCAR_REPO_PATH/kitcar-ros
