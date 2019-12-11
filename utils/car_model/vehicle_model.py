@@ -113,6 +113,20 @@ def create_depth_camera(el,pose,size, horizontal_fov, capture,clip, ros, attribu
     joint = SubElement(el,'joint',{'name':'depth_camera_joint','type':'fixed'})
     add_tag_dict(joint,{'child':'depth_camera_ros::link','parent':'chassis'})
 
+def create_birds_view_camera(el,pose,size, horizontal_fov, capture,clip, ros, attributes):
+    camera = SubElement(el,'link',{'name':'create_birds_view_camera_ros::link'})
+    add_pose(camera,pose)
+    add_no_inertial(camera)
+
+    #Create camera sensor 
+    create_camera_sensor(camera,camera_type='camera',plugin_type='libgazebo_ros_camera.so',
+        plugin_att=ros,horizontal_fov=horizontal_fov,
+        image_att=capture, clip_att=clip,attributes=attributes
+        )
+    
+
+    joint = SubElement(el,'joint',{'name':'create_birds_view_camera_joint','type':'fixed'})
+    add_tag_dict(joint,{'child':'create_birds_view_camera_ros::link','parent':'chassis'})
 
 def create_tof_camera(el, name, pose, horizontal_fov, capture,clip, topic_base, topic_info_base):
     tof = SubElement(el, 'link',{'name':'depth_camera_ros::link_' + name})
@@ -162,6 +176,19 @@ def extend_dr_drift(base, data, cam_horizontal_fov, depth_cam_horizontal_fov):
     front_camera_dict['attributes'] = {'update_rate': data['front_camera']['update_rate']}
 
     create_front_camera(model,**front_camera_dict)
+
+    ## Birds view camera!
+    birds_view_camera_dict = dict()
+    birds_view_camera_dict['pose'] = np.append(np.array(data['birds_view_camera']['translation']),
+[0,data['birds_view_camera']['angle'], 0])
+    birds_view_camera_dict['size'] = data['birds_view_camera']['size']
+    birds_view_camera_dict['horizontal_fov'] = cam_horizontal_fov
+    birds_view_camera_dict['clip'] = data['birds_view_camera']['clip']
+    birds_view_camera_dict['capture'] = data['birds_view_camera']['capture']
+    birds_view_camera_dict['ros'] = data['birds_view_camera']['ros']
+    birds_view_camera_dict['attributes'] = {'update_rate': data['birds_view_camera']['update_rate']}
+
+    create_birds_view_camera(model,**birds_view_camera_dict)
 
     depth_camera_dict = dict()
     depth_camera_dict['pose'] = np.append(np.array(data['depth_camera']['translation']),
