@@ -26,6 +26,29 @@
         ros: {'imageTopicName':'/simulation/sensors/raw/camera','cameraInfoTopicName':'/simulation/sensors/info/camera','frameName':'camera'},
         update_rate: 60
     },
+    birds_view_camera: {
+        translation: [0, 0, 1.5],
+        origin: [0,0,0],
+        'angle': 1.570796,
+        size: [0, 0, 0],
+        'focal_length': 1024,
+        capture: {
+            'width':512,
+            'height':512,
+            'format':'L8'
+        },
+        output: {
+            'width':512,
+            'height':512,
+            'format':'L8'
+        },
+        clip: {
+            'near':0.1,
+            'far':20
+        },
+        ros: {'imageTopicName':'/simulation/sensors/raw/birds_view_camera','cameraInfoTopicName':'/simulation/sensors/info/birds_view_camera','frameName':'birds_view_camera'},
+        update_rate: 30
+    },
     depth_camera: {
         translation: [0.00428937, 0.0114112, 0.21946],
         'angle': 0.2016281,
