@@ -23,23 +23,33 @@ before_script:
   - source venv/bin/activate
   - pip3 install -r requirements.txt
   - mkdir -p ccache
-  #Configure kitcar packages 
+
+  #Move kitcar-ros to $KITCAR_REPO_PATH
   - export KITCAR_REPO_PATH=/builds/kitcar/
   - if [ -d "kitcar-ros" ]; then
   - mv kitcar-ros $KITCAR_REPO_PATH/kitcar-ros
+  - source $KITCAR_REPO_PATH/kitcar-ros/init/bashrc || true
   - fi
+
+  #Source init 
+  - source init/bashrc || true
+
 after_script:
+  #Move kitcar-ros back into this folder (Necessary for artifacts!)
   - export KITCAR_REPO_PATH=/builds/kitcar/
   - if [ -d "$KITCAR_REPO_PATH/kitcar-ros" ]; then
   - mv $KITCAR_REPO_PATH/kitcar-ros kitcar-ros
   - fi
-  - ls $KITCAR_REPO_PATH
+
+
 
 stages:
   - prebuild-test # Some tests are performed before building, to filter easy mistakes
   - build
   - test
 
+######## PREBUILD STAGE #########
+#Test basics before attempting to build!
 
 
 # Test if dr_drift generation script works
@@ -57,6 +67,9 @@ test-road-generation:
     - ./generate.sh -r default-road
     - ./generate.sh -r curves
 
+
+######## BUILD STAGE ########
+# buikd kitcar-ros and simulation
 build:
     stage: build
     script: &build-all
