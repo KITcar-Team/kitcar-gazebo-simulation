@@ -356,6 +356,11 @@ class point (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         
     })
+
+    def __eq__(self, point):
+        return self.x == point.x and self.y == point.y
+
+
 _module_typeBindings.point = point
 Namespace.addCategoryObject('typeBinding', 'point', point)
 
@@ -821,6 +826,21 @@ class boundary (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         
     })
+
+    def __eq__(self, boundary):
+        if len(self.point) != len(boundary.point):
+            return False
+
+        if self.lineMarking != boundary.lineMarking:
+            return False
+
+        for p, b_p in zip(self.point, boundary.point):
+            if not p == b_p:
+                return False
+
+        return True
+
+
 _module_typeBindings.boundary = boundary
 Namespace.addCategoryObject('typeBinding', 'boundary', boundary)
 
@@ -1030,6 +1050,11 @@ class lanelet (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         __id.name() : __id
     })
+
+    def __eq__(self, lanelet):
+        return self.rightBoundary == lanelet.rightBoundary and self.leftBoundary == lanelet.leftBoundary
+
+
 _module_typeBindings.lanelet = lanelet
 Namespace.addCategoryObject('typeBinding', 'lanelet', lanelet)
 
