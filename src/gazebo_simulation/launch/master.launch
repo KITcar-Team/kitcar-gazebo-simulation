@@ -25,6 +25,7 @@
   <arg name="gz_pub_clock_frequency" default="100"/>
   <arg name="gz_extra_args" default=""/>
 
+  <arg name="car_state" default="true"/>
   <!-- Launch KITcar_brain -->
   <group if="$(arg include_brain)">
     <include file="$(find gazebo_simulation)/launch/brain.launch">
@@ -39,6 +40,13 @@
     </include>
   </group>
 
+  <!-- Launch car state -->
+  <group if="$(arg car_state)">
+    <include file="$(find gazebo_simulation)/launch/car_state_node.launch">
+      <arg name="car_name" value="$(arg car_name)"/>
+      <arg name="rviz" value="$(arg rviz)"/>
+    </include>
+  </group>
   <!-- Launch Gazebo -->
   <include file="$(find gazebo_simulation)/launch/world.launch">
     <arg name="world_name" value="$(arg road)"/>

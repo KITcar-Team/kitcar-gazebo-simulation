@@ -1,0 +1,23 @@
+<!-- Just for highlighting -->
+<launch>
+  <arg name="start_activated" default="true" />
+  <arg name="car_name" default="dr_drift" />
+  <arg name="cone_points" default="10"/>
+  <arg name="rviz" default="true"/>
+
+  <node name="car_state_node" ns="gazebo_simulation" pkg="gazebo_simulation" type="car_state_node" output="screen">
+   <param name="start_activated" value="$(arg start_activated)" />
+   <param name="car_name" value="$(arg car_name)" />
+   <param name="cone_points" value="$(arg cone_points)" />
+  </node>
+
+
+  
+  <group if="$(arg rviz)">
+    <node name="car_state_visualization_node" ns="gazebo_simulation" pkg="gazebo_simulation" type="car_state_visualization_node" output="screen">
+      <param name="start_activated" value="$(arg start_activated)" />
+    </node> 
+  </group>
+
+
+</launch>
