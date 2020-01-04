@@ -10,12 +10,16 @@ project(gazebo_simulation)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  rospy
   cv_bridge
   eigen_conversions
   image_transport
   gazebo_ros
   common
   state_estimation_msgs
+  message_generation
+  std_msgs
+  geometry_msgs
   )
 
 ## System dependencies are found with CMake's conventions
@@ -57,10 +61,24 @@ include_directories(SYSTEM {OpenCV_INCLUDE_DIRS})
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
+#Setup python
+catkin_python_setup()
+
+add_message_files(
+  FILES 
+)
+
+generate_messages(
+  DEPENDENCIES
+  geometry_msgs
+  std_msgs
+)
+
+
 ## Generate messages in the 'msg' folder
 # add_message_files(
 #  FILES
-#	 MissionMode.msg
+#  MissionMode.msg
 #   Message2.msg
 # )
 
@@ -111,7 +129,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES pre_cropping
 #  CATKIN_DEPENDS gazebo_ros_pkgs
-	CATKIN_DEPENDS message_runtime
+  CATKIN_DEPENDS message_runtime
   DEPENDS roscpp gazebo_ros
 )
 
@@ -171,9 +189,9 @@ INCLUDE(src/sensor_tof/CMakeLists.txt)
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 # install(PROGRAMS
-	 #   scripts/start_simulation_groundtruth.py
-	 #    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-	 # )
+   #   scripts/start_simulation_groundtruth.py
+   #    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+   # )
 
 ## Mark executables and/or libraries for installation
 # install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
@@ -209,6 +227,6 @@ INCLUDE(src/sensor_tof/CMakeLists.txt)
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 if(CATKIN_ENABLE_TESTING)
-	find_package(rostest REQUIRED)
-	add_rostest(test/start_road.test)
+  find_package(rostest REQUIRED)
+  add_rostest(test/start_road.test)
 endif()
