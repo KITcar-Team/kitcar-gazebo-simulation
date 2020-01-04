@@ -60,6 +60,11 @@ test-dr_drift:
         - ./generate.sh
         #TODO: Also test if the calibration is actually correct.
 
+test-utils:
+  stage: prebuild-test
+  script: &prebuild-test-utils
+    - python3 utils/base/module_test.py
+
 test-road-generation:
   stage: prebuild-test
   script: &prebuild-generation
