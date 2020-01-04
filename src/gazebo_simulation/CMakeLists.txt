@@ -66,6 +66,7 @@ catkin_python_setup()
 
 add_message_files(
   FILES 
+  CarStateMsg.msg
 )
 
 generate_messages(
