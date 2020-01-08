@@ -118,25 +118,6 @@ class Transform(Vector):
         except:
             pass
 
-        try:
-            return Transform(super(Transform, self).__add__(tf), self.rotation)
-        except:
-            pass
-
-        return NotImplemented
-
-    def __truediv__(self, tf):
-
-        try:
-            return Transform(self - Vector(tf).rotated(self.get_angle()), self.get_angle() - tf.get_angle())
-        except:
-            pass
-
-        try:
-            return Transform(super(Transform, self).__sub__(tf), self.rotation)
-        except:
-            pass
-
         return NotImplemented
 
     def __eq__(self, tf):

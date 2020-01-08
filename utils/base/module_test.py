@@ -155,8 +155,6 @@ class ModuleTest(unittest.TestCase):
         # Multiply transforms
         self.assertEqual(tf*tf2, Transform(Vector(1, 4, 2), math.pi))
 
-        self.assertEqual(tf / tf2, Transform(Vector(1, 2, 2), 0))
-
 ######## POSE ########
 
     def geom_pose_almost_eq(self, p1, p2):
@@ -377,6 +375,13 @@ class ModuleTest(unittest.TestCase):
         self.assertEqual(poly, poly)
         self.assertTrue(tf*poly == poly_rev)
         self.assertFalse(tf*poly == poly_uneq)
+
+    def test_transformations(self):
+            
+        tf = Transform(Vector(2,2),math.pi / 2)
+        
+        self.assertEqual(Vector(1,3),tf*Vector(1,1))
+        self.assertEqual(Point(1,3),tf*Point(1,1))
 
 
 if __name__ == '__main__':

@@ -60,4 +60,9 @@ class Point(Vector):
         return Point(self.x + p.x, self.y + p.y, self.z + p.z)
 
     def __rmul__(self, num):
+        try:
+            return Point(Vector(self).rotated(num.get_angle()) + Vector(num))
+        except:
+            pass
+
         raise InvalidPointOperationError("A point cannot be scaled.")

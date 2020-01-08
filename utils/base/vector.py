@@ -13,6 +13,7 @@ import numpy as np
 import geometry_msgs.msg as geometry_msgs
 from road_generation import schema
 
+import numbers
 
 class Vector(shapely.geometry.point.Point):
 
@@ -97,7 +98,15 @@ class Vector(shapely.geometry.point.Point):
         return p1
 
     def __rmul__(self, num):
-        return Vector(num*self.x, num*self.y, num*self.z)
+        try:
+            return self.rotated(num.get_angle()) + Vector(num)
+        except:
+            pass
+
+        if isinstance(num, numbers.Number):
+            return Vector(num*self.x, num*self.y, num*self.z)
+
+        return NotImplemented
 
     def __eq__(self, vector):
         TOLERANCE = 1e-8
