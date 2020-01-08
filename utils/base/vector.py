@@ -97,6 +97,12 @@ class Vector(shapely.geometry.point.Point):
         p1 = Vector(self.x + p.x, self.y + p.y, self.z + p.z)
         return p1
 
+    def __mul__(self, vec):
+        if isinstance(vec, Vector):
+            return vec.x * self.x + vec.y * self.y + vec.z * self.z
+
+        return NotImplemented
+
     def __rmul__(self, num):
         try:
             return self.rotated(num.get_angle()) + Vector(num)
@@ -110,4 +116,5 @@ class Vector(shapely.geometry.point.Point):
 
     def __eq__(self, vector):
         TOLERANCE = 1e-8
-        return abs(vector.x-self.x) + abs(vector.y-self.y) + abs(vector.z-self.z) < TOLERANCE
+        return type(vector) == type(self) \
+            and (Vector(vector)-Vector(self)).norm < TOLERANCE
