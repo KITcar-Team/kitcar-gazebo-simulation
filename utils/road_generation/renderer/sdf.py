@@ -54,7 +54,11 @@ def generate_sdf(xml_content, target_dir, generator_dir, road_name, add_vehicle,
     with open(path.join(target_dir,  "model.sdf"), "w+") as file:
         file.write("<?xml version='1.0'?>\n")
         file.write("<sdf version='1.6'>\n<world name='default'>")
+        file.write("")
+        file.write("<wind/>")
+        file.write("<atmosphere type='adiabatic'/>")
         file.write(physics(fast = fast_physics))
+        file.write(scene())
         file.write(sun_light())
         file.write(content)
         file.write("</world>\n</sdf>")
@@ -121,6 +125,14 @@ def physics(fast=False):
       </ode>
     </physics>
     """
+def scene():
+    return """
+    <scene>
+      <ambient>0.7 0.7 0.7 1</ambient>
+      <background>0.1 0.1 0.1 1</background>
+      <shadows>0</shadows>
+    </scene>
+    """
 def sun_light():
     return """
     <light name='sun_light' type='directional'>
@@ -134,7 +146,7 @@ def sun_light():
         <linear>0.01</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <cast_shadows>1</cast_shadows>
+      <cast_shadows>0</cast_shadows>
     </light>
     """
 
