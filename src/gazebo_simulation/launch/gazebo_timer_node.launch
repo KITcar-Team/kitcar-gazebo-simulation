@@ -1,0 +1,25 @@
+<!-- Just for highlighting -->
+<launch>
+  <arg name="start_activated" default="true" />
+
+  <arg name="max_rate" default="55" />
+  <arg name="min_rate" default="45" />
+  
+  <arg name="p_down" default="0.03" />
+  <arg name="p_up" default="0.005"/>
+  
+  <arg name="max_update_rate" default="1500" />
+  <arg name="min_update_rate" default="10" />
+  
+  <arg name="topic" default="camera/image_raw" />
+
+  <node name="gazebo_timer_node" ns="gazebo_simulation" pkg="gazebo_simulation" type="gazebo_timer_node" output="screen">
+    <param name="max_rate" value="$(arg max_rate)"/>
+    <param name="min_rate" value="$(arg min_rate)"/>
+    <param name="p_down" value="$(arg p_down)"/>
+    <param name="max_update_rate" value="$(arg max_update_rate)"/>
+    <param name="min_update_rate" value="$(arg min_update_rate)"/>
+    <param name="topic" value="$(arg topic)"/>
+  </node>
+
+</launch>

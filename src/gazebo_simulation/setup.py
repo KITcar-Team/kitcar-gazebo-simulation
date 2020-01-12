@@ -5,8 +5,7 @@ from catkin_pkg.python_setup import generate_distutils_setup
 
 # fetch values from package.xml
 setup_args = generate_distutils_setup(
-    packages=['car_state'],
+    packages=['car_state', 'gazebo_timer'],
     package_dir={'': 'src'})
 
 setup(**setup_args)
-
