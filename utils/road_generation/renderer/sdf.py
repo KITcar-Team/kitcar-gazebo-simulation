@@ -6,7 +6,7 @@ from os import path, makedirs
 import os
 
 
-def generate_sdf(xml_content, target_dir, generator_dir, road_name, add_vehicle, extract_tiles=False, tile_size = 4, background = False, segmentation = False):
+def generate_sdf(xml_content, target_dir, generator_dir, road_name, add_vehicle, extract_tiles=False, tile_size = 4, background = False, segmentation = False, fast_physics = False):
     """Create world.sdf file and material files for Gazebo. 
 
     @param xml_content An XML document.  This should be data (Python 2
@@ -54,6 +54,7 @@ def generate_sdf(xml_content, target_dir, generator_dir, road_name, add_vehicle,
     with open(path.join(target_dir,  "model.sdf"), "w+") as file:
         file.write("<?xml version='1.0'?>\n")
         file.write("<sdf version='1.6'>\n<world name='default'>")
+        file.write(physics(fast = fast_physics))
         file.write(sun_light())
         file.write(content)
         file.write("</world>\n</sdf>")
@@ -87,7 +88,39 @@ def generate_sdf(xml_content, target_dir, generator_dir, road_name, add_vehicle,
             
             idx+=1
 
+def physics(fast=False):
+    gravity = "0 0 -9.81"
+    contacts = 10
+    step = 0.001
+    iters = 50
 
+    if fast:
+        gravity = "0"
+        contacts = 2
+        step = 0.001
+        iters = 1
+
+    return f"""
+    <gravity>{gravity}</gravity>
+    <physics type="ode">
+      <max_step_size>{step}</max_step_size>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_contacts>{contacts}</max_contacts>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>{iters}</iters>
+          <sor>1.4</sor>
+        </solver>
+        <constraints>
+          <cfm>0</cfm>
+          <erp>1</erp>
+          <contact_max_correcting_vel>0</contact_max_correcting_vel>
+          <contact_surface_layer>0</contact_surface_layer>
+        </constraints>
+      </ode>
+    </physics>
+    """
 def sun_light():
     return """
     <light name='sun_light' type='directional'>

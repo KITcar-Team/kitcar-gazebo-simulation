@@ -3,7 +3,7 @@
 ROAD_GENERATION_PATH=$KITCAR_REPO_PATH/kitcar-gazebo-simulation/utils #Path to road-generation folder
 #Read input flags
 FLAGS=""
-while getopts "st:br:" option
+while getopts "st:br:f" option
 do
 	case "${option}"
 		in
@@ -11,6 +11,7 @@ do
 		t) FLAGS="$FLAGS --tile_size=${OPTARG}";;
 		b) FLAGS="$FLAGS --background";;
 		l) FLAGS="$FLAGS --lines";;
+		f) FLAGS="$FLAGS --fast_physics";;
 		r) ROAD_NAME="${OPTARG}";; # Name of the road e.g. default-road
 
 	esac
