@@ -101,7 +101,7 @@ build:
         - kitcar-ros
         - devel
         - build
-        expire_in: 6 hrs
+        expire_in: 2 hrs
    
 
 test-start-process:
