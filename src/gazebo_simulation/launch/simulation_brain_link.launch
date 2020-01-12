@@ -1,12 +1,14 @@
 <!-- Start nodes which are used to connect Gazebo and KITcar_brain -->
 <launch>
   <arg name="car_name" default="dr_drift" /> 
-  <arg name="link_pose" default="true"/>
+  <arg name="link_pose" default="false"/>
   <arg name="link_twist" default="true"/>
+  <arg name="link_allow_z" default="true"/>
 
   <param name="gazebo/vehicle_simulation_link/start_activated" value="true"/>
   <param name="gazebo/vehicle_simulation_link/set_pose" value="$(arg link_pose)"/>
   <param name="gazebo/vehicle_simulation_link/set_twist" value="$(arg link_twist)"/>
+  <param name="gazebo/vehicle_simulation_link/enable_z_coord" value="$(arg link_allow_z)"/>
 
  
 	<!-- Remap simulated sensors to the topics used in KITcar brain -->

@@ -11,8 +11,9 @@
   <arg name="rviz" default="false"/>
 
   <!-- params vehicle simulation -->
-  <arg name="link_pose" default="true"/>
+  <arg name="link_pose" default="false"/>
   <arg name="link_twist" default="true"/>
+  <arg name="link_allow_z" default="true"/>
 
   <!-- params gazebo -->
   <arg name="gz_paused" default="false"/>
@@ -37,6 +38,7 @@
       <arg name="car_name" value="$(arg car_name)"/>
       <arg name="link_pose" value="$(arg link_pose)"/>
       <arg name="link_twist" value="$(arg link_twist)"/>
+      <arg name="link_allow_z" value="$(arg link_allow_z)"/>
     </include>
   </group>
 
