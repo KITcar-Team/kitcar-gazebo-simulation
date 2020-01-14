@@ -16,6 +16,7 @@ if __name__ == "__main__":
     parser.add_argument("--lines","-l", action="store_true")
     parser.add_argument("--background","-bg", action="store_true")
     parser.add_argument("--segmentation","-s", action="store_true")
+    parser.add_argument("--fast_physics","-fp", action="store_true")
     parser.add_argument("--tile_size", "-t")
     #parser.add_argument("--add_vehicle", "-av", action="store_true")
     args = parser.parse_args()
@@ -36,7 +37,8 @@ if __name__ == "__main__":
         'road_name':args.name, #Name of road
         'add_vehicle':True, #Add dr_drift model to world
         'background':args.background, #If background wall images should be included
-        'segmentation':args.segmentation #If segmentation colors should be used for rendering
+        'segmentation':args.segmentation, #If segmentation colors should be used for rendering
+        'fast_physics':args.fast_physics#If segmentation colors should be used for rendering
     }
 
 
