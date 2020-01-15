@@ -1,5 +1,3 @@
-#echo 'exporting kitcar-gazebo-simulation path variables'
-
 KITCAR_GAZEBO_SIM_PATH=$KITCAR_REPO_PATH/kitcar-gazebo-simulation
 
 source /usr/share/gazebo-9/setup.sh
@@ -9,6 +7,5 @@ export GAZEBO_MODEL_PATH=$KITCAR_GAZEBO_SIM_PATH/models/env_db:$KITCAR_GAZEBO_SI
 
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$KITCAR_GAZEBO_SIM_PATH/src
 export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/utils
-#export KITCAR_SIM_DATA_PATH=$KITCAR_REPO_PATH/kitcar-simulation-data
 
 source $KITCAR_GAZEBO_SIM_PATH/devel/setup.bash --extend
