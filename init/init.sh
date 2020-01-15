@@ -19,9 +19,21 @@ case "$option" in
     source  ~/.bashrc
 
     # set commit hook
-    echo "setting commit hook to check formatting when creating new commit ..."
-    ln -sf $KITCAR_REPO_PATH/kitcar-gazebo-simulation/check_formatting.sh $KITCAR_REPO_PATH/kitcar-gazebo-simulation/.git/hooks/pre-commit
-	  chmod +x $KITCAR_REPO_PATH/kitcar-gazebo-simulation/.git/hooks/pre-commit
+    #echo "setting commit hook to check formatting when creating new commit ..."
+    #ln -sf $KITCAR_REPO_PATH/kitcar-gazebo-simulation/check_formatting.sh $KITCAR_REPO_PATH/kitcar-gazebo-simulation/.git/hooks/pre-commit
+	  #chmod +x $KITCAR_REPO_PATH/kitcar-gazebo-simulation/.git/hooks/pre-commit
+   
+    OLD_PWD=`pwd`
+
+    cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation
+
+    # Install python packages
+    pip3 install -r requirements.txt
+
+    # Install pre-commit hook
+    pre-commit install
+
+    cd $OLD_PWD
   ;;
 
   2) # do cleanup
