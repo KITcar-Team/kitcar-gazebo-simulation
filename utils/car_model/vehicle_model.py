@@ -154,7 +154,7 @@ def create_tof_camera(el, name, pose, horizontal_fov, capture,clip, topic_base, 
     joint = SubElement(el,'joint',{'name':'depth_camera_joint_'+name,'type':'fixed'})
     add_tag_dict(joint,{'child':'depth_camera_ros::link_'+name,'parent':'chassis'})
 
-def extend_dr_drift(base, data, cam_horizontal_fov, depth_cam_horizontal_fov):
+def extend_dr_drift(base, data, cam_horizontal_fov, depth_cam_horizontal_fov = None):
     tree = ET.parse(base)
     root = tree.getroot()
 
@@ -189,18 +189,20 @@ def extend_dr_drift(base, data, cam_horizontal_fov, depth_cam_horizontal_fov):
     birds_view_camera_dict['attributes'] = {'update_rate': data['birds_view_camera']['update_rate']}
 
     create_birds_view_camera(model,**birds_view_camera_dict)
+    
+    if 'depth_camera' in data:
 
-    depth_camera_dict = dict()
-    depth_camera_dict['pose'] = np.append(np.array(data['depth_camera']['translation']),
-[0,data['depth_camera']['angle'], 0])
-    depth_camera_dict['size'] = data['depth_camera']['size']
-    depth_camera_dict['horizontal_fov'] = depth_cam_horizontal_fov
-    depth_camera_dict['clip'] = data['depth_camera']['clip']
-    depth_camera_dict['capture'] = data['depth_camera']['capture']
-    depth_camera_dict['ros'] = data['depth_camera']['ros']
-    depth_camera_dict['attributes'] = {'update_rate': data['depth_camera']['update_rate']}
+        depth_camera_dict = dict()
+        depth_camera_dict['pose'] = np.append(np.array(data['depth_camera']['translation']),
+            [0,data['depth_camera']['angle'], 0])
+        depth_camera_dict['size'] = data['depth_camera']['size']
+        depth_camera_dict['horizontal_fov'] = depth_cam_horizontal_fov
+        depth_camera_dict['clip'] = data['depth_camera']['clip']
+        depth_camera_dict['capture'] = data['depth_camera']['capture']
+        depth_camera_dict['ros'] = data['depth_camera']['ros']
+        depth_camera_dict['attributes'] = {'update_rate': data['depth_camera']['update_rate']}
 
-    create_depth_camera(model,**depth_camera_dict)
+        create_depth_camera(model,**depth_camera_dict)
 
     sensors = data['time_of_flight']['sensors']
 

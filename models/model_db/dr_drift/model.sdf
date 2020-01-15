@@ -17,7 +17,7 @@
                 </inertia>
             </inertial>
             <visual name="visual">
-                <pose frame="">0.11 0 0.06 0 0 0</pose>
+                <pose frame="">0.09 0 0.04 0 0 0</pose>
                 <geometry>
                     <mesh>
                         <uri>model://dr_drift/meshes/dr_drift.stl</uri>
@@ -65,7 +65,7 @@
                     </image>
                     <clip>
                         <near>0.1</near>
-                        <far>20</far>
+                        <far>2.5</far>
                     </clip>
                 </camera>
                 <plugin filename="libgazebo_ros_camera.so" name="camera_plugin">
@@ -119,53 +119,6 @@
         </link>
         <joint name="create_birds_view_camera_joint" type="fixed">
             <child>create_birds_view_camera_ros::link</child>
-            <parent>chassis</parent>
-        </joint>
-        <link name="depth_camera_ros::link">
-            <pose frame="">0.00428937 0.0114112 0.21946 0.0 0.2016281 0.0</pose>
-            <inertial>
-                <mass>1e-05</mass>
-                <inertia>
-                    <ixx>1e-05</ixx>
-                    <iyy>1e-05</iyy>
-                    <izz>1e-05</izz>
-                    <ixy>0</ixy>
-                    <iyz>0</iyz>
-                    <ixz>0</ixz>
-                </inertia>
-            </inertial>
-            <visual name="visual">
-                <geometry>
-                    <box>
-                        <size>0.07 0.03 0.03</size>
-                    </box>
-                </geometry>
-            </visual>
-            <sensor name="camera" type="depth">
-                <update_rate>60</update_rate>
-                <camera name="__default__">
-                    <horizontal_fov>1.465630203573013</horizontal_fov>
-                    <image>
-                        <width>360</width>
-                        <height>240</height>
-                        <format>L8</format>
-                    </image>
-                    <clip>
-                        <near>0.1</near>
-                        <far>3</far>
-                    </clip>
-                </camera>
-                <plugin filename="libgazebo_ros_openni_kinect.so" name="camera_plugin">
-                    <alwaysOn>1</alwaysOn>
-                    <updateRate>0</updateRate>
-                    <imageTopicName>/simulation/sensors/raw/depth_camera</imageTopicName>
-                    <cameraInfoTopicName>/simulation/sensors/info/depth_camera</cameraInfoTopicName>
-                    <frameName>depth_camera</frameName>
-                </plugin>
-            </sensor>
-        </link>
-        <joint name="depth_camera_joint" type="fixed">
-            <child>depth_camera_ros::link</child>
             <parent>chassis</parent>
         </joint>
         <link name="depth_camera_ros::link_back">
@@ -316,7 +269,7 @@
             <parent>chassis</parent>
         </joint>
         <link name="depth_camera_ros::link_ahead">
-            <pose frame="">0.3 0 0.08 0 0 0</pose>
+            <pose frame="">0.27 0 0.06 0 0 0</pose>
             <inertial>
                 <mass>1e-05</mass>
                 <inertia>
