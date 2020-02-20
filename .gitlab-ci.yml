@@ -47,6 +47,7 @@ stages:
   - prebuild-test # Some tests are performed before building, to filter easy mistakes
   - build
   - test
+  - deploy
 
 ######## PREBUILD STAGE #########
 #Test basics before attempting to build!
@@ -72,6 +73,13 @@ test-road-generation:
     - ./generate.sh -r default-road
     - ./generate.sh -r curves
 
+
+# Simply test if the documentation can be generated.
+test-documentation-generation:
+  stage: prebuild-test
+  script:
+    - cd docs
+    - make html
 
 ######## BUILD STAGE ########
 # buikd kitcar-ros and simulation
@@ -120,3 +128,15 @@ test-start-process:
         # Run test
         - rostest gazebo_simulation start_road.test
 
+deploy-sphinx-documentation:
+  stage: deploy
+  script:
+    - cd docs
+    - make html
+  artifacts:
+    paths:
+      - docs/_build/html/*
+    expire_in: 1 day
+  only:
+    - master
+    
