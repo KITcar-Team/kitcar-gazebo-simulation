@@ -18,7 +18,6 @@ import road_generation.schema as schema
 
 
 class ModuleTest(unittest.TestCase):
-
     def test_vector_init(self):
         """ Test if the vector class can be initialize. """
 
@@ -26,19 +25,20 @@ class ModuleTest(unittest.TestCase):
         p1 = Vector(1, 3)
         self.assertListEqual([p1.x, p1.y, p1.z], [1, 3, 0])
 
-        examples = [([-1, -2], [-1, -2, 0]),
-                    (np.array([1, 2, 4]), [1, 2, 4]),
-                    (np.array([1, 2]), [1, 2, 0]),
-                    (g_msgs.Vector3(1, 3, 4), [1, 3, 4])]
+        examples = [
+            ([-1, -2], [-1, -2, 0]),
+            (np.array([1, 2, 4]), [1, 2, 4]),
+            (np.array([1, 2]), [1, 2, 0]),
+            (g_msgs.Vector3(1, 3, 4), [1, 3, 4]),
+        ]
 
         for example in examples:
             # Point initialization
             v = Vector(example[0])
             self.assertListEqual([v.x, v.y, v.z], example[1])
 
-        #r, phi
-        self.assertEqual(Vector(math.sqrt(2), math.sqrt(2)),
-                         Vector(r=2, phi=math.pi/4))
+        # r, phi
+        self.assertEqual(Vector(math.sqrt(2), math.sqrt(2)), Vector(r=2, phi=math.pi / 4))
 
     def test_vector_extract(self):
         p1 = Vector(1, 3, 2)
@@ -51,11 +51,17 @@ class ModuleTest(unittest.TestCase):
         p2 = Vector(2, 1, 3)
         p3 = Vector(3, 3, 6)
 
-        self.assertEqual(p1+p2, p3)
-        self.assertEqual(p3-p2, p1)
-        self.assertEqual(3*p1, Vector(3, 6, 9))
+        self.assertEqual(p1 + p2, p3)
+        self.assertEqual(p3 - p2, p1)
+        self.assertEqual(3 * p1, Vector(3, 6, 9))
 
-        self.assertEqual(p1.rotated(math.pi/2), Vector(-2, 1, 3))
+        self.assertEqual(p1.rotated(math.pi / 2), Vector(-2, 1, 3))
+
+        # Test norm function and scalar product
+        self.assertEqual(p1 * p3, p1.x*p3.x + p1.y*p3.y + p1.z*p3.z)
+        self.assertEqual(p1 * p1, p1.norm * p1.norm)
+        self.assertEqual(p1 * (p2-p3), p1*p2 - p1*p3)
+        self.assertEqual(p1*p2, p2*p1 )
 
     def test_point_init(self):
         """ Test if the point class can be initialize. """
@@ -64,18 +70,19 @@ class ModuleTest(unittest.TestCase):
         p1 = Point(1, 3)
         self.assertListEqual([p1.x, p1.y, p1.z], [1, 3, 0])
 
-        examples = [([-1, -2], [-1, -2, 0]),
-                    (np.array([1, 2, 4]), [1, 2, 4]),
-                    (np.array([1, 2]), [1, 2, 0]),
-                    (g_msgs.Point(1, 3, 4), [1, 3, 4])]
+        examples = [
+            ([-1, -2], [-1, -2, 0]),
+            (np.array([1, 2, 4]), [1, 2, 4]),
+            (np.array([1, 2]), [1, 2, 0]),
+            (g_msgs.Point(1, 3, 4), [1, 3, 4]),
+        ]
 
         for example in examples:
             # Point initialization
             point = Point(example[0])
             self.assertListEqual([point.x, point.y, point.z], example[1])
 
-        self.assertEqual(Point(math.sqrt(2), math.sqrt(2)),
-                         Point(r=2, phi=math.pi/4))
+        self.assertEqual(Point(math.sqrt(2), math.sqrt(2)), Point(r=2, phi=math.pi / 4))
 
     def test_point_extract(self):
         p1 = Point(1, 3, 2)
@@ -88,8 +95,8 @@ class ModuleTest(unittest.TestCase):
         vec = Vector(2, 1, 3)
         p3 = Point(3, 3, 6)
 
-        self.assertEqual(p1+vec, p3)
-        self.assertEqual(p3-vec, p1)
+        self.assertEqual(p1 + vec, p3)
+        self.assertEqual(p3 - vec, p1)
 
         # The following should raise exception
         with self.assertRaises(InvalidPointOperationError):
@@ -102,9 +109,9 @@ class ModuleTest(unittest.TestCase):
             p1 - p3
 
         with self.assertRaises(InvalidPointOperationError):
-            3*p3
+            3 * p3
 
-######## TRANSFORM ########
+    """ TRANSFORM """
 
     def geom_tf_almost_eq(self, p1, p2):
 
@@ -119,43 +126,42 @@ class ModuleTest(unittest.TestCase):
         """ Test if tf class can be initialized as expected. """
         # Create from quaternion
         v = Vector(1, 3, 2)
-        o = Quaternion(math.sqrt(1/2), 0, 0, math.sqrt(1/2))
+        o = Quaternion(math.sqrt(1 / 2), 0, 0, math.sqrt(1 / 2))
         tf = Transform(v, o)
 
         # Create from angle
-        tf2 = Transform(v, math.pi/2)
+        tf2 = Transform(v, math.pi / 2)
 
         self.assertEqual(tf, tf2)
 
         # Create from geometry_msgs/transform
         g_tf = g_msgs.Transform()
         g_tf.translation = v.to_geometry_msg()
-        g_tf.rotation = g_msgs.Quaternion(0, 0, math.sqrt(1/2), math.sqrt(1/2))
+        g_tf.rotation = g_msgs.Quaternion(0, 0, math.sqrt(1 / 2), math.sqrt(1 / 2))
 
         self.assertEqual(Transform(g_tf), tf)
 
     def test_tf_funcs(self):
         v = Vector(1, 3, 2)
         # Create from angle
-        tf = Transform(v, math.pi/2)
+        tf = Transform(v, math.pi / 2)
 
-        self.assertAlmostEqual(tf.get_angle(), math.pi/2)
+        self.assertAlmostEqual(tf.get_angle(), math.pi / 2)
 
         g_tf = g_msgs.Transform()
         g_tf.translation = v.to_geometry_msg()
-        g_tf.rotation = g_msgs.Quaternion(
-            0, 0, math.sqrt(1/2), math.sqrt(1/2))
+        g_tf.rotation = g_msgs.Quaternion(0, 0, math.sqrt(1 / 2), math.sqrt(1 / 2))
 
         self.geom_tf_almost_eq(g_tf, tf.to_geometry_msg())
 
         # Should return 90 degrees
         tf2 = Transform(Vector(1, 0, 0), Quaternion(1, 0, 0, 1).normalised)
-        self.assertEqual(tf2.get_angle(), math.pi/2)
+        self.assertEqual(tf2.get_angle(), math.pi / 2)
 
         # Multiply transforms
-        self.assertEqual(tf*tf2, Transform(Vector(1, 4, 2), math.pi))
+        self.assertEqual(tf * tf2, Transform(Vector(1, 4, 2), math.pi))
 
-######## POSE ########
+    """ POSE """
 
     def geom_pose_almost_eq(self, p1, p2):
 
@@ -170,57 +176,51 @@ class ModuleTest(unittest.TestCase):
         """ Test if pose class can be initialized as expected. """
         # Create from quaternion
         p = Point(1, 3, 2)
-        o = Quaternion(math.sqrt(1/2), 0, 0, math.sqrt(1/2))
+        o = Quaternion(math.sqrt(1 / 2), 0, 0, math.sqrt(1 / 2))
         pose = Pose(p, o)
 
         # Create from angle
-        pose2 = Pose(p, math.pi/2)
+        pose2 = Pose(p, math.pi / 2)
 
         self.assertEqual(pose, pose2)
 
         g_pose = g_msgs.Pose()
         g_pose.position = p.to_geometry_msg()
-        g_pose.orientation = g_msgs.Quaternion(
-            0, 0, math.sqrt(1/2), math.sqrt(1/2))
+        g_pose.orientation = g_msgs.Quaternion(0, 0, math.sqrt(1 / 2), math.sqrt(1 / 2))
 
         self.assertEqual(Pose(g_pose), pose)
 
         # Create from geometry_msgs/transform
         g_tf = g_msgs.Transform()
         g_tf.translation = p.to_geometry_msg()
-        g_tf.rotation = g_msgs.Quaternion(0, 0, math.sqrt(1/2), math.sqrt(1/2))
+        g_tf.rotation = g_msgs.Quaternion(0, 0, math.sqrt(1 / 2), math.sqrt(1 / 2))
 
         self.assertEqual(Pose(g_tf), pose)
 
     def test_pose_funcs(self):
         p = Point(1, 3, 2)
         # Create from angle
-        pose = Pose(p, math.pi/2)
+        pose = Pose(p, math.pi / 2)
 
-        self.assertAlmostEqual(pose.get_angle(), math.pi/2)
+        self.assertAlmostEqual(pose.get_angle(), math.pi / 2)
 
         g_pose = g_msgs.Pose()
         g_pose.position = p.to_geometry_msg()
-        g_pose.orientation = g_msgs.Quaternion(
-            0, 0, math.sqrt(1/2), math.sqrt(1/2))
+        g_pose.orientation = g_msgs.Quaternion(0, 0, math.sqrt(1 / 2), math.sqrt(1 / 2))
 
         self.geom_pose_almost_eq(g_pose, pose.to_geometry_msg())
 
         # Should return 90 degrees
         pose2 = Pose(Point(1, 0, 0), Quaternion(-1, 0, 0, -1).normalised)
-        self.assertEqual(pose2.get_angle(), math.pi/2)
+        self.assertEqual(pose2.get_angle(), math.pi / 2)
 
         # Apply transformations
         tf2 = Transform(Vector(1, 0, 0), Quaternion(1, 0, 0, 1).normalised)
 
         # Multiply transforms
-        self.assertEqual(pose*tf2, Pose(Vector(1, 4, 2), math.pi))
+        self.assertEqual(tf2*pose, Pose(Vector(1, 4, 2), math.pi))
 
-        self.assertEqual(pose / tf2, Pose(Vector(1, 2, 2), 0))
-
-
-##### Helper function #####
-
+    """ Helper function """
 
     def create_points(self, count=10):
         points = []
@@ -235,7 +235,7 @@ class ModuleTest(unittest.TestCase):
 
         return points
 
-######### LINE #########
+    """ LINE """
 
     def test_line_init(self):
         points = self.create_points()
@@ -281,14 +281,14 @@ class ModuleTest(unittest.TestCase):
 
         line = Line([x, x] for x in range(10))
         l_r = Line([x + math.sqrt(2), x - math.sqrt(2)] for x in range(10))
-        l_p = line.parallel_offset(2, 'right')
+        l_p = line.parallel_offset(2, "right")
         self.assertEqual(l_p, l_r)
 
-        tf = Transform(Point(1, 0, 2), math.pi/2)
+        tf = Transform(Point(1, 0, 2), math.pi / 2)
 
-        self.assertEqual(tf*line, Line([1-x,x,2] for x in range(10)))
+        self.assertEqual(tf * line, Line([1 - x, x, 2] for x in range(10)))
 
-######### POLYGON #########
+    """ POLYGON """
 
     def test_polygon_init(self):
         points = self.create_points()
@@ -357,32 +357,38 @@ class ModuleTest(unittest.TestCase):
     def test_polygon_func(self):
         """Test polygon functions."""
 
-        poly = Polygon([Point(1, 0), Point(2, 1),
-                        Point(2, 2), Point(-1, 0, 2)])
+        poly = Polygon([Point(1, 0), Point(2, 1), Point(2, 2), Point(-1, 0, 2)])
 
         # Rotate by 90 degrees -> [0,1],[-1,2],[-2,2],[0,-1,2]
         # Translate by 1,0,2 -> [1,1,2],[0,2,2],[-1,2,2],[1,-1,4]
-        tf = Transform(Point(1, 0, 2), math.pi/2)
+        tf = Transform(Point(1, 0, 2), math.pi / 2)
 
-        self.assertEqual(tf*poly, Polygon(
-            [Point(1, 1, 2), Point(0, 2, 2), Point(-1, 2, 2), Point(1, -1, 4)]))
+        self.assertEqual(tf * poly, Polygon([Point(1, 1, 2), Point(0, 2, 2), Point(-1, 2, 2), Point(1, -1, 4)]))
 
         # Test polygon eq function
-        poly_rev = Polygon([Point(1, 1, 2), Point(1, -1, 4),
-                            Point(-1, 2, 2), Point(0, 2, 2), Point(1, 1, 2)])
+        poly_rev = Polygon([Point(1, 1, 2), Point(1, -1, 4), Point(-1, 2, 2), Point(0, 2, 2), Point(1, 1, 2)])
         poly_uneq = Polygon([Point(2, 2), Point(2, 1), Point(1, 0)])
 
         self.assertEqual(poly, poly)
-        self.assertTrue(tf*poly == poly_rev)
-        self.assertFalse(tf*poly == poly_uneq)
+        self.assertTrue(tf * poly == poly_rev)
+        self.assertFalse(tf * poly == poly_uneq)
 
     def test_transformations(self):
-            
-        tf = Transform(Vector(2,2),math.pi / 2)
-        
-        self.assertEqual(Vector(1,3),tf*Vector(1,1))
-        self.assertEqual(Point(1,3),tf*Point(1,1))
 
+        tf = Transform(Vector(2, 2), math.pi / 2)
 
-if __name__ == '__main__':
+        self.assertEqual(Vector(1, 3), tf * Vector(1, 1))
+        self.assertEqual(Point(1, 3), tf * Point(1, 1))
+
+        # Check if line and polygon are transformed correctly
+        points = self.create_points()
+        transformed_points = [tf*p for p in points]
+
+        self.assertEqual(tf*Line(points), Line(transformed_points))
+        self.assertEqual(tf*Polygon(points), Polygon(transformed_points))
+
+        # Check to transform a pose
+        pose = Pose(Point(2,2), math.pi)
+        self.assertEqual(tf*pose,Pose([0,4],math.pi*3/2))
+if __name__ == "__main__":
     unittest.main()

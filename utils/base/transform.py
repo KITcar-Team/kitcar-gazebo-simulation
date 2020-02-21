@@ -14,6 +14,7 @@ import numbers
 import math
 import numpy as np
 
+from contextlib import suppress
 
 class Transform(Vector):
 
@@ -111,14 +112,15 @@ class Transform(Vector):
 
         return tf
 
-    def __mul__(self, tf):
+    def __mul__(self, tf: "Transform") -> "Transform":
 
-        try:
+        if type(tf) == Transform: 
             return Transform(self + Vector(tf).rotated(self.get_angle()), self.get_angle() + tf.get_angle())
-        except:
-            pass
 
         return NotImplemented
 
-    def __eq__(self, tf):
-        return tf.rotation.normalised == self.rotation.normalised and self.to_numpy().all() == tf.to_numpy().all()
+    def __eq__(self, tf: "Transform") -> bool:
+        with suppress(AttributeError):
+            return tf.rotation.normalised == self.rotation.normalised and self.to_numpy().all() == tf.to_numpy().all()
+
+        return NotImplemented

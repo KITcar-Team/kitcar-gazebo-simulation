@@ -16,6 +16,7 @@ import numbers
 import math
 import numpy as np
 
+from contextlib import suppress
 
 class Pose(Point):
 
@@ -113,27 +114,17 @@ class Pose(Point):
 
         return pose
 
-    def __mul__(self, tf):
+    def __rmul__(self, tf: "Transform") -> "Pose":
+        """Apply transformation.
 
-        if type(tf) is Transform:
-            return Pose(self + Vector(tf).rotated(self.get_angle()), self.get_angle() + tf.get_angle())
+        Args:
+            tf (Transform): Transformation to apply.
 
-        try:
-            return Pose(self + tf, self.orientation)
-        except:
-            pass
-
-        return NotImplemented
-
-    def __truediv__(self, tf):
-
-        if type(tf) is Transform:
-            return Pose(self - Vector(tf).rotated(self.get_angle()), self.get_angle() - tf.get_angle())
-
-        try:
-            return Pose(self - tf, self.orientation)
-        except:
-            pass
+        Returns:
+            Pose transformed by tf.
+        """
+        with suppress(NotImplementedError, AttributeError):
+            return Pose(tf*Vector(self), self.get_angle() + tf.get_angle())
 
         return NotImplemented
 
