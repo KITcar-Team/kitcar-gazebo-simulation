@@ -19,6 +19,8 @@ Most components of the simulation have been written in Python3.6_ and use ROS_. 
    :maxdepth: 2
    :caption: Contents:
 
+   utils/base/index.rst
+
 Indices and tables
 ==================
 
