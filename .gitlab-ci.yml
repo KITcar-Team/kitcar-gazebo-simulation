@@ -64,7 +64,7 @@ test-dr_drift:
 test-utils:
   stage: prebuild-test
   script: &prebuild-test-utils
-    - python3 utils/base/module_test.py
+    - python3 utils/geometry/module_test.py
 
 test-road-generation:
   stage: prebuild-test
