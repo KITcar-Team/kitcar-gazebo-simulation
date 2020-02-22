@@ -3,9 +3,9 @@
 
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
-from base.vector import Vector
-from base.point import Point
-from base.transform import Transform
+from geometry.vector import Vector
+from geometry.point import Point
+from geometry.transform import Transform
 from pyquaternion import Quaternion
 
 import numbers

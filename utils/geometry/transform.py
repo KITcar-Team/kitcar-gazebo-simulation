@@ -3,7 +3,7 @@
 
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
-from base.vector import Vector
+from geometry.vector import Vector
 from pyquaternion import Quaternion
 
 import numbers

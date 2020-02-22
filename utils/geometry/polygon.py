@@ -8,9 +8,9 @@ import numpy as np
 import geometry_msgs.msg as geometry_msgs
 from road_generation import schema
 
-from base.point import Point
-from base.line import Line
-from base.transform import Transform
+from geometry.point import Point
+from geometry.line import Line
+from geometry.transform import Transform
 
 from contextlib import suppress
 

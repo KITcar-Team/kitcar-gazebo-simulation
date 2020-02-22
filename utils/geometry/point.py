@@ -6,7 +6,7 @@ Basic point class which is compatible with all needed formats
 import geometry_msgs.msg as geometry_msgs
 from road_generation import schema
 
-from base.vector import Vector  # Base class
+from geometry.vector import Vector  # Base class
 
 __author__ = "Konstantin Ditschuneit"
 __copyright__ = "KITcar"

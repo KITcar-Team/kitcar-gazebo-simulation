@@ -2,13 +2,13 @@ import unittest
 import random
 import math
 
-from base.point import Point
-from base.point import InvalidPointOperationError
-from base.vector import Vector
-from base.line import Line
-from base.polygon import Polygon
-from base.pose import Pose
-from base.transform import Transform
+from geometry.point import Point
+from geometry.point import InvalidPointOperationError
+from geometry.vector import Vector
+from geometry.line import Line
+from geometry.polygon import Polygon
+from geometry.pose import Pose
+from geometry.transform import Transform
 
 from pyquaternion import Quaternion
 
@@ -58,10 +58,10 @@ class ModuleTest(unittest.TestCase):
         self.assertEqual(p1.rotated(math.pi / 2), Vector(-2, 1, 3))
 
         # Test norm function and scalar product
-        self.assertEqual(p1 * p3, p1.x*p3.x + p1.y*p3.y + p1.z*p3.z)
+        self.assertEqual(p1 * p3, p1.x * p3.x + p1.y * p3.y + p1.z * p3.z)
         self.assertEqual(p1 * p1, p1.norm * p1.norm)
-        self.assertEqual(p1 * (p2-p3), p1*p2 - p1*p3)
-        self.assertEqual(p1*p2, p2*p1 )
+        self.assertEqual(p1 * (p2 - p3), p1 * p2 - p1 * p3)
+        self.assertEqual(p1 * p2, p2 * p1)
 
     def test_point_init(self):
         """ Test if the point class can be initialize. """
@@ -218,7 +218,7 @@ class ModuleTest(unittest.TestCase):
         tf2 = Transform(Vector(1, 0, 0), Quaternion(1, 0, 0, 1).normalised)
 
         # Multiply transforms
-        self.assertEqual(tf2*pose, Pose(Vector(1, 4, 2), math.pi))
+        self.assertEqual(tf2 * pose, Pose(Vector(1, 4, 2), math.pi))
 
     """ Helper function """
 
@@ -382,13 +382,15 @@ class ModuleTest(unittest.TestCase):
 
         # Check if line and polygon are transformed correctly
         points = self.create_points()
-        transformed_points = [tf*p for p in points]
+        transformed_points = [tf * p for p in points]
 
-        self.assertEqual(tf*Line(points), Line(transformed_points))
-        self.assertEqual(tf*Polygon(points), Polygon(transformed_points))
+        self.assertEqual(tf * Line(points), Line(transformed_points))
+        self.assertEqual(tf * Polygon(points), Polygon(transformed_points))
 
         # Check to transform a pose
-        pose = Pose(Point(2,2), math.pi)
-        self.assertEqual(tf*pose,Pose([0,4],math.pi*3/2))
+        pose = Pose(Point(2, 2), math.pi)
+        self.assertEqual(tf * pose, Pose([0, 4], math.pi * 3 / 2))
+
+
 if __name__ == "__main__":
     unittest.main()

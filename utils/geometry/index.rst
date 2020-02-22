@@ -8,32 +8,32 @@ The mathematical operations are inherited by subclassing the Shapely_ package an
 The following classes are available:
 
 
-.. autoclass:: base.vector.Vector
+.. autoclass:: geometry.vector.Vector
    :members:
    :special-members:
 
 
-.. autoclass:: base.point.Point
+.. autoclass:: geometry.point.Point
    :members:
    :special-members:
 
 
-.. autoclass:: base.transform.Transform
+.. autoclass:: geometry.transform.Transform
    :members:
    :special-members:
 
 
-.. autoclass:: base.pose.Pose
+.. autoclass:: geometry.pose.Pose
    :members:
    :special-members:
 
 
-.. autoclass:: base.line.Line
+.. autoclass:: geometry.line.Line
    :members:
    :special-members:
 
 
-.. autoclass:: base.polygon.Polygon
+.. autoclass:: geometry.polygon.Polygon
    :members:
    :special-members:
 
