@@ -9,7 +9,6 @@ from road_generation import schema
 from geometry.transform import Transform
 from geometry.vector import Vector  # Base class
 
-__author__ = "Konstantin Ditschuneit"
 __copyright__ = "KITcar"
 
 

@@ -12,7 +12,6 @@ import numpy as np
 
 from contextlib import suppress
 
-__author__ = "Konstantin Ditschuneit"
 __copyright__ = "KITcar"
 
 

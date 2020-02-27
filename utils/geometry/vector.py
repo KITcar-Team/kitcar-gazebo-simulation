@@ -10,7 +10,6 @@ import numbers
 
 from contextlib import suppress
 
-__author__ = "Konstantin Ditschuneit"
 __copyright__ = "KITcar"
 
 
