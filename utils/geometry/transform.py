@@ -135,7 +135,7 @@ class Transform(Vector):
         """
 
         if type(tf) == Transform:
-            return Transform(self + Vector(tf).rotated(self.get_angle()), self.get_angle() + tf.get_angle())
+            return Transform(Vector(self) + Vector(tf).rotated(self.get_angle()), self.get_angle() + tf.get_angle())
 
         return NotImplemented
 
