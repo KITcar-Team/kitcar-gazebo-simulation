@@ -27,7 +27,12 @@ case "$option" in
 
     cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation
 
+    # Install apt packages
+    echo "Start installing apt packages from *packages.txt* \(requires sudo priviliges\):"
+    sudo xargs --arg-file=packages.txt apt-get install -y
+
     # Install python packages
+    echo "Start installing python packages from *requirements.txt*:"
     pip3 install -r requirements.txt
 
     # Install pre-commit hook
