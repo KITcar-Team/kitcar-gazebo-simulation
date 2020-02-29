@@ -28,15 +28,20 @@ class NodeBase:
             def __init__(self):
                 super(NodeSubClass,self).__init__("node_name") # Important!
                 ...
-                self.run() # Calls .start() on begin and .stop() when ROS shuts down
+                self.run() # Calls .start() if self.param.active is True (default: True)
 
             def start(self):
                 self.subscriber = ...
                 self.publisher = ...
+                super().start() # Make sure to call this!
 
+            # Called when deactivating the node by setting self.param.active to false
+            # E.g. through command line with: rosparam set .../node/active false
+            # or when ROS is shutting down
             def stop(self):
                 self.subscriber.unregister()
                 self.publisher.unregister()
+                super().stop() # Make sure to call this!
 
     Attributes:
         param (ParameterObject): Attribute of type :class:`ParameterObject`,
@@ -94,22 +99,22 @@ class NodeBase:
         self._parameter_cache = TTLCache(maxsize=128, ttl=parameter_cache_time)
         self.param = ParameterObject(ns="~", set_param_func=self._set_param, get_param_func=self._get_param)
 
-        if self.param.start_activated is None:
-            self.param.start_activated = True
+        # Node is not yet active
+        self.__active = False
 
-    def start(self):
-        raise NotImplementedError("The start function is missing.")
+        # Always call stop on shutdown!
+        rospy.on_shutdown(self.__shutdown)
 
-    def stop(self):
-        raise NotImplementedError("The stop function is missing.")
+        # Node is by default active
+        if self.param.active is None:
+            self.param.active = True
 
-    def run(self):
-        """Helper function, starting the node and shutting it down once ROS signals to.
-        Can only be called if the subclass implements start and stop functions.
+    def __shutdown(self):
+        """Called when ROS is shutting down.
+
+        If the node was active before, self.stop is called.
         """
-        if self.param.start_activated:
-            self.start()
-            rospy.spin()
+        if self.__active:
             self.stop()
 
     def _get_param(self, key: str) -> Any:
@@ -142,6 +147,38 @@ class NodeBase:
 
         # Set the parameter
         rospy.set_param(key, value)
+
+    def run(self, *, function: Callable = None, rate: float = 1):
+        """Helper function, starting the node and shutting it down once ROS signals to.
+        Can only be called if the subclass implements start and stop functions.
+
+        Args:
+            rate (float): Rate with which to update active/ not active status of the node
+            function: Called with a frequency of ``rate`` when node is active
+        """
+        while not rospy.is_shutdown():
+            # Node should be active, but is not.
+            if self.param.active and not self.__active:
+                self.start()
+                rospy.loginfo(f"Activating {rospy.get_name()}")
+            elif not self.param.active and self.__active:
+                self.stop()
+                rospy.loginfo(f"Deactivating {rospy.get_name()}")
+
+            if self.param.active and function:
+                function()
+            rospy.sleep(1 / rate)
+
+    def start(self):
+        """Called when activating the node."""
+        self.__active = True
+
+    def stop(self):
+        """Called when deactivating or shutting down the node.
+
+        Every subclass must implement this function.
+        """
+        self.__active = False
 
 
 class ParameterObject:
