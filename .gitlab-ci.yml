@@ -65,6 +65,7 @@ test-utils:
   stage: prebuild-test
   script: &prebuild-test-utils
     - python3 utils/geometry/module_test.py
+    - python3 utils/ros_base/test/parameter_object_test.py
 
 test-road-generation:
   stage: prebuild-test
