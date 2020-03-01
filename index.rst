@@ -20,6 +20,7 @@ Most components of the simulation have been written in Python3.6_ and use ROS_. 
    :caption: Contents:
 
    utils/geometry/index.rst
+   utils/ros_base/index.rst
 
 Indices and tables
 ==================
