@@ -10,9 +10,12 @@ import numbers
 
 from contextlib import suppress
 
+from . import export
+
 __copyright__ = "KITcar"
 
 
+@export
 class Vector(shapely.geometry.point.Point):
     """Vector class which inherits from shapely's Point class and implements a vector in the mathematical sense.
 

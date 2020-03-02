@@ -12,9 +12,12 @@ import numpy as np
 
 from contextlib import suppress
 
+from . import export
+
 __copyright__ = "KITcar"
 
 
+@export
 class Transform(Vector):
     """Transformation class consisting of a translation and a rotation.
 

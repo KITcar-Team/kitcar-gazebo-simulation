@@ -14,9 +14,12 @@ import numpy as np
 
 from contextlib import suppress
 
+from . import export
+
 __copyright__ = "KITcar"
 
 
+@export
 class Pose(Point):
     """Pose class consisting of a position and an orientation.
 

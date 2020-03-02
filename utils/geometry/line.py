@@ -14,9 +14,12 @@ from geometry.transform import Transform
 
 from contextlib import suppress
 
+from . import export
+
 __copyright__ = "KITcar"
 
 
+@export
 class Line(shapely.geometry.linestring.LineString):
     """List of points as a Line class inheriting from shapely's LineString class.
 

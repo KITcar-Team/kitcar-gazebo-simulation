@@ -8,14 +8,17 @@ from road_generation import schema
 
 from geometry.transform import Transform
 from geometry.vector import Vector  # Base class
+from . import export
 
 __copyright__ = "KITcar"
 
 
+@export
 class InvalidPointOperationError(Exception):
     pass
 
 
+@export
 class Point(Vector):
     """Point subclass of Vector which implements a point.
 

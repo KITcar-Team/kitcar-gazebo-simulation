@@ -14,9 +14,12 @@ from geometry.transform import Transform
 
 from contextlib import suppress
 
+from . import export
+
 __copyright__ = "KITcar"
 
 
+@export
 class Polygon(shapely.geometry.polygon.Polygon):
     """Polygon class inheriting from shapely's Polygon class.
 
