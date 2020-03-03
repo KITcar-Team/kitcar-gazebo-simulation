@@ -14,10 +14,12 @@ from geometry.transform import Transform
 
 from contextlib import suppress
 
-__author__ = "Konstantin Ditschuneit"
+from . import export
+
 __copyright__ = "KITcar"
 
 
+@export
 class Line(shapely.geometry.linestring.LineString):
     """List of points as a Line class inheriting from shapely's LineString class.
 
@@ -117,7 +119,7 @@ class Line(shapely.geometry.linestring.LineString):
         """
         return np.array([p.to_numpy() for p in self.get_points()])
 
-    def __add__(self, line: "Line") -> "Line":
+    def __add__(self, line: "Line"):
         """Concatenate lines.
 
         Returns:
@@ -125,9 +127,9 @@ class Line(shapely.geometry.linestring.LineString):
         coords = list(self._get_coords())
         coords.extend(line._get_coords())
 
-        return Line(coords)
+        return self.__class__(coords)
 
-    def __rmul__(self, tf: Transform) -> "Line":
+    def __rmul__(self, tf: Transform):
         """ Transform this line.
 
         Args:
@@ -144,7 +146,7 @@ class Line(shapely.geometry.linestring.LineString):
         transformed = affinity.rotate(self, tf.get_angle(), use_radians=True, origin=[0, 0])
         transformed = affinity.translate(transformed, tf.x, tf.y, tf.z)
 
-        return Line(transformed.coords)
+        return self.__class__(transformed.coords)
 
     def __eq__(self, line):
         return self.get_points() == line.get_points()

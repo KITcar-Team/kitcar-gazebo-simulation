@@ -14,10 +14,12 @@ from geometry.transform import Transform
 
 from contextlib import suppress
 
-__author__ = "Konstantin Ditschuneit"
+from . import export
+
 __copyright__ = "KITcar"
 
 
+@export
 class Polygon(shapely.geometry.polygon.Polygon):
     """Polygon class inheriting from shapely's Polygon class.
 
@@ -120,7 +122,7 @@ class Polygon(shapely.geometry.polygon.Polygon):
         """
         return np.array([p.to_numpy() for p in self.get_points()])
 
-    def __rmul__(self, tf: Transform) -> "Polygon":
+    def __rmul__(self, tf: Transform):
         """ Transform this polygon.
 
         Args:
@@ -137,7 +139,7 @@ class Polygon(shapely.geometry.polygon.Polygon):
         transformed = affinity.rotate(self, tf.get_angle(), use_radians=True, origin=[0, 0])
         transformed = affinity.translate(transformed, tf.x, tf.y, tf.z)
 
-        return Polygon(transformed.exterior.coords)
+        return self.__class__(transformed.exterior.coords)
 
     def __eq__(self, polygon):
         eq = self.get_points() == polygon.get_points()

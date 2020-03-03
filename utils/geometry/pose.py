@@ -14,10 +14,12 @@ import numpy as np
 
 from contextlib import suppress
 
-__author__ = "Konstantin Ditschuneit"
+from . import export
+
 __copyright__ = "KITcar"
 
 
+@export
 class Pose(Point):
     """Pose class consisting of a position and an orientation.
 
@@ -118,7 +120,7 @@ class Pose(Point):
 
         return pose
 
-    def __rmul__(self, tf: "Transform") -> "Pose":
+    def __rmul__(self, tf: "Transform"):
         """Apply transformation.
 
         Args:
@@ -128,7 +130,7 @@ class Pose(Point):
             Pose transformed by tf.
         """
         with suppress(NotImplementedError, AttributeError):
-            return Pose(tf * Vector(self), self.get_angle() + tf.get_angle())
+            return self.__class__(tf * Vector(self), self.get_angle() + tf.get_angle())
 
         return NotImplemented
 

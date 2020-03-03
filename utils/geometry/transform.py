@@ -12,10 +12,12 @@ import numpy as np
 
 from contextlib import suppress
 
-__author__ = "Konstantin Ditschuneit"
+from . import export
+
 __copyright__ = "KITcar"
 
 
+@export
 class Transform(Vector):
     """Transformation class consisting of a translation and a rotation.
 
@@ -135,7 +137,7 @@ class Transform(Vector):
         """
 
         if type(tf) == Transform:
-            return Transform(self + Vector(tf).rotated(self.get_angle()), self.get_angle() + tf.get_angle())
+            return Transform(Vector(self) + Vector(tf).rotated(self.get_angle()), self.get_angle() + tf.get_angle())
 
         return NotImplemented
 

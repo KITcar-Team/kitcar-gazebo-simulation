@@ -10,10 +10,12 @@ import numbers
 
 from contextlib import suppress
 
-__author__ = "Konstantin Ditschuneit"
+from . import export
+
 __copyright__ = "KITcar"
 
 
+@export
 class Vector(shapely.geometry.point.Point):
     """Vector class which inherits from shapely's Point class and implements a vector in the mathematical sense.
 
@@ -89,7 +91,7 @@ class Vector(shapely.geometry.point.Point):
         """
         return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
-    def rotated(self, angle: float) -> "Vector":
+    def rotated(self, angle: float):
         """This vector rotated around [0,0,0] in the x-y-plane.
 
         Args:
@@ -102,28 +104,28 @@ class Vector(shapely.geometry.point.Point):
         c = math.cos(angle)
         s = math.sin(angle)
         # Matrix multiplication
-        return Vector(c * self.x - s * self.y, s * self.x + c * self.y, self.z)
+        return self.__class__(c * self.x - s * self.y, s * self.x + c * self.y, self.z)
 
-    def __sub__(self, vec: "Vector") -> "Vector":
+    def __sub__(self, vec):
         """Subtracted by a another vector."""
-        return Vector(self.x - vec.x, self.y - vec.y, self.z - vec.z)
+        return self.__class__(self.x - vec.x, self.y - vec.y, self.z - vec.z)
 
-    def __add__(self, vec: "Vector") -> "Vector":
+    def __add__(self, vec):
         """Another vector added."""
-        return Vector(self.x + vec.x, self.y + vec.y, self.z + vec.z)
+        return self.__class__(self.x + vec.x, self.y + vec.y, self.z + vec.z)
 
-    def __mul__(self, vec: "Vector") -> "Vector":
+    def __mul__(self, vec: "Vector") -> float:
         """Scalar product.
 
         Returns:
             :math:`\\vec{vec} \\cdot \\vec{v}`
             """
-        if isinstance(vec, Vector):
+        if isinstance(vec, self.__class__):
             return vec.x * self.x + vec.y * self.y + vec.z * self.z
 
         return NotImplemented
 
-    def __rmul__(self, c) -> "Vector":
+    def __rmul__(self, c):
         """Scale vector by number c.
 
         Args:
@@ -135,10 +137,10 @@ class Vector(shapely.geometry.point.Point):
 
         # If c is a transform
         with suppress(AttributeError):
-            return self.rotated(c.get_angle()) + Vector(c)
+            return self.rotated(c.get_angle()) + self.__class__(c)
 
         if isinstance(c, numbers.Number):
-            return Vector(c * self.x, c * self.y, c * self.z)
+            return self.__class__(c * self.x, c * self.y, c * self.z)
 
         return NotImplemented
 
