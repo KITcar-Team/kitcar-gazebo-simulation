@@ -106,7 +106,9 @@ class NodeBase:
         rospy.on_shutdown(self.__shutdown)
 
         # Node is by default active
-        if self.param.active is None:
+        try:
+            self.param.active
+        except KeyError:
             self.param.active = True
 
     def __shutdown(self):
@@ -219,20 +221,19 @@ class ParameterObject:
         Returns:
             Value of the parameter in this namespace with key ``key`` or a ParameterObject in the subnamespace
             of ``key``.
+
+        Raises:
+            KeyError if parameter is not found.
         """
-        try:
-            # Load the parameter
-            item = self._get_param(f"{self._ns}{key}")
-            # If the parameter is a dictionary, a new ParameterObject is returned
-            # with the current key appended to the namespace!
-            if type(item) == dict:
-                return ParameterObject(
-                    ns=f"{self._ns}{key}/", set_param_func=self._set_param, get_param_func=self._get_param
-                )
-            return item
-        # Ends up being raised when the parameter is not found by ROS!
-        except KeyError:
-            return None
+        # Load the parameter
+        item = self._get_param(f"{self._ns}{key}")
+        # If the parameter is a dictionary, a new ParameterObject is returned
+        # with the current key appended to the namespace!
+        if type(item) == dict:
+            return ParameterObject(
+                ns=f"{self._ns}{key}/", set_param_func=self._set_param, get_param_func=self._get_param
+            )
+        return item
 
     def __setattr__(self, key: str, value: Any):
         """Setting the value of an attribute."""
