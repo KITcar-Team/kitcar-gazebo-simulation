@@ -154,7 +154,7 @@ def dr_drift():
     return """
     <include>
         <uri>model://dr_drift</uri>
-        <pose>0 -.2 0.01 0 0 0</pose>
+        <pose>0 0 0.01 0 0 0</pose>
     </include>
     """
 

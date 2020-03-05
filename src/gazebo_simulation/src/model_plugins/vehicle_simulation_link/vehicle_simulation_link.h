@@ -42,9 +42,13 @@ class VehicleSimulationLink : public ModelPlugin, public NodeBase {
  private:
   //!
   //! \brief updates the model's linear and angular velocity which makes the robot move
-  //! \todo How frequent is this function called? Are we dropping state estimation messages?
   //!
   void onWorldUpdate();
+
+  //!
+  //! \brief updates the model's linear and angular velocity which makes the robot move, but always sets the z coordinate to 0.
+  //!
+  void onWorldUpdateWithoutZ();
 
   //!
   //! \brief updates the
@@ -84,6 +88,9 @@ class VehicleSimulationLink : public ModelPlugin, public NodeBase {
 
 
   ros::Publisher reset_localization;  //! publisher to trigger a navigation localization reset
+
+  bool pose_param = false;
+  bool twist_param = false;
 
   Eigen::Vector3d speed;  //! the robots velocity obtained by the state estimation
   double yaw_rate = 0.0;  //! the robots yaw rate obtained by the state estimation

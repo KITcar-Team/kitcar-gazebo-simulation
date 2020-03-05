@@ -35,22 +35,31 @@ void VehicleSimulationLink::Load(physics::ModelPtr _parent, sdf::ElementPtr /*_s
 
 
   model = _parent;
-  update_connection = event::Events::ConnectWorldUpdateBegin(
-      std::bind(&VehicleSimulationLink::onWorldUpdate, this));
+
+  if (node_handle_.param("enable_z_coord", true)) {
+    update_connection = event::Events::ConnectWorldUpdateBegin(
+        std::bind(&VehicleSimulationLink::onWorldUpdate, this));
+  } else {
+    update_connection = event::Events::ConnectWorldUpdateBegin(
+        std::bind(&VehicleSimulationLink::onWorldUpdateWithoutZ, this));
+  }
+  pose_param = node_handle_.param("set_pose", false);
+  twist_param = node_handle_.param("set_twist", true);
 
   activateIfDesired();
 }
 
 void VehicleSimulationLink::onWorldUpdate() {
-  if (set_pose && node_handle_.param<bool>("set_pose", false)) {
+
+  if (set_pose && pose_param) {
     model->SetWorldPose(pose, true, false);
     set_pose = false;
   }
 
-  if (node_handle_.param<bool>("set_twist", true)) {
+  if (twist_param) {
     const auto pose = model->WorldPose();
-    Eigen::Quaternion<double> rotation(
-        pose.Rot().W(), pose.Rot().X(), pose.Rot().Y(), pose.Rot().Z());
+    auto rot = pose.Rot();
+    Eigen::Quaternion<double> rotation(rot.W(), rot.X(), rot.Y(), rot.Z());
     Eigen::Quaternion<double> vehicle_to_world = rotation.normalized();
     Eigen::Vector3d velocity_in_world = vehicle_to_world * speed;
     ignition::math::Vector3 prev_velocity_in_world = model->WorldLinearVel();
@@ -60,9 +69,25 @@ void VehicleSimulationLink::onWorldUpdate() {
     model->SetAngularVel(ignition::math::Vector3d(
         prev_angular_velocity_in_world.X(), prev_angular_velocity_in_world.Y(), yaw_rate));
   }
+}
 
-  // Also publish simulation to world transformation
-  // simulationWorldTransformation();
+void VehicleSimulationLink::onWorldUpdateWithoutZ() {
+
+  if (set_pose && pose_param) {
+    model->SetWorldPose(pose, true, false);
+    set_pose = false;
+  }
+
+  if (twist_param) {
+    const auto pose = model->WorldPose();
+    auto rot = pose.Rot();
+    Eigen::Quaternion<double> rotation(rot.W(), rot.X(), rot.Y(), rot.Z());
+    Eigen::Quaternion<double> vehicle_to_world = rotation.normalized();
+    Eigen::Vector3d velocity_in_world = vehicle_to_world * speed;
+    model->SetLinearVel(ignition::math::Vector3d(
+        velocity_in_world.x(), velocity_in_world.y(), 0));
+    model->SetAngularVel(ignition::math::Vector3d(0, 0, yaw_rate));
+  }
 }
 
 void VehicleSimulationLink::simulationWorldTransformation(const geometry_msgs::TransformStamped wv_stamped) {
@@ -115,6 +140,15 @@ void VehicleSimulationLink::tfCallback(const tf2_msgs::TFMessageConstPtr& msgs) 
   for (const auto& msg : msgs->transforms) {
     if (msg.header.frame_id == "world" && msg.child_frame_id == "vehicle") {
       simulationWorldTransformation(msg);
+      pose = ignition::math::Pose3d(
+          ignition::math::Vector3d(msg.transform.translation.x,
+                                   msg.transform.translation.y,
+                                   msg.transform.translation.z),
+          ignition::math::Quaterniond(msg.transform.rotation.w,
+                                      msg.transform.rotation.x,
+                                      msg.transform.rotation.y,
+                                      msg.transform.rotation.z));
+      set_pose = true;
     }
   }
 }
