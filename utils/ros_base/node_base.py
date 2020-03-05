@@ -115,6 +115,7 @@ class NodeBase:
         If the node was active before, self.stop is called.
         """
         if self.__active:
+            self.__active = False
             self.stop()
 
     def _get_param(self, key: str) -> Any:
@@ -156,29 +157,29 @@ class NodeBase:
             rate (float): Rate with which to update active/ not active status of the node
             function: Called with a frequency of ``rate`` when node is active
         """
+        rate = rospy.Rate(rate)
         while not rospy.is_shutdown():
             # Node should be active, but is not.
             if self.param.active and not self.__active:
+                self.__active = True
                 self.start()
                 rospy.loginfo(f"Activating {rospy.get_name()}")
             elif not self.param.active and self.__active:
+                self.__active = False
                 self.stop()
                 rospy.loginfo(f"Deactivating {rospy.get_name()}")
 
-            if self.param.active and function:
+            if self.__active and function:
                 function()
-            rospy.sleep(1 / rate)
+            rate.sleep()
 
     def start(self):
         """Called when activating the node."""
-        self.__active = True
+        pass
 
     def stop(self):
-        """Called when deactivating or shutting down the node.
-
-        Every subclass must implement this function.
-        """
-        self.__active = False
+        """Called when deactivating or shutting down the node."""
+        pass
 
 
 class ParameterObject:
