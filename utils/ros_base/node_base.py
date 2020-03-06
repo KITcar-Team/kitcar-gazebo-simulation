@@ -106,7 +106,9 @@ class NodeBase:
         rospy.on_shutdown(self.__shutdown)
 
         # Node is by default active
-        if self.param.active is None:
+        try:
+            self.param.active
+        except KeyError:
             self.param.active = True
 
     def __shutdown(self):
@@ -115,6 +117,7 @@ class NodeBase:
         If the node was active before, self.stop is called.
         """
         if self.__active:
+            self.__active = False
             self.stop()
 
     def _get_param(self, key: str) -> Any:
@@ -156,29 +159,29 @@ class NodeBase:
             rate (float): Rate with which to update active/ not active status of the node
             function: Called with a frequency of ``rate`` when node is active
         """
+        rate = rospy.Rate(rate)
         while not rospy.is_shutdown():
             # Node should be active, but is not.
             if self.param.active and not self.__active:
+                self.__active = True
                 self.start()
                 rospy.loginfo(f"Activating {rospy.get_name()}")
             elif not self.param.active and self.__active:
+                self.__active = False
                 self.stop()
                 rospy.loginfo(f"Deactivating {rospy.get_name()}")
 
-            if self.param.active and function:
+            if self.__active and function:
                 function()
-            rospy.sleep(1 / rate)
+            rate.sleep()
 
     def start(self):
         """Called when activating the node."""
-        self.__active = True
+        pass
 
     def stop(self):
-        """Called when deactivating or shutting down the node.
-
-        Every subclass must implement this function.
-        """
-        self.__active = False
+        """Called when deactivating or shutting down the node."""
+        pass
 
 
 class ParameterObject:
@@ -218,20 +221,19 @@ class ParameterObject:
         Returns:
             Value of the parameter in this namespace with key ``key`` or a ParameterObject in the subnamespace
             of ``key``.
+
+        Raises:
+            KeyError if parameter is not found.
         """
-        try:
-            # Load the parameter
-            item = self._get_param(f"{self._ns}{key}")
-            # If the parameter is a dictionary, a new ParameterObject is returned
-            # with the current key appended to the namespace!
-            if type(item) == dict:
-                return ParameterObject(
-                    ns=f"{self._ns}{key}/", set_param_func=self._set_param, get_param_func=self._get_param
-                )
-            return item
-        # Ends up being raised when the parameter is not found by ROS!
-        except KeyError:
-            return None
+        # Load the parameter
+        item = self._get_param(f"{self._ns}{key}")
+        # If the parameter is a dictionary, a new ParameterObject is returned
+        # with the current key appended to the namespace!
+        if type(item) == dict:
+            return ParameterObject(
+                ns=f"{self._ns}{key}/", set_param_func=self._set_param, get_param_func=self._get_param
+            )
+        return item
 
     def __setattr__(self, key: str, value: Any):
         """Setting the value of an attribute."""
