@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Vector"""
 
+from warnings import warn
 import shapely.geometry  # Base class
 import math  # For calculations
 
@@ -89,7 +90,8 @@ class Vector(shapely.geometry.point.Point):
             The norm as float.
 
         """
-        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+        warn("Vector(...).norm is deprecated. Use abs(Vector(...)) instead.", DeprecationWarning)
+        return abs(self)
 
     def rotated(self, angle: float):
         """This vector rotated around [0,0,0] in the x-y-plane.
@@ -109,6 +111,10 @@ class Vector(shapely.geometry.point.Point):
     def __sub__(self, vec):
         """Subtracted by a another vector."""
         return self.__class__(self.x - vec.x, self.y - vec.y, self.z - vec.z)
+
+    def __abs__(self):
+        """Eucledian norm of the vector."""
+        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
     def __add__(self, vec):
         """Another vector added."""

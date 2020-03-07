@@ -59,7 +59,7 @@ class ModuleTest(unittest.TestCase):
 
         # Test norm function and scalar product
         self.assertEqual(p1 * p3, p1.x * p3.x + p1.y * p3.y + p1.z * p3.z)
-        self.assertEqual(p1 * p1, p1.norm * p1.norm)
+        self.assertEqual(p1 * p1, abs(p1) * abs(p1))
         self.assertEqual(p1 * (p2 - p3), p1 * p2 - p1 * p3)
         self.assertEqual(p1 * p2, p2 * p1)
 
