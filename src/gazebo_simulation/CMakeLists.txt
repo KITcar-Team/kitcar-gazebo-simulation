@@ -171,8 +171,6 @@ add_subdirectory(src/model_plugins/vehicle_simulation_link)
 
 INCLUDE(src/sensor_camera/CMakeLists.txt)
 
-INCLUDE(src/sensor_tof/CMakeLists.txt)
-
 
 #############
 ## Install ##

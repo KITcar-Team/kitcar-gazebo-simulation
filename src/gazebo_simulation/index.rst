@@ -49,3 +49,16 @@ This node is not started in the master.launch file by default. It can be manuall
   roslaunch gazebo_simulation gazebo_rate_control_node.launch
 
 See :ref:`gazebo_rate_control_node` for more details.
+
+
+
+sensor_tof_node
+------------------------
+Gazebo does not provide distance sensors out of the box.
+The SensorTofNode converts the output of a depth camera into a distance by publishing the distance to the closest object.
+
+.. code-block::
+
+  roslaunch gazebo_simulation sensor_tof_node.launch name:=NAME_OF_SENSOR topic:=OUTPUT_TOPIC
+
+See :ref:`sensor_tof_node` for more details.

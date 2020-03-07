@@ -11,39 +11,40 @@
   <param name="gazebo/vehicle_simulation_link/enable_z_coord" value="$(arg link_allow_z)"/>
 
  
-	<!-- Remap simulated sensors to the topics used in KITcar brain -->
-	<remap from="/simulation/sensors/prepared/camera" to="/camera/image_raw"/>
-	<remap from="/simulation/sensors/prepared/depth_camera" to="/depth_camera/image_raw"/>
-	<remap from="/simulation/sensors/prepared/ultrasonic_sensor_back" to="/controller_interface/controller_interface/ultrasonic_sensor_back"/>
-	<remap from="/simulation/sensors/prepared/ultrasonic_sensor_front" to="/controller_interface/controller_interface/ultrasonic_sensor_front"/>
-	<remap from="/simulation/sensors/prepared/infrared_sensor_back" to="/controller_interface/controller_interface/infrared_sensor_back"/>
-	<remap from="/simulation/sensors/prepared/infrared_sensor_front" to="/controller_interface/controller_interface/infrared_sensor_front"/>
+  <!-- Remap simulated sensors to the topics used in KITcar brain -->
+  <remap from="/simulation/sensors/prepared/camera" to="/camera/image_raw"/>
+  <remap from="/simulation/sensors/prepared/depth_camera" to="/depth_camera/image_raw"/>
+  <remap from="/simulation/sensors/prepared/ultrasonic_sensor_back" to="/controller_interface/controller_interface/ultrasonic_sensor_back"/>
+  <remap from="/simulation/sensors/prepared/ultrasonic_sensor_front" to="/controller_interface/controller_interface/ultrasonic_sensor_front"/>
+  <remap from="/simulation/sensors/prepared/infrared_sensor_back" to="/controller_interface/controller_interface/infrared_sensor_back"/>
+  <remap from="/simulation/sensors/prepared/infrared_sensor_front" to="/controller_interface/controller_interface/infrared_sensor_front"/>
 
 
   <!-- Start the vehicle simulation -->
   <include file="$(find control_debug)/launch/vehicle_simulation_node.launch">
     <arg name="car_name" value="$(arg car_name)"/>
-		<!--arg name="coupled_type" value="high"/>
- 		<arg name="vehicle_simulation" value="coupled"/-->
+    <!--arg name="coupled_type" value="high"/>
+    <arg name="vehicle_simulation" value="coupled"/-->
   </include>
-	
-	<include file="$(find gazebo_simulation)/launch/sensor_camera_node.launch"/>
+  
+  <include file="$(find gazebo_simulation)/launch/sensor_camera_node.launch"/>
 
+  <!-- Simulate all time of flight sensors -->
   <include file="$(find gazebo_simulation)/launch/sensor_tof_node.launch">
-		<arg name="name" value="back"/> 
-		<arg name="topic" value="ultrasonic_sensor_back"/>
-	</include>
+    <arg name="name" value="back"/> 
+    <arg name="topic" value="ultrasonic_sensor_back"/>
+  </include>
   <include file="$(find gazebo_simulation)/launch/sensor_tof_node.launch">
-		<arg name="name" value="middle"/> 
-		<arg name="topic" value="infrared_sensor_back"/>
-	</include> 
+    <arg name="name" value="middle"/> 
+    <arg name="topic" value="infrared_sensor_back"/>
+  </include> 
   <include file="$(find gazebo_simulation)/launch/sensor_tof_node.launch">
-		<arg name="name" value="front"/> 
-		<arg name="topic" value="infrared_sensor_front"/>
-	</include>
+    <arg name="name" value="front"/> 
+    <arg name="topic" value="infrared_sensor_front"/>
+  </include>
   <include file="$(find gazebo_simulation)/launch/sensor_tof_node.launch">
-		<arg name="name" value="ahead"/> 
-		<arg name="topic" value="ultrasonic_sensor_front"/>
-	</include> 
+    <arg name="name" value="ahead"/> 
+    <arg name="topic" value="ultrasonic_sensor_front"/>
+  </include> 
 
 </launch>

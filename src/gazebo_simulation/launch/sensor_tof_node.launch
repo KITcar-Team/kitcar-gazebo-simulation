@@ -1,22 +1,12 @@
 <!-- KITcar launch script for sensor_tof -->
 <launch>
-
-  <arg name="start_activated" default="True" />
   <arg name="name"/>
   <arg name="topic"/>
 
-  <node pkg="gazebo_simulation" type="sensor_tof" output="screen" ns="gazebo_simulation" name="sensor_tof_$(arg name)_node">
-
-    <rosparam file="$(find gazebo_simulation)/param/sensor_tof/default.yaml" command="load" ns="default" />
-    <rosparam file="$(find gazebo_simulation)/param/sensor_tof/free_ride_mode.yaml" command="load" ns="free_ride_mode" />
-    <rosparam file="$(find gazebo_simulation)/param/sensor_tof/obstacle_mode.yaml" command="load" ns="obstacle_mode" />
-    <rosparam file="$(find gazebo_simulation)/param/sensor_tof/parking_mode.yaml" command="load" ns="parking_mode" />
-
+  <node pkg="gazebo_simulation" type="sensor_tof_node" output="screen" ns="gazebo_simulation" name="sensor_tof_$(arg name)_node">
+    <rosparam file="$(find gazebo_simulation)/param/sensor_tof/default.yaml" command="load" />
     <param name="frame_id" value="ir_$(arg name)" />
-    <param name="sub_topic" value="/simulation/sensors/raw/distance_$(arg name)_points" />
-    <param name="pub_topic" value="/simulation/sensors/prepared/$(arg topic)" />
-    <!--param name="pub_topic" value="/controller_interface/controller_interface/$(arg topic)" /-->
-
-    <param name="start_activated" value="$(arg start_activated)" />
+    <param name="topics/depth_camera" value="/simulation/sensors/raw/distance_$(arg name)_points" />
+    <param name="topics/tof_sensor" value="/simulation/sensors/prepared/$(arg topic)" />
   </node>
 </launch>
