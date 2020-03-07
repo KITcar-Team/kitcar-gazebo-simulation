@@ -1,0 +1,9 @@
+<!-- Just for highlighting -->
+<launch>
+
+  <node name="gazebo_rate_control_node" ns="gazebo_simulation" pkg="gazebo_simulation" type="gazebo_rate_control_node" output="screen">
+    <rosparam file="$(find gazebo_simulation)/param/gazebo_rate_control/default.yaml" command="load"/>
+    <rosparam file="$(find gazebo_simulation)/param/gazebo_rate_control/topics.yaml" command="load" ns="topics"/>
+  </node>
+
+</launch>

@@ -72,7 +72,7 @@
     <arg name="pub_clock_frequency" default="$(arg gz_pub_clock_frequency)"/>
   </include>
 
-  <include if="$(arg control_sim_rate)" file="$(find gazebo_simulation)/launch/gazebo_timer_node.launch" />
+  <include if="$(arg control_sim_rate)" file="$(find gazebo_simulation)/launch/gazebo_rate_control_node.launch" />
 
   <!-- GUI -->
   <group if="$(arg gui)">

@@ -36,3 +36,16 @@ It can be launched by running
 
 By default the parameter *rviz* is *true* and an additional visualization node is launched, displaying the car's frame and field of view in rviz.
 See :ref:`car_state_node` for more details.
+
+gazebo_rate_control_node
+------------------------
+The gazebo_rate_control_node can control Gazebo's maximum update rate to ensure that a specified topic publishes with a large enough rate.
+It is primarily needed because Gazebo does not ensure a sensor update rate in Docker containers, which leads to low camera rates (e.g. *8Hz*).
+
+This node is not started in the master.launch file by default. It can be manually started by passing the parameter *control_sim_rate:=true* or running:
+
+.. code-block::
+
+  roslaunch gazebo_simulation gazebo_rate_control_node.launch
+
+See :ref:`gazebo_rate_control_node` for more details.
