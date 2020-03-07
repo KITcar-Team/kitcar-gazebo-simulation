@@ -1,0 +1,7 @@
+gazebo_models: '/gazebo/model_states'
+car_state: '/simulation/car_state'
+
+# Visualization topics
+rviz:
+  frame: '/simulation/car_state/visualization/frame'
+  cone: '/simulation/car_state/visualization/view_cone'

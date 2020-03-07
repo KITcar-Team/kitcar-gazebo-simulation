@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+import sys
+import unittest
+import rospy
+import math
+
+import gazebo_msgs.srv as gazebo_srvs
+
+from gazebo_simulation.msg import CarState as CarStateMsg
+from visualization_msgs.msg import Marker
+
+from geometry.vector import Vector
+from geometry.pose import Pose
+from geometry.point import Point
+from geometry.polygon import Polygon
+import geometry_msgs.msg as geometry_msgs
+from ros_base.node_base import NodeBase
+from functools import partial
+
+PKG = "gazebo_simulation"
+
+
+class CarStateNodeTest(unittest.TestCase, NodeBase):
+    """Unittest that is executed through a ROS test and checks the functionality of the car_state_node
+    and the car_state_visualization_node.
+    """
+
+    def setUp(self):
+        NodeBase.__init__(self, name="test_car_state_node")
+
+        set_srv_topic = "/gazebo/set_model_state"
+
+        rospy.wait_for_service(set_srv_topic)
+
+        self.gazebo_set_state = rospy.ServiceProxy(set_srv_topic, gazebo_srvs.SetModelState)
+        self.car_state_listener = rospy.Subscriber(
+            self.param.topics.car_state, CarStateMsg, partial(self.callbacks, "car_state")
+        )
+        self.rviz_frame_listener = rospy.Subscriber(
+            self.param.topics.rviz.frame, Marker, partial(self.callbacks, "frame")
+        )
+        self.rviz_cone_listener = rospy.Subscriber(self.param.topics.rviz.cone, Marker, partial(self.callbacks, "cone"))
+
+    def tearDown(self):
+        self.car_state_listener.unregister()
+        self.rviz_frame_listener.unregister()
+        self.rviz_cone_listener.unregister()
+        self.gazebo_set_state.close()
+        rospy.signal_shutdown("Car state test done.")
+
+    def callbacks(self, desc, msg):
+        if desc == "car_state":
+            self.last_car_state = msg
+        elif desc == "frame":
+            self.last_frame = msg
+        elif desc == "cone":
+            self.last_cone = msg
+
+    def test_car_state_node(self):
+        """Basically just tell gazebo to put the car somewhere and check if CarStateMsg contains the new position.
+        Also test the visualization by making sure, that the topics receive rviz markers."""
+
+        pose = Pose(Point(3, 4, 0), math.pi)
+
+        new_state = gazebo_srvs.SetModelState()
+        new_state.model_name = self.param.car_name
+        new_state.pose = pose.to_geometry_msg()
+        new_state.twist = geometry_msgs.Twist(
+            linear=geometry_msgs.Vector3(0, 0, 0), angular=geometry_msgs.Vector3(0, 0, 0)
+        )
+        new_state.reference_frame = ""
+        self.gazebo_set_state(new_state)
+
+        # Wait for some time...
+        rospy.sleep(1)
+
+        # Check if last message is correct
+        self.assertAlmostEqual(
+            Vector(Pose(self.last_car_state.pose)), Vector(pose), delta=self.param.tolerance
+        )  # Not nice...
+        self.assertAlmostEqual(
+            Pose(self.last_car_state.pose).get_angle(), pose.get_angle(), delta=self.param.tolerance
+        )  # Not nice...
+
+        # Check if there were any rviz markers
+        self.assertIsNotNone(self.last_frame)
+        self.assertIsNotNone(self.last_cone)
+
+        # Some minimal sanity checks
+        frame = Polygon(self.last_frame.points)
+        cone = Polygon(self.last_cone.points)
+
+        self.assertTrue(frame.contains(pose))  # Frame should contains the vehicles position
+        self.assertTrue(
+            frame.intersects(cone)
+        )  # View cone should start inside the cars frame and therefore also intersect
+
+
+if __name__ == "__main__":
+    import rostest
+
+    rostest.rosrun(PKG, "test_car_state_node", CarStateNodeTest, sys.argv)

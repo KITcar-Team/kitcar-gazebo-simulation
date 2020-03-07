@@ -1,14 +1,10 @@
 #! /usr/bin/env python3
 import rospy
+from contextlib import suppress
 
+from car_state.node import CarStateNode
 
-from car_state.car_state_node import CarStateNode
-
-if __name__ == '__main__':
-    # Initialize the node and name it.
-    #rospy.init_node('simulation_groundtruth')
-    # Go to class functions that do all the heavy lifting.
-    try:
+if __name__ == "__main__":
+    # Start the node
+    with suppress(rospy.ROSInterruptException):
         CarStateNode()
-    except rospy.ROSInterruptException:
-        pass

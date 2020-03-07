@@ -23,3 +23,16 @@ The ModelInterfaceNode class allows to set/get the poses and twists of models in
   roslaunch gazebo_simulation model_interface_node.launch
 
 See :ref:`model_interface_node` for more details.
+
+car_state_node
+----------------
+The car_state_node subscribes to Gazebo updates and publishes information
+about the cars current state in shape of a CarStateMsg.
+It can be launched by running
+
+.. code-block::
+
+  roslaunch gazebo_simulation car_state_node.launch
+
+By default the parameter *rviz* is *true* and an additional visualization node is launched, displaying the car's frame and field of view in rviz.
+See :ref:`car_state_node` for more details.
