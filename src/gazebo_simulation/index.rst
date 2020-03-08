@@ -13,3 +13,13 @@ There are also the master.launch file inside the **launch**-folder which starts 
 See :ref:`getting_started` for details the master.launch file.
 
 Parameters used in nodes throughout this package are either defined in **param** or directly in the launch files used to start the node.
+
+model_interface_node
+------------------------
+The ModelInterfaceNode class allows to set/get the poses and twists of models in gazebo.
+
+.. code-block::
+
+  roslaunch gazebo_simulation model_interface_node.launch
+
+See :ref:`model_interface_node` for more details.

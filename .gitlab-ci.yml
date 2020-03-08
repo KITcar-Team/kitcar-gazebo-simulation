@@ -100,3 +100,12 @@ test-road-generation:
     - cd models/env_db
     - ./generate.sh -r default-road
     - ./generate.sh -r curves
+
+test-gazebo-simulation:
+  stage: test
+  script:
+    - cd models/env_db
+    - ./generate.sh -r curves
+    - cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation
+    - catkin_make run_tests_gazebo_simulation -j1
+    - catkin_test_results # Ensure that pipeline fails when test fails

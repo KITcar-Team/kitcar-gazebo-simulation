@@ -64,9 +64,20 @@ include_directories(SYSTEM {OpenCV_INCLUDE_DIRS})
 #Setup python
 catkin_python_setup()
 
+## Generate messages in the 'msg' folder
 add_message_files(
   FILES 
-  CarStateMsg.msg
+  CarState.msg
+)
+
+## Generate services in the 'srv' folder
+add_service_files(
+   FILES
+   GetModelPose.srv
+   SetModelPose.srv
+   GetModelTwist.srv
+   SetModelTwist.srv
+#   Service2.srv
 )
 
 generate_messages(
@@ -75,20 +86,6 @@ generate_messages(
   std_msgs
 )
 
-
-## Generate messages in the 'msg' folder
-# add_message_files(
-#  FILES
-#  MissionMode.msg
-#   Message2.msg
-# )
-
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -229,4 +226,5 @@ INCLUDE(src/sensor_tof/CMakeLists.txt)
 # catkin_add_nosetests(test)
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
+  add_rostest(launch/test/model_interface_node.test)
 endif()

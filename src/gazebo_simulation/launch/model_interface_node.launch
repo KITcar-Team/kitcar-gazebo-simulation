@@ -1,0 +1,7 @@
+<!-- KITcar launch script for model interface-->
+<launch>
+  <node pkg="gazebo_simulation" type="model_interface_node" output="screen" ns="gazebo_simulation" name="model_interface_node">
+    <rosparam file="$(find gazebo_simulation)/param/model_interface/default.yaml" command="load" />
+    <rosparam file="$(find gazebo_simulation)/param/model_interface/topics.yaml" command="load" ns="topics"/>
+  </node>
+</launch>
