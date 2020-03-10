@@ -1,28 +1,23 @@
 image: kitcar/docker-gazebo-build:latest
 
 variables:
-  CCACHE_DIR: "ccache"
   GIT_STRATEGY: clone
-  PIP3_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - ccache
-    - .cache/pip
-    - venv/
+    - .venv/
 
 before_script:
   #Run the container start script to enable the pulseaudio & xserver
   - bash /start_script.sh
-  #Install python packages
-  - mkdir -p .pip
-  - python3 -V               # Print out python version for debugging
+
+  # Print out python version for debugging
+  - python3 -V
+  #Install python packages # use a virtual environment to use CI cache
   - pip3 install virtualenv
-  - virtualenv venv
-  - source venv/bin/activate
+  - virtualenv .venv
+  - source .venv/bin/activate
   - pip3 install -r requirements.txt
-  - mkdir -p ccache
 
   #Move kitcar-ros to $KITCAR_REPO_PATH
   - export KITCAR_REPO_PATH=/builds/kitcar/
@@ -31,7 +26,7 @@ before_script:
   - source $KITCAR_REPO_PATH/kitcar-ros/init/bashrc || true
   - fi
 
-  #Source init 
+  #Source init / This fails when the simulation has not been built
   - source init/bashrc || true
 
 after_script:
@@ -41,103 +36,67 @@ after_script:
   - mv $KITCAR_REPO_PATH/kitcar-ros kitcar-ros
   - fi
 
-
-
 stages:
-  - prebuild-test # Some tests are performed before building, to filter easy mistakes
   - build
   - test
-  - deploy
 
-######## PREBUILD STAGE #########
-#Test basics before attempting to build!
+######## BUILD STAGE ########
+# buikd kitcar-ros and simulation
+build-code:
+  stage: build
+  script: &build-all
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-ros.git $KITCAR_REPO_PATH/kitcar-ros
+    - cd $KITCAR_REPO_PATH/kitcar-ros
+    # Build only necessary parts of brain and debugger!
+    - cd $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain
+    - catkin_make --only-pkg-with-deps common state_estimation_msgs longitudinal_controller_msgs lateral_controller_msgs
 
+    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
+    - cd  $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger
+    - catkin_make --only-pkg-with-deps control_debug
+
+    - cd  $KITCAR_REPO_PATH/kitcar-gazebo-simulation
+    - catkin_make
+  artifacts:
+    paths:
+      - kitcar-ros
+      - devel
+      - build
+    expire_in: 2 hrs
+
+# Build the sphinx documentation
+# If this is the master branch, the website deployer will also update doc.kitcar-team.de!
+build-documentation:
+  stage: build
+  script:
+    - cd docs
+    - make html
+  artifacts: # Extract artifacts to view the documentation that has been generated
+    paths:
+      - docs/_build/html/*
+    expire_in: 2 day
+
+######## TEST STAGE #########
 
 # Test if dr_drift generation script works
 test-dr_drift:
-    stage: prebuild-test
-    script: &prebuild-dr_drift
-        - cd models/model_db/dr_drift
-        - ./generate.sh
-        #TODO: Also test if the calibration is actually correct.
+  stage: test
+  script: &prebuild-dr_drift
+    - cd models/model_db/dr_drift
+    - ./generate.sh
+    #TODO: Also test if the calibration is actually correct.
 
+# Run module test in utils packages
 test-utils:
-  stage: prebuild-test
+  stage: test
   script: &prebuild-test-utils
     - python3 utils/geometry/module_test.py
     - python3 utils/ros_base/test/parameter_object_test.py
 
+# Generate some roads, just for testing
 test-road-generation:
-  stage: prebuild-test
+  stage: test
   script: &prebuild-generation
     - cd models/env_db
     - ./generate.sh -r default-road
     - ./generate.sh -r curves
-
-
-# Simply test if the documentation can be generated.
-test-documentation-generation:
-  stage: prebuild-test
-  script:
-    - cd docs
-    - make html
-
-######## BUILD STAGE ########
-# buikd kitcar-ros and simulation
-build:
-    stage: build
-    script: &build-all
-        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-ros.git $KITCAR_REPO_PATH/kitcar-ros
-        - cd $KITCAR_REPO_PATH/kitcar-ros
-        - git submodule sync --recursive
-        - git submodule update --init --recursive
-        - git clean -d -f -f KITcar_external/src
-        #External
-        - echo "CCACHE_DIR=$CCACHE_DIR"
-        - cd $KITCAR_REPO_PATH/kitcar-ros/KITcar_external
-        - catkin_make #-DCMAKE_BUILD_TYPE=Coverage
-        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash --extend
-        #Brain
-        - cd $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain
-        - catkin_make  #-DCMAKE_BUILD_TYPE=Coverage
-        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
-        - cd  $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger
-        - catkin_make #-DCMAKE_BUILD_TYPE=Coverage
-        - cd  $KITCAR_REPO_PATH/kitcar-gazebo-simulation
-        - catkin_make
-    artifacts:
-        paths:
-        - kitcar-ros
-        - devel
-        - build
-        expire_in: 2 hrs
-   
-
-test-start-process:
-    stage: test
-    script: &test-start
-        #Perform sourcing
-        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_external/devel/setup.bash 
-        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
-        - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger/devel/setup.bash --extend
-        - source devel/setup.bash --extend
-        
-        # Generate road
-        - cd models/env_db
-        - ./generate.sh -r curves
-
-        # Run test
-        - rostest gazebo_simulation start_road.test
-
-deploy-sphinx-documentation:
-  stage: deploy
-  script:
-    - cd docs
-    - make html
-  artifacts:
-    paths:
-      - docs/_build/html/*
-    expire_in: 1 day
-  only:
-    - master
-    
