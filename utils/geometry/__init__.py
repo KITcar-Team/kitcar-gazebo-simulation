@@ -1,7 +1,8 @@
-"""Geometry module init.py
+"""Definition of the geometry module
 
-Collect geometry classes which are decorated with @export.
+Collect classes and functions which should be included in the geometry module.
 """
+from typing import List, Any
 
 # Decorator to easily add classes/functions to the geometry module.
 def export(define):
@@ -12,12 +13,12 @@ def export(define):
     return define
 
 
-__all__ = []
+__all__: List[Any] = []  # Will hold all classes/functions which can be imported with 'from geometry import ...'
 
-# Collect the classes defined in geometry
-from .vector import *
-from .point import *
-from .transform import *
-from .pose import *
-from .line import *
-from .polygon import *
+# import all files which are part of the geometry module
+import geometry.vector  # noqa:402
+import geometry.point  # noqa:402
+import geometry.transform  # noqa:402
+import geometry.pose  # noqa:402
+import geometry.line  # noqa:402
+import geometry.polygon  # noqa:402

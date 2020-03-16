@@ -14,6 +14,8 @@ from geometry.transform import Transform
 
 from contextlib import suppress
 
+from typing import List
+
 from . import export
 
 __copyright__ = "KITcar"
@@ -69,7 +71,7 @@ class Polygon(shapely.geometry.polygon.Polygon):
         # None of the initializations worked
         raise NotImplementedError(f"Polygon initialization not implemented for {type(args[0])}")
 
-    def get_points(self) -> [Point]:
+    def get_points(self) -> List[Point]:
         """Points of polygon.
 
         Returns:

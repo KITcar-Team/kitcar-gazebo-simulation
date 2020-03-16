@@ -8,6 +8,7 @@ from road_generation import schema
 
 from geometry.transform import Transform
 from geometry.vector import Vector  # Base class
+
 from . import export
 
 __copyright__ = "KITcar"
@@ -29,14 +30,14 @@ class Point(Vector):
 
     """
 
-    def to_geometry_msg(self):
+    def to_geometry_msg(self) -> geometry_msgs.Point:
         """To ROS geometry_msg.
 
         Returns:
             This point as a geometry_msgs/Point """
         return geometry_msgs.Point(x=self.x, y=self.y, z=self.z)
 
-    def to_schema(self):
+    def to_schema(self) -> schema.point:
         """To schema Point.
 
         Mainly used in lanelets for road generation.
@@ -45,7 +46,7 @@ class Point(Vector):
             This point as a schema Point."""
         return schema.point(x=self.x, y=self.y)
 
-    def rotated(self, num):
+    def rotated(self, *args, **kwargs):
         raise InvalidPointOperationError("A point cannot be rotated.")
 
     def __sub__(self, p):
@@ -58,7 +59,8 @@ class Point(Vector):
             raise InvalidPointOperationError("A point can only be modified by a vector.")
         return super(Point, self).__add__(p)
 
-    def __rmul__(self, obj):
+    def __rmul__(self, obj: Transform):
+        """Right multiplication of a point. Only defined for transformations."""
         if type(obj) == Transform:
             # Transform * self
             return self.__class__(obj * Vector(self))

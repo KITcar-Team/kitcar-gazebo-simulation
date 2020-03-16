@@ -108,8 +108,23 @@ class Vector(shapely.geometry.point.Point):
         # Matrix multiplication
         return self.__class__(c * self.x - s * self.y, s * self.x + c * self.y, self.z)
 
+    def cross(self, vec: "Vector") -> "Vector":
+        """Cross product with other vector.
+
+        Args:
+            vec(Vector): Second vector.
+
+        Returns:
+            Resulting vector.
+        """
+
+        x = self.y * vec.z - self.z * vec.y
+        y = self.z * vec.x - self.x * vec.z
+        z = self.x * vec.y - self.y * vec.x
+
+        return Vector(x, y, z)
+
     def __sub__(self, vec):
-        """Subtracted by a another vector."""
         return self.__class__(self.x - vec.x, self.y - vec.y, self.z - vec.z)
 
     def __abs__(self):
@@ -117,7 +132,6 @@ class Vector(shapely.geometry.point.Point):
         return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
     def __add__(self, vec):
-        """Another vector added."""
         return self.__class__(self.x + vec.x, self.y + vec.y, self.z + vec.z)
 
     def __mul__(self, vec: "Vector") -> float:
@@ -150,7 +164,11 @@ class Vector(shapely.geometry.point.Point):
 
         return NotImplemented
 
-    def __eq__(self, vec: "Vector") -> bool:
-        """Decide if vectors are equal."""
+    def __eq__(self, vec) -> bool:
         TOLERANCE = 1e-8
-        return type(vec) == type(self) and (Vector(vec) - Vector(self)).norm < TOLERANCE
+        if not self.__class__ == vec.__class__:
+            return NotImplemented
+        return abs(Vector(vec) - Vector(self)) < TOLERANCE
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__qualname__}{tuple(round(val,8) for val in self.to_numpy())}"
