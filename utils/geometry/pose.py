@@ -134,5 +134,12 @@ class Pose(Point):
 
         return NotImplemented
 
-    def __eq__(self, pose):
-        return pose.orientation == self.orientation and self.to_numpy().all() == pose.to_numpy().all()
+    def __eq__(self, pose) -> bool:
+        TOLERANCE = 1e-8  # Radian!
+        if self.__class__ != pose.__class__:
+            return NotImplemented
+        return (self.get_angle() - pose.get_angle()) < TOLERANCE and self.to_numpy().all() == pose.to_numpy().all()
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__qualname__}(position={super().__repr__()},\
+                orientation= {round(math.degrees(self.get_angle()),4)} degrees)"

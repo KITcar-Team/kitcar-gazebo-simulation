@@ -90,7 +90,7 @@ test-dr_drift:
 test-utils:
   stage: test
   script: &prebuild-test-utils
-    - python3 utils/geometry/module_test.py
+    - python3 -m geometry.test
     - python3 utils/ros_base/test/parameter_object_test.py
 
 # Generate some roads, just for testing

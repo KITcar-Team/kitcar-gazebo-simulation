@@ -11,12 +11,50 @@ from road_generation import schema
 from geometry.point import Point
 from geometry.vector import Vector
 from geometry.transform import Transform
+from geometry.pose import Pose
 
 from contextlib import suppress
+
+from typing import List, Callable
 
 from . import export
 
 __copyright__ = "KITcar"
+
+#
+APPROXIMATION_DISTANCE = 0.00005
+CURVATURE_APPROX_DISTANCE = 0.04
+
+
+def ensure_valid_arc_length(*, approx_distance=APPROXIMATION_DISTANCE) -> Callable:
+    """Decorator to check if an arc length is on the line and can be used for approximation.
+
+    If the arc_length is too close to the end points of the line, it is moved further away from the edges.
+
+    Args:
+        approx_distance(float): Approximation step length to be used in further calculations.
+                                Arc length will be at least that far away from the end of the line."""
+
+    def wrapper(func):
+        def decorator(self, *args, **kwargs):
+
+            # Ensure that arc_length is not too close to the end points of the road.
+            arc_length = kwargs.get("arc_length")
+            if not (arc_length >= 0 and arc_length <= self.length):
+                raise ValueError("The provided arc length is less than 0 or greater than the line's length.")
+            elif self.length == 0:
+                raise ValueError("The line is too short.")
+
+            arc_length = max(arc_length, approx_distance)
+            arc_length = min(arc_length, self.length - approx_distance)
+
+            kwargs["arc_length"] = arc_length
+
+            return func(self, *args, **kwargs)
+
+        return decorator
+
+    return wrapper
 
 
 @export
@@ -52,7 +90,7 @@ class Line(shapely.geometry.linestring.LineString):
         # None of the initializations worked
         raise NotImplementedError(f"Line initialization not implemented for {type(args[0])}")
 
-    def get_points(self) -> [Point]:
+    def get_points(self) -> List[Point]:
         """Points of line.
 
         Returns:
@@ -85,16 +123,85 @@ class Line(shapely.geometry.linestring.LineString):
             elif side == "right":
                 v_orth = Vector((v.y, v.x * -1))
 
-            v_scaled = (offset / v_orth.norm) * v_orth
+            v_scaled = (offset / abs(v_orth)) * v_orth
             p = p1 + v_scaled
 
             new_line.append(p)
         return Line(new_line)
 
+    @ensure_valid_arc_length()
+    def interpolate_direction(self, *, arc_length: float) -> Vector:
+        """Interpolate the direction of the line as a vector.
+
+        Approximate by calculating difference vector of a point slightly further
+        and a point slightly before along the line.
+
+        Args:
+            arc_length (float): Length along the line starting from the first point
+
+        Raises:
+            ValueError: If the arc_length is less than 0 or more than the length of the line.
+
+        Returns:
+            Corresponding direction."""
+
+        n = Vector(self.interpolate(arc_length + APPROXIMATION_DISTANCE))
+        p = Vector(self.interpolate(arc_length - APPROXIMATION_DISTANCE))
+
+        d = n - p
+
+        return 1 / abs(d) * d
+
+    @ensure_valid_arc_length(approx_distance=CURVATURE_APPROX_DISTANCE)
+    def interpolate_curvature(self, *, arc_length: float) -> float:
+        """Interpolate the curvature at a given arc_length.
+
+        The curvature is approximated by calculating the Menger curvature as defined and described here:
+        https://en.wikipedia.org/wiki/Menger_curvature#Definition
+
+        Args:
+            arc_length (float): Length along the line starting from the first point
+
+        Raises:
+            ValueError: If the arc_length is less than 0 or more than the length of the line.
+
+        Returns:
+            Corresponding curvature."""
+
+        p = Vector(self.interpolate(arc_length - CURVATURE_APPROX_DISTANCE))  # Previous point
+        c = Vector(self.interpolate(arc_length))  # Point at current arc_length
+        n = Vector(self.interpolate(arc_length + CURVATURE_APPROX_DISTANCE))  # Next point
+
+        # Area of the triangle spanned by p, c, and n.
+        # The triangle's area can be computed by calculating the cross product of the vectors.
+        cross = (n - c).cross(p - c)
+
+        sign = 1 - 2 * (cross.z < 0)  # The z coordinates sign determines whether the curvature is positive or negative
+
+        return sign * 2 * abs(cross) / (abs(p - c) * abs(n - c) * abs(p - n))
+
+    @ensure_valid_arc_length(approx_distance=0)
+    def interpolate_pose(self, *, arc_length: float) -> Pose:
+        """Interpolate the pose a model travelling along this line has.
+
+        Args:
+            arc_length (float): Length along the line starting from the first point
+
+        Raises:
+            ValueError: If the arc_length is less than 0 or more than the length of the line.
+
+        Returns:
+            Corresponding pose."""
+
+        point = self.interpolate(arc_length)
+        orientation = self.interpolate_direction(arc_length=arc_length)
+
+        return Pose(Point(point), orientation)
+
     def to_schema_boundary(self) -> schema.boundary:
         """To schema.boundary.
 
-        Export line as the boundary of a schema lanelet. E.g. the left boundery of the right lanelet (= middle line).
+        Export line as the boundary of a schema lanelet. E.g. the left boundary of the right lanelet (= middle line).
 
         Returns:
             Line as schema.boundary
@@ -103,7 +210,7 @@ class Line(shapely.geometry.linestring.LineString):
         boundary.point = [p.to_schema() for p in self.get_points()]
         return boundary
 
-    def to_geometry_msgs(self) -> [geometry_msgs.Point]:
+    def to_geometry_msgs(self) -> List[geometry_msgs.Point]:
         """To ROS geometry_msgs.
 
         Returns:
@@ -149,4 +256,6 @@ class Line(shapely.geometry.linestring.LineString):
         return self.__class__(transformed.coords)
 
     def __eq__(self, line):
+        if not self.__class__ == line.__class__:
+            return NotImplemented
         return self.get_points() == line.get_points()

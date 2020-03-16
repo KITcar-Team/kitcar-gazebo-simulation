@@ -136,13 +136,19 @@ class Transform(Vector):
             The product transformation.
         """
 
-        if type(tf) == Transform:
-            return Transform(Vector(self) + Vector(tf).rotated(self.get_angle()), self.get_angle() + tf.get_angle())
+        if tf.__class__ == self.__class__:
+            return self.__class__(
+                Vector(self) + Vector(tf).rotated(self.get_angle()), self.get_angle() + tf.get_angle()
+            )
 
         return NotImplemented
 
-    def __eq__(self, tf: "Transform") -> bool:
-        with suppress(AttributeError):
-            return tf.rotation.normalised == self.rotation.normalised and self.to_numpy().all() == tf.to_numpy().all()
+    def __eq__(self, tf) -> bool:
+        if self.__class__ != tf.__class__:
+            return NotImplemented
+        return tf.rotation.normalised == self.rotation.normalised and Vector(self) == Vector(tf)
 
-        return NotImplemented
+    def __repr__(self) -> str:
+        return (
+            f"Transform(translation={super().__repr__()},rotation= {round(math.degrees(self.get_angle()),4)} degrees)"
+        )
