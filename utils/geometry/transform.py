@@ -87,23 +87,21 @@ class Transform(Vector):
         # None of the initializations worked
         raise NotImplementedError(f"Transform initialization not implemented for {type(args[0])}")
 
+    @property
+    def inverse(self) -> "Transform":
+        """Inverse transformation."""
+        return Transform(-1 * Vector(self).rotated(-self.get_angle()), -1 * self.get_angle())
+
     def get_angle(self) -> float:
         """Angle of rotation.
 
         Returns:
             The angle that a vector is rotated, when this transformation is applied."""
-        rot = self.rotation.normalised.rotate([1, 0, 0])
 
-        assert len(rot) == 3
-        assert abs(rot[0]) <= 1
-
-        sign = -1 if rot[1] < 0 else 1
-
-        try:
-            return sign * math.acos(rot[0])
-        except Exception as e:
-            print(e)
-            return 0
+        # Project the rotation axis onto the z axis to get the amount of the rotation that is in z direction!
+        # Also the quaternions rotation axis is sometimes (0,0,-1) at which point the angles flip their sign,
+        # taking the scalar product of the axis and z fixes that as well
+        return Vector(self.rotation.axis) * Vector(0, 0, 1) * self.rotation.radians
 
     def to_geometry_msg(self) -> geometry_msgs.Transform:
         """To ROS geometry_msg.

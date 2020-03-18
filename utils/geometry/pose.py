@@ -89,19 +89,12 @@ class Pose(Point):
         """Angle of orientation.
 
         Returns:
-            The angle that a vector is rotated, when this orientation is applied as a transformation."""
-        rot = self.orientation.normalised.rotate([1, 0, 0])
+            The angle that a vector is rotated, when this transformation is applied."""
 
-        assert len(rot) == 3
-        assert abs(rot[0]) <= 1
-
-        sign = -1 if rot[1] < 0 else 1
-
-        try:
-            return sign * math.acos(rot[0])
-        except Exception as e:
-            print(e)
-            return 0
+        # Project the rotation axis onto the z axis to get the amount of the rotation that is in z direction!
+        # Also the quaternions rotation axis is sometimes (0,0,-1) at which point the angles flip their sign,
+        # taking the scalar product of the axis and z fixes that as well
+        return Vector(self.orientation.axis) * Vector(0, 0, 1) * self.orientation.radians
 
     def to_geometry_msg(self) -> geometry_msgs.Pose:
         """To ROS geometry_msg.
