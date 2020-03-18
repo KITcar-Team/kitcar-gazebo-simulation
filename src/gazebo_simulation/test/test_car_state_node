@@ -3,19 +3,18 @@ import sys
 import unittest
 import rospy
 import math
+import random
 
-import gazebo_msgs.srv as gazebo_srvs
-
+# Messages
 from gazebo_simulation.msg import CarState as CarStateMsg
+from gazebo_simulation.msg import SetModelTwist, SetModelPose
 from visualization_msgs.msg import Marker
 
-from geometry.vector import Vector
-from geometry.pose import Pose
-from geometry.point import Point
-from geometry.polygon import Polygon
-import geometry_msgs.msg as geometry_msgs
+from geometry import Vector, Pose, Point, Polygon
 from ros_base.node_base import NodeBase
 from functools import partial
+
+# NOT NICE
 
 PKG = "gazebo_simulation"
 
@@ -25,14 +24,36 @@ class CarStateNodeTest(unittest.TestCase, NodeBase):
     and the car_state_visualization_node.
     """
 
+    @property
+    def set_twist_topic(self):
+        return (
+            self.param.topics.model_plugin.namespace
+            + "/"
+            + self.param.car_name
+            + "/"
+            + self.param.topics.model_plugin.set.twist
+        )
+
+    @property
+    def set_pose_topic(self):
+        return (
+            self.param.topics.model_plugin.namespace
+            + "/"
+            + self.param.car_name
+            + "/"
+            + self.param.topics.model_plugin.set.pose
+        )
+
+    def assert_approx_equal_pose(self, pose, pose2):
+        self.assertAlmostEqual(Vector(pose), Vector(pose2))
+        self.assertAlmostEqual(pose.get_angle(), pose2.get_angle(), delta=math.radians(0.02))
+
     def setUp(self):
-        NodeBase.__init__(self, name="test_car_state_node")
+        NodeBase.__init__(self, name="test_model_plugin_node")
 
-        set_srv_topic = "/gazebo/set_model_state"
+        self.set_twist_publisher = rospy.Publisher(self.set_twist_topic, SetModelTwist, queue_size=1)
+        self.set_pose_publisher = rospy.Publisher(self.set_pose_topic, SetModelPose, queue_size=1)
 
-        rospy.wait_for_service(set_srv_topic)
-
-        self.gazebo_set_state = rospy.ServiceProxy(set_srv_topic, gazebo_srvs.SetModelState)
         self.car_state_listener = rospy.Subscriber(
             self.param.topics.car_state, CarStateMsg, partial(self.callbacks, "car_state")
         )
@@ -41,46 +62,97 @@ class CarStateNodeTest(unittest.TestCase, NodeBase):
         )
         self.rviz_cone_listener = rospy.Subscriber(self.param.topics.rviz.cone, Marker, partial(self.callbacks, "cone"))
 
-    def tearDown(self):
-        self.car_state_listener.unregister()
-        self.rviz_frame_listener.unregister()
-        self.rviz_cone_listener.unregister()
-        self.gazebo_set_state.close()
-        rospy.signal_shutdown("Car state test done.")
+        # Reset pose / Reset twist
+        self.set_twist((SetModelTwist.LINEAR_X, 0), (SetModelTwist.LINEAR_Y, 0), (SetModelTwist.ANGULAR_Z, 0))
+        self.set_complete_pose(Pose([0, 0, 0], 0))
+
+        random.seed(self.param.seed + self._testMethodName)
+        # Wait
+        rospy.wait_for_message(self.param.topics.car_state, CarStateMsg)
+        rospy.sleep(self.param.sleep_time)
+
+        # Get initial z
+        self.init_z = self.last_received_pose.z
+
+    def set_twist(self, *args):
+        req = SetModelTwist()
+        req.keys, req.values = zip(*args)
+
+        self.set_twist_publisher.publish(req)
+
+    def set_pose(self, *args):
+        req = SetModelPose()
+        req.keys, req.values = zip(*args)
+        self.set_pose_publisher.publish(req)
+
+    def set_complete_pose(self, pose: Pose):
+        self.set_pose(
+            (SetModelPose.POSITION_X, pose.x),
+            (SetModelPose.POSITION_Y, pose.y),
+            (SetModelPose.POSITION_Z, pose.z),
+            (SetModelPose.ORIENTATION_W, pose.orientation.w),
+            (SetModelPose.ORIENTATION_X, pose.orientation.x),
+            (SetModelPose.ORIENTATION_Y, pose.orientation.y),
+            (SetModelPose.ORIENTATION_Z, pose.orientation.z),
+        )
 
     def callbacks(self, desc, msg):
         if desc == "car_state":
+            self.last_received_pose = Pose(msg.pose)
+            self.last_received_twist = msg.twist
             self.last_car_state = msg
         elif desc == "frame":
             self.last_frame = msg
         elif desc == "cone":
             self.last_cone = msg
 
-    def test_car_state_node(self):
+    def test_set_pose(self):
+        """Test to set a number of random poses and check if the model is always placed, where it should be!"""
+
+        for i in range(0, 20):
+            pose = Pose([random.random(), random.random(), self.init_z], random.random())
+            self.set_complete_pose(pose)
+
+            # Wait
+            rospy.sleep(self.param.sleep_time)
+
+            self.assert_approx_equal_pose(pose, self.last_received_pose)
+
+    def test_set_twist(self):
+        """Test to set a number of random twists and check if the model is always moving how it should be!"""
+
+        for i in range(0, 20):
+            lin = Vector(random.random(), random.random(), 0)
+            ang = Vector(0, 0, random.random())
+
+            self.set_twist(
+                (SetModelTwist.LINEAR_X, lin.x), (SetModelTwist.LINEAR_Y, lin.y), (SetModelTwist.ANGULAR_Z, ang.z),
+            )
+
+            # Wait
+            rospy.sleep(self.param.sleep_time)
+
+            rospy.loginfo(
+                f"Received: lin:{Vector(self.last_received_twist.linear)}, \
+                        ang:{Vector(self.last_received_twist.linear)},\nexpected: lin:{lin}, ang:{ang}"
+            )
+
+            self.assertAlmostEqual(Vector(self.last_received_twist.linear), lin)
+            self.assertAlmostEqual(Vector(self.last_received_twist.angular), ang)
+
+    def test_frame_cone_and_viz(self):
         """Basically just tell gazebo to put the car somewhere and check if CarStateMsg contains the new position.
         Also test the visualization by making sure, that the topics receive rviz markers."""
 
-        pose = Pose(Point(3, 4, 0), math.pi)
+        pose = Pose(Point(3, 4, self.init_z), math.pi)
 
-        new_state = gazebo_srvs.SetModelState()
-        new_state.model_name = self.param.car_name
-        new_state.pose = pose.to_geometry_msg()
-        new_state.twist = geometry_msgs.Twist(
-            linear=geometry_msgs.Vector3(0, 0, 0), angular=geometry_msgs.Vector3(0, 0, 0)
-        )
-        new_state.reference_frame = ""
-        self.gazebo_set_state(new_state)
+        self.set_complete_pose(pose)
 
         # Wait for some time...
-        rospy.sleep(1)
+        rospy.sleep(self.param.sleep_time)
 
         # Check if last message is correct
-        self.assertAlmostEqual(
-            Vector(Pose(self.last_car_state.pose)), Vector(pose), delta=self.param.tolerance
-        )  # Not nice...
-        self.assertAlmostEqual(
-            Pose(self.last_car_state.pose).get_angle(), pose.get_angle(), delta=self.param.tolerance
-        )  # Not nice...
+        self.assert_approx_equal_pose(pose, self.last_received_pose)
 
         # Check if there were any rviz markers
         self.assertIsNotNone(self.last_frame)

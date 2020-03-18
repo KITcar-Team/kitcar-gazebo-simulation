@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
     <model name="dr_drift">
-        <plugin filename="libvehicle_simulation_link.so" name="vehicle_simulation_link"/>
+        <plugin filename="libmodel_plugin_link.so" name="model_plugin_link"/>
         <static>0</static>
         <allow_auto_disable>1</allow_auto_disable>
         <link name="chassis">

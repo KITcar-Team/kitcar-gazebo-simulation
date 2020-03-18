@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-project(gazebo_simulation)
+project(simulation_brain_link)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -9,23 +9,23 @@ project(gazebo_simulation)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  genmsg
   roscpp
   rospy
-  eigen_conversions
+  cv_bridge
   image_transport
-  gazebo_ros
+  common
+  state_estimation_msgs
   message_generation
   std_msgs
   geometry_msgs
   )
+find_package(OpenCV REQUIRED COMPONENTS core imgproc calib3d video aruco)
 
 ## System dependencies are found with CMake's conventions
 
 # Depend on system install of Gazebo
 #find_package(Boost REQUIRED COMPONENTS)
-find_package(gazebo REQUIRED)
-find_package(Eigen3 REQUIRED)
+#include_directories(SYSTEM {OpenCV_INCLUDE_DIRS})
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -59,26 +59,21 @@ find_package(Eigen3 REQUIRED)
 #Setup python
 catkin_python_setup()
 
-## Generate messages in the 'msg' folder
-add_message_files(
-  FILES 
-  CarState.msg
-  SetModelTwist.msg
-  SetModelPose.msg
-)
-
-## Generate services in the 'srv' folder
+### Generate messages in the 'msg' folder
+#add_message_files(
+#  FILES 
+#)
+#
+### Generate services in the 'srv' folder
 #add_service_files(
 #   FILES
-#   Service2.srv
+##   Service2.srv
 #)
-
-generate_messages(
-  DEPENDENCIES
-  geometry_msgs
-  std_msgs
-)
-
+#
+#generate_messages(
+#  DEPENDENCIES
+#)
+#
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -118,10 +113,9 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES pre_cropping
 #  CATKIN_DEPENDS gazebo_ros_pkgs
   CATKIN_DEPENDS message_runtime
-  DEPENDS roscpp gazebo_ros
+  DEPENDS roscpp
 )
 
 ###########
@@ -131,15 +125,11 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-#  include
-  ${Boost_INCLUDE_DIR}
   ${catkin_INCLUDE_DIRS}
-  ${GAZEBO_INCLUDE_DIRS}
-  ${Eigen_INCLUDE_DIRS}
+#  include
 )
 
-add_subdirectory(src/model_plugin_link)
-#add_subdirectory(src/pre_cropping)
+INCLUDE(src/sensor_camera/CMakeLists.txt)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -149,7 +139,7 @@ add_subdirectory(src/model_plugin_link)
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/gazebo_simulation_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/simulation_brain_link_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -204,7 +194,7 @@ add_subdirectory(src/model_plugin_link)
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_gazebo_simulation.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_simulation_brain_link.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
@@ -213,6 +203,6 @@ add_subdirectory(src/model_plugin_link)
 # catkin_add_nosetests(test)
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
-  add_rostest(launch/test/car_state_node.test)
-  add_rostest(launch/test/model_plugin_link.test)
+  add_rostest(launch/test/vehicle_simulation_link.test)
+
 endif()

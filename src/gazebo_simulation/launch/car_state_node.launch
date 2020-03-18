@@ -7,7 +7,7 @@
     <param name="car_name" value="$(arg car_name)"/>
     <rosparam file="$(find gazebo_simulation)/param/car_state/default.yaml" command="load"/>
     <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics"/>
-    <rosparam file="$(find gazebo_simulation)/param/model_interface/topics.yaml" command="load" ns="topics/model_interface"/>
+    <rosparam file="$(find gazebo_simulation)/param/model_plugin/topics.yaml" command="load" ns="topics/model_plugin"/>
   </node>
 
 

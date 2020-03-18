@@ -32,24 +32,18 @@
 
   <!-- Launch KITcar_brain -->
   <group if="$(arg include_brain)">
-    <include file="$(find gazebo_simulation)/launch/brain.launch">
+    <include file="$(find simulation_brain_link)/launch/brain.launch">
       <arg name="car_name" value="$(arg car_name)"/>
     </include>
 
     <!-- Launch nodes to connect gazebo and kitcar brain -->
-    <include file="$(find gazebo_simulation)/launch/simulation_brain_link.launch">
+    <include file="$(find simulation_brain_link)/launch/vehicle_link.launch">
       <arg name="car_name" value="$(arg car_name)"/>
-      <arg name="link_pose" value="$(arg link_pose)"/>
-      <arg name="link_twist" value="$(arg link_twist)"/>
-      <arg name="link_allow_z" value="$(arg link_allow_z)"/>
+      <arg name="gui" value="$(arg gui)"/>
+      <arg name="rviz" value="$(arg rviz)"/>
     </include>
   </group>
 
-  <!-- Launch model_interface -->
-  <group if="$(arg model_interface)">
-    <include file="$(find gazebo_simulation)/launch/model_interface_node.launch">
-    </include>
-  </group>
   <!-- Launch car state -->
   <group if="$(arg car_state)">
     <include file="$(find gazebo_simulation)/launch/car_state_node.launch">
@@ -73,17 +67,5 @@
   </include>
 
   <include if="$(arg control_sim_rate)" file="$(find gazebo_simulation)/launch/gazebo_rate_control_node.launch" />
-
-  <!-- GUI -->
-  <group if="$(arg gui)">
-    <!-- Mission Mode GUI -->
-    <node pkg="rqt_mission_mode" type="rqt_mission_mode" name="rqt_mission_mode" output="screen"/>
-
-    <!-- RVIZ -->
-    <group if="$(arg rviz)">
-      <include file="$(find visualization)/launch/visualization.launch" />
-      <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-f simulation -d  $(find navigation_debug)/../../res/rviz/navigation_validation_w_camera.rviz -s $(find navigation_debug)/../../res/rviz/kitcar_logo.png"/>
-    </group>
-  </group>
 
 </launch>

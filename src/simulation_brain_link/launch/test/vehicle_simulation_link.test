@@ -1,6 +1,6 @@
 <launch>
   <arg name="tolerance" value="0.01"/>
-  <arg name="time_limit" value="30"/>
+  <arg name="time_limit" value="120"/>
   <arg name="sleep_time" value="0.5"/>
   <arg name="speed" value="0.1"/>
   <arg name="seed" value="KITCAR"/>
@@ -38,19 +38,24 @@
     <arg name="pub_clock_frequency" default="$(arg gz_pub_clock_frequency)"/>
   </include>
 
+  <include file="$(find simulation_brain_link)/launch/vehicle_simulation_link.launch">
+    <arg name="car_name" value="$(arg car_name)"/>
+  </include>
+
+
   <include file="$(find gazebo_simulation)/launch/car_state_node.launch">
     <arg name="car_name" value="$(arg car_name)"/>
   </include>
 
-  <test test-name="test_car_state_node" pkg="gazebo_simulation" time-limit="$(arg time_limit)" type="test_car_state_node">
+  <test test-name="test_vehicle_simulation_link_node" pkg="simulation_brain_link" time-limit="$(arg time_limit)" type="test_vehicle_simulation_link_node">
     <param name="car_name" value="$(arg car_name)"/>
     <param name="sleep_time" value="$(arg sleep_time)"/>
     <param name="tolerance" value="$(arg tolerance)"/>
     <param name="speed" value="$(arg speed)"/>
     <param name="seed" value="$(arg seed)"/>
-    <rosparam file="$(find gazebo_simulation)/param/car_state/default.yaml" command="load"/>
-    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics"/>
-    <rosparam file="$(find gazebo_simulation)/param/model_plugin/topics.yaml" command="load" ns="topics/model_plugin"/>
+    <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state"/>
   </test>
 
 </launch>

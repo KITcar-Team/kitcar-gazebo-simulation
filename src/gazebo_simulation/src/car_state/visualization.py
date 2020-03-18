@@ -19,13 +19,6 @@ __copyright__ = "KITcar"
 class CarStateVisualizationNode(NodeBase):
     """ROS node which allows to visualize the car state in rviz.
 
-    ROS Parameters (by default they are defined in gazebo_simulation/param/car_state.yaml):
-        * topics:
-            * car_state(str): Subscriber topic of car_state
-            * rviz:
-                * cone (str): Topic to publish the view cone
-                * frame (str): Topic to publish the car frame
-
     Attributes:
         frame_publisher (rospy.publisher): Publishes the cars frame as a rviz marker.
         view_cone_publisher (rospy.publisher): Publishes the cars view cone as a rviz marker.

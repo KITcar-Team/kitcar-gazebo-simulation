@@ -31,6 +31,7 @@ A number of components are needed to run the simulation. The following list are 
    :maxdepth: 2
  
    src/gazebo_simulation/index.rst
+   src/simulation_brain_link/index.rst
 
 
 .. _CaroloCup: https://wiki.ifr.ing.tu-bs.de/carolocup/news

@@ -5,7 +5,6 @@
 import os
 import rospy
 import yaml  # parse config file
-from functools import partial
 import numpy as np
 
 from ros_base.node_base import NodeBase
@@ -14,7 +13,6 @@ import car_model.camera_calibration as calibration
 
 import geometry_msgs.msg
 from gazebo_simulation.msg import CarState as CarStateMsg
-from gazebo_simulation.srv import GetModelPoseRequest, GetModelPose, GetModelTwistRequest, GetModelTwist
 
 __copyright__ = "KITcar"
 
@@ -22,20 +20,10 @@ __copyright__ = "KITcar"
 class CarStateNode(NodeBase):
     """ROS node which publishes information about the model in a CarState.
 
-    ROS Parameters (by default they are defined in gazebo_simulation/param/...):
-        * car_name (String): Name of the car_model in gazebo
-        * max_rate (float): Max. update rate of the publisher
-        * cone_points (int): Number of points used to approximate the vehicles view cone
-        * car_config (str): Path to car config file.
-        * topics:
-            * gazebo_models(str): Topic on which gazebo publishes model states
-            * car_state(str): Publisher topic of car_state
-
     Attributes:
         car_frame (shapely.geom.Polygon): Frame of car in vehicle coordinate system
-        _vehicle_pose_proxy (rospy.ServiceProxy): ServiceProxy to get the cars pose from model_interface service
-        get_vehicle_pose (Callable[[],None]: Returns current vehicle pose by calling the service proxy
-        _vehicle_twist_proxy (rospy.ServiceProxy): ServiceProxy to get the cars twist from model_interface service
+        model_pose_subscriber (rospy.Subscriber): Receive the cars pose
+        model_twist_subscriber (rospy.Subscriber): Receive the cars twist
         get_vehicle_twist (Callable[[],None]: Returns current vehicle twist by calling the service proxy
         publisher (rospy.publisher): CarStateMsg) publishes real time information about the car
     """
@@ -50,29 +38,49 @@ class CarStateNode(NodeBase):
         # Start running node.
         self.run(function=self.state_update, rate=self.param.max_rate)
 
+    def receive_pose(self, pose):
+        self.latest_vehicle_pose = pose
+
+    def receive_twist(self, twist):
+        self.latest_vehicle_twist = twist
+
     def start(self):
         """Start node."""
+
+        self.model_pose_subscriber = rospy.Subscriber(
+            self.param.topics.model_plugin.namespace
+            + "/"
+            + self.param.car_name
+            + "/"
+            + self.param.topics.model_plugin.get.pose,
+            geometry_msgs.msg.Pose,
+            self.receive_pose,
+            queue_size=1,
+        )
+
+        self.model_twist_subscriber = rospy.Subscriber(
+            self.param.topics.model_plugin.namespace
+            + "/"
+            + self.param.car_name
+            + "/"
+            + self.param.topics.model_plugin.get.twist,
+            geometry_msgs.msg.Twist,
+            self.receive_twist,
+            queue_size=1,
+        )
+
+        rospy.wait_for_message(self.model_pose_subscriber.name, geometry_msgs.msg.Pose)
+        rospy.wait_for_message(self.model_twist_subscriber.name, geometry_msgs.msg.Twist)
+
         self.publisher = rospy.Publisher(self.param.topics.car_state, CarStateMsg, queue_size=1)
-
-        rospy.wait_for_service(self.param.topics.model_interface.get.model_pose)
-        rospy.wait_for_service(self.param.topics.model_interface.get.model_twist)
-
-        # Use model interface service to get vehicles pose
-        self._vehicle_pose_proxy = rospy.ServiceProxy(self.param.topics.model_interface.get.model_pose, GetModelPose)
-        # Call proxy with car_name as input
-        self.get_vehicle_pose = partial(self._vehicle_pose_proxy, GetModelPoseRequest(self.param.car_name))
-
-        self._vehicle_twist_proxy = rospy.ServiceProxy(self.param.topics.model_interface.get.model_twist, GetModelTwist)
-        # Call proxy with car_name as input
-        self.get_vehicle_twist = partial(self._vehicle_twist_proxy, GetModelTwistRequest(self.param.car_name))
 
         super().start()
 
     def stop(self):
         """Turn off node."""
         super().stop()
-        self._vehicle_pose_proxy.close()
-        self._vehicle_twist_proxy.close()
+        self.model_pose_subscriber.unregister()
+        self.model_twist_subscriber.unregister()
         self.publisher.unregister()
 
     def read_car_config(self):
@@ -132,11 +140,13 @@ class CarStateNode(NodeBase):
         """Publish new CarState with updated information."""
 
         # Request current pose and twist from model_interface
-        pose: geometry_msgs.msg.Pose = self.get_vehicle_pose().pose
-        twist: geometry_msgs.msg.Twist = self.get_vehicle_twist().twist
+        pose: geometry_msgs.msg.Pose = self.latest_vehicle_pose
+        twist: geometry_msgs.msg.Twist = self.latest_vehicle_twist
 
         # Transform which is used to calculate frame and view cone
         tf = Transform(pose)
+
+        rospy.logdebug(f"State update transform: {tf.rotation}")
 
         # Create message
         msg = CarStateMsg()
@@ -147,4 +157,5 @@ class CarStateNode(NodeBase):
         if self.view_cone:
             msg.view_cone = (tf * self.view_cone).to_geometry_msg()
 
-        self.publisher.publish(msg)
+        if not rospy.is_shutdown():
+            self.publisher.publish(msg)
