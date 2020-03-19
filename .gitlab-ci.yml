@@ -100,3 +100,15 @@ test-road-generation:
     - cd models/env_db
     - ./generate.sh -r default-road
     - ./generate.sh -r curves
+
+test-gazebo-simulation:
+  stage: test
+  script:
+    - catkin_make run_tests_gazebo_simulation -j1
+    - catkin_test_results # Ensure that pipeline fails when test fails
+
+test-simulation-brain-link:
+  stage: test
+  script:
+    - catkin_make run_tests_simulation_brain_link -j1
+    - catkin_test_results # Ensure that pipeline fails when test fails

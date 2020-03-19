@@ -1,0 +1,12 @@
+<!-- KITcar launch script for sensor_tof -->
+<launch>
+  <arg name="name"/>
+  <arg name="topic"/>
+
+  <node pkg="simulation_brain_link" type="sensor_tof_node" output="screen" ns="simulation_brain_link" name="sensor_tof_$(arg name)_node">
+    <rosparam file="$(find simulation_brain_link)/param/sensor_tof/default.yaml" command="load" />
+    <param name="frame_id" value="ir_$(arg name)" />
+    <param name="topics/depth_camera" value="/simulation/sensors/raw/distance_$(arg name)_points" />
+    <param name="topics/tof_sensor" value="/simulation/sensors/prepared/$(arg topic)" />
+  </node>
+</launch>

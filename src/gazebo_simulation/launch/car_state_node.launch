@@ -1,21 +1,21 @@
 <!-- Just for highlighting -->
 <launch>
-  <arg name="start_activated" default="true" />
-  <arg name="car_name" default="dr_drift" />
-  <arg name="cone_points" default="10"/>
   <arg name="rviz" default="true"/>
+  <arg name="car_name" default="dr_drift" />
 
-  <node name="car_state_node" ns="gazebo_simulation" pkg="gazebo_simulation" type="car_state_node" output="screen">
-   <param name="start_activated" value="$(arg start_activated)" />
-   <param name="car_name" value="$(arg car_name)" />
-   <param name="cone_points" value="$(arg cone_points)" />
+  <node name="car_state" ns="simulation" pkg="gazebo_simulation" type="car_state_node" output="screen">
+    <param name="car_name" value="$(arg car_name)"/>
+    <rosparam file="$(find gazebo_simulation)/param/car_state/default.yaml" command="load"/>
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find gazebo_simulation)/param/model_plugin/topics.yaml" command="load" ns="topics/model_plugin"/>
   </node>
 
 
   
   <group if="$(arg rviz)">
     <node name="car_state_visualization_node" ns="gazebo_simulation" pkg="gazebo_simulation" type="car_state_visualization_node" output="screen">
-      <param name="start_activated" value="$(arg start_activated)" />
+      <rosparam file="$(find gazebo_simulation)/param/car_state/default.yaml" command="load"/>
+      <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics"/>
     </node> 
   </group>
 

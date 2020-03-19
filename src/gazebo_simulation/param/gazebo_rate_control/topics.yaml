@@ -1,0 +1,4 @@
+target: "/camera/image_raw"
+
+set_physics: "/gazebo/set_physics_properties"
+get_physics: "/gazebo/get_physics_properties"

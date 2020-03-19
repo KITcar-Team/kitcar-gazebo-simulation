@@ -1,0 +1,4 @@
+frame:
+  simulation: "simulation"
+  vehicle: "vehicle"
+  world: "world"

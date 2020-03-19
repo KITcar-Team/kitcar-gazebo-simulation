@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
     <model name="dr_drift">
-        <plugin filename="libvehicle_simulation_link.so" name="vehicle_simulation_link"/>
+        <plugin filename="libmodel_plugin_link.so" name="model_plugin_link"/>
         <static>0</static>
         <allow_auto_disable>1</allow_auto_disable>
         <link name="chassis">
@@ -143,10 +143,10 @@
             </visual>
             <sensor name="camera" type="depth">
                 <camera name="__default__">
-                    <horizontal_fov>0.436</horizontal_fov>
+                    <horizontal_fov>0.0349</horizontal_fov>
                     <image>
-                        <width>10</width>
-                        <height>10</height>
+                        <width>2</width>
+                        <height>2</height>
                         <format>L8</format>
                     </image>
                     <clip>
@@ -192,10 +192,10 @@
             </visual>
             <sensor name="camera" type="depth">
                 <camera name="__default__">
-                    <horizontal_fov>0.436</horizontal_fov>
+                    <horizontal_fov>0.0349</horizontal_fov>
                     <image>
-                        <width>10</width>
-                        <height>10</height>
+                        <width>2</width>
+                        <height>2</height>
                         <format>L8</format>
                     </image>
                     <clip>
@@ -241,10 +241,10 @@
             </visual>
             <sensor name="camera" type="depth">
                 <camera name="__default__">
-                    <horizontal_fov>0.436</horizontal_fov>
+                    <horizontal_fov>0.0349</horizontal_fov>
                     <image>
-                        <width>10</width>
-                        <height>10</height>
+                        <width>2</width>
+                        <height>2</height>
                         <format>L8</format>
                     </image>
                     <clip>
@@ -290,10 +290,10 @@
             </visual>
             <sensor name="camera" type="depth">
                 <camera name="__default__">
-                    <horizontal_fov>0.436</horizontal_fov>
+                    <horizontal_fov>0.0349</horizontal_fov>
                     <image>
-                        <width>10</width>
-                        <height>10</height>
+                        <width>2</width>
+                        <height>2</height>
                         <format>L8</format>
                     </image>
                     <clip>

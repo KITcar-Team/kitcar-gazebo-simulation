@@ -9,14 +9,12 @@ project(gazebo_simulation)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  genmsg
   roscpp
   rospy
-  cv_bridge
   eigen_conversions
   image_transport
   gazebo_ros
-  common
-  state_estimation_msgs
   message_generation
   std_msgs
   geometry_msgs
@@ -28,9 +26,6 @@ find_package(catkin REQUIRED COMPONENTS
 #find_package(Boost REQUIRED COMPONENTS)
 find_package(gazebo REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_package(PCL REQUIRED)
-find_package(OpenCV REQUIRED COMPONENTS core imgproc calib3d video aruco)
-include_directories(SYSTEM {OpenCV_INCLUDE_DIRS})
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -64,10 +59,19 @@ include_directories(SYSTEM {OpenCV_INCLUDE_DIRS})
 #Setup python
 catkin_python_setup()
 
+## Generate messages in the 'msg' folder
 add_message_files(
   FILES 
-  CarStateMsg.msg
+  CarState.msg
+  SetModelTwist.msg
+  SetModelPose.msg
 )
+
+## Generate services in the 'srv' folder
+#add_service_files(
+#   FILES
+#   Service2.srv
+#)
 
 generate_messages(
   DEPENDENCIES
@@ -75,20 +79,6 @@ generate_messages(
   std_msgs
 )
 
-
-## Generate messages in the 'msg' folder
-# add_message_files(
-#  FILES
-#  MissionMode.msg
-#   Message2.msg
-# )
-
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -146,10 +136,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${GAZEBO_INCLUDE_DIRS}
   ${Eigen_INCLUDE_DIRS}
-  ${PCL_INCLUDE_DIRS}
 )
 
-add_subdirectory(src/model_plugins/vehicle_simulation_link)
+add_subdirectory(src/model_plugin_link)
 #add_subdirectory(src/pre_cropping)
 
 ## Add cmake target dependencies of the library
@@ -171,11 +160,6 @@ add_subdirectory(src/model_plugins/vehicle_simulation_link)
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-INCLUDE(src/sensor_camera/CMakeLists.txt)
-
-INCLUDE(src/sensor_tof/CMakeLists.txt)
-
 
 #############
 ## Install ##
@@ -229,5 +213,6 @@ INCLUDE(src/sensor_tof/CMakeLists.txt)
 # catkin_add_nosetests(test)
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
-  add_rostest(test/start_road.test)
+  add_rostest(launch/test/car_state_node.test)
+  add_rostest(launch/test/model_plugin_link.test)
 endif()
