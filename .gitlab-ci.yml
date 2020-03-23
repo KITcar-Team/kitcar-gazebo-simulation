@@ -39,6 +39,7 @@ after_script:
 stages:
   - build
   - test
+  - deploy
 
 ######## BUILD STAGE ########
 # buikd kitcar-ros and simulation
@@ -64,17 +65,6 @@ build-code:
       - simulation/build
     expire_in: 2 hrs
 
-# Build the sphinx documentation
-# If this is the master branch, the website deployer will also update doc.kitcar-team.de!
-build-documentation:
-  stage: build
-  script:
-    - cd docs
-    - make html
-  artifacts: # Extract artifacts to view the documentation that has been generated
-    paths:
-      - docs/_build/html/*
-    expire_in: 2 day
 
 ######## TEST STAGE #########
 
@@ -114,3 +104,18 @@ test-simulation-brain-link:
     - cd simulation
     - catkin_make run_tests_simulation_brain_link -j1
     - catkin_test_results # Ensure that pipeline fails when test fails
+
+
+######### Documentation ########
+
+# Build the sphinx documentation
+# If this is the master branch, the website deployer will also update doc.kitcar-team.de!
+build-documentation:
+  stage: deploy
+  script:
+    - cd docs
+    - make html
+  artifacts: # Extract artifacts to view the documentation that has been generated
+    paths:
+      - docs/_build/html/*
+    expire_in: 2 day
