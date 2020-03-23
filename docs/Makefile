@@ -2,11 +2,9 @@
 #
 
 # You can set these variables from the command line.
-SPHINXOPTS    = -c .
+SPHINXOPTS    = -c . 
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = KITcarSimulation
-SOURCEDIR     = ..
-CONFIGDIR     = .
+SOURCEDIR     = ./content/
 BUILDDIR      = _build
 
 # Put it first so that "make" without argument is like "make help".

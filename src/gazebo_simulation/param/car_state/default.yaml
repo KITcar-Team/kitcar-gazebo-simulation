@@ -1,4 +1,0 @@
-car_name: 'dr_drift'
-cone_points: 10
-max_rate: 120
-car_config: "/kitcar-gazebo-simulation/models/model_db/dr_drift/dr_drift.yaml"

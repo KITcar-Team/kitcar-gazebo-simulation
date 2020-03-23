@@ -1,4 +1,4 @@
-KITCAR_GAZEBO_SIM_PATH=$KITCAR_REPO_PATH/kitcar-gazebo-simulation
+KITCAR_GAZEBO_SIM_PATH=$KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation
 
 source /usr/share/gazebo-9/setup.sh
 
