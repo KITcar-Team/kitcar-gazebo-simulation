@@ -19,46 +19,98 @@
 #
 import os
 import sys
+from unittest.mock import Mock
+from typing import List
 
 sys.path.insert(0, os.path.abspath(".."))
 
 
-# -- General configuration ------------------------------------------------
-
-# If your documentation needs a minimal Sphinx version, state it here.
-#
-# needs_sphinx = '1.0'
-
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.doctest",
-    "sphinx.ext.napoleon",
-    "sphinx.ext.todo",
-    "sphinx.ext.mathjax",
-    "sphinx.ext.coverage",
-    "sphinx.ext.githubpages",
+# Prevent all of these libraries to be installed just for the configuration
+MOCK_MODULES = [
+    "yaml",
+    "numpy",
+    "numpy.core.multiarray",
+    "PIL",
+    "pyxb",
+    "pyxb.binding",
+    "pyxb.binding.saxer",
+    "pyxb.utils",
+    "pyxb.utils.utility",
+    "pyxb.utils.domutils",
+    "pyxb.utils.six",
+    "pyxb.binding",
+    "pyxb.binding.datatypes",
+    "road_generation",
+    "road_generation.generator",
+    "road_generation.renderer",
+    "machine_learning.color_classes",
+    "simulation.utils.machine_learning",
+    "simulation.utils.machine_learning.nn",
+    "simulation.utils.machine_learning.database",
+    "simulation.utils.machine_learning.img",
 ]
 
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ["_templates"]
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = Mock()
 
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
-source_suffix = ".rst"
 
-# The master toctree document.
-master_doc = "index"
+def create_run_apidoc(root: str, exclude: List[str] = None):
+    """Create the run apidoc function which is used by better-apidoc to build .rst files from modules and packages."""
 
-# General information about the project.
+    def run_apidoc(app):
+        """Generate API documentation"""
+
+        apidoc_args = [
+            "better-apidoc",
+            "-a",
+            "-M",
+            "-t",
+            os.path.join(".", "templates"),
+            "--force",
+            "--no-toc",
+            "--separate",
+            "--ext-autodoc",
+            "--ext-coverage",
+            "-o",
+            os.path.join(".", "content", "_source_files/"),
+            root,
+        ]
+
+        if exclude:
+            apidoc_args.extend(exclude)
+
+        import better_apidoc
+
+        better_apidoc.APP = app
+        better_apidoc.main(apidoc_args)
+
+    return run_apidoc
+
+
+run_apidoc = create_run_apidoc(
+    root="../simulation/",
+    exclude=[
+        "../*setup*",
+        "../*road_generation*",
+        "../*gazebo-renderer*",
+        "../*road-generator*",
+        "../*machine_learning*",
+    ],
+)
+
+
+def setup(app):
+    app.connect("builder-inited", run_apidoc)
+
+
+# -- Project information -----------------------------------------------------
+
 project = "KITcar Simulation"
 copyright = "2020, KITcar"
 author = "KITcar"
 
+# The master toctree document.
+# master_doc = "index"
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
@@ -74,6 +126,40 @@ release = "1.0.0"
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
 language = None
+
+# -- General configuration ------------------------------------------------
+
+# If your documentation needs a minimal Sphinx version, state it here.
+#
+# needs_sphinx = '1.0'
+
+# Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# ones.
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.doctest",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.todo",
+    "sphinx.ext.coverage",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.ifconfig",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.githubpages",
+]
+
+
+# Add any paths that contain templates here, relative to this directory.
+templates_path = ["templates"]
+
+# The suffix(es) of source filenames.
+# You can specify multiple suffix as a list of string:
+#
+# source_suffix = ['.rst', '.md']
+source_suffix = ".rst"
+
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -92,7 +178,7 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_celery"
+html_theme = "sphinx_rtd_theme"
 
 # from crate.theme.rtd.conf.crate_server import *
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -104,67 +190,20 @@ html_theme = "sphinx_celery"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
 #
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-html_sidebars = {"**": ["relations.html", "searchbox.html"]}  # needs 'show_related': True theme option to display
 
-
-# -- Options for HTMLHelp output ------------------------------------------
-
-# Output file base name for HTML help builder.
-htmlhelp_basename = "KITcarSimulationdoc"
-
-
-# -- Options for LaTeX output ---------------------------------------------
-
-latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
-    # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
+autodoc_default_options = {
+    "members": True,
+    "member-order": "bysource",
+    "special-members": "__init__",
+    "undoc-members": True,
 }
 
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, "KITcarSimulation.tex", "KITcar Simulation Documentation", "KITcar", "manual"),
-]
-
-
-# -- Options for manual page output ---------------------------------------
-
-# One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "kitcarsimulation", "KITcar Simulation Documentation", [author], 1,)]
-
-
-# -- Options for Texinfo output -------------------------------------------
-
-# Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-texinfo_documents = [
-    (
-        master_doc,
-        "KITcarSimulation",
-        "KITcar Simulation Documentation",
-        author,
-        "KITcarSimulation",
-        "One line description of project.",
-        "Miscellaneous",
-    ),
-]
+# Napoleon settings
+napoleon_google_docstring = True
+napoleon_numpy_docstring = False

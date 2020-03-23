@@ -3,6 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. _CaroloCup: https://wiki.ifr.ing.tu-bs.de/carolocup/news
+.. _Gazebo: http://gazebosim.org
+.. _ROS: https://www.ros.org/
+.. _Python3.6: https://www.python.org/downloads/
+
 Welcome to KITcar's Simulation
 ==============================
 
@@ -23,34 +28,22 @@ The actual movement (pose and twist) of the vehicle is not simulated, but must b
 
 See :ref:`getting_started` for a tutorial on how to set up the Gazebo_ simulation.
 
-Components
-==================
-A number of components are needed to run the simulation. The following list are the ROS-packages used:
-
 .. toctree::
    :maxdepth: 2
+   :caption: ROS Packages
  
-   src/gazebo_simulation/index.rst
-   src/simulation_brain_link/index.rst
+   gazebo_simulation/index
+   simulation_brain_link/index
 
+All ROS nodes are located in the simulation/src folder.
 
-.. _CaroloCup: https://wiki.ifr.ing.tu-bs.de/carolocup/news
-.. _Gazebo: http://gazebosim.org
-.. _ROS: https://www.ros.org/
-.. _Python3.6: https://www.python.org/downloads/
-
-The utils package contains useful tools to make life easier:
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Utility Packages
 
-   utils/geometry/index.rst
-   utils/ros_base/index.rst
+   _source_files/simulation.utils.car_model
+   _source_files/simulation.utils.geometry
+   _source_files/simulation.utils.ros_base
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+The utils package contains useful tools to make life easier.
