@@ -55,13 +55,13 @@ build-code:
     - cd  $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger
     - catkin_make --only-pkg-with-deps control_debug
 
-    - cd  $KITCAR_REPO_PATH/kitcar-gazebo-simulation
+    - cd  $KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation
     - catkin_make
   artifacts:
     paths:
       - kitcar-ros
-      - devel
-      - build
+      - simulation/devel
+      - simulation/build
     expire_in: 2 hrs
 
 # Build the sphinx documentation
@@ -82,7 +82,7 @@ build-documentation:
 test-dr_drift:
   stage: test
   script: &prebuild-dr_drift
-    - cd models/model_db/dr_drift
+    - cd simulation/models/model_db/dr_drift
     - ./generate.sh
     #TODO: Also test if the calibration is actually correct.
 
@@ -91,24 +91,26 @@ test-utils:
   stage: test
   script: &prebuild-test-utils
     - python3 -m geometry.test
-    - python3 utils/ros_base/test/parameter_object_test.py
+    - python3 simulation/utils/ros_base/test/parameter_object_test.py
 
 # Generate some roads, just for testing
 test-road-generation:
   stage: test
   script: &prebuild-generation
-    - cd models/env_db
+    - cd simulation/models/env_db
     - ./generate.sh -r default-road
     - ./generate.sh -r curves
 
 test-gazebo-simulation:
   stage: test
   script:
+    - cd simulation
     - catkin_make run_tests_gazebo_simulation -j1
     - catkin_test_results # Ensure that pipeline fails when test fails
 
 test-simulation-brain-link:
   stage: test
   script:
+    - cd simulation
     - catkin_make run_tests_simulation_brain_link -j1
     - catkin_test_results # Ensure that pipeline fails when test fails
