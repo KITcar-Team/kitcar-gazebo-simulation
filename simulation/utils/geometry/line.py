@@ -109,24 +109,17 @@ class Line(shapely.geometry.linestring.LineString):
         Returns:
             Line shifted by an offset into the left or right direction.
         """
-        points = self.get_points()
+        assert side == "right" or side == "left"
+
         new_line = []
-        for i in range(len(points)):
-            if i != len(points) - 1:
-                p1 = points[i]
-                v = Vector(points[i + 1]) - Vector(points[i])
-            else:
-                p1 = points[i]
+        for p in self.get_points():
+            direction = self.interpolate_direction(arc_length=self.project(other=p))
 
-            if side == "left":
-                v_orth = Vector((v.y * -1, v.x))
-            elif side == "right":
-                v_orth = Vector((v.y, v.x * -1))
-
+            v_orth = (1 - 2 * (side == "left")) * direction.cross(Vector(0, 0, 1))  # Othogonal vector to the right/left
             v_scaled = (offset / abs(v_orth)) * v_orth
-            p = p1 + v_scaled
+            new_p = p + v_scaled
 
-            new_line.append(p)
+            new_line.append(new_p)
         return Line(new_line)
 
     @ensure_valid_arc_length()
@@ -143,7 +136,7 @@ class Line(shapely.geometry.linestring.LineString):
             ValueError: If the arc_length is less than 0 or more than the length of the line.
 
         Returns:
-            Corresponding direction."""
+            Corresponding direction as a normalised vector."""
 
         n = Vector(self.interpolate(arc_length + APPROXIMATION_DISTANCE))
         p = Vector(self.interpolate(arc_length - APPROXIMATION_DISTANCE))

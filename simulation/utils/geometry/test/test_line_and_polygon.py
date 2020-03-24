@@ -13,7 +13,6 @@ import geometry_msgs.msg as g_msgs
 import numpy as np
 import road_generation.schema as schema
 
-from pyquaternion import Quaternion
 
 TOLERANCE = 0.007
 
@@ -80,7 +79,7 @@ class ModuleTest(unittest.TestCase):
         self.assertAlmostEqual(line.interpolate_curvature(arc_length=0), 0, delta=TOLERANCE)
         self.assertAlmostEqual(line.interpolate_curvature(arc_length=line.length / 4), 0, delta=TOLERANCE)
 
-        self.assertEqual(line.interpolate_pose(arc_length=0), Pose(Point(0, 0), Quaternion(vector=[1, 1, 0])))
+        self.assertEqual(line.interpolate_pose(arc_length=0), Pose(Point(0, 0), Vector(1, 1, 0)))
 
         circle = Line(reversed([p for p in Point(-1, 0).buffer(1, resolution=4096).exterior.coords]))
 
@@ -126,7 +125,7 @@ class ModuleTest(unittest.TestCase):
         line = Line([x, x] for x in range(10))
         l_r = Line([x + math.sqrt(2), x - math.sqrt(2)] for x in range(10))
         l_p = line.parallel_offset(2, "right")
-        self.assertEqual(l_p, l_r)
+        self.assertEqual(l_p, l_r, f"Lines {l_r} and {l_p} are not equal.")
 
         tf = Transform(Point(1, 0, 2), math.pi / 2)
 
