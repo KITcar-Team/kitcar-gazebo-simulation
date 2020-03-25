@@ -47,3 +47,9 @@ All ROS nodes are located in the simulation/src folder.
    _source_files/simulation.utils.ros_base
 
 The utils package contains useful tools to make life easier.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Mini - Talks
+
+   talks/names_and_values/index.rst
