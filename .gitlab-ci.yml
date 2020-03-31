@@ -11,6 +11,9 @@ before_script:
   #Run the container start script to enable the pulseaudio & xserver
   - bash /start_script.sh
 
+  # Install packages
+  - cat packages.txt | xargs sudo apt-get install -y
+
   # Print out python version for debugging
   - python3 -V
   #Install python packages # use a virtual environment to use CI cache
