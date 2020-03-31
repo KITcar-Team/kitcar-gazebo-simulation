@@ -1,4 +1,4 @@
-image: kitcar/docker-gazebo-build:latest
+image: kitcar/docker-gazebo-build:python3.8
 
 variables:
   GIT_STRATEGY: clone
