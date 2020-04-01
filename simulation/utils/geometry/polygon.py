@@ -69,7 +69,9 @@ class Polygon(shapely.geometry.polygon.Polygon):
             return
 
         # None of the initializations worked
-        raise NotImplementedError(f"Polygon initialization not implemented for {type(args[0])}")
+        raise NotImplementedError(
+            f"Polygon initialization not implemented for {type(args[0])}"
+        )
 
     def get_points(self) -> List[Point]:
         """Points of polygon.
@@ -143,7 +145,7 @@ class Polygon(shapely.geometry.polygon.Polygon):
 
         return self.__class__(transformed.exterior.coords)
 
-    def __eq__(self, polygon):
-        eq = self.get_points() == polygon.get_points()
-        rev_eq = self.get_points() == list(reversed(polygon.get_points()))
-        return eq or rev_eq
+    def __eq__(self, polygon: "Polygon"):
+        """Compare two polygons by calculating intersection/union > 0.99."""
+        return self.almost_equals(polygon)
+        # return self.intersection(polygon).area / self.union(polygon).area > 0.99
