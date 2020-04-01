@@ -6,6 +6,8 @@ from geometry.vector import Vector
 import geometry_msgs.msg as g_msgs
 import numpy as np
 
+import random
+
 
 class ModuleTest(unittest.TestCase):
     def test_vector_init(self):
@@ -56,6 +58,24 @@ class ModuleTest(unittest.TestCase):
         # Test cross product
         self.assertAlmostEqual(p1.cross(p2), Vector(3, 3, -3))
 
+    def test_hash_func(self):
+        """Check random points that their hash is equal iff they are equal.
+
+        Check in (-100,100).
+        """
+
+        v1 = Vector(0, 0, 0)
+        v2 = Vector(0, 0, 0)
+        for _ in range(1000):
+            v1.__hash__()
+            x = (random.random() - 0.5) * 200
+            y = (random.random() - 0.5) * 200
+            z = (random.random() - 0.5) * 200
+            v2 = Vector(x, y, z)
+            self.assertEqual(v1.__hash__() == v2.__hash__(), v1 == v2)
+            v1 = v2
+
 
 if __name__ == "__main__":
+    random.seed("KITCAR")
     unittest.main()

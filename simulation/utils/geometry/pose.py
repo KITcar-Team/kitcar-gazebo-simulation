@@ -136,3 +136,6 @@ class Pose(Point):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(position={super().__repr__()},\
                 orientation= {round(math.degrees(self.get_angle()),4)} degrees)"
+
+    def __hash__(self):
+        return NotImplemented

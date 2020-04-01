@@ -150,3 +150,6 @@ class Transform(Vector):
         return (
             f"Transform(translation={super().__repr__()},rotation= {round(math.degrees(self.get_angle()),4)} degrees)"
         )
+
+    def __hash__(self):
+        return NotImplemented
