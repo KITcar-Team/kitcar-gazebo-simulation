@@ -6,7 +6,7 @@ import rospy
 from cachetools import cached, TTLCache
 import yaml
 
-from typing import Any, Callable
+from typing import Any, Callable, Dict
 
 
 class NodeBase:
@@ -91,13 +91,17 @@ class NodeBase:
             \'captain_rapid\'
     """
 
-    def __init__(self, *, name: str, parameter_cache_time: float = 1, log_level: int = rospy.INFO):
+    def __init__(
+        self, *, name: str, parameter_cache_time: float = 1, log_level: int = rospy.INFO
+    ):
 
         rospy.init_node(name, log_level=log_level)
 
         # Parameters
         self._parameter_cache = TTLCache(maxsize=128, ttl=parameter_cache_time)
-        self.param = ParameterObject(ns="~", set_param_func=self._set_param, get_param_func=self._get_param)
+        self.param = ParameterObject(
+            ns="~", set_param_func=self._set_param, get_param_func=self._get_param
+        )
 
         # Node is not yet active
         self.__active = False
@@ -210,7 +214,13 @@ class ParameterObject:
         _get_param (Callable[[str], Any]): Called when a parameter is requested
     """
 
-    def __init__(self, *, ns: str, set_param_func: Callable[[str, Any], None], get_param_func: Callable[[str], Any]):
+    def __init__(
+        self,
+        *,
+        ns: str,
+        set_param_func: Callable[[str, Any], None],
+        get_param_func: Callable[[str], Any],
+    ):
         self._ns = ns
         self._set_param = set_param_func
         self._get_param = get_param_func
@@ -231,7 +241,9 @@ class ParameterObject:
         # with the current key appended to the namespace!
         if type(item) == dict:
             return ParameterObject(
-                ns=f"{self._ns}{key}/", set_param_func=self._set_param, get_param_func=self._get_param
+                ns=f"{self._ns}{key}/",
+                set_param_func=self._set_param,
+                get_param_func=self._get_param,
             )
         return item
 
@@ -244,6 +256,10 @@ class ParameterObject:
             return
         # Parameter
         self._set_param(f"{self._ns}{key}", value)
+
+    def as_dict(self) -> Dict[str, Any]:
+        """Return all parameters in current namespace as dicts."""
+        return self._get_param(self._ns)
 
     def __repr__(self) -> str:
         return yaml.dump(self._get_param(self._ns), default_flow_style=False)

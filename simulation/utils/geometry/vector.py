@@ -66,7 +66,9 @@ class Vector(shapely.geometry.point.Point):
             return
 
         # None of the initializations worked
-        raise NotImplementedError(f"{type(self).__name__} initialization not implemented for {type(args[0])}")
+        raise NotImplementedError(
+            f"{type(self).__name__} initialization not implemented for {type(args[0])}"
+        )
 
     def to_geometry_msg(self) -> geometry_msgs.Vector3:
         """To ROS geometry_msg.
@@ -90,7 +92,10 @@ class Vector(shapely.geometry.point.Point):
             The norm as float.
 
         """
-        warn("Vector(...).norm is deprecated. Use abs(Vector(...)) instead.", DeprecationWarning)
+        warn(
+            "Vector(...).norm is deprecated. Use abs(Vector(...)) instead.",
+            DeprecationWarning,
+        )
         return abs(self)
 
     def rotated(self, angle: float):
@@ -165,10 +170,14 @@ class Vector(shapely.geometry.point.Point):
         return NotImplemented
 
     def __eq__(self, vec) -> bool:
-        TOLERANCE = 1e-8
         if not self.__class__ == vec.__class__:
             return NotImplemented
-        return abs(Vector(vec) - Vector(self)) < TOLERANCE
+        return self.almost_equals(vec)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}{tuple(round(val,8) for val in self.to_numpy())}"
+        return (
+            f"{self.__class__.__qualname__}{tuple(round(val,8) for val in self.to_numpy())}"
+        )
+
+    def __hash__(self) -> int:
+        return int(self.x * 1e6 + self.y * 1e4 + self.z * 1e2)

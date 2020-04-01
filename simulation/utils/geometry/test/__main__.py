@@ -25,4 +25,7 @@ append_test_cases(transform)
 append_test_cases(line_and_polygon)
 
 runner = unittest.TextTestRunner()
-runner.run(suite)
+result = runner.run(suite)
+
+if len(result.errors) > 0:
+    exit(1)

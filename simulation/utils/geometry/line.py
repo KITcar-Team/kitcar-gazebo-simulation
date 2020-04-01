@@ -41,7 +41,9 @@ def ensure_valid_arc_length(*, approx_distance=APPROXIMATION_DISTANCE) -> Callab
             # Ensure that arc_length is not too close to the end points of the road.
             arc_length = kwargs.get("arc_length")
             if not (arc_length >= 0 and arc_length <= self.length):
-                raise ValueError("The provided arc length is less than 0 or greater than the line's length.")
+                raise ValueError(
+                    "The provided arc length is less than 0 or greater than the line's length."
+                )
             elif self.length == 0:
                 raise ValueError("The line is too short.")
 
@@ -88,7 +90,9 @@ class Line(shapely.geometry.linestring.LineString):
             return
 
         # None of the initializations worked
-        raise NotImplementedError(f"Line initialization not implemented for {type(args[0])}")
+        raise NotImplementedError(
+            f"Line initialization not implemented for {type(args[0])}"
+        )
 
     def get_points(self) -> List[Point]:
         """Points of line.
@@ -109,24 +113,19 @@ class Line(shapely.geometry.linestring.LineString):
         Returns:
             Line shifted by an offset into the left or right direction.
         """
-        points = self.get_points()
+        assert side == "right" or side == "left"
+
         new_line = []
-        for i in range(len(points)):
-            if i != len(points) - 1:
-                p1 = points[i]
-                v = Vector(points[i + 1]) - Vector(points[i])
-            else:
-                p1 = points[i]
+        for p in self.get_points():
+            direction = self.interpolate_direction(arc_length=self.project(other=p))
 
-            if side == "left":
-                v_orth = Vector((v.y * -1, v.x))
-            elif side == "right":
-                v_orth = Vector((v.y, v.x * -1))
-
+            v_orth = (1 - 2 * (side == "left")) * direction.cross(
+                Vector(0, 0, 1)
+            )  # Othogonal vector to the right/left
             v_scaled = (offset / abs(v_orth)) * v_orth
-            p = p1 + v_scaled
+            new_p = p + v_scaled
 
-            new_line.append(p)
+            new_line.append(new_p)
         return Line(new_line)
 
     @ensure_valid_arc_length()
@@ -143,7 +142,7 @@ class Line(shapely.geometry.linestring.LineString):
             ValueError: If the arc_length is less than 0 or more than the length of the line.
 
         Returns:
-            Corresponding direction."""
+            Corresponding direction as a normalised vector."""
 
         n = Vector(self.interpolate(arc_length + APPROXIMATION_DISTANCE))
         p = Vector(self.interpolate(arc_length - APPROXIMATION_DISTANCE))
@@ -168,7 +167,9 @@ class Line(shapely.geometry.linestring.LineString):
         Returns:
             Corresponding curvature."""
 
-        p = Vector(self.interpolate(arc_length - CURVATURE_APPROX_DISTANCE))  # Previous point
+        p = Vector(
+            self.interpolate(arc_length - CURVATURE_APPROX_DISTANCE)
+        )  # Previous point
         c = Vector(self.interpolate(arc_length))  # Point at current arc_length
         n = Vector(self.interpolate(arc_length + CURVATURE_APPROX_DISTANCE))  # Next point
 
@@ -176,7 +177,9 @@ class Line(shapely.geometry.linestring.LineString):
         # The triangle's area can be computed by calculating the cross product of the vectors.
         cross = (n - c).cross(p - c)
 
-        sign = 1 - 2 * (cross.z < 0)  # The z coordinates sign determines whether the curvature is positive or negative
+        sign = 1 - 2 * (
+            cross.z < 0
+        )  # The z coordinates sign determines whether the curvature is positive or negative
 
         return sign * 2 * abs(cross) / (abs(p - c) * abs(n - c) * abs(p - n))
 
@@ -255,7 +258,7 @@ class Line(shapely.geometry.linestring.LineString):
 
         return self.__class__(transformed.coords)
 
-    def __eq__(self, line):
+    def __eq__(self, line: "Line") -> bool:
         if not self.__class__ == line.__class__:
             return NotImplemented
-        return self.get_points() == line.get_points()
+        return self.almost_equals(line)
