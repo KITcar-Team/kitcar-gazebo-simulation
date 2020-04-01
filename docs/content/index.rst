@@ -53,3 +53,4 @@ The utils package contains useful tools to make life easier.
    :caption: Mini - Talks
 
    talks/names_and_values/index.rst
+   talks/inheritance/index.rst
