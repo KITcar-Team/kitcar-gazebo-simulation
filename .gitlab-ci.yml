@@ -1,4 +1,4 @@
-image: kitcar/docker-gazebo-build:latest
+image: kitcar/docker-gazebo-build:python3.8
 
 variables:
   GIT_STRATEGY: clone
@@ -10,6 +10,9 @@ cache:
 before_script:
   #Run the container start script to enable the pulseaudio & xserver
   - bash /start_script.sh
+
+  # Install packages
+  - cat packages.txt | xargs sudo apt-get install -y
 
   # Print out python version for debugging
   - python3 -V

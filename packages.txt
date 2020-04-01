@@ -1,7 +1,7 @@
 git-lfs
 ros-melodic-gazebo-ros-control
 ros-melodic-gazebo-ros-pkgs
-python3
+python3.8
 gazebo9
 libgazebo9-dev
 python-opencv
@@ -11,5 +11,5 @@ gcc
 libignition-math2
 libcairo2-dev
 pkg-config
-python3-dev
+python3.8-dev
 gir1.2-gtk-3.0 

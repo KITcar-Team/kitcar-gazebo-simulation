@@ -1,16 +1,16 @@
 backports.functools-lru-cache==1.5
+better-apidoc==0.3.1
 cachetools==4.0.0
-cairocffi==0.9.0
-catkin-pkg==0.4.13
-cffi==1.12.3
+cairocffi==1.1.0
+catkin-pkg==0.4.16
 cycler==0.10.0
-docutils==0.15.2
+docutils==0.16
 empy==3.3.4
 kiwisolver==1.1.0
-lxml==4.4.1
-matplotlib==2.2.4
-numpy==1.16.5
-opencv-python==4.1.1.26
+lxml==4.5.0
+matplotlib==3.2.1
+numpy==1.18.2
+opencv-python>=4.2
 pycairo==1.18.1
 pycparser==2.19
 pyparsing==2.4.2
@@ -19,10 +19,10 @@ PySide2==5.13.1
 python-dateutil==2.8.0
 pytz==2019.2
 PyXB==1.2.6
-PyYAML==3.12
+PyYAML
 ratelimit==2.2.1
 rospkg==1.1.10
-scipy==1.2.2
+scipy==1.4.1
 Shapely==1.6.4.post2
 shiboken2==5.13.1
 six==1.12.0
@@ -32,5 +32,4 @@ PyGObject==3.34.0
 pre-commit==1.21.0
 sphinx==2.4.2
 sphinx_rtd_theme
-better-apidoc
 
