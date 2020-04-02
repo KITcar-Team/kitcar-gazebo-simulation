@@ -38,7 +38,7 @@ However, :py:func:`short_desc` is defined in both base classes.
 What happens if we attempt to call :py:func:`short_desc`?
 
 >>> double_child.short_desc()
-'Child of BaseClass(double_child_foo)'
+'BaseClass(double_child_foo)'
 
 If there are two base classes, the first base class is prioritized.
 
