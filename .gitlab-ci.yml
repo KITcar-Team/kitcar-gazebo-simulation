@@ -116,6 +116,13 @@ test-simulation-groundtruth:
     - catkin_make run_tests_simulation_groundtruth -j1
     - catkin_test_results # Ensure that pipeline fails when test fails
 
+test-simulation-evaluation:
+  stage: test
+  script:
+    - cd simulation
+    - catkin_make run_tests_simulation_evaluation -j1
+    - catkin_test_results  # Ensure that pipeline fails when test fails
+
 ######### Documentation ########
 
 # Build the sphinx documentation

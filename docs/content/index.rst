@@ -60,6 +60,7 @@ to share knowledge and ensure common standards within the code.
 
    gazebo_simulation/index
    simulation_brain_link/index
+   simulation_evaluation/index
    simulation_groundtruth/index
 
 

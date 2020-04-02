@@ -9,6 +9,7 @@ export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$KITCAR_GAZEBO_SIM_PATH/src
 export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/utils
 
 export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/simulation/src/simulation_groundtruth/src
+export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/simulation/src/simulation_evaluation/src
 export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/simulation/src/simulation_brain_link/src
 export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/simulation/src/gazebo_simulation/src
 
