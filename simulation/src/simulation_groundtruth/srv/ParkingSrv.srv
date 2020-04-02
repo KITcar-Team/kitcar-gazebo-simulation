@@ -1,0 +1,5 @@
+# Service that accepts a section id and type and returns the corresponding Parking
+uint8 id
+---
+Parking left_msg
+Parking right_msg
