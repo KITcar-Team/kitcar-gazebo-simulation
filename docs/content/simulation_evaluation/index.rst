@@ -3,6 +3,9 @@ simulation_evaluation
 
 The **evaluation** ROS package provides functionality to evaluate drives automatically.
 
+.. program-output:: tree -a -L 3 -I __pycache__ --dirsfirst $KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/src/simulation_evaluation | head -n -2 | tail -n +2
+   :shell:
+
 .. toctree::
    :maxdepth: 1
    :caption: Packages and Modules
