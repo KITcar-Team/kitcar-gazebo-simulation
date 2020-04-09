@@ -12,4 +12,5 @@ libignition-math2
 libcairo2-dev
 pkg-config
 python3.8-dev
-gir1.2-gtk-3.0 
+gir1.2-gtk-3.0
+tree
