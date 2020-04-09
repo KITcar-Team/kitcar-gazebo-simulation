@@ -11,8 +11,9 @@ The **evaluation** ROS package provides functionality to evaluate drives automat
    :caption: Packages and Modules
 
    ../_source_files/simulation.src.simulation_evaluation.src.speaker
-   ../_source_files/simulation.src.simulation_evaluation.src.evaluation_test
    ../_source_files/simulation.src.simulation_evaluation.src.state_machine
+   ../_source_files/simulation.src.simulation_evaluation.src.referee
+   ../_source_files/simulation.src.simulation_evaluation.src.evaluation_test
 
 
 The simulation can be used to automatically detect errors in the car's driving behavior.
@@ -196,7 +197,18 @@ See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.
 RefereeNode
 -----------
 
-...
+The :mod:`simulation.src.simulation_evaluation.src.referee.node` is used to evaluate \
+the output of the state machines and calculate a score.
+The referee publishes a :ref:`Referee <referee_msg>` message containing a state, a score \
+and more information about the current drive.
+
+.. note::
+
+   The RefereeNode can be launched with:
+
+   .. code-block::
+
+      roslaunch simulation_evaluation referee_node.launch
 
 
 EvaluationTestNode

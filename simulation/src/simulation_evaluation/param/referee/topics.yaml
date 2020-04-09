@@ -1,0 +1,5 @@
+info: "/simulation/referee/info"
+reset: "/simulation/referee/reset"
+prepare: "/simulation/referee/prepare"
+start: "/simulation/referee/start"
+stop: "/simulation/referee/stop"
