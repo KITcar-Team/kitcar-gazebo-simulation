@@ -1,8 +1,5 @@
-# The fields variable is used to specify which fields of the new twist should actually be updated.
-# This enables to not change the speed in z-direction
-# The usage is as followed:
-# Each digit represents one direction:
-# linear.x, linear.y, linear.z, angular.x, angular.y, angular.z
+# The keys list is a list of integers specifying which variables should updated.
+# See SetModelPose.msg for an explanation on how to use the keys/values lists.
 uint8 LINEAR_X = 0
 uint8 LINEAR_Y = 1
 uint8 LINEAR_Z = 2

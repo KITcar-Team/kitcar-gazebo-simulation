@@ -149,6 +149,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
     "sphinx.ext.graphviz",
+    "sphinxcontrib.programoutput",
 ]
 
 

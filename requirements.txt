@@ -32,4 +32,4 @@ PyGObject==3.34.0
 pre-commit==1.21.0
 sphinx==2.4.2
 sphinx_rtd_theme
-
+sphinxcontrib-programoutput
