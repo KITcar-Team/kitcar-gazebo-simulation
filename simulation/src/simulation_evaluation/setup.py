@@ -10,6 +10,7 @@ setup_args = generate_distutils_setup(
         [
             "speaker",
             "evaluation_test",
+            "state_machine",
         ]
     ),
     package_dir={"": "src"},

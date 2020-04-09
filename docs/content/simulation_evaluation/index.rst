@@ -9,6 +9,7 @@ The **evaluation** ROS package provides functionality to evaluate drives automat
 
    ../_source_files/simulation.src.simulation_evaluation.src.speaker
    ../_source_files/simulation.src.simulation_evaluation.src.evaluation_test
+   ../_source_files/simulation.src.simulation_evaluation.src.state_machine
 
 
 The simulation can be used to automatically detect errors in the car's driving behavior.
@@ -114,7 +115,79 @@ The Speaker message carries a *type* (and a *name* for debugging).
 StateMachineNode
 ----------------
 
-...
+The :py:class:`simulation.src.simulation_evaluation.src.state_machine.node.StateMachineNode` contains multiple state machines that are used to automatically track the car's behavior over time.
+
+The current state of each state machine is published as a :ref:`State <state_msg>` message on a separate topic.
+
+
+State Machines
+^^^^^^^^^^^^^^
+
+There are four state machines which track the state of the drive.
+
+OvertakingStateMachine
+""""""""""""""""""""""
+
+This state machine keeps track of overtaking obstacles.
+
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.overtaking` for implementation details.
+
+.. figure:: graphs/overtaking.svg
+   :scale: 10 %
+   :align: center
+   :alt: Graph of OvertakingStateMachine
+
+   Graph of OvertakingStateMachine
+
+ParkingStateMachine
+"""""""""""""""""""
+
+This state machine keeps track of parking.
+
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.parking` for implementation details.
+
+.. figure:: graphs/parking.svg
+   :scale: 5 %
+   :align: center
+   :alt: Graph of ParkingStateMachine
+
+   Graph of ParkingStateMachine
+
+PriorityStateMachine
+""""""""""""""""""""
+
+This state machine keeps track of the car correctly stoping or halting in front of stop or halt lines.
+
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.priority` for implementation details.
+
+.. figure:: graphs/priority.svg
+   :scale: 5 %
+   :align: center
+   :alt: Graph of PriorityStateMachine
+
+   Graph of PriorityStateMachine
+
+ProgressStateMachine
+""""""""""""""""""""
+
+This state machines keeps track if the car has started, is driving or has finished the drive.
+
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.progress` for implementation details.
+
+.. figure:: graphs/progress.svg
+   :scale: 10 %
+   :align: center
+   :alt: Graph of ProgressStateMachine
+
+   Graph of ProgressStateMachine
+
+.. note::
+
+   The StateMachineNode can be launched with:
+
+   .. code-block::
+
+      roslaunch simulation_evaluation state_machine_node.launch
 
 
 RefereeNode

@@ -120,6 +120,7 @@ test-simulation-evaluation:
   stage: test
   script:
     - python3 -m speaker.speakers.test
+    - python3 -m state_machine.test
 
     - cd simulation
     - catkin_make run_tests_simulation_evaluation -j1

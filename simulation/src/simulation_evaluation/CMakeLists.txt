@@ -51,6 +51,7 @@ catkin_python_setup()
 add_message_files(
   FILES
   Speaker.msg
+  State.msg
   Broadcast.msg
 )
 
@@ -181,4 +182,5 @@ catkin_package(
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
   add_rostest(launch/test/speaker_node.test)
+  add_rostest(launch/test/state_machine_node.test)
 endif()
