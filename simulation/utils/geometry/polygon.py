@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
 """Polygon"""
+
+__copyright__ = "KITcar"
 
 import shapely.geometry  # Base class
 import shapely.affinity as affinity
@@ -16,16 +17,12 @@ from contextlib import suppress
 
 from typing import List
 
-from . import export
 
-__copyright__ = "KITcar"
-
-
-@export
 class Polygon(shapely.geometry.polygon.Polygon):
     """Polygon class inheriting from shapely's Polygon class.
 
-    Inheriting from shapely enables to use their powerful operations in combination with other objects,
+    Inheriting from shapely enables to use their powerful operations in combination \
+    with other objects,
     e.g. polygon intersections.
 
     Initialization can be done in one of the following ways.
@@ -34,8 +31,8 @@ class Polygon(shapely.geometry.polygon.Polygon):
         1 ([Point]): List of points or anything that can be initialized as a point,
                      e.g. Vector, geometry_msgs.Point,np.array
         2 (geometry_msgs.Polygon)
-        3 ((Line,Line)): Two lines which are interpreted as the left and right boundary of the polygon,
-                         e.g. a road lane
+        3 ((Line,Line)): Two lines which are interpreted as the left \
+                         and right boundary of the polygon, e.g. a road lane
     """
 
     def __init__(self, *args):
@@ -89,8 +86,9 @@ class Polygon(shapely.geometry.polygon.Polygon):
         be on the right side. The returned lanelet has no line markings.
 
         Args:
-            split_idx (int): Points in polygon before this index are considered as the right boundary
-            of the resulting lanelet, the other points as the left boundary.
+            split_idx (int): Points in polygon before this index are considered \
+            as the right boundary of the resulting lanelet, \
+            the other points as the left boundary.
 
         Returns:
             Schema lanelet without lane markings from polygon
@@ -146,6 +144,10 @@ class Polygon(shapely.geometry.polygon.Polygon):
         return self.__class__(transformed.exterior.coords)
 
     def __eq__(self, polygon: "Polygon"):
-        """Compare two polygons by calculating intersection/union > 0.99."""
-        return self.almost_equals(polygon)
-        # return self.intersection(polygon).area / self.union(polygon).area > 0.99
+        """Compare two polygons using shapely's almost_equals.
+
+        Also allow the points to be provided in the reversed order.
+        """
+        return self.almost_equals(polygon) or self.almost_equals(
+            Polygon(reversed(polygon.get_points()))
+        )

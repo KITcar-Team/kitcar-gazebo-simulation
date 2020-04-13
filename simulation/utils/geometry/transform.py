@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
 """Transformation"""
+
+__copyright__ = "KITcar"
 
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
@@ -12,12 +13,7 @@ import numpy as np
 
 from contextlib import suppress
 
-from . import export
 
-__copyright__ = "KITcar"
-
-
-@export
 class Transform(Vector):
     """Transformation class consisting of a translation and a rotation.
 
@@ -85,12 +81,16 @@ class Transform(Vector):
             return
 
         # None of the initializations worked
-        raise NotImplementedError(f"Transform initialization not implemented for {type(args[0])}")
+        raise NotImplementedError(
+            f"Transform initialization not implemented for {type(args[0])}"
+        )
 
     @property
     def inverse(self) -> "Transform":
         """Inverse transformation."""
-        return Transform(-1 * Vector(self).rotated(-self.get_angle()), -1 * self.get_angle())
+        return Transform(
+            -1 * Vector(self).rotated(-self.get_angle()), -1 * self.get_angle()
+        )
 
     def get_angle(self) -> float:
         """Angle of rotation.
@@ -98,19 +98,23 @@ class Transform(Vector):
         Returns:
             The angle that a vector is rotated, when this transformation is applied."""
 
-        # Project the rotation axis onto the z axis to get the amount of the rotation that is in z direction!
-        # Also the quaternions rotation axis is sometimes (0,0,-1) at which point the angles flip their sign,
+        # Project the rotation axis onto the z axis to get the amount of the rotation \
+        # that is in z direction!
+        # Also the quaternions rotation axis is sometimes (0,0,-1) at which point \
+        # the angles flip their sign,
         # taking the scalar product of the axis and z fixes that as well
         return Vector(self.rotation.axis) * Vector(0, 0, 1) * self.rotation.radians
 
     def to_geometry_msg(self) -> geometry_msgs.Transform:
-        """To ROS geometry_msg.
+        """Convert transform to ROS geometry_msg.
 
         Returns:
             This transformation as a geometry_msgs/Transform.
         """
         vector = super(Transform, self).to_geometry_msg()
-        rotation = geometry_msgs.Quaternion(self.rotation.x, self.rotation.y, self.rotation.z, self.rotation.w)
+        rotation = geometry_msgs.Quaternion(
+            self.rotation.x, self.rotation.y, self.rotation.z, self.rotation.w
+        )
 
         tf = geometry_msgs.Transform()
         tf.translation = vector
@@ -124,19 +128,18 @@ class Transform(Vector):
         The product has to be understood as a single transformation consisting of
         the right hand transformation applied first and then the left hand transformation.
 
-        Example
-        ------
-        Easily modify a vector multiple times:
+        Example:
+            Easily modify a vector multiple times:
 
-        :math:`(\\text{Tf}_1*\\text{Tf}_2)*\\vec{v} = \\text{Tf}_1*( \\text{Tf}_2*\\vec{v})`
+            :math:`(\\text{Tf}_1*\\text{Tf}_2)*\\vec{v} = \\text{Tf}_1*( \\text{Tf}_2*\\vec{v})`
 
         Returns:
             The product transformation.
         """
-
         if tf.__class__ == self.__class__:
             return self.__class__(
-                Vector(self) + Vector(tf).rotated(self.get_angle()), self.get_angle() + tf.get_angle()
+                Vector(self) + Vector(tf).rotated(self.get_angle()),
+                self.get_angle() + tf.get_angle(),
             )
 
         return NotImplemented
@@ -144,12 +147,13 @@ class Transform(Vector):
     def __eq__(self, tf) -> bool:
         if self.__class__ != tf.__class__:
             return NotImplemented
-        return tf.rotation.normalised == self.rotation.normalised and Vector(self) == Vector(tf)
+        return tf.rotation.normalised == self.rotation.normalised and Vector(
+            self
+        ) == Vector(tf)
 
     def __repr__(self) -> str:
-        return (
-            f"Transform(translation={super().__repr__()},rotation= {round(math.degrees(self.get_angle()),4)} degrees)"
-        )
+        return f"Transform(translation={super().__repr__()},\
+                rotation={round(math.degrees(self.get_angle()),4)} degrees)"
 
     def __hash__(self):
         return NotImplemented

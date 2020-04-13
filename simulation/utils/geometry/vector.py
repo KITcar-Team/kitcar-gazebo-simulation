@@ -1,26 +1,22 @@
-# -*- coding: utf-8 -*-
 """Vector"""
-
-from warnings import warn
-import shapely.geometry  # Base class
-import math  # For calculations
-
-import numpy as np
-import geometry_msgs.msg as geometry_msgs
-import numbers
-
-from contextlib import suppress
-
-from . import export
 
 __copyright__ = "KITcar"
 
+import numbers
+import math
+from warnings import warn
+from contextlib import suppress
 
-@export
+import shapely.geometry  # Base class
+import numpy as np
+import geometry_msgs.msg as geometry_msgs
+
+
 class Vector(shapely.geometry.point.Point):
-    """Vector class which inherits from shapely's Point class and implements a vector in the mathematical sense.
+    """Implementation of the mathematical vector object.
 
-    Inheriting from shapely enables to use their powerful operations in combination with other objects,
+    Inheriting from shapely enables to use their powerful operations in combination with \
+    other objects,
     e.g. lines, polygons.
 
     Initialization can be done in one of the following ways.
@@ -34,12 +30,12 @@ class Vector(shapely.geometry.point.Point):
         r (float): length of vector
         phi (float): angle between vector and x-y-plane
 
-    A vector is always initialized with 3 coordinates. If there's no third coordinate provided, z:=0.
+    A vector is always initialized with 3 coordinates.
+    If there's no third coordinate provided, z:=0.
     """
 
     def __init__(self, *args, **kwargs):
         """Vector initialization."""
-
         if "r" in kwargs and "phi" in kwargs:
             # construct Vector from r, phi
             r = kwargs["r"]

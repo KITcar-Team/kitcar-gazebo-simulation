@@ -2,6 +2,8 @@
 Basic point class which is compatible with all needed formats
 """
 
+__copyright__ = "KITcar"
+
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
 from road_generation import schema
@@ -9,17 +11,11 @@ from road_generation import schema
 from geometry.transform import Transform
 from geometry.vector import Vector  # Base class
 
-from . import export
 
-__copyright__ = "KITcar"
-
-
-@export
 class InvalidPointOperationError(Exception):
     pass
 
 
-@export
 class Point(Vector):
     """Point subclass of Vector which implements a point.
 

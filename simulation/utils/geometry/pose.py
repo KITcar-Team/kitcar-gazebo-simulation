@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
 """Pose."""
+
+__copyright__ = "KITcar"
 
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
@@ -14,16 +15,12 @@ import numpy as np
 
 from contextlib import suppress
 
-from . import export
 
-__copyright__ = "KITcar"
-
-
-@export
 class Pose(Point):
     """Pose class consisting of a position and an orientation.
 
-    A Pose object can be used to describe the state of an object with a position and an orientation.
+    A Pose object can be used to describe the state of an object with a position \
+    and an orientation.
     Initialization can be done in one of the following ways:
 
     Args:
@@ -38,7 +35,6 @@ class Pose(Point):
 
     def __init__(self, *args):
         """Pose initialization."""
-
         with suppress(Exception):
             args = (args[0], Quaternion(*args[1]))
 
@@ -83,16 +79,20 @@ class Pose(Point):
             return
 
         # None of the initializations worked
-        raise NotImplementedError(f"Point initialization not implemented for {type(args[0])}")
+        raise NotImplementedError(
+            f"Point initialization not implemented for {type(args[0])}"
+        )
 
     def get_angle(self) -> float:
         """Angle of orientation.
 
         Returns:
-            The angle that a vector is rotated, when this transformation is applied."""
-
-        # Project the rotation axis onto the z axis to get the amount of the rotation that is in z direction!
-        # Also the quaternions rotation axis is sometimes (0,0,-1) at which point the angles flip their sign,
+            The angle that a vector is rotated, when this transformation is applied.
+        """
+        # Project the rotation axis onto the z axis to get the amount of the rotation \
+        # that is in z direction!
+        # Also the quaternions rotation axis is sometimes (0,0,-1) at which point \
+        # the angles flip their sign,
         # taking the scalar product of the axis and z fixes that as well
         return Vector(self.orientation.axis) * Vector(0, 0, 1) * self.orientation.radians
 
@@ -131,7 +131,9 @@ class Pose(Point):
         TOLERANCE = 1e-8  # Radian!
         if self.__class__ != pose.__class__:
             return NotImplemented
-        return (self.get_angle() - pose.get_angle()) < TOLERANCE and self.to_numpy().all() == pose.to_numpy().all()
+        return (
+            self.get_angle() - pose.get_angle()
+        ) < TOLERANCE and self.to_numpy().all() == pose.to_numpy().all()
 
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(position={super().__repr__()},\
