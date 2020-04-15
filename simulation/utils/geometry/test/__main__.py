@@ -10,6 +10,7 @@ import geometry.test.test_line_and_polygon as line_and_polygon
 
 # Create test suite
 import unittest
+import sys
 
 suite = unittest.TestSuite()
 
@@ -27,5 +28,4 @@ append_test_cases(line_and_polygon)
 runner = unittest.TextTestRunner()
 result = runner.run(suite)
 
-if len(result.errors) > 0:
-    exit(1)
+sys.exit(0 if result.wasSuccessful() else 1)

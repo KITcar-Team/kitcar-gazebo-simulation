@@ -89,7 +89,9 @@ class ModuleTest(unittest.TestCase):
     def test_tf_inverse(self):
         # Extensively test the inverse function:
         for _ in range(0, 100):
-            tf = Transform([random.random(), random.random(), random.random()], random.random())
+            tf = Transform(
+                [random.random(), random.random(), random.random()], random.random()
+            )
             self.assertEqual(tf * tf.inverse, Transform([0, 0, 0], 0))
             self.assertEqual(tf.inverse * tf, Transform([0, 0, 0], 0))
 

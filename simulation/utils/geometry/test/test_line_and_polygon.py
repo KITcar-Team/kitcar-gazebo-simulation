@@ -68,49 +68,87 @@ class ModuleTest(unittest.TestCase):
         line = Line([Point(0, 0), Point(1, 1)])
 
         # Test if line direction function works
-        self.assertAlmostEqual(line.interpolate_direction(arc_length=0), Vector(r=1, phi=math.pi / 4), delta=TOLERANCE)
         self.assertAlmostEqual(
-            line.interpolate_direction(arc_length=line.length / 2), Vector(r=1, phi=math.pi / 4), delta=TOLERANCE
+            line.interpolate_direction(arc_length=0),
+            Vector(r=1, phi=math.pi / 4),
+            delta=TOLERANCE,
         )
         self.assertAlmostEqual(
-            line.interpolate_direction(arc_length=line.length), Vector(r=1, phi=math.pi / 4), delta=TOLERANCE
+            line.interpolate_direction(arc_length=line.length / 2),
+            Vector(r=1, phi=math.pi / 4),
+            delta=TOLERANCE,
+        )
+        self.assertAlmostEqual(
+            line.interpolate_direction(arc_length=line.length),
+            Vector(r=1, phi=math.pi / 4),
+            delta=TOLERANCE,
         )
 
         self.assertAlmostEqual(line.interpolate_curvature(arc_length=0), 0, delta=TOLERANCE)
-        self.assertAlmostEqual(line.interpolate_curvature(arc_length=line.length / 4), 0, delta=TOLERANCE)
+        self.assertAlmostEqual(
+            line.interpolate_curvature(arc_length=line.length / 4), 0, delta=TOLERANCE
+        )
 
-        self.assertEqual(line.interpolate_pose(arc_length=0), Pose(Point(0, 0), Vector(1, 1, 0)))
+        self.assertEqual(
+            line.interpolate_pose(arc_length=0), Pose(Point(0, 0), Vector(1, 1, 0))
+        )
 
-        circle = Line(reversed([p for p in Point(-1, 0).buffer(1, resolution=4096).exterior.coords]))
+        circle = Line(
+            reversed([p for p in Point(-1, 0).buffer(1, resolution=4096).exterior.coords])
+        )
 
         # Test if line direction function works
-        self.assertAlmostEqual(circle.interpolate_direction(arc_length=0), Vector(0, 1), delta=TOLERANCE)
         self.assertAlmostEqual(
-            circle.interpolate_direction(arc_length=circle.length / 2), Vector(0, -1), delta=TOLERANCE
+            circle.interpolate_direction(arc_length=0), Vector(0, 1), delta=TOLERANCE
         )
-        self.assertAlmostEqual(circle.interpolate_direction(arc_length=circle.length), Vector(0, 1), delta=TOLERANCE)
-        self.assertAlmostEqual(circle.interpolate_direction(arc_length=circle.length * 3 / 4), Vector(1, 0))
-        self.assertAlmostEqual(circle.interpolate_direction(arc_length=circle.length / 4), Vector(-1, 0))
+        self.assertAlmostEqual(
+            circle.interpolate_direction(arc_length=circle.length / 2),
+            Vector(0, -1),
+            delta=TOLERANCE,
+        )
+        self.assertAlmostEqual(
+            circle.interpolate_direction(arc_length=circle.length),
+            Vector(0, 1),
+            delta=TOLERANCE,
+        )
+        self.assertAlmostEqual(
+            circle.interpolate_direction(arc_length=circle.length * 3 / 4), Vector(1, 0)
+        )
+        self.assertAlmostEqual(
+            circle.interpolate_direction(arc_length=circle.length / 4), Vector(-1, 0)
+        )
 
-        self.assertAlmostEqual(circle.interpolate_curvature(arc_length=circle.length / 2), 1, delta=TOLERANCE)
-        self.assertAlmostEqual(circle.interpolate_curvature(arc_length=circle.length / 4), 1, delta=TOLERANCE)
+        self.assertAlmostEqual(
+            circle.interpolate_curvature(arc_length=circle.length / 2), 1, delta=TOLERANCE
+        )
+        self.assertAlmostEqual(
+            circle.interpolate_curvature(arc_length=circle.length / 4), 1, delta=TOLERANCE
+        )
 
         def assert_approx_equal_pose(pose1, pose2):
             self.assertAlmostEqual(Vector(pose1), Vector(pose2))
-            self.assertAlmostEqual(pose1.get_angle(), pose2.get_angle(), delta=math.radians(0.02))
+            self.assertAlmostEqual(
+                pose1.get_angle(), pose2.get_angle(), delta=math.radians(0.02)
+            )
 
-        assert_approx_equal_pose(circle.interpolate_pose(arc_length=0), Pose(Point(0, 0), Vector([0, 1, 0])))
         assert_approx_equal_pose(
-            circle.interpolate_pose(arc_length=circle.length / 4), Pose(Point(-1, 1), Vector([-1, 0, 0]))
+            circle.interpolate_pose(arc_length=0), Pose(Point(0, 0), Vector([0, 1, 0]))
         )
         assert_approx_equal_pose(
-            circle.interpolate_pose(arc_length=circle.length / 2), Pose(Point(-2, 0), Vector([0, -1, 0]))
+            circle.interpolate_pose(arc_length=circle.length / 4),
+            Pose(Point(-1, 1), Vector([-1, 0, 0])),
         )
         assert_approx_equal_pose(
-            circle.interpolate_pose(arc_length=circle.length * 3 / 4), Pose(Point(-1, -1), Vector([1, 0, 0]))
+            circle.interpolate_pose(arc_length=circle.length / 2),
+            Pose(Point(-2, 0), Vector([0, -1, 0])),
         )
         assert_approx_equal_pose(
-            circle.interpolate_pose(arc_length=circle.length), Pose(Point(0, 0), Vector([0, 1, 0]))
+            circle.interpolate_pose(arc_length=circle.length * 3 / 4),
+            Pose(Point(-1, -1), Vector([1, 0, 0])),
+        )
+        assert_approx_equal_pose(
+            circle.interpolate_pose(arc_length=circle.length),
+            Pose(Point(0, 0), Vector([0, 1, 0])),
         )
 
     def test_line_func(self):
@@ -204,15 +242,26 @@ class ModuleTest(unittest.TestCase):
         # Translate by 1,0,2 -> [1,1,2],[0,2,2],[-1,2,2],[1,-1,4]
         tf = Transform(Point(1, 0, 2), math.pi / 2)
 
-        self.assertEqual(tf * poly, Polygon([Point(1, 1, 2), Point(0, 2, 2), Point(-1, 2, 2), Point(1, -1, 4)]))
+        self.assertEqual(
+            tf * poly,
+            Polygon([Point(1, 1, 2), Point(0, 2, 2), Point(-1, 2, 2), Point(1, -1, 4)]),
+        )
 
         # Test polygon eq function
-        poly_rev = Polygon([Point(1, 1, 2), Point(1, -1, 4), Point(-1, 2, 2), Point(0, 2, 2), Point(1, 1, 2)])
+        poly_rev = Polygon(
+            [
+                Point(1, 1, 2),
+                Point(1, -1, 4),
+                Point(-1, 2, 2),
+                Point(0, 2, 2),
+                Point(1, 1, 2),
+            ]
+        )
         poly_uneq = Polygon([Point(2, 2), Point(2, 1), Point(1, 0)])
 
         self.assertEqual(poly, poly)
-        self.assertTrue(tf * poly == poly_rev)
-        self.assertFalse(tf * poly == poly_uneq)
+        self.assertEqual(tf * poly, poly_rev)
+        self.assertNotEqual(tf * poly, poly_uneq)
 
 
 if __name__ == "__main__":

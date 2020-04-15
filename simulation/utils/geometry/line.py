@@ -1,5 +1,7 @@
-# -*- coding: utf-8 -*-
 """Line."""
+
+__copyright__ = "KITcar"
+
 
 import shapely.geometry  # Base class
 import shapely.affinity as affinity
@@ -17,32 +19,31 @@ from contextlib import suppress
 
 from typing import List, Callable
 
-from . import export
-
-__copyright__ = "KITcar"
-
 #
 APPROXIMATION_DISTANCE = 0.00005
 CURVATURE_APPROX_DISTANCE = 0.04
 
 
 def ensure_valid_arc_length(*, approx_distance=APPROXIMATION_DISTANCE) -> Callable:
-    """Decorator to check if an arc length is on the line and can be used for approximation.
+    """Check if an arc length is on the line and can be used for approximation.
 
-    If the arc_length is too close to the end points of the line, it is moved further away from the edges.
+    If the arc_length is too close to the end points of the line, \
+    it is moved further away from the edges.
 
     Args:
-        approx_distance(float): Approximation step length to be used in further calculations.
-                                Arc length will be at least that far away from the end of the line."""
+        approx_distance(float): Approximation step length to be used \
+                in further calculations.
+                Arc length will be at least that far away from the end of the line.
+    """
 
     def wrapper(func):
-        def decorator(self, *args, **kwargs):
+        def decorator(self, arc_length: float):
 
             # Ensure that arc_length is not too close to the end points of the road.
-            arc_length = kwargs.get("arc_length")
             if not (arc_length >= 0 and arc_length <= self.length):
                 raise ValueError(
-                    "The provided arc length is less than 0 or greater than the line's length."
+                    "The provided arc length is less than 0 \
+                            or greater than the line's length."
                 )
             elif self.length == 0:
                 raise ValueError("The line is too short.")
@@ -50,20 +51,21 @@ def ensure_valid_arc_length(*, approx_distance=APPROXIMATION_DISTANCE) -> Callab
             arc_length = max(arc_length, approx_distance)
             arc_length = min(arc_length, self.length - approx_distance)
 
-            kwargs["arc_length"] = arc_length
+            return func(self, arc_length=arc_length)
 
-            return func(self, *args, **kwargs)
+        decorator.__doc__ = func.__doc__
+        decorator.__annotations__ = func.__annotations__
 
         return decorator
 
     return wrapper
 
 
-@export
 class Line(shapely.geometry.linestring.LineString):
     """List of points as a Line class inheriting from shapely's LineString class.
 
-    Inheriting from shapely enables to use their powerful operations in combination with other objects,
+    Inheriting from shapely enables to use their powerful operations in combination \
+    with other objects,
     e.g. polygon intersections.
 
     Initialization can be done in one of the following ways.
@@ -139,7 +141,7 @@ class Line(shapely.geometry.linestring.LineString):
             arc_length (float): Length along the line starting from the first point
 
         Raises:
-            ValueError: If the arc_length is less than 0 or more than the length of the line.
+            ValueError: If the arc_length is <0 or more than the length of the line.
 
         Returns:
             Corresponding direction as a normalised vector."""
@@ -155,14 +157,15 @@ class Line(shapely.geometry.linestring.LineString):
     def interpolate_curvature(self, *, arc_length: float) -> float:
         """Interpolate the curvature at a given arc_length.
 
-        The curvature is approximated by calculating the Menger curvature as defined and described here:
+        The curvature is approximated by calculating the Menger curvature as defined \
+        and described here:
         https://en.wikipedia.org/wiki/Menger_curvature#Definition
 
         Args:
             arc_length (float): Length along the line starting from the first point
 
         Raises:
-            ValueError: If the arc_length is less than 0 or more than the length of the line.
+            ValueError: If the arc_length is <0 or more than the length of the line.
 
         Returns:
             Corresponding curvature."""
@@ -174,12 +177,12 @@ class Line(shapely.geometry.linestring.LineString):
         n = Vector(self.interpolate(arc_length + CURVATURE_APPROX_DISTANCE))  # Next point
 
         # Area of the triangle spanned by p, c, and n.
-        # The triangle's area can be computed by calculating the cross product of the vectors.
+        # The triangle's area can be computed by the cross product of the vectors.
         cross = (n - c).cross(p - c)
 
         sign = 1 - 2 * (
             cross.z < 0
-        )  # The z coordinates sign determines whether the curvature is positive or negative
+        )  # The z-coord sign determines whether the curvature is positive or negative
 
         return sign * 2 * abs(cross) / (abs(p - c) * abs(n - c) * abs(p - n))
 
@@ -191,7 +194,7 @@ class Line(shapely.geometry.linestring.LineString):
             arc_length (float): Length along the line starting from the first point
 
         Raises:
-            ValueError: If the arc_length is less than 0 or more than the length of the line.
+            ValueError: If the arc_length is <0 or more than the length of the line.
 
         Returns:
             Corresponding pose."""
@@ -204,7 +207,8 @@ class Line(shapely.geometry.linestring.LineString):
     def to_schema_boundary(self) -> schema.boundary:
         """To schema.boundary.
 
-        Export line as the boundary of a schema lanelet. E.g. the left boundary of the right lanelet (= middle line).
+        Export line as the boundary of a schema lanelet.
+        E.g. the left boundary of the right lanelet (= middle line).
 
         Returns:
             Line as schema.boundary
