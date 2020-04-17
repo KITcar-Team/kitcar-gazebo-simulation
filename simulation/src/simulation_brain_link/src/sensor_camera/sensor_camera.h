@@ -1,15 +1,11 @@
 #ifndef SENSOR_CAMERA_H
 #define SENSOR_CAMERA_H
-#include <common/macros.h>
-
-THIRD_PARTY_HEADERS_BEGIN
 
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-THIRD_PARTY_HEADERS_END
 
 #include "common/parameter_interface.h"
 
