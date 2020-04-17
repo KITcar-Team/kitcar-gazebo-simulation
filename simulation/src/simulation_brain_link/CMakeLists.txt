@@ -24,7 +24,7 @@ find_package(OpenCV REQUIRED COMPONENTS core imgproc calib3d video aruco)
 ## System dependencies are found with CMake's conventions
 
 # Depend on system install of Gazebo
-#find_package(Boost REQUIRED COMPONENTS)
+find_package(Boost REQUIRED COMPONENTS)
 #include_directories(SYSTEM {OpenCV_INCLUDE_DIRS})
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -125,8 +125,8 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
+  SYSTEM
   ${catkin_INCLUDE_DIRS}
-#  include
 )
 
 INCLUDE(src/sensor_camera/CMakeLists.txt)

@@ -22,7 +22,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # This makes all warnings into errors (with two exceptions). This is NOT done on the car, since it would be too annoying.
     # unused-variable and unused-but-set-variable are excluded because these warnings come up frequently during debugging and
     # would be distrubing.
-    #set(BASE_LINE_FLAGS "${BASE_LINE_FLAGS} -Werror -Wno-error=unused-variable -Wno-error=unused-but-set-variable")
+    set(BASE_LINE_FLAGS "${BASE_LINE_FLAGS} -Werror -Wno-error=unused-variable -Wno-error=unused-but-set-variable")
   endif()
 endif()
 
@@ -47,6 +47,9 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
   set(CMAKE_CXX_ARCHIVE_CREATE "<CMAKE_AR> qcs <TARGET> <LINK_FLAGS> <OBJECTS>")
   set(CMAKE_CXX_ARCHIVE_FINISH true)
 endif()
+
+include_directories(SYSTEM ${CATKIN_DEVEL_PREFIX}/include)
+include_directories(SYSTEM /usr/src/googletest/googletest/include/)
 
 # setting up BULID_TYPEs
 

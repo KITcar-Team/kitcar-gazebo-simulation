@@ -1,10 +1,7 @@
 #ifndef SENSOR_CAMERA_NODE_H
 #define SENSOR_CAMERA_NODE_H
-#include <common/macros.h>
 
-THIRD_PARTY_HEADERS_BEGIN
 #include <image_transport/image_transport.h>
-THIRD_PARTY_HEADERS_END
 
 #include "common/node_base.h"
 
@@ -46,21 +43,21 @@ class SensorCameraNode : public NodeBase {
 
 
   /**
-    * @brief handleImage
-    *
-    * Call-back for incomming images.
-    * Receives image from Gazebo Camera; publishes precropped image.
-    *
-    * @param msg the message
-    */
+   * @brief handleImage
+   *
+   * Call-back for incomming images.
+   * Receives image from Gazebo Camera; publishes precropped image.
+   *
+   * @param msg the message
+   */
   void handleImage(const sensor_msgs::ImageConstPtr& msg);
 
 
   /**
-     * @brief rossub_uncropped_image
-     *
-     * Subscribes camera image.
-     */
+   * @brief rossub_uncropped_image
+   *
+   * Subscribes camera image.
+   */
   image_transport::Subscriber rossub_uncropped_image;
   /**
    * @brief rospub_image

@@ -1,15 +1,9 @@
 #include "sensor_camera_node.h"
 
-THIRD_PARTY_HEADERS_BEGIN
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 #include <opencv2/core.hpp>
 #include <thread>
-
-
-THIRD_PARTY_HEADERS_END
-
-
 
 #include "common/node_creation_makros.h"
 

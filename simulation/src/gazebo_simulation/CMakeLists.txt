@@ -61,7 +61,7 @@ catkin_python_setup()
 
 ## Generate messages in the 'msg' folder
 add_message_files(
-  FILES 
+  FILES
   CarState.msg
   SetModelTwist.msg
   SetModelPose.msg
@@ -138,8 +138,13 @@ include_directories(
   ${Eigen_INCLUDE_DIRS}
 )
 
+include_directories(
+  SYSTEM
+  ${catkin_INCLUDE_DIRS}
+  ${GAZEBO_INCLUDE_DIRS}
+)
+
 add_subdirectory(src/model_plugin_link)
-#add_subdirectory(src/pre_cropping)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
