@@ -1,9 +1,5 @@
-!generate.sh
-!setup_modular.sh
-
-!default-road/road.xml
-!default-freeride/road.xml
-!curves/road.xml
-
 /*
+
+
+!/default_road.py
 

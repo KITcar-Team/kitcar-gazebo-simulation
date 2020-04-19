@@ -3,7 +3,7 @@
 <launch>
   <arg name="include_brain" default="true"/>
   <arg name="car_name" default="dr_drift" />
-  <arg name="road" default="default-road"/>
+  <arg name="road" default="default_road"/>
 
   <arg name="use_sim_time" default="true"/>
 
@@ -53,7 +53,7 @@
   </group>
   <!-- Launch Gazebo -->
   <include file="$(find gazebo_simulation)/launch/world.launch">
-    <arg name="world_name" value="$(arg road)"/>
+    <arg name="world_name" value=".$(arg road)"/>
     <arg name="paused" value="$(arg gz_paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gui" value="$(arg gui)"/>
