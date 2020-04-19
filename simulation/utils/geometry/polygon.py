@@ -7,7 +7,7 @@ import shapely.affinity as affinity
 
 import numpy as np
 import geometry_msgs.msg as geometry_msgs
-from road_generation import schema
+from road import schema
 
 from geometry.point import Point
 from geometry.line import Line

@@ -2,19 +2,27 @@ def draw(obst):
     result = ""
     i = 0
     for rect in obst.shape.rectangle:
-        result += obstacle_model("Obstacle/{0}/{1}".format(obst.id, i),
-            rect.centerPoint.x, rect.centerPoint.y, rect.length,
-            rect.width, 0.2, - rect.orientation)
+        result += obstacle_model(
+            "Obstacle/{0}/{1}".format(obst.id, i),
+            rect.centerPoint.x,
+            rect.centerPoint.y,
+            rect.length,
+            rect.width,
+            0.2,
+            rect.orientation,
+        )
         i += 1
     return result
 
+
+# large masses make model instable
 def obstacle_model(name, x, y, length, width, height, orientation):
     return """
     <model name='{name}'>
       <pose frame=''>{x} {y} {z} 0 0 {orientation}</pose>
       <link name='link'>
         <inertial>
-          <mass>10</mass>
+          <mass>1</mass>
           <inertia>
             <ixx>0.166667</ixx>
             <ixy>0</ixy>
@@ -62,5 +70,13 @@ def obstacle_model(name, x, y, length, width, height, orientation):
         <kinematic>0</kinematic>
       </link>
     </model>
-    """.format(name=name, x=x, y=y, z=height/2, length=length, width=width,
-        height=height, orientation=orientation)
+    """.format(
+        name=name,
+        x=x,
+        y=y,
+        z=height / 2 + 0.1,
+        length=length,
+        width=width,
+        height=height,
+        orientation=orientation,
+    )

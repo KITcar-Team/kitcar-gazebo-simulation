@@ -147,6 +147,7 @@ class lineMarking (pyxb.binding.datatypes.string, pyxb.binding.basis.enumeration
 lineMarking._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=lineMarking, enum_prefix=None)
 lineMarking.dashed = lineMarking._CF_enumeration.addEnumeration(unicode_value='dashed', tag='dashed')
 lineMarking.solid = lineMarking._CF_enumeration.addEnumeration(unicode_value='solid', tag='solid')
+lineMarking.missing = lineMarking._CF_enumeration.addEnumeration(unicode_value='missing', tag='missing')
 lineMarking.parking = lineMarking._CF_enumeration.addEnumeration(unicode_value='parking', tag='parking')
 lineMarking._InitializeFacetMap(lineMarking._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'lineMarking', lineMarking)
@@ -180,6 +181,7 @@ laneletType.road = laneletType._CF_enumeration.addEnumeration(unicode_value='roa
 laneletType.sidewalk = laneletType._CF_enumeration.addEnumeration(unicode_value='sidewalk', tag='sidewalk')
 laneletType.zebraCrossing = laneletType._CF_enumeration.addEnumeration(unicode_value='zebraCrossing', tag='zebraCrossing')
 laneletType.startLane = laneletType._CF_enumeration.addEnumeration(unicode_value='startLane', tag='startLane')
+laneletType.parking_spot_x = laneletType._CF_enumeration.addEnumeration(unicode_value='parking_spot_x', tag='parking_spot_x')
 
 laneletType._InitializeFacetMap(laneletType._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'laneletType', laneletType)

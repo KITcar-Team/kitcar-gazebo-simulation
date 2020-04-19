@@ -1,4 +1,4 @@
-from road_generation import schema
+from road import schema
 from functools import reduce
 
 class BoundingBox:

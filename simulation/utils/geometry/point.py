@@ -6,7 +6,7 @@ __copyright__ = "KITcar"
 
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
-from road_generation import schema
+from road import schema
 
 from geometry.transform import Transform
 from geometry.vector import Vector  # Base class

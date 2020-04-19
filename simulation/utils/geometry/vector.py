@@ -171,9 +171,7 @@ class Vector(shapely.geometry.point.Point):
         return self.almost_equals(vec)
 
     def __repr__(self) -> str:
-        return (
-            f"{self.__class__.__qualname__}{tuple(round(val,8) for val in self.to_numpy())}"
-        )
+        return f"{self.__class__.__qualname__}{tuple(round(val,8) for val in [self.x,self.y,self.z])}"
 
     def __hash__(self) -> int:
         return int(self.x * 1e6 + self.y * 1e4 + self.z * 1e2)

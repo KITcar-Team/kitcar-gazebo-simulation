@@ -1,12 +1,23 @@
-from road_generation.renderer import groundplane, obstacle, traffic_sign, special_objects
+from road.renderer import groundplane, obstacle, traffic_sign, special_objects
+
 # we assume that the road width config set here is the same used during the generation
-from road_generation.generator import road_generation
-from road_generation import schema
-from os import path, makedirs
+from road import schema
+from os import path
 import os
 
 
-def generate_sdf(xml_content, target_dir, generator_dir, road_name, add_vehicle, extract_tiles=False, tile_size = 4, background = False, segmentation = False, fast_physics = False):
+def generate_sdf(
+    xml_content,
+    target_dir,
+    generator_dir,
+    road_name,
+    add_vehicle,
+    extract_tiles=False,
+    tile_size=4,
+    background=False,
+    segmentation=False,
+    fast_physics=False,
+):
     """Create world.sdf file and material files for Gazebo. 
 
     @param xml_content An XML document.  This should be data (Python 2
@@ -28,14 +39,20 @@ def generate_sdf(xml_content, target_dir, generator_dir, road_name, add_vehicle,
 
     #
 
-
     # Draw groundplane elements into materials directory. / Returns array of tile models
-    tiles = groundplane.draw(doc, generator_dir, road_name=road_name, tile_size= tile_size, include_empty= not extract_tiles, segmentation = segmentation)
+    tiles = groundplane.draw(
+        doc,
+        generator_dir,
+        road_name=road_name,
+        tile_size=tile_size,
+        include_empty=not extract_tiles,
+        segmentation=segmentation,
+    )
 
-    content = ''.join(tiles)
+    content = "".join(tiles)
 
     if add_vehicle:
-        #Includes dr_drift into world.sdf
+        # Includes dr_drift into world.sdf
         #
         content += dr_drift()
     for obst in doc.obstacle:
@@ -44,53 +61,61 @@ def generate_sdf(xml_content, target_dir, generator_dir, road_name, add_vehicle,
     for sign in doc.trafficSign:
         content += traffic_sign.draw(sign, target_dir)
     for ramp in doc.ramp:
-        content += special_objects.draw_ramp(ramp.centerPoint.x, ramp.centerPoint.y, ramp.orientation, ramp.id)
-    
+        content += special_objects.draw_ramp(
+            ramp.centerPoint.x, ramp.centerPoint.y, ramp.orientation, ramp.id
+        )
+
     if background:
         content += bg_wall()
 
-
     # Write content to world.sdf in the target directory
-    with open(path.join(target_dir,  "model.sdf"), "w+") as file:
+    with open(path.join(target_dir, "model.sdf"), "w+") as file:
         file.write("<?xml version='1.0'?>\n")
         file.write("<sdf version='1.6'>\n<world name='default'>")
         file.write("")
         file.write("<wind/>")
         file.write("<atmosphere type='adiabatic'/>")
-        file.write(physics(fast = fast_physics))
+        file.write(physics(fast=fast_physics))
         file.write(scene())
         file.write(sun_light())
         file.write(content)
         file.write("</world>\n</sdf>")
 
-    with open(path.join(target_dir,"model.config"),"w+") as file:
+    with open(path.join(target_dir, "model.config"), "w+") as file:
         file.write(config(road_name))
-    
-    with open(path.join(target_dir,".gitignore"),"w+") as file:
+
+    with open(path.join(target_dir, ".gitignore"), "w+") as file:
         file.write(git_ignore())
 
     # If tiles are supposed to be extracted
     if extract_tiles:
-        tiles_db = path.join(os.environ.get("KITCAR_REPO_PATH"),'kitcar-gazebo-simulation','simulation','models','tiles_db')
+        tiles_db = path.join(
+            os.environ.get("KITCAR_REPO_PATH"),
+            "kitcar-gazebo-simulation",
+            "simulation",
+            "models",
+            "tiles_db",
+        )
         idx = 0
 
-        road_name = road_name.split('/')[-1]
+        road_name = road_name.split("/")[-1]
 
         for t in tiles:
-            p = path.join(tiles_db,road_name + str(idx))
+            p = path.join(tiles_db, road_name + str(idx))
             os.makedirs(p, exist_ok=True)
 
-            with open(path.join(p,'model.sdf'),"w+") as file:
+            with open(path.join(p, "model.sdf"), "w+") as file:
 
                 file.write("<?xml version='1.0'?>\n")
                 file.write("<sdf version='1.6'>")
                 file.write(t)
                 file.write("</sdf>")
-            
-            with open(path.join(p,"model.config"),"w+") as file:
+
+            with open(path.join(p, "model.config"), "w+") as file:
                 file.write(config(road_name + str(idx)))
-            
-            idx+=1
+
+            idx += 1
+
 
 def physics(fast=False):
     gravity = "0 0 -9.81"
@@ -125,6 +150,8 @@ def physics(fast=False):
       </ode>
     </physics>
     """
+
+
 def scene():
     return """
     <scene>
@@ -133,6 +160,8 @@ def scene():
       <shadows>0</shadows>
     </scene>
     """
+
+
 def sun_light():
     return """
     <light name='sun_light' type='directional'>
@@ -150,6 +179,7 @@ def sun_light():
     </light>
     """
 
+
 def dr_drift():
     return """
     <include>
@@ -158,6 +188,7 @@ def dr_drift():
     </include>
     """
 
+
 def bg_wall():
     return """
     <include>
@@ -165,6 +196,7 @@ def bg_wall():
         <pose>0 0 0 0 0 0</pose>
     </include>
     """
+
 
 def config(road_name):
     return """<?xml version='1.0'?>
@@ -177,7 +209,10 @@ def config(road_name):
         <email>kditschuneit@icloud.com</email>
     </author>
     <description>Auto-generated by Commonroad road-generation</description>
-</model>""".format(road_name=road_name)
+</model>""".format(
+        road_name=road_name
+    )
+
 
 def git_ignore():
-    return"""materials\nmodel.sdf\nmodel.config\nlines.csv\ncommonroad.xml"""
+    return """materials\nmodel.sdf\nmodel.config\nlines.csv\ncommonroad.xml"""
