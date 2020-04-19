@@ -149,8 +149,12 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
     "sphinx.ext.graphviz",
+    "sphinx.ext.autosectionlabel",
     "sphinxcontrib.programoutput",
+    "sphinx-prompt",
 ]
+
+add_module_names = False
 
 
 # Add any paths that contain templates here, relative to this directory.
