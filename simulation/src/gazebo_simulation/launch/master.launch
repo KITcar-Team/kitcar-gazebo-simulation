@@ -51,6 +51,8 @@
       <arg name="rviz" value="$(arg rviz)"/>
     </include>
   </group>
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" output="screen" args="-f simulation -d  $(find gazebo_simulation)/res/simulation.rviz -s $(find gazebo_simulation)/res/kitcar_logo.png"/>
+
   <!-- Launch Gazebo -->
   <include file="$(find gazebo_simulation)/launch/world.launch">
     <arg name="world_name" value=".$(arg road)"/>
