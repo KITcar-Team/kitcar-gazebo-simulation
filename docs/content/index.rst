@@ -6,48 +6,71 @@
 .. _CaroloCup: https://wiki.ifr.ing.tu-bs.de/carolocup/news
 .. _Gazebo: http://gazebosim.org
 .. _ROS: https://www.ros.org/
-.. _Python3.6: https://www.python.org/downloads/
+.. _Python3.8: https://www.python.org/downloads/
+.. _Github: https://www.github.com/...
+.. _drive_sim_road_generation: https://github.com/tum-phoenix/drive_sim_road_generation
+.. _TUM-Phoenix: https://www.mw.tum.de/phoenix/tum-phoenix-robotics/
+.. _KITcar: https://kitcar-team.de
 
 Welcome to KITcar's Simulation
 ==============================
 
-This simulation, developed and used by KITcar, a group of students participating in the annual CaroloCup_, can generate CaroloCup-Cup roads and uses the Gazebo_ simulator to enable vehicles with visual sensors to drive on the generated roads. 
+This is the documentation of **kitcar-gazebo-simulation**; a ROS_ and Gazebo_ based simulation \
+tool that can generate CaroloCup_ roads and simulate a car driving on the generated roads.
 
-Most components of the simulation have been written in Python3.6_ and use ROS_. ROS-Nodes are used to achieve high code modularity and ROS-Topics to achieve human readable interactions between code components. 
+.. figure:: tutorials/resources/simulation_video.gif
 
-The most basic, but nevertheless most powerful feature of this simulation is to provide a world which allows to generate sensor data and provides interfaces to move your vehicle around freely.
+   View of the Gazebo user interface displaying the default_road.
 
-What's needed for that?
+ROS_ topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the bevahior of the car.
 
-* a road and
-* a vehicle model and
-* a simulation for the movement of the vehicle.
+.. figure:: tutorials/resources/simulation_camera.gif
 
-This package allows to generate a wide range of roads and to easily integrate a Gazebo_ model with camera sensors.
-The actual movement (pose and twist) of the vehicle is not simulated, but must be done externally and can be integrated by writing a Gazebo model plugin. 
+   Front Camera Output of the Car.
 
-See :ref:`getting_started` for a tutorial on how to set up the Gazebo_ simulation.
+.. note::
+
+   There's currently no dynamics simulation. The position or speed of the car must be provided externally.
+
+Public parts of the source code are available on Github.
+The project was originally inspired by the drive_sim_road_generation_ \
+created by TUM-Phoenix_ but significantly diverged since and \
+grew into a completely independent project developed by KITcar_.
+
+This documentation aims to enable an easy entry to using the simulation \
+while still providing a "behind-the-scenes" explanation of the implementation.
+First, there are several introductory pages, before diving into the different \
+ROS packages and python packages used in the repository afterward.
+The documentation concludes with a list of "mini"-talks that were held internally at KITcar \
+to share knowledge and ensure common standards within the code.
+
+.. toctree::
+   :caption: How To
+   :maxdepth: 1
+
+   tutorials/installation
+   tutorials/getting_started
+   tutorials/models
+   road/index.rst
+
 
 .. toctree::
    :maxdepth: 2
    :caption: ROS Packages
- 
+
    gazebo_simulation/index
    simulation_brain_link/index
-
-All ROS nodes are located in the simulation/src folder.
 
 
 .. toctree::
    :maxdepth: 2
-   :caption: Utility Packages
+   :caption: Python Packages
 
    _source_files/simulation.utils.car_model
    _source_files/simulation.utils.geometry
    _source_files/simulation.utils.ros_base
    _source_files/simulation.utils.road
 
-The utils package contains useful tools to make life easier.
 
 .. toctree::
    :maxdepth: 1

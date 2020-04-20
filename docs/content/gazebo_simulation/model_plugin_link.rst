@@ -5,7 +5,9 @@
 ModelPluginLinkNode
 ===================
 
-The ModelPluginLinkNode is written in Cpp because Gazebo model plugins cannot be written in Python.
+.. note::
+
+   The ModelPluginLinkNode is written in Cpp because Gazebo model plugins cannot be written in Python.
 
 model_plugin_link.h
 -------------------
