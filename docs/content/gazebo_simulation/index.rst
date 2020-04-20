@@ -5,7 +5,7 @@ gazebo_simulation
 
 ROS package to better communicate with Gazebo.
 
-.. program-output:: tree -a -I __pycache__ --dirsfirst $KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/src/gazebo_simulation | head -n -2 | tail -n +2
+.. program-output:: cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation && tree -a -I __pycache__ --dirsfirst simulation/src/gazebo_simulation
    :shell:
 
 
@@ -24,26 +24,28 @@ The :ref:`master.launch master_launch` file includes all necessary components to
 simulation locally.
 Refer to the actual source code for more details on available parameters.
 
+.. admonition:: Launch
 
-.. note::
+   Start the complete simulation with
 
-   Run::
+   .. prompt:: bash
 
       roslaunch gazebo_simulation master.launch
 
+.. seealso::
 
-See :ref:`getting_started` for more details on how to setup the simulation.
+   :ref:`getting_started` for more details.
 
-Car State Node
+CarStateNode
 --------------
 
 The :py:class:`simulation.src.gazebo_simulation.src.car_state.node.CarStateNode` \
 subscribes to Gazebo updates and publishes information about the cars current state
 (*position + speed + ...*) in shape of a :ref:`car_state_msg`.
 
-.. note::
+.. admonition:: Launch
 
-   Launch the car state node with::
+   .. prompt:: bash
 
       roslaunch gazebo_simulation car_state_node.launch
 
@@ -65,9 +67,9 @@ a sensor update rate in Docker containers.
 This node is not started in the master.launch file by default.
 It can be manually started by passing the parameter *control_sim_rate:=true* or running:
 
-.. note::
+.. admonition:: Launch
 
-   Launch the car state node with::
+   .. prompt:: bash
 
       roslaunch gazebo_simulation gazebo_rate_control_node.launch
 
