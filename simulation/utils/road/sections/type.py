@@ -11,3 +11,5 @@ CUBIC_BEZIER = 4
 """"""
 PARKING_AREA = 5
 """"""
+ZEBRA_CROSSING = 6
+""""""

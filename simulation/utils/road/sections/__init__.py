@@ -12,6 +12,7 @@ from road.sections.parking_area import (
     ParkingSpot,
     StartLine,
 )  # noqa: 402
+from road.sections.zebra_crossing import ZebraCrossing  # noqa: 402
 from road.sections.road_section import RoadSection  # noqa: 402
 
 __all__ = [
@@ -26,5 +27,6 @@ __all__ = [
     "ParkingSpot",
     "StartLine",
     "StraightRoad",
+    "ZebraCrossing",
     "RoadSection",
 ]
