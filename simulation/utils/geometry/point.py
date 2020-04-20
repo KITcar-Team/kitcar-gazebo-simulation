@@ -31,7 +31,7 @@ class Point(Vector):
 
         Returns:
             This point as a geometry_msgs/Point """
-        return geometry_msgs.Point(x=self.x, y=self.y, z=self.z)
+        return geometry_msgs.Point32(x=self.x, y=self.y, z=self.z)
 
     def to_schema(self) -> schema.point:
         """To schema Point.

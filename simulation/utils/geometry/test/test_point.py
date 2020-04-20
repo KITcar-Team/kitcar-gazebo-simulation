@@ -22,7 +22,7 @@ class ModuleTest(unittest.TestCase):
             ([-1, -2], [-1, -2, 0]),
             (np.array([1, 2, 4]), [1, 2, 4]),
             (np.array([1, 2]), [1, 2, 0]),
-            (g_msgs.Point(1, 3, 4), [1, 3, 4]),
+            (g_msgs.Point32(1, 3, 4), [1, 3, 4]),
         ]
 
         for example in examples:
@@ -35,7 +35,7 @@ class ModuleTest(unittest.TestCase):
     def test_point_extract(self):
         p1 = Point(1, 3, 2)
 
-        self.assertEqual(p1.to_geometry_msg(), g_msgs.Point(1, 3, 2))
+        self.assertEqual(p1.to_geometry_msg(), g_msgs.Point32(1, 3, 2))
         self.assertEqual(p1.to_schema(), schema.point(x=1, y=3))
 
     def test_point_func(self):
