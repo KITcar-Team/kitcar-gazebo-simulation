@@ -266,3 +266,6 @@ class Line(shapely.geometry.linestring.LineString):
         if not self.__class__ == line.__class__:
             return NotImplemented
         return self.almost_equals(line)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__qualname__}({self.get_points()})"

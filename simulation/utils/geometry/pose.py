@@ -136,8 +136,10 @@ class Pose(Point):
         ) < TOLERANCE and self.to_numpy().all() == pose.to_numpy().all()
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(position={super().__repr__()},\
-                orientation= {round(math.degrees(self.get_angle()),4)} degrees)"
+        return (
+            f"{self.__class__.__qualname__}(position={self.x, self.y, self.z},"
+            f"orientation= {round(math.degrees(self.get_angle()),4)} degrees)"
+        )
 
     def __hash__(self):
         return NotImplemented

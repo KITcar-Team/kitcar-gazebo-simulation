@@ -151,3 +151,6 @@ class Polygon(shapely.geometry.polygon.Polygon):
         return self.almost_equals(polygon) or self.almost_equals(
             Polygon(reversed(polygon.get_points()))
         )
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__qualname__}({self.get_points()})"
