@@ -19,7 +19,7 @@ from gi.repository import Rsvg
 import shutil
 import sys
 
-from geometry import Line, Point
+from geometry import Line, Point, Vector
 
 sys.path.append(
     os.path.join(
@@ -287,55 +287,50 @@ def draw_zebra_crossing(ctx, lanelet):
 
 
 def draw_start_lane(ctx, lanelet):
+    ctx.save()
+    # both boundaries are orthogonal to middle line
+    left = Line([Point(point.x, point.y) for point in lanelet.leftBoundary.point])
+    right = Line([Point(point.x, point.y) for point in lanelet.rightBoundary.point])
+
     TILE_LENGTH = 0.02
 
-    left = Line(boundary_to_equi_distant(lanelet.leftBoundary, 0.01, 0.01))
-    right = Line(boundary_to_equi_distant(lanelet.rightBoundary, 0.01, 0.01))
+    # two vectors y is orthogonal to middle line, x parallel
+    y_start = Vector(right.interpolate(0.01))
+    y_end = Vector(right.interpolate(right.length - 0.01))
+    x_end = Vector(left.interpolate(0.01))
+    # wrong name x_start is same as y_start
+    x_start = Vector(left.interpolate(left.length - 0.01))
 
-    x = TILE_LENGTH
+    # distance between lines at start and end
+    dist_start = abs(y_start - x_end)
+    dist_end = abs(y_end - x_start)
+    assert (
+        abs(dist_start - dist_end) < 0.001
+    ), "Invalid: start line lanelet boundaries not parallel"
 
-    idx = 0
-    while x < left.length + TILE_LENGTH:
-        left_lower_border = left.interpolate(x - TILE_LENGTH)
-        right_lower_border = right.interpolate(x - TILE_LENGTH)
-        # ctx.save()
+    x = Vector(x_end - y_start)
+    y = Vector(y_end - y_start)
+    # norm to TILE_LENGTH
+    x_normed = TILE_LENGTH / abs(x) * x
+    y_normed = TILE_LENGTH / abs(y) * y
 
-        left_upper_border = left.interpolate(x)
-        right_upper_border = right.interpolate(x)
-
-        cross_lower = Line([right_lower_border, left_lower_border])
-        cross_upper = Line([right_upper_border, left_upper_border])
-
-        o = TILE_LENGTH
-
-        idx += 1
-        idx %= 2
-
-        flag = idx
-        while o <= cross_lower.length:
-            r_upper = Point(cross_upper.interpolate(o - TILE_LENGTH))  # From right to left
-            r_lower = Point(cross_lower.interpolate(o - TILE_LENGTH))
-            l_upper = Point(cross_upper.interpolate(o))  # From right to left
-            l_lower = Point(cross_lower.interpolate(o))
-
-            ctx.save()
-
-            # Dont paint
-            if flag == 1:
-                ctx.move_to(r_lower.x, r_lower.y)
-                ctx.line_to(r_upper.x, r_upper.y)
-                ctx.line_to(l_upper.x, l_upper.y)
-                ctx.line_to(l_lower.x, l_lower.y)
+    n_x = int(round(abs(x) / TILE_LENGTH, 3))
+    n_y = int(round(abs(y) / TILE_LENGTH, 3))
+    for j in range(n_x):
+        # rectangle is drawn from left lower corner starting at y_start
+        for i in range(n_y):
+            if (i + j) % 2 == 0:
+                ll = y_start + j * x_normed + i * y_normed
+                rl = ll + x_normed
+                ru = rl + y_normed
+                lu = ru - x_normed
+                ctx.move_to(ll.x, ll.y)
+                ctx.line_to(rl.x, rl.y)
+                ctx.line_to(ru.x, ru.y)
+                ctx.line_to(lu.x, lu.y)
                 ctx.close_path()
                 ctx.fill()
-                flag = 0
-            else:
-                flag = 1
-            o += TILE_LENGTH
-
             ctx.restore()
-
-        x += TILE_LENGTH
 
 
 def draw_parking_spot_x(ctx, lanelet):

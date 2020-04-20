@@ -9,3 +9,5 @@ QUAD_BEZIER = 3
 """"""
 CUBIC_BEZIER = 4
 """"""
+PARKING_AREA = 5
+""""""

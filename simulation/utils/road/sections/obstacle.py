@@ -1,4 +1,4 @@
-"""StaticObstacle on road."""
+"""StaticObstacle on road and ParkingObstacle on ParkingSpot."""
 
 from dataclasses import dataclass
 import math
@@ -75,3 +75,18 @@ class StaticObstacle(_StaticObstacle):
         obstacle.shape.rectangle.append(rect)
 
         return obstacle
+
+
+@dataclass
+class _ParkingObstacle(_StaticObstacle):
+    center: Point = Point(0.2, -0.2)
+    """Center point of the obstacle."""
+    width: float = 0.15
+    """Width of the obstacle."""
+    depth: float = 0.15
+    """Width of the obstacle."""
+    normalize_x: bool = False
+
+
+class ParkingObstacle(StaticObstacle, _ParkingObstacle):
+    pass
