@@ -152,8 +152,10 @@ class Transform(Vector):
         ) == Vector(tf)
 
     def __repr__(self) -> str:
-        return f"Transform(translation={super().__repr__()},\
-                rotation={round(math.degrees(self.get_angle()),4)} degrees)"
+        return (
+            f"Transform(translation={self.x, self.y, self.z},"
+            f"rotation={round(math.degrees(self.get_angle()),4)} degrees)"
+        )
 
     def __hash__(self):
         return NotImplemented
