@@ -1,6 +1,8 @@
 """
-This file contains a definition of all different colorclasses used in the gazebo segmentation and ColorClass<->Rgb conversion methods. 
-Colors with the same grey-value are used to automatically label road objects, while still appearing the same to dr_drift's greyscale camera!
+This file contains a definition of all different colorclasses used in
+the gazebo segmentation and ColorClass<->Rgb conversion methods.
+Colors with the same grey-value are used to automatically label road objects,
+while still appearing the same to dr_drift's greyscale camera!
 
 Author: Konstantin Ditschuneit
 Date: 19.08.2019
@@ -17,6 +19,7 @@ class ColorClass(Enum):
     """
     Contains all ColorClasses used in segmentation, and a corresponding index
     """
+
     NONE = -1
     DEFAULT = 0
     SIDE_LINE = 1
@@ -27,6 +30,8 @@ class ColorClass(Enum):
     BLOCKED_AREA = 6
     ZEBRA_CROSSING = 7
     TRAFFIC_SIGN = 8
+    PARKING_SPOT_X = 9
+
 
 def color_vec():
     """
@@ -48,24 +53,24 @@ def rgb(color_class):
 
     k = color_class.value  # Number of the class
 
-    #if k < 1 or k > 2:
+    # if k < 1 or k > 2:
     #    k = 0
 
-    h = 180*float(k/NUMBER_OF_CLASSES)  # hue
-    s = 0.5*255  # saturation
-    l = 0.8*255  # value: brightness
+    h = 180 * float(k / NUMBER_OF_CLASSES)  # hue
+    s = 0.5 * 255  # saturation
+    light = 0.8 * 255  # value: brightness
 
     if k == ColorClass.DEFAULT.value:  # white
         s = 0
-    hls = np.uint8([[[h, l, s]]])  # Create hsv array
+    hls = np.uint8([[[h, light, s]]])  # Create hsv array
 
     rgb = cv2.cvtColor(hls, cv2.COLOR_HLS2RGB)  # Convert to rgb
 
-    r = rgb[0][0][0]/255
-    g = rgb[0][0][1]/255
-    b = rgb[0][0][2]/255
+    r = rgb[0][0][0] / 255
+    g = rgb[0][0][1] / 255
+    b = rgb[0][0][2] / 255
 
-    #print("k:", k, "h:", h, "RGB:", r, g, b)
+    # print("k:", k, "h:", h, "RGB:", r, g, b)
 
     return r, g, b  # return rgb
 
@@ -84,17 +89,16 @@ def class_from_color(r, g, b):
     hsv = cv2.cvtColor(rgb, cv2.COLOR_RGB2HLS)  # convert to hsv
 
     h = hsv[0][0][0]
-    l = hsv[0][0][1]
+    light = hsv[0][0][1]
     s = hsv[0][0][2]
 
-    if l == 0:
+    if light == 0:
         return ColorClass.NONE  # Black
     if s == 0:
         return ColorClass.DEFAULT  # Pure White
 
-    k = h/180*NUMBER_OF_CLASSES  # Otherwise calculate from h value
+    k = h / 180 * NUMBER_OF_CLASSES  # Otherwise calculate from h value
 
     # print(h,s,v)
 
-    return ColorClass(round(k)%NUMBER_OF_CLASSES)
-
+    return ColorClass(round(k) % NUMBER_OF_CLASSES)

@@ -40,9 +40,9 @@ MOCK_MODULES = [
     "pyxb.utils.six",
     "pyxb.binding",
     "pyxb.binding.datatypes",
-    "road_generation",
-    "road_generation.generator",
-    "road_generation.renderer",
+    "road.renderer",
+    "road.schema",
+    "road.schema_backup",
     "machine_learning.color_classes",
     "simulation.utils.machine_learning",
     "simulation.utils.machine_learning.nn",
@@ -90,11 +90,12 @@ def create_run_apidoc(root: str, exclude: List[str] = None):
 run_apidoc = create_run_apidoc(
     root="../simulation/",
     exclude=[
+        # fmt: off
         "../*setup*",
-        "../*road_generation*",
         "../*gazebo-renderer*",
-        "../*road-generator*",
+        "../*schema*",
         "../*machine_learning*",
+        # fmt: on
     ],
 )
 
@@ -206,8 +207,8 @@ html_theme = "sphinx_rtd_theme"
 autodoc_default_options = {
     "members": True,
     "member-order": "bysource",
-    "special-members": "__init__",
     "undoc-members": True,
+    "private-members": True,
 }
 
 # Napoleon settings

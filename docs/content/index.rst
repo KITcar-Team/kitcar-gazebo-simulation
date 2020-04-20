@@ -45,6 +45,7 @@ All ROS nodes are located in the simulation/src folder.
    _source_files/simulation.utils.car_model
    _source_files/simulation.utils.geometry
    _source_files/simulation.utils.ros_base
+   _source_files/simulation.utils.road
 
 The utils package contains useful tools to make life easier.
 

@@ -11,7 +11,7 @@ from geometry.transform import Transform
 
 import geometry_msgs.msg as g_msgs
 import numpy as np
-import road_generation.schema as schema
+from road import schema
 
 
 TOLERANCE = 0.007

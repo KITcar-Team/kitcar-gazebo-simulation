@@ -86,13 +86,13 @@ test-utils:
     - python3 -m geometry.test
     - python3 simulation/utils/ros_base/test/parameter_object_test.py
 
+    - python3 -m road.sections.test
+
 # Generate some roads, just for testing
 test-road-generation:
   stage: test
   script: &prebuild-generation
-    - cd simulation/models/env_db
-    - ./generate.sh -r default-road
-    - ./generate.sh -r curves
+    - python3 -m generate_road default_road
 
 test-gazebo-simulation:
   stage: test
