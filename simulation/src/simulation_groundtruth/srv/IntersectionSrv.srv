@@ -2,7 +2,6 @@
 uint8 id
 ---
 # -- Definition of msg content-- #
-LabeledPolygon[] surface_markings
 
 uint8 turn  # direction in which the car leaves the intersection
 uint8 rule  # Defines priority
