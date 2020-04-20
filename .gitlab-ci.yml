@@ -2,6 +2,7 @@ image: kitcar/docker-gazebo-build:python3.8
 
 variables:
   GIT_STRATEGY: clone
+  GIT_LFS_SKIP_SMUDGE: "1"  #  Don't pull Git LFS
 
 cache:
   paths:
