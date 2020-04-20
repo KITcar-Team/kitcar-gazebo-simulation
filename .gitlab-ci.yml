@@ -86,6 +86,8 @@ test-utils:
     - python3 -m geometry.test
     - python3 simulation/utils/ros_base/test/parameter_object_test.py
 
+    - python3 -m road.sections.test
+
 # Generate some roads, just for testing
 test-road-generation:
   stage: test
