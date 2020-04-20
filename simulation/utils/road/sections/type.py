@@ -13,3 +13,5 @@ PARKING_AREA = 5
 """"""
 ZEBRA_CROSSING = 6
 """"""
+INTERSECTION = 7
+""""""

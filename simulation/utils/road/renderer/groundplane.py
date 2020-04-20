@@ -39,9 +39,7 @@ NUMBER_COLORS = 5
 
 class MarkerImage(Enum):
     TURN_LEFT = "road/renderer/street_markings/" "Fahrbahnmarkierung_Pfeil_L.svg"
-    TURN_RIGHT = (
-        "road/renderer/street_markings/" "Fahrbahnmarkierung_Pfeil_R.svg"
-    )
+    TURN_RIGHT = "road/renderer/street_markings/" "Fahrbahnmarkierung_Pfeil_R.svg"
 
 
 StreetMarking = namedtuple("StreetMarking", ["marker_image", "marker_text", "crossed"])
@@ -74,6 +72,7 @@ ROADMARKING_TYPE_TO_VISUAL = {
     ),
 }
 
+
 def draw_stop_line(ctx, lanelet):
     ctx.save()
     left = Line([Point(point.x, point.y) for point in lanelet.leftBoundary.point])
@@ -91,7 +90,7 @@ def draw_stop_line(ctx, lanelet):
         ctx.set_dash([])
         ctx.set_line_cap(cairo.LINE_CAP_BUTT)
     ctx.set_line_width(lineWidth)
-    if(left.length < right.length):
+    if left.length < right.length:
         last_left = left.get_points()[-1]
         point_right = right.interpolate(right.project(last_left))
         ctx.move_to(last_left.x, last_left.y)
@@ -330,7 +329,7 @@ def draw_start_lane(ctx, lanelet):
                 ctx.line_to(lu.x, lu.y)
                 ctx.close_path()
                 ctx.fill()
-            ctx.restore()
+    ctx.restore()
 
 
 def draw_parking_spot_x(ctx, lanelet):
