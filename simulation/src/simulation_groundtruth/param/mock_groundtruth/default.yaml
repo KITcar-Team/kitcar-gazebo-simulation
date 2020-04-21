@@ -24,7 +24,7 @@ update_rate: 30
 #path: 0
 
 # The stops list tells the car to stop at certain points on the path:
-#stops: [[3.4,3]]
+#stops: [[3.2,3]]
 
 
 # Common options
@@ -47,27 +47,27 @@ update_rate: 30
 # 4) Intersection (yield)
 #road: 4
 #path: 0
-#stops: [[2.3,1]]
+#stops: [[2.1,1]]
 
 # 5) Intersection (stop)
 # road: 5
 # path: 0
-# stops: [[2.3,3]]
+# stops: [[2.1,3]]
 
 # 6) Parking front right
 road: 2
 path: 3
-stops: [[2.9,1]]
+stops: [[2.7,1.1]]
 
 # 7) Parking back right
 #road: 2
 #path: 4
-#stops: [[3.9,1]]
+#stops: [[3.7,1]]
 
 # 8) Parking back right
 #road: 2
 #path: 5
-#stops: [[3.3,1]]
+#stops: [[3.1,1]]
 
 # 9) Parking back right
 #road: 2

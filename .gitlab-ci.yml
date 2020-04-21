@@ -119,6 +119,8 @@ test-simulation-groundtruth:
 test-simulation-evaluation:
   stage: test
   script:
+    - python3 -m speaker.speakers.test
+
     - cd simulation
     - catkin_make run_tests_simulation_evaluation -j1
     - catkin_test_results  # Ensure that pipeline fails when test fails

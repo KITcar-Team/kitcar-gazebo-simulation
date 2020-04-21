@@ -61,6 +61,7 @@
       <arg name="rviz" value="$(arg rviz)"/>
     </include>
   </group>
+  <include if="$(arg evaluate)" file="$(find simulation_evaluation)/launch/evaluation.launch" />
 
   <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" output="screen" args="-f simulation -d  $(find gazebo_simulation)/res/simulation.rviz -s $(find gazebo_simulation)/res/kitcar_logo.png"/>
 

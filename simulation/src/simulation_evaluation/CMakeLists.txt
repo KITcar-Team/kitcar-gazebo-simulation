@@ -50,6 +50,8 @@ catkin_python_setup()
 
 add_message_files(
   FILES
+  Speaker.msg
+  Broadcast.msg
 )
 
 generate_messages(
@@ -178,4 +180,5 @@ catkin_package(
 # catkin_add_nosetests(test)
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
+  add_rostest(launch/test/speaker_node.test)
 endif()

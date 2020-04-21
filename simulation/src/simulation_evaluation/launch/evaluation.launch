@@ -1,0 +1,7 @@
+<!-- Running KITcar_brain software needed for the simulation -->
+<launch>
+  <arg name="speaker" default="true" />
+
+  <include if="$(arg speaker)" file="$(find simulation_evaluation)/launch/speaker_node.launch"/>
+
+</launch>

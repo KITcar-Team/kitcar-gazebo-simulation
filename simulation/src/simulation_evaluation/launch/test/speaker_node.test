@@ -1,0 +1,16 @@
+<launch>
+  <arg name="time_limit" value="120"/>
+
+  <arg name="pkg" default="simulation_evaluation"/>
+
+  <include file="$(find simulation_evaluation)/launch/speaker_node.launch"/>
+
+  <test test-name="test_speaker_node" pkg="simulation_evaluation" time-limit="$(arg time_limit)" type="test_speaker_node">
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state"/>
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics/groundtruth"/>
+    <rosparam file="$(find simulation_evaluation)/param/speaker/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_evaluation)/param/speaker/topics.yaml" command="load" ns="topics"/>
+  </test>
+
+</launch>
+
