@@ -117,6 +117,7 @@ test-simulation-brain-link:
 build-documentation:
   stage: deploy
   script:
+    - git lfs pull
     - cd docs
     - make html
   artifacts: # Extract artifacts to view the documentation that has been generated
