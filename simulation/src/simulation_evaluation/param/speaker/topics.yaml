@@ -1,0 +1,5 @@
+zone: "/simulation/speaker/zone"
+area: "/simulation/speaker/area"
+event: "/simulation/speaker/event"
+speed: "/simulation/speaker/speed"
+broadcast: "/simulation/speaker/broadcast"

@@ -52,7 +52,6 @@
     <!-- RVIZ -->
     <group if="$(arg rviz)">
       <include file="$(find visualization)/launch/visualization.launch" />
-      <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-f simulation -d  $(find simulation_brain_link)/res/simulation.rviz -s $(find simulation_brain_link)/res/kitcar_logo.png"/>
     </group>
   </group>
 

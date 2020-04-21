@@ -1,0 +1,17 @@
+<!-- KITcar launch script for pre_cropping -->
+<launch>
+  <arg name="time_limit" value="120"/>
+  <arg name="sleep_time" value="0.5"/>
+
+  <include file="$(find simulation_evaluation)/launch/referee_node.launch"/>
+
+  <!-- The expected argument allows for generic tests. Possible values are positive, negative -->
+  <test test-name="test_referee_node" pkg="simulation_evaluation" time-limit="$(arg time_limit)" type="test_referee_node">
+    <param name="sleep_time" value="$(arg sleep_time)"/>
+    <rosparam file="$(find simulation_evaluation)/param/referee/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_evaluation)/param/referee/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find simulation_evaluation)/param/state_machine/topics.yaml" command="load" ns="topics/state_machine"/>
+    <rosparam file="$(find simulation_evaluation)/param/speaker/topics.yaml" command="load" ns="topics/speaker"/>
+  </test>
+
+</launch>

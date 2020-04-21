@@ -109,6 +109,23 @@ test-simulation-brain-link:
     - catkin_make run_tests_simulation_brain_link -j1
     - catkin_test_results # Ensure that pipeline fails when test fails
 
+test-simulation-groundtruth:
+  stage: test
+  script:
+    - cd simulation
+    - catkin_make run_tests_simulation_groundtruth -j1
+    - catkin_test_results # Ensure that pipeline fails when test fails
+
+test-simulation-evaluation:
+  stage: test
+  script:
+    - python3 -m speaker.speakers.test
+    - python3 -m state_machine.test
+    - python3 -m referee.test
+
+    - cd simulation
+    - catkin_make run_tests_simulation_evaluation -j1
+    - catkin_test_results  # Ensure that pipeline fails when test fails
 
 ######### Documentation ########
 

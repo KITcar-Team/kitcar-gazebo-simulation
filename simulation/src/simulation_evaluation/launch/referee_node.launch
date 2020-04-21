@@ -1,0 +1,11 @@
+<!-- KITcar launch script -->
+<launch>
+
+  <node name="referee_node" ns="simulation_evaluation" pkg="simulation_evaluation" type="referee_node" output="screen">
+    <rosparam file="$(find simulation_evaluation)/param/referee/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_evaluation)/param/referee/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find simulation_evaluation)/param/state_machine/topics.yaml" command="load" ns="topics/state_machine"/>
+    <rosparam file="$(find simulation_evaluation)/param/speaker/topics.yaml" command="load" ns="topics/speaker"/>
+  </node>
+
+</launch>

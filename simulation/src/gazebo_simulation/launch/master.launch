@@ -28,6 +28,8 @@
 
   <arg name="model_interface" default="true"/>
   <arg name="car_state" default="true"/>
+  <arg name="evaluate" default="false"/>
+  <arg name="groundtruth" default="$(arg evaluate)"/>
   <arg name="control_sim_rate" default="false"/>
 
   <!-- Launch KITcar_brain -->
@@ -51,6 +53,18 @@
       <arg name="rviz" value="$(arg rviz)"/>
     </include>
   </group>
+
+  <!-- Launch evaluation pipeline -->
+  <group if="$(arg groundtruth)">
+    <include file="$(find simulation_groundtruth)/launch/groundtruth_node.launch">
+      <arg name="road" value="$(arg road)"/>
+      <arg name="rviz" value="$(arg rviz)"/>
+    </include>
+  </group>
+  <include if="$(arg evaluate)" file="$(find simulation_evaluation)/launch/evaluation.launch" />
+
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" output="screen" args="-f simulation -d  $(find gazebo_simulation)/res/simulation.rviz -s $(find gazebo_simulation)/res/kitcar_logo.png"/>
+
   <!-- Launch Gazebo -->
   <include file="$(find gazebo_simulation)/launch/world.launch">
     <arg name="world_name" value=".$(arg road)"/>

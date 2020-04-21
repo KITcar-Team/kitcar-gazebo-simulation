@@ -1,0 +1,11 @@
+<!-- Running KITcar_brain software needed for the simulation -->
+<launch>
+  <arg name="speaker" default="true" />
+  <arg name="state_machine" default="true" />
+  <arg name="referee" default="true" />
+
+  <include if="$(arg speaker)" file="$(find simulation_evaluation)/launch/speaker_node.launch"/>
+  <include if="$(arg state_machine)" file="$(find simulation_evaluation)/launch/state_machine_node.launch"/>
+  <include if="$(arg referee)" file="$(find simulation_evaluation)/launch/referee_node.launch"/>
+
+</launch>

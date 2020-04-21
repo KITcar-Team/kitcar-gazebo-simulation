@@ -1,0 +1,4 @@
+# Return all static obstacles in one section
+uint8 id
+---
+LabeledPolygon[] polygons

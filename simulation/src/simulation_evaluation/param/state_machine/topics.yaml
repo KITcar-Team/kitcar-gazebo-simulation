@@ -1,0 +1,12 @@
+progress:
+  get: '/simulation/state_machine/progress/get/'
+  set: '/simulation/state_machine/progress/set/'
+overtaking:
+  get: '/simulation/state_machine/overtaking/get/'
+  set: '/simulation/state_machine/overtaking/set/'
+parking:
+  get: '/simulation/state_machine/parking/get/'
+  set: '/simulation/state_machine/parking/set/'
+priority:
+  get: '/simulation/state_machine/priority/get/'
+  set: '/simulation/state_machine/priority/set/'

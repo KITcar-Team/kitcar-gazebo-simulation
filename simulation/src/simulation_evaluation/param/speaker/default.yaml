@@ -1,0 +1,21 @@
+queue_size: 10
+
+area:
+  min_wheels: 4  # How many wheels have to be inside an area that the speaker thinks the car is in that area
+  buffer: 0.01  # [m] All areas are buffered by this amount
+
+zone:
+  overtaking_buffer: 2  # [m] Length before and behind an obstacle in which the car is allowed to overtake
+  start_buffer: 1  # [m] Drive starts when car has driven this distance
+  end_buffer: 1  # [m] Drive ends this distance before the actual road is over
+  yield_distance: [-0.6, -0.1]  # [m] Interval before stop/halt line that car must halt/stop in
+
+event:
+  parking_spot_buffer: 0.01  # [m] Parking spots are inflated by this amount
+  min_parking_wheels: 3  # Minimum number of wheels that must be in parking spot
+
+speed:
+  stop_threshold: 1  # [Adjusted km/h] If car is slower the speaker will think it stopped
+  halt_time: 0.9  # [s] Duration for which the car must stop for the speaker to accept that it halted
+  stop_time: 2.9  # [s] Duration for which the car must stop for the speaker to accept that it stopped
+

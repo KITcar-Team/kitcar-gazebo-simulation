@@ -1,0 +1,20 @@
+<!-- KITcar launch script for pre_cropping -->
+<launch>
+  <arg name="rviz" default="true"/>
+  <arg name="rate" default="0.5"/>
+
+  <node name="groundtruth_node" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="groundtruth_mock_node" output="screen">
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find simulation_groundtruth)/param/mock_groundtruth/default.yaml" command="load"/>
+  </node>
+
+  <group if="$(arg rviz)">
+    <node name="groundtruth_visualization_node" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="groundtruth_visualization_node" output="screen">
+      <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load"/>
+      <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics"/>
+      <param name="rate" value="$(arg rate)"/>
+    </node>
+  </group>
+
+</launch>

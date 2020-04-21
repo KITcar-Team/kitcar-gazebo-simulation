@@ -1,0 +1,9 @@
+<!-- StateMachineNode launchfile -->
+<launch>
+
+  <node name="state_machine_node" ns="simulation_evaluation" pkg="simulation_evaluation" type="state_machine_node" output="screen">
+    <rosparam file="$(find simulation_evaluation)/param/state_machine/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find simulation_evaluation)/param/speaker/topics.yaml" command="load" ns="topics/speaker"/>
+  </node>
+
+</launch>

@@ -1,0 +1,11 @@
+<launch>
+  <arg name="time_limit" value="120"/>
+
+  <test test-name="test_groundtruth_node" pkg="simulation_groundtruth" time-limit="$(arg time_limit)" type="test_groundtruth_node">
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find simulation_groundtruth)/param/mock_groundtruth/default.yaml" command="load"/>
+  </test>
+
+</launch>
+

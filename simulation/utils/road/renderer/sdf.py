@@ -18,7 +18,7 @@ def generate_sdf(
     segmentation=False,
     fast_physics=False,
 ):
-    """Create world.sdf file and material files for Gazebo. 
+    """Create world.sdf file and material files for Gazebo.
 
     @param xml_content An XML document.  This should be data (Python 2
     str or Python 3 bytes), or a text (Python 2 unicode or Python 3
@@ -53,7 +53,6 @@ def generate_sdf(
 
     if add_vehicle:
         # Includes dr_drift into world.sdf
-        #
         content += dr_drift()
     for obst in doc.obstacle:
         if obst.type != "blockedArea":
@@ -184,7 +183,7 @@ def dr_drift():
     return """
     <include>
         <uri>model://dr_drift</uri>
-        <pose>0 0 0.01 0 0 0</pose>
+        <pose>0.4 -0.2 0.01 0 0 0</pose>
     </include>
     """
 
