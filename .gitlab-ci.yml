@@ -67,7 +67,7 @@ build-code:
       - kitcar-ros
       - simulation/devel
       - simulation/build
-    expire_in: 2 hrs
+    expire_in: 2 day
 
 
 ######## TEST STAGE #########
@@ -75,56 +75,32 @@ build-code:
 # Test if dr_drift generation script works
 test-dr_drift:
   stage: test
-  script: &prebuild-dr_drift
+  script: &test-dr_drift
     - cd simulation/models/model_db/dr_drift
     - ./generate.sh
     #TODO: Also test if the calibration is actually correct.
 
 # Run module test in utils packages
-test-utils:
+test-python-packages:
   stage: test
-  script: &prebuild-test-utils
+  script: &test-utils
     - python3 -m geometry.test
     - python3 simulation/utils/ros_base/test/parameter_object_test.py
 
     - python3 -m road.sections.test
 
-# Generate some roads, just for testing
-test-road-generation:
-  stage: test
-  script: &prebuild-generation
+    # Generate roads, just for testing
     - python3 -m generate_road default_road
 
-test-gazebo-simulation:
-  stage: test
-  script:
-    - cd simulation
-    - catkin_make run_tests_gazebo_simulation -j1
-    - catkin_test_results # Ensure that pipeline fails when test fails
-
-test-simulation-brain-link:
-  stage: test
-  script:
-    - cd simulation
-    - catkin_make run_tests_simulation_brain_link -j1
-    - catkin_test_results # Ensure that pipeline fails when test fails
-
-test-simulation-groundtruth:
-  stage: test
-  script:
-    - cd simulation
-    - catkin_make run_tests_simulation_groundtruth -j1
-    - catkin_test_results # Ensure that pipeline fails when test fails
-
-test-simulation-evaluation:
-  stage: test
-  script:
     - python3 -m speaker.speakers.test
     - python3 -m state_machine.test
     - python3 -m referee.test
 
+test-ros-packages:
+  stage: test
+  script:
     - cd simulation
-    - catkin_make run_tests_simulation_evaluation -j1
+    - catkin_make run_tests -j1
     - catkin_test_results  # Ensure that pipeline fails when test fails
 
 ######### Documentation ########
