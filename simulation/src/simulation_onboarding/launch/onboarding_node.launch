@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Launch script for onboarding node -->
+<launch>
+  <!-- Start a node with the <node> tag. The `pkg` and `type` attribute specify which script should be called to start the node. Here, the script is located at simulation_onboarding/scripts/simulation_onboarding -->
+  <node name="onboarding_node" ns="simulation_onboarding" pkg="simulation_onboarding" type="onboarding_node" output="screen">
+    <!-- Load parameters from default.yaml with <rosparam>.-->
+    <rosparam file="$(find simulation_onboarding)/param/onboarding/default.yaml" command="load"/>
+    <!-- Load parameters from topics.yaml with <rosparam>. In this case, the parameters are loaded into the namespace `topics`. Namespaces allow to load a number of parameter files without conflicts. The parameters can then be accessed within the node. -->
+    <rosparam file="$(find simulation_onboarding)/param/onboarding/topics.yaml" command="load" ns="topics" />
+  </node>
+</launch>

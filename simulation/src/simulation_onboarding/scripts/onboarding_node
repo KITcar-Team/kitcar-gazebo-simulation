@@ -1,0 +1,10 @@
+#! /usr/bin/env python3
+import rospy
+from contextlib import suppress
+
+from onboarding.node import OnboardingNode
+
+if __name__ == "__main__":
+    # Start the node
+    with suppress(rospy.ROSInterruptException):
+        OnboardingNode()

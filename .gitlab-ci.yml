@@ -135,6 +135,9 @@ build-documentation:
   stage: deploy
   script:
     - git lfs pull
+    # Test if the onboarding documentation is correct
+    - python3 docs/content/onboarding/road_examples/example.py
+    # Build the documentation
     - cd docs
     - make html
   artifacts: # Extract artifacts to view the documentation that has been generated
