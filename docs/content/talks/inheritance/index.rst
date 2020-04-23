@@ -1,3 +1,5 @@
+.. _talk_inheritance:
+
 Inheritance in Python
 ==========================
 

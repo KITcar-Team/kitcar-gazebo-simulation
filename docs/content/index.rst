@@ -80,3 +80,16 @@ to share knowledge and ensure common standards within the code.
 
    talks/names_and_values/index.rst
    talks/inheritance/index.rst
+
+
+Onboarding
+----------
+
+At KITcar_, we integrate new members into the team through the *Onboarding*-Challenge.
+This is the **KITcar Simulation**'s Onboarding:
+
+.. toctree::
+
+   onboarding/index
+
+

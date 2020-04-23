@@ -12,5 +12,6 @@ export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/simulation/src/simulation_
 export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/simulation/src/simulation_evaluation/src
 export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/simulation/src/simulation_brain_link/src
 export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/simulation/src/gazebo_simulation/src
+export PYTHONPATH=$PYTHONPATH:$KITCAR_GAZEBO_SIM_PATH/simulation/src/simulation_onboarding/src
 
 source $KITCAR_GAZEBO_SIM_PATH/devel/setup.bash --extend
