@@ -22,6 +22,7 @@ from typing import List, Callable
 #
 APPROXIMATION_DISTANCE = 0.00005
 CURVATURE_APPROX_DISTANCE = 0.04
+SIMPLIFICATION_TOLERANCE = 0.001
 
 
 def ensure_valid_arc_length(*, approx_distance=APPROXIMATION_DISTANCE) -> Callable:
@@ -115,20 +116,14 @@ class Line(shapely.geometry.linestring.LineString):
         Returns:
             Line shifted by an offset into the left or right direction.
         """
-        assert side == "right" or side == "left"
-
-        new_line = []
-        for p in self.get_points():
-            direction = self.interpolate_direction(arc_length=self.project(other=p))
-
-            v_orth = (1 - 2 * (side == "left")) * direction.cross(
-                Vector(0, 0, 1)
-            )  # Othogonal vector to the right/left
-            v_scaled = (offset / abs(v_orth)) * v_orth
-            new_p = p + v_scaled
-
-            new_line.append(new_p)
-        return Line(new_line)
+        assert (
+            side == "right" or side == "left"
+        ), "Parallel offset is only possible to the right or left!"
+        coords = super().parallel_offset(offset, side).coords
+        if side == "right":
+            # Because shapely orders right hand offset lines in reverse
+            coords = reversed(coords)
+        return Line(coords)
 
     @ensure_valid_arc_length()
     def interpolate_direction(self, *, arc_length: float) -> Vector:
@@ -144,8 +139,8 @@ class Line(shapely.geometry.linestring.LineString):
             ValueError: If the arc_length is <0 or more than the length of the line.
 
         Returns:
-            Corresponding direction as a normalised vector."""
-
+            Corresponding direction as a normalised vector.
+        """
         n = Vector(self.interpolate(arc_length + APPROXIMATION_DISTANCE))
         p = Vector(self.interpolate(arc_length - APPROXIMATION_DISTANCE))
 
@@ -168,8 +163,8 @@ class Line(shapely.geometry.linestring.LineString):
             ValueError: If the arc_length is <0 or more than the length of the line.
 
         Returns:
-            Corresponding curvature."""
-
+            Corresponding curvature.
+        """
         p = Vector(
             self.interpolate(arc_length - CURVATURE_APPROX_DISTANCE)
         )  # Previous point
@@ -197,8 +192,8 @@ class Line(shapely.geometry.linestring.LineString):
             ValueError: If the arc_length is <0 or more than the length of the line.
 
         Returns:
-            Corresponding pose."""
-
+            Corresponding pose.
+        """
         point = self.interpolate(arc_length)
         orientation = self.interpolate_direction(arc_length=arc_length)
 
@@ -237,7 +232,8 @@ class Line(shapely.geometry.linestring.LineString):
         """Concatenate lines.
 
         Returns:
-            Lines concatenated behind another. """
+            Lines concatenated behind another.
+        """
         coords = list(self._get_coords())
         coords.extend(line._get_coords())
 
@@ -265,7 +261,11 @@ class Line(shapely.geometry.linestring.LineString):
     def __eq__(self, line: "Line") -> bool:
         if not self.__class__ == line.__class__:
             return NotImplemented
-        return self.almost_equals(line)
+
+        # simplify lines (1 mm tolerance) before checking equality
+        return self.simplify(tolerance=SIMPLIFICATION_TOLERANCE).almost_equals(
+            line.simplify(tolerance=SIMPLIFICATION_TOLERANCE)
+        )
 
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}({self.get_points()})"
