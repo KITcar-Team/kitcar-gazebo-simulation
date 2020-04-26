@@ -12,8 +12,8 @@ ModelPluginLinkNode
 model_plugin_link.h
 -------------------
 
-.. literalinclude:: ../../../simulation/src/gazebo_simulation/src/model_plugin_link/model_plugin_link.h
-   :language: cpp
+.. autodoxygenfile:: simulation/src/gazebo_simulation/src/model_plugin_link/model_plugin_link.h
+   :project: kitcar-gazebo-simulation
 
 model_plugin_link.cpp
 ---------------------

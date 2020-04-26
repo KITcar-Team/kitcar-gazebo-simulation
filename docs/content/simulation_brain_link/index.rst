@@ -15,6 +15,7 @@ The camera used in Dr.Drift does some internal precropping to enable a higher fr
 
   roslaunch simulation_brain_link sensor_camera_node.launch
 
+See :ref:`sensor_camera_node` for more.
 
 `Dr. Drift` is also equipped with `time-of-flight` distance-sensors. However, Gazebo does not provide distance sensors out of the box.
 The SensorTofNode converts the output of a depth camera into a distance by publishing the distance to the closest object.
