@@ -19,6 +19,7 @@
 #
 import os
 import sys
+from pathlib import Path
 from unittest.mock import Mock
 from typing import List
 
@@ -153,6 +154,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinxcontrib.programoutput",
     "sphinx-prompt",
+    "breathe",
 ]
 
 add_module_names = False
@@ -214,3 +216,15 @@ autodoc_default_options = {
 # Napoleon settings
 napoleon_google_docstring = True
 napoleon_numpy_docstring = False
+
+# Breathe settings
+os.chdir("..")
+breathe_projects_source = {
+    "kitcar-gazebo-simulation": (
+        "..",
+        # Add all header files in simulation/* to project!
+        # (Exclude devel)
+        [str(file) for file in Path("simulation").rglob("*.h") if "devel" not in str(file)],
+    ),
+}
+os.chdir("docs")

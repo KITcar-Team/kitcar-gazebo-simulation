@@ -14,3 +14,4 @@ pkg-config
 python3.8-dev
 gir1.2-gtk-3.0
 tree
+doxygen
