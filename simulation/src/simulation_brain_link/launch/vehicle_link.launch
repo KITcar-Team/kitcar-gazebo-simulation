@@ -2,7 +2,10 @@
 <launch>
   <arg name="gui" default="true"/>
   <arg name="rviz" default="false"/>
-  <arg name="car_name" default="dr_drift" /> 
+  <arg name="car_name" default="dr_drift" />
+
+  <arg name="set_twist" default="true" />
+  <arg name="set_pose" default="true" />
 
   <!-- Remap simulated sensors to the topics used in KITcar brain -->
   <remap from="/simulation/sensors/prepared/camera" to="/camera/image_raw"/>
@@ -22,8 +25,10 @@
 
   <include file="$(find simulation_brain_link)/launch/vehicle_simulation_link.launch">
     <arg name="car_name" value="$(arg car_name)"/>
+    <arg name="set_twist" value="$(arg set_twist)"/>
+    <arg name="set_pose" value="$(arg set_pose)"/>
   </include>
-  
+
   <include file="$(find simulation_brain_link)/launch/sensor_camera_node.launch"/>
 
   <!-- Simulate all time of flight sensors -->

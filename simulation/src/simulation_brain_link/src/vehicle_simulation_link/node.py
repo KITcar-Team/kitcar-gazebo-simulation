@@ -9,10 +9,15 @@ from geometry import Transform, Vector
 # Messages
 from state_estimation_msgs.msg import State as StateEstimationMsg
 import geometry_msgs.msg
-from gazebo_simulation.msg import SetModelTwist as SetModelTwistMsg
+from gazebo_simulation.msg import (
+    SetModelTwist as SetModelTwistMsg,
+    SetModelPose as SetModelPoseMsg,
+)
 from tf2_msgs.msg import TFMessage
 
 import std_msgs.msg
+
+from pyquaternion import Quaternion
 
 __copyright__ = "KITcar"
 
@@ -35,11 +40,14 @@ class VehicleSimulationLinkNode(NodeBase):
     """
 
     def __init__(self):
-        """ initialize the node"""
-
         self.vehicle_world_tf = Transform([0, 0], 0)
+        self.speed = Vector(0, 0)
+        self.yaw_rate = 0
+        self.vehicle_simulation_rotation = Transform([0, 0], 0)
 
-        super().__init__(name="vehicle_simulation_link_node")  # Name can be overwritten in launch file
+        super().__init__(
+            name="vehicle_simulation_link_node"
+        )  # Name can be overwritten in launch file
 
         self.run()
 
@@ -59,8 +67,20 @@ class VehicleSimulationLinkNode(NodeBase):
             SetModelTwistMsg,
             queue_size=1,
         )
+        self.set_model_pose_publisher = rospy.Publisher(
+            self.param.topics.model_plugin.namespace
+            + "/"
+            + self.param.car_name
+            + "/"
+            + self.param.topics.model_plugin.set.pose,
+            SetModelPoseMsg,
+            queue_size=1,
+        )
         self.state_estimation_subscriber = rospy.Subscriber(
-            self.param.topics.state_estimation, StateEstimationMsg, self.state_estimation_cb, queue_size=1
+            self.param.topics.state_estimation,
+            StateEstimationMsg,
+            self.state_estimation_cb,
+            queue_size=1,
         )
 
         rospy.wait_for_message(
@@ -84,6 +104,19 @@ class VehicleSimulationLinkNode(NodeBase):
             queue_size=1,
         )
 
+        # Read initial position from parameters
+        try:
+            initial = self.param.initial_pose
+            if len(initial) > 3:
+                angle = initial[3]
+                del initial[3]
+            else:
+                angle = 0
+            pos = Vector(initial)
+            self.initial_tf = Transform(pos, angle)
+        except KeyError:
+            self.initial_tf = None
+
         super().start()
 
     def stop(self):
@@ -96,10 +129,13 @@ class VehicleSimulationLinkNode(NodeBase):
 
     def receive_model_pose_cb(self, msg: geometry_msgs.msg.Pose):
         """Receive new model pose."""
-
-        # Rotation between vehicle and simulation coordinates!
-        tf = Transform([0, 0, 0], Transform(msg).rotation)
-        self.update_twist(self.latest_state_estimation, tf)
+        rot = Quaternion(
+            msg.orientation.w, msg.orientation.x, msg.orientation.y, msg.orientation.z
+        )
+        if self.param.set_twist:
+            self.update_twist(self.latest_state_estimation, rot)
+        if self.param.set_pose:
+            self.update_pose()
 
         self.update_simulation_world_tf(vehicle_simulation_tf=Transform(msg))
 
@@ -107,7 +143,9 @@ class VehicleSimulationLinkNode(NodeBase):
         """Receive new state estimation."""
         self.latest_state_estimation = msg
 
-    def update_twist(self, state_estimation: StateEstimationMsg, vehicle_simulation_rotation: Transform):
+    def update_twist(
+        self, state_estimation: StateEstimationMsg, vehicle_simulation_rotation: Quaternion
+    ):
         """Update the vehicle's twist by publishing an update on the model plugins set_twist topic.
 
         Args:
@@ -119,12 +157,16 @@ class VehicleSimulationLinkNode(NodeBase):
 
             # The state_estimation message contains the speed in vehicle coordinates,
             # the vehicle world rotation converts the speed into simulation coordinates.
-            speed = vehicle_simulation_rotation * Vector(state_estimation.speed_x, state_estimation.speed_y, 0)
+            speed_x, speed_y, _ = vehicle_simulation_rotation.rotate(
+                (state_estimation.speed_x, state_estimation.speed_y, 0)
+            )
 
             new_vals = []
-            new_vals.append((SetModelTwistMsg.LINEAR_X, speed.x))
-            new_vals.append((SetModelTwistMsg.LINEAR_Y, speed.y))
-            new_vals.append((SetModelTwistMsg.ANGULAR_Z, state_estimation.yaw_rate))
+            new_vals.append((SetModelTwistMsg.LINEAR_X, speed_x))
+            new_vals.append((SetModelTwistMsg.LINEAR_Y, speed_y))
+            new_vals.append(
+                (SetModelTwistMsg.ANGULAR_Z, self.latest_state_estimation.yaw_rate)
+            )
 
             keys, values = zip(*new_vals)
             msg = SetModelTwistMsg(keys, values)
@@ -136,19 +178,52 @@ class VehicleSimulationLinkNode(NodeBase):
         except Exception as e:
             rospy.logerr(f"Error updating the vehicles twist {e}.")
 
+    def update_pose(self):
+        try:
+            tf = self.vehicle_world_tf
+            if self.initial_tf is None:
+                tf = self.vehicle_world_tf
+            else:
+                tf = self.initial_tf * self.vehicle_world_tf
+
+            new_vals = []
+            new_vals.append((SetModelPoseMsg.POSITION_X, tf.x))
+            new_vals.append((SetModelPoseMsg.POSITION_Y, tf.y))
+            new_vals.append((SetModelPoseMsg.ORIENTATION_W, tf.rotation.w))
+            new_vals.append((SetModelPoseMsg.ORIENTATION_X, tf.rotation.x))
+            new_vals.append((SetModelPoseMsg.ORIENTATION_Y, tf.rotation.y))
+            new_vals.append((SetModelPoseMsg.ORIENTATION_Z, tf.rotation.z))
+
+            keys, values = zip(*new_vals)
+            msg = SetModelPoseMsg(keys, values)
+
+            self.set_model_pose_publisher.publish(msg)
+
+            rospy.logdebug(f"Updating the vehicle's pose with {new_vals}")
+
+        except Exception as e:
+            rospy.logerr(f"Error updating the vehicles pose {e}.")
+
     def receive_tf(self, tf_msg: TFMessage):
         """Receive new message from the /tf topic and extract the world to vehicle transformation."""
-
         # Only select world to vehicle transformations
         def select_tf(tf):
-            return tf.header.frame_id == self.param.frame.world and tf.child_frame_id == self.param.frame.vehicle
+            return (
+                tf.header.frame_id == self.param.frame.world
+                and tf.child_frame_id == self.param.frame.vehicle
+            )
 
         # Select first tf (default: None)
         # Beware: Transformation goes from child to header frame !!
-        vehicle_world: geometry_msgs.msg.TransformStamped = next(filter(select_tf, tf_msg.transforms), None)
+        vehicle_world: geometry_msgs.msg.TransformStamped = next(
+            filter(select_tf, tf_msg.transforms), None
+        )
         if vehicle_world:
-            rospy.logdebug(f"Received vehicle to world transform {vehicle_world}")
             self.vehicle_world_tf = Transform(vehicle_world.transform)
+            rospy.logdebug(
+                f"Received vehicle to world transform {vehicle_world}"
+                f"(Converted to: {self.vehicle_world_tf} {self.vehicle_world_tf.rotation})"
+            )
 
     def update_simulation_world_tf(self, vehicle_simulation_tf: Transform):
         """Publish up to date simulation to world transformation to /tf.
@@ -164,6 +239,8 @@ class VehicleSimulationLinkNode(NodeBase):
         tf_stamped.child_frame_id = self.param.frame.world
 
         # Transformation from world to simulation == (world to vehicle -> vehicle to simulation)
-        tf_stamped.transform = (vehicle_simulation_tf * self.vehicle_world_tf).to_geometry_msg()
+        tf_stamped.transform = (
+            vehicle_simulation_tf * self.vehicle_world_tf
+        ).to_geometry_msg()
 
         self.pub_tf.publish(TFMessage([tf_stamped]))
