@@ -240,7 +240,7 @@ class VehicleSimulationLinkNode(NodeBase):
 
         # Transformation from world to simulation == (world to vehicle -> vehicle to simulation)
         tf_stamped.transform = (
-            vehicle_simulation_tf * self.vehicle_world_tf
+            vehicle_simulation_tf * self.vehicle_world_tf.inverse
         ).to_geometry_msg()
 
         self.pub_tf.publish(TFMessage([tf_stamped]))
