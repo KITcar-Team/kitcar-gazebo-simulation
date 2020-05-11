@@ -17,6 +17,20 @@ The repositories already comes with a few predefined roads.
 .. program-output:: cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation/ &&  tree -L 3 -I __pycache__ --dirsfirst simulation/models/env_db
    :shell:
 
+Before a road can be simulated, it has to be generated:
+
+.. admonition:: Generate a Road
+
+   Roads are generated using the :py:mod:`simulation.utils.generate_road` module.
+   The name of the road has to be passed as an argument:
+
+   .. prompt:: bash
+
+      python3 -m generate_road <NAME_OF_ROAD>
+
+default_road
+------------
+
 When the simulation is launched without any additional *road* parameter:
 
 .. prompt:: bash
