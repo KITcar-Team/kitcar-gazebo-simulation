@@ -11,7 +11,6 @@ from pyquaternion import Quaternion
 
 import numbers
 import math
-import numpy as np
 
 from contextlib import suppress
 
@@ -70,9 +69,9 @@ class Pose(Point):
         with suppress(Exception):
             # Try to initialize with two points translation+orientation
             t = args[0]
-            orientation_vec = args[1].to_numpy()
-            angle = (-1 if orientation_vec[1] < 0 else 1) * math.acos(
-                np.dot([1, 0, 0], orientation_vec) / np.linalg.norm(orientation_vec)
+            orientation_vec = Vector(args[1])
+            angle = (-1 if orientation_vec.y < 0 else 1) * math.acos(
+                (Vector(1, 0, 0) * orientation_vec) / abs(orientation_vec)
             )
 
             self.__init__(t, angle)
@@ -80,7 +79,7 @@ class Pose(Point):
 
         # None of the initializations worked
         raise NotImplementedError(
-            f"Point initialization not implemented for {type(args[0])}"
+            f"{self.__class__} initialization not implemented for {type(args[0])}"
         )
 
     def get_angle(self) -> float:
