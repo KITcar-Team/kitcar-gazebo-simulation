@@ -234,6 +234,7 @@ class VehicleSimulationLinkNode(NodeBase):
         tf_stamped = geometry_msgs.msg.TransformStamped()
 
         tf_stamped.header = std_msgs.msg.Header()
+        tf_stamped.header.stamp = rospy.Time.now()
         # Transform from world to simulation
         tf_stamped.header.frame_id = self.param.frame.simulation
         tf_stamped.child_frame_id = self.param.frame.world
