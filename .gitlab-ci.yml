@@ -72,6 +72,9 @@ test-python-packages:
     - python3 -m state_machine.test
     - python3 -m referee.test
 
+    # Test the urdf package
+    - python3 simulation/utils/urdf/test/test_core.py
+
 test-ros-packages:
   stage: test
   script:
