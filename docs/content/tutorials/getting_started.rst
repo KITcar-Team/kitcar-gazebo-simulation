@@ -11,7 +11,7 @@ It only covers the very basics of what's happening behind the scenes.
 Generate Roads
 ----------------
 
-Roads are defined as python scripts within *simulation/models/env_db*.
+Roads are defined as python scripts within ``simulation/models/env_db``.
 Before starting the simulation with a road, a Gazebo model must be generated from the \
 python script:
 
@@ -52,3 +52,5 @@ The **default_road** can be started without the *road* argument:
 You should then see a road looking similar to the following:
 
 .. figure:: resources/gazebo_simulation.jpg
+
+See :ref:`master_launch` for more details.

@@ -45,13 +45,16 @@ The documentation concludes with a list of "mini"-talks that were held internall
 to share knowledge and ensure common standards within the code.
 
 .. toctree::
-   :caption: How To
+   :caption: Tutorials
    :maxdepth: 1
 
    tutorials/installation
    tutorials/getting_started
+   tutorials/master_launch
+   tutorials/drive_in_simulation
+   tutorials/roads.rst
+   tutorials/road_sections.rst
    tutorials/models
-   road/index.rst
 
 
 .. toctree::
