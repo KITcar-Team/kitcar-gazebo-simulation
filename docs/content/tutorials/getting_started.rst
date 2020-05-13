@@ -52,3 +52,5 @@ The **default_road** can be started without the *road* argument:
 You should then see a road looking similar to the following:
 
 .. figure:: resources/gazebo_simulation.jpg
+
+See :ref:`master_launch` for more details.

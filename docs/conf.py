@@ -169,6 +169,7 @@ templates_path = ["templates"]
 # source_suffix = ['.rst', '.md']
 source_suffix = ".rst"
 
+html_extra_path = ["content/tutorials/resources/rviz_master_launch.mp4"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
