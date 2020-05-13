@@ -5,6 +5,11 @@ from road.sections import ParkingArea, ParkingLot, ParkingSpot, StartLine, Parki
 from road.sections import Intersection
 from road.sections import ZebraCrossing
 from road.sections import LeftCircularArc
+from road.sections import StraightRoad
+
+# - Beginning sphinx straight_road -
+straight_road = StraightRoad(length=2)
+# - Ending sphinx straight_road -
 
 
 # - Beginning sphinx parking_area -
@@ -23,9 +28,9 @@ parking_area = ParkingArea(
             opening_angle=40,
             spots=[
                 ParkingSpot(),
-                ParkingSpot(kind=ParkingSpot.OCCUPIED, obstacle=ParkingObstacle())
+                ParkingSpot(kind=ParkingSpot.OCCUPIED, obstacle=ParkingObstacle()),
             ],
-        )
+        ),
     ],
     right_lots=[
         ParkingLot(
@@ -44,11 +49,7 @@ parking_area = ParkingArea(
 # - Ending sphinx parking_area -
 
 # - Beginning sphinx intersection -
-intersection = Intersection(
-    size=2,
-    turn=Intersection.RIGHT,
-    angle=110
-)
+intersection = Intersection(size=2, turn=Intersection.RIGHT, angle=110)
 # - Ending sphinx intersection -
 
 # - Beginning sphinx zebra_crossing -
@@ -56,10 +57,7 @@ zebra_crossing = ZebraCrossing(length=0.5)
 # - Ending sphinx zebra_crossing -
 
 # - Beginning sphinx left_arc -
-left_arc = LeftCircularArc(
-    radius=2,
-    angle=90
-)
+left_arc = LeftCircularArc(radius=2, angle=90)
 # - Ending sphinx left_arc -
 
 road = Road()

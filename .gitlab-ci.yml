@@ -112,7 +112,7 @@ build-documentation:
   script:
     - git lfs pull
     # Test if the onboarding documentation is correct
-    - python3 docs/content/onboarding/road_examples/example.py
+    - python3 docs/content/tutorials/road_examples/example.py
     # Build the documentation
     - cd docs
     - make html

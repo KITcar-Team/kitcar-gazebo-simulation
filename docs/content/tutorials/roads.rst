@@ -28,6 +28,34 @@ Before a road can be simulated, it has to be generated:
 
       python3 -m generate_road <NAME_OF_ROAD>
 
+The :py:mod:`simulation.utils.generate_road` script imports the *<ROAD_NAME>.py* within \
+``simulation/models/env_db/``.
+It then expects to find the python variable **road** of type \
+:py:class:`simulation.utils.road.road.Road` within the road script.
+
+This implies that:
+
+.. note::
+
+   A new road can be any script which defines a global road variable of type \
+   :py:class:`simulation.utils.road.road.Road` within ``simulation/models/env_db``.
+
+E.g. the file ``simulation/models/env_db/custom_road.py`` with content:
+
+.. code-block:: python
+
+   from road.road import Road
+   from road.sections import *
+
+   road = Road()
+
+   road.append(StraightRoad())  # Replace with other road sections
+
+creates a very simple straight road, called **custom_road**.
+
+There are a number of different types of road sections which are explained in
+:ref:`road_sections`.
+
 default_road
 ------------
 
@@ -43,23 +71,10 @@ concatenated using a :py:class:`simulation.utils.road.road.Road`:
 
 .. literalinclude:: ../../..//simulation/models/env_db/default_road.py
 
-As described in :ref:`getting_started`, the *default_road* must be generated before launching:
+As described earlier, the *default_road* must be generated before launching:
 
 .. prompt:: bash
 
    python3 -m generate_road default_road
 
-The :py:mod:`simulation.utils.generate_road` script imports the *<ROAD_NAME>.py* within \
-``simulation/models/env_db/``.
-It then expects to find the python variable **road** of type \
-:py:class:`simulation.utils.road.road.Road` within the road script.
 
-This implies that:
-
-.. note::
-
-   A new road can be any script which defines a global road variable of type \
-   :py:class:`simulation.utils.road.road.Road` within ``simulation/models/env_db``.
-
-There are a number of different types of road sections which are explained in
-:ref:`road_sections`.

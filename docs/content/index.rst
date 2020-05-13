@@ -51,7 +51,8 @@ to share knowledge and ensure common standards within the code.
    tutorials/installation
    tutorials/getting_started
    tutorials/master_launch
-   road/index.rst
+   tutorials/roads.rst
+   tutorials/road_sections.rst
    tutorials/models
 
 
