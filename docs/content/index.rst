@@ -51,6 +51,7 @@ to share knowledge and ensure common standards within the code.
    tutorials/installation
    tutorials/getting_started
    tutorials/master_launch
+   tutorials/drive_in_simulation
    tutorials/roads.rst
    tutorials/road_sections.rst
    tutorials/models
