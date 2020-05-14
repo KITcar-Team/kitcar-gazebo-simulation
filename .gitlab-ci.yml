@@ -23,22 +23,9 @@ before_script:
   - source .venv/bin/activate
   - pip3 install -r requirements.txt
 
-  #Move kitcar-ros to $KITCAR_REPO_PATH
   - export KITCAR_REPO_PATH=/builds/kitcar/
-  - if [ -d "kitcar-ros" ]; then
-  - mv kitcar-ros $KITCAR_REPO_PATH/kitcar-ros
-  - source $KITCAR_REPO_PATH/kitcar-ros/init/bashrc || true
-  - fi
-
   #Source init / This fails when the simulation has not been built
   - source init/bashrc || true
-
-after_script:
-  #Move kitcar-ros back into this folder (Necessary for artifacts!)
-  - export KITCAR_REPO_PATH=/builds/kitcar/
-  - if [ -d "$KITCAR_REPO_PATH/kitcar-ros" ]; then
-  - mv $KITCAR_REPO_PATH/kitcar-ros kitcar-ros
-  - fi
 
 stages:
   - build
@@ -50,21 +37,10 @@ stages:
 build-code:
   stage: build
   script: &build-all
-    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-ros.git $KITCAR_REPO_PATH/kitcar-ros
-    - cd $KITCAR_REPO_PATH/kitcar-ros
-    # Build only necessary parts of brain and debugger!
-    - cd $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain
-    - catkin_make --only-pkg-with-deps common state_estimation_msgs longitudinal_controller_msgs lateral_controller_msgs
-
-    - source $KITCAR_REPO_PATH/kitcar-ros/KITcar_brain/devel/setup.bash --extend
-    - cd  $KITCAR_REPO_PATH/kitcar-ros/KITcar_debugger
-    - catkin_make --only-pkg-with-deps control_debug
-
-    - cd  $KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation
+    - cd  simulation
     - catkin_make
   artifacts:
     paths:
-      - kitcar-ros
       - simulation/devel
       - simulation/build
     expire_in: 2 day
