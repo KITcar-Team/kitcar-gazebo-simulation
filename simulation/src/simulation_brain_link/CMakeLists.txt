@@ -13,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   cv_bridge
   image_transport
-  common
   state_estimation_msgs
   message_generation
   std_msgs

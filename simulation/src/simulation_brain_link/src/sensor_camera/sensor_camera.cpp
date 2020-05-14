@@ -1,47 +1,27 @@
 #include "sensor_camera.h"
 
-// Define parameters for image dimensions
-const ParameterString<int> SensorCamera::OUTPUT_START_X("output_start_x");
-const ParameterString<int> SensorCamera::OUTPUT_END_X("output_end_x");
-const ParameterString<int> SensorCamera::OUTPUT_START_Y("output_start_y");
-const ParameterString<int> SensorCamera::OUTPUT_END_Y("output_end_y");
 
-// Define parameters for noise
-const ParameterString<int> SensorCamera::NOISE_TYPE("noise_type");
-const ParameterString<int> SensorCamera::MEAN_VALUE("mean_value");
-const ParameterString<int> SensorCamera::STANDARD_DEVIATION(
-    "standard_deviation");
-const ParameterString<int> SensorCamera::STEP("step");
+SensorCamera::SensorCamera(ros::NodeHandle nh) : node_handle_(nh) {
 
-
-SensorCamera::SensorCamera(ParameterInterface* parameters)
-    : parameters_ptr_(parameters) {
-
-  // Register parameters for image dimensions
-  parameters_ptr_->registerParam(OUTPUT_START_X);
-  parameters_ptr_->registerParam(OUTPUT_END_X);
-  parameters_ptr_->registerParam(OUTPUT_START_Y);
-  parameters_ptr_->registerParam(OUTPUT_END_Y);
-
-  // Register parameters for noise
-  parameters_ptr_->registerParam(NOISE_TYPE);
-  parameters_ptr_->registerParam(MEAN_VALUE);
-  parameters_ptr_->registerParam(STANDARD_DEVIATION);
-  parameters_ptr_->registerParam(STEP);
-
-
+  int start_x, start_y, end_x, end_y;
   // Get parameters for image dimensions
-  image_limits.x = parameters_ptr_->getParam(OUTPUT_START_X);
-  image_limits.y = parameters_ptr_->getParam(OUTPUT_START_Y);
-  image_limits.width = parameters_ptr_->getParam(OUTPUT_END_X) - image_limits.x;
-  image_limits.height = parameters_ptr_->getParam(OUTPUT_END_Y) - image_limits.y;
+  nh.getParam("output_start_x", start_x);
+  nh.getParam("output_start_y", start_y);
+  nh.getParam("output_end_x", end_x);
+  nh.getParam("output_end_y", end_y);
+
+  image_limits.x = start_x;
+  image_limits.y = start_y;
+  image_limits.width = end_x - image_limits.x;
+  image_limits.height = end_y - image_limits.y;
 }
 
 void SensorCamera::precropImage(const cv::Mat& image_uncropped, cv::Mat& image_cropped) {
   // cutting out region of interest
   image_cropped = image_uncropped(image_limits);
 
-  int noise_type = parameters_ptr_->getParam(NOISE_TYPE);
+  int noise_type;
+  node_handle_.getParam("noise_type", noise_type);
 
   switch (noise_type) {
     case 1:
@@ -58,8 +38,9 @@ void SensorCamera::precropImage(const cv::Mat& image_uncropped, cv::Mat& image_c
 
 void SensorCamera::gaussianNoise(const cv::Mat& image) {
   // Get parameters for noise
-  int mean_value = parameters_ptr_->getParam(MEAN_VALUE);
-  int standard_deviation = parameters_ptr_->getParam(STANDARD_DEVIATION);
+  int mean_value, standard_deviation;
+  node_handle_.getParam("mean_value", mean_value);
+  node_handle_.getParam("standard_deviation", standard_deviation);
 
   // Create noise matrix (height x width from image)
   cv::Mat mat_noise = cv::Mat(image_limits.size(), CV_16S);
@@ -69,7 +50,8 @@ void SensorCamera::gaussianNoise(const cv::Mat& image) {
 }
 
 void SensorCamera::saltPepperNoise(const cv::Mat& image) {
-  int step = parameters_ptr_->getParam(STEP);
+  int step;
+  node_handle_.getParam("step", step);
 
   // Loop over image
   cv::Mat img = image;

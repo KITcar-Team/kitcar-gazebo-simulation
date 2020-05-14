@@ -7,7 +7,7 @@ from ros_base.node_base import NodeBase
 from geometry import Transform, Vector
 
 # Messages
-from state_estimation_msgs.msg import State as StateEstimationMsg
+from simulation_brain_link.msg import State as StateEstimationMsg
 import geometry_msgs.msg
 from gazebo_simulation.msg import (
     SetModelTwist as SetModelTwistMsg,

@@ -3,13 +3,11 @@
 
 #include <image_transport/image_transport.h>
 
-#include "common/node_base.h"
-
 #include "sensor_camera.h"
 /*!
  * \brief Precrops camera image outputted by Gazebo
  */
-class SensorCameraNode : public NodeBase {
+class SensorCameraNode {
  public:
   /*!
    * \brief SensorCameraNode the constructor.
@@ -23,25 +21,20 @@ class SensorCameraNode : public NodeBase {
    */
   static std::string getName();
 
- private:
-  // TODO: Check what these parameters are necessary for and if they should be
-  // used in this context!
-  static const ParameterString<int> INPUT_QUEUE_SIZE;
-  static const ParameterString<int> OUTPUT_QUEUE_SIZE;
-
   // NodeBase interface
   /*!
    * \brief startModule is called, if the node shall be turned active. In here
    * the subrscribers an publishers are started.
    */
-  virtual void startModule() override;
+  void startModule();
   /*!
    * \brief stopModule is called, if the node shall be turned inactive. In this
    * function subscribers and publishers are shutdown.
    */
-  virtual void stopModule() override;
+  void stopModule();
 
 
+ private:
   /**
    * @brief handleImage
    *
@@ -52,6 +45,12 @@ class SensorCameraNode : public NodeBase {
    */
   void handleImage(const sensor_msgs::ImageConstPtr& msg);
 
+  /**
+   * @brief node_handle_
+   *
+   * Connection to ros.
+   */
+  ros::NodeHandle node_handle_;
 
   /**
    * @brief rossub_uncropped_image
@@ -65,8 +64,6 @@ class SensorCameraNode : public NodeBase {
    * Publisher for precropped images.
    */
   ros::Publisher rospub_image;
-
-
 
   /*!
    * \brief sensor_camera contains the ROS-indipendent implementation of this
