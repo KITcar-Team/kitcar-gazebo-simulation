@@ -7,7 +7,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "common/parameter_interface.h"
+#include "ros/ros.h"
 
 /*!
  * \brief Precrops camera image outputted by Gazebo
@@ -15,44 +15,52 @@
 class SensorCamera {
  public:
   /*!
-   * \brief SensorCamera is the consstructor. A ros indipendent functionality
+   * \brief SensorCamera is the constructor. A ros independent functionality
    * containing
-   * class needs a pointer to a ParameterInterface (in fact a ParameterHandler)
-   * to get access to parameters.
-   * \param parameters the ParameterInterface
+   * \param nh node handle to access parameters
    */
-  SensorCamera(ParameterInterface* parameters);
+  SensorCamera(ros::NodeHandle nh);
 
   /*!
    * \brief precropImage
    *
-   * performs image cropping
+   * Crop the image to the region of interest.
+   * Optionally (depending on ROS parameter "noise_type" noise can be applied.
    *
-   * @param image_gray the source image
-   * @param preprocessed_image the output image
+   * \param image_uncropped the source image
+   * \param image_cropped the output image
    */
   void precropImage(const cv::Mat& image_uncropped, cv::Mat& image_cropped);
 
+  /*!
+   * \brief image_limits region of interest that the image is cropped to.
+   */
   cv::Rect image_limits;
 
  private:
-  static const ParameterString<int> OUTPUT_START_X;
-  static const ParameterString<int> OUTPUT_END_X;
-  static const ParameterString<int> OUTPUT_START_Y;
-  static const ParameterString<int> OUTPUT_END_Y;
+  /*!
+   * \brief node_handle_ is needed for parameter access
+   */
+  ros::NodeHandle node_handle_;
 
-  static const ParameterString<int> NOISE_TYPE;
-  static const ParameterString<int> MEAN_VALUE;
-  static const ParameterString<int> STANDARD_DEVIATION;
-  static const ParameterString<int> STEP;
 
   /*!
-   * \brief parameters_ptr_ is needed for parameter access
+   * \brief gaussianNoise
+   *
+   * Apply gaussian noise to the image
+   *
+   * \param image
    */
-  ParameterInterface* parameters_ptr_;
-
   void gaussianNoise(const cv::Mat& image);
 
+  /*!
+   * \brief saltPepperNoise
+   *
+   * Apply salt and pepper noise to the image
+   * Slow due to poor implementation!
+   *
+   * \param image
+   */
   void saltPepperNoise(const cv::Mat& image);
 };
 

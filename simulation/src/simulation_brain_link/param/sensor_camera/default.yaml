@@ -1,4 +1,4 @@
-# Default parameter of pre_cropping
+# Default parameter of sensor camera
 
 output_start_x: 0
 output_end_x: 1280

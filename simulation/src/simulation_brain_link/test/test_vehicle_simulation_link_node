@@ -8,7 +8,7 @@ from geometry import Vector, Transform
 from ros_base.node_base import NodeBase
 
 # Messages
-from state_estimation_msgs.msg import State as StateEstimationMsg
+from simulation_brain_link.msg import State as StateEstimationMsg
 from gazebo_simulation.msg import CarState as CarStateMsg
 from tf2_msgs.msg import TFMessage
 import std_msgs.msg
@@ -23,10 +23,14 @@ class VehicleSimulationLinkNodeTest(unittest.TestCase, NodeBase):
 
     def assert_approx_equal_pose(self, pose, pose2):
         self.assertAlmostEqual(Vector(pose), Vector(pose2))
-        self.assertAlmostEqual(pose.get_angle(), pose2.get_angle(), delta=math.radians(0.02))
+        self.assertAlmostEqual(
+            pose.get_angle(), pose2.get_angle(), delta=math.radians(0.02)
+        )
 
     def setUp(self):
-        NodeBase.__init__(self, name="test_vehicle_simulation_link_node", log_level=rospy.DEBUG)
+        NodeBase.__init__(
+            self, name="test_vehicle_simulation_link_node", log_level=rospy.DEBUG
+        )
 
         self.state_estimation_publisher = rospy.Publisher(
             self.param.topics.state_estimation, StateEstimationMsg, queue_size=1
@@ -73,10 +77,15 @@ class VehicleSimulationLinkNodeTest(unittest.TestCase, NodeBase):
 
         # Only select world to vehicle transformations
         def select_tf(tf):
-            return tf.header.frame_id == self.param.frame.simulation and tf.child_frame_id == self.param.frame.world
+            return (
+                tf.header.frame_id == self.param.frame.simulation
+                and tf.child_frame_id == self.param.frame.world
+            )
 
         # Select first tf (default: None)
-        simulation_world: geometry_msgs.msg.TransformStamped = next(filter(select_tf, msg.transforms), None)
+        simulation_world: geometry_msgs.msg.TransformStamped = next(
+            filter(select_tf, msg.transforms), None
+        )
         if simulation_world:
             rospy.logdebug(f"Received simulation_world transform {simulation_world}")
             self.last_simulation_world_tf = Transform(simulation_world.transform)
@@ -112,4 +121,6 @@ class VehicleSimulationLinkNodeTest(unittest.TestCase, NodeBase):
 if __name__ == "__main__":
     import rostest
 
-    rostest.rosrun(PKG, "test_vehicle_simulation_link_node", VehicleSimulationLinkNodeTest, sys.argv)
+    rostest.rosrun(
+        PKG, "test_vehicle_simulation_link_node", VehicleSimulationLinkNodeTest, sys.argv
+    )

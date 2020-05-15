@@ -5,17 +5,8 @@
 #include <opencv2/core.hpp>
 #include <thread>
 
-#include "common/node_creation_makros.h"
-
 SensorCameraNode::SensorCameraNode(ros::NodeHandle &node_handle)
-    : NodeBase(node_handle), sensor_camera_(&parameter_handler_) {
-
-  // TODO: Load Cropping region!
-
-  // Using the same input/output queue size as perception / preprocessing!
-  // parameter_handler_.registerParam(INPUT_QUEUE_SIZE);
-  // parameter_handler_.registerParam(OUTPUT_QUEUE_SIZE);
-}
+    : node_handle_(node_handle), sensor_camera_(node_handle_) {}
 
 void SensorCameraNode::startModule() {
 
@@ -63,4 +54,15 @@ void SensorCameraNode::handleImage(const sensor_msgs::ImageConstPtr &msg) {
 
 std::string SensorCameraNode::getName() { return std::string("sensor_camera"); }
 
-CREATE_NODE(SensorCameraNode)
+int main(int argc, char *argv[]) {
+  // Start, loop and stop node!
+  ros::init(argc, argv, SensorCameraNode::getName());
+  ros::NodeHandle nh("~");
+  SensorCameraNode node(nh);
+  node.startModule();
+  while (ros::ok()) {
+    ros::spinOnce();
+  }
+  node.stopModule();
+  return 0;
+}

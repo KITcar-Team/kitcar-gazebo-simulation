@@ -13,8 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   cv_bridge
   image_transport
-  common
-  state_estimation_msgs
   message_generation
   std_msgs
   geometry_msgs
@@ -60,9 +58,10 @@ find_package(Boost REQUIRED COMPONENTS)
 catkin_python_setup()
 
 ### Generate messages in the 'msg' folder
-#add_message_files(
-#  FILES 
-#)
+add_message_files(
+  FILES
+  State.msg
+)
 #
 ### Generate services in the 'srv' folder
 #add_service_files(
@@ -70,9 +69,10 @@ catkin_python_setup()
 ##   Service2.srv
 #)
 #
-#generate_messages(
-#  DEPENDENCIES
-#)
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 #
 
 ## Generate actions in the 'action' folder
