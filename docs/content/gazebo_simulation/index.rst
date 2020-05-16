@@ -147,3 +147,21 @@ And two subscribers:
      }
    }
 |
+
+.. _automatic_drive_node:
+
+AutomaticDriveNode
+------------------
+
+The :py:class:`simulation.src.gazebo_simulation.src.automatic_drive.node.AutomaticDriveNode`
+moves the car on the right side of the road.
+It can be used instead of **KITcar_brain**.
+
+.. admonition:: Launch
+
+   .. prompt:: bash
+
+      roslaunch gazebo_simulation automatic_drive.launch
+
+The speed of the car can be modified by passing *speed:=...* as a launch parameter.
+(Or by modifying the parameter with **rosparam** at runtime.)
