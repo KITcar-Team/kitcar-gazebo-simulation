@@ -73,7 +73,6 @@ It can be manually started by passing the parameter *control_sim_rate:=true* or 
 
       roslaunch gazebo_simulation gazebo_rate_control_node.launch
 
-
 ModelPluginLinkNode
 ----------------------
 
@@ -144,6 +143,64 @@ And two subscribers:
        label="Gazebo"
 
        model
+     }
+   }
+|
+
+WorldPluginLinkNode
+----------------------
+
+The :ref:`world_plugin_link_node` is a \
+`Gazebo world plugin <http://gazebosim.org/tutorials?tut=plugins_world&cat=write_plugin>`_
+that allows to interact with worlds in Gazebo easily.
+In particular, it allows to spawn and remove models from the world.
+
+It can be attached to Gazebo worlds by adding
+
+.. code-block:: xml
+
+   <plugin filename="libworld_plugin_link.so" name="world_plugin_link" />
+
+to the *model.sdf*.
+
+When Gazebo loads a world with the *world_plugin_link*, a new instance of the world plugin \
+link node is created.
+The model plugin link node creates two subscribers:
+
+- */simulation/gazebo/world/spawn_sdf_model* (string): \
+  Receive sdf model definition.
+- */simulation/gazebo/world/remove_model* (string): \
+  Receive name of the model to be removed.
+
+.. graphviz::
+   :align: center
+   :caption: Schema of the World Plugin Link
+
+   digraph WorldPluginLink {
+
+     node [style=dotted, shape=box]; world [label="Gazebo world"];
+     node [style=solid, shape=ellipse]; world_plugin_link_node [label="world_plugin_link"];
+     node [shape=box]; spawn_sdf [label="spawn_sdf_model"]; remove_model [label="remove_model"];
+     node [style=solid, shape=ellipse]; other_nodes;
+
+     world -> world_plugin_link_node [style=dotted, dir=both];
+
+     world_plugin_link_node -> spawn_sdf[dir="back"];
+     world_plugin_link_node -> remove_model[dir="back"];
+
+     spawn_sdf -> other_nodes[dir="back"];
+     remove_model -> other_nodes[dir="back"];
+
+     subgraph gazebo {
+       rank="same"
+       label="Gazebo"
+
+       world
+     }
+     subgraph topics {
+       rank="same"
+       spawn_sdf
+       remove_model
      }
    }
 |
