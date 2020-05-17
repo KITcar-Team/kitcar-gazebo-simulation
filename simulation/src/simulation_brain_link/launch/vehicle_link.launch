@@ -6,6 +6,7 @@
 
   <arg name="set_twist" default="true" />
   <arg name="set_pose" default="true" />
+  <arg name="include_vehicle_simulation" default="true" />
 
   <!-- Remap simulated sensors to the topics used in KITcar brain -->
   <remap from="/simulation/sensors/prepared/camera" to="/camera/image_raw"/>
@@ -17,7 +18,7 @@
 
 
   <!-- Start the vehicle simulation -->
-  <include file="$(find control_debug)/launch/vehicle_simulation_node.launch">
+  <include if="$(arg include_vehicle_simulation)" file="$(find control_debug)/launch/vehicle_simulation_node.launch">
     <arg name="car_name" value="$(arg car_name)"/>
     <!--arg name="coupled_type" value="high"/>
     <arg name="vehicle_simulation" value="coupled"/-->

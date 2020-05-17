@@ -22,6 +22,12 @@ Use this launch file to start the complete simulation.-->
   -->
   <!-- Indicate whether the KITcar_brain is started. -->
   <arg name="include_brain" default="true" />
+  <!-- Indicate whether to include the vehicle simulation or automatic_drive.
+       The vehicle simulation is used to simulate vehicle's movement based on KITcar_brain's commands.
+       If KITcar_brain is not running, automatic_drive can be used to "drive" the vehicle on the road.
+   -->
+  <arg name="include_vehicle_simulation" default="true" />
+  <arg name="include_automatic_drive" default="false" />
   <!-- Indicate whether to launch the car_state_node. -->
   <arg name="car_state" default="true" />
   <!-- Indicate whether to launch the evaluation pipeline. This includes:
@@ -57,19 +63,20 @@ Use this launch file to start the complete simulation.-->
        Launch processes
   -->
   <!-- Launch KITcar_brain -->
-  <group if="$(arg include_brain)">
-    <include file="$(find simulation_brain_link)/launch/brain.launch">
-      <arg name="car_name" value="$(arg car_name)" />
-    </include>
-    <!-- Launch nodes to connect gazebo and kitcar brain -->
-    <include file="$(find simulation_brain_link)/launch/vehicle_link.launch">
-      <arg name="car_name" value="$(arg car_name)" />
-      <arg name="gui" value="$(arg gui)" />
-      <arg name="rviz" value="$(arg rviz)" />
-      <arg name="set_pose" value="$(arg link_pose)" />
-      <arg name="set_twist" value="$(arg link_twist)" />
-    </include>
-  </group>
+  <include if="$(arg include_brain)" file="$(find simulation_brain_link)/launch/brain.launch">
+    <arg name="car_name" value="$(arg car_name)" />
+  </include>
+  <!-- Launch nodes to connect gazebo and kitcar brain -->
+  <include file="$(find simulation_brain_link)/launch/vehicle_link.launch">
+    <arg name="car_name" value="$(arg car_name)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="rviz" value="$(arg rviz)" />
+    <arg name="set_pose" value="$(arg link_pose)" />
+    <arg name="set_twist" value="$(arg link_twist)" />
+    <arg name="include_vehicle_simulation" value="$(arg include_vehicle_simulation)" />
+  </include>
+  <!-- Launch automatic drive-->
+  <include if="$(arg include_automatic_drive)" file="$(find gazebo_simulation)/launch/automatic_drive.launch" />
   <!-- Launch car state -->
   <group if="$(arg car_state)">
     <include file="$(find gazebo_simulation)/launch/car_state_node.launch">
