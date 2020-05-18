@@ -131,20 +131,15 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-#  include
+  SYSTEM
   ${Boost_INCLUDE_DIR}
   ${catkin_INCLUDE_DIRS}
   ${GAZEBO_INCLUDE_DIRS}
   ${Eigen_INCLUDE_DIRS}
 )
 
-include_directories(
-  SYSTEM
-  ${catkin_INCLUDE_DIRS}
-  ${GAZEBO_INCLUDE_DIRS}
-)
-
 add_subdirectory(src/model_plugin_link)
+add_subdirectory(src/world_plugin_link)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
