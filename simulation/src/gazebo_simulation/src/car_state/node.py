@@ -1,21 +1,19 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-import os
 import rospy
-import yaml  # parse config file
 import numpy as np
 
 from ros_base.node_base import NodeBase
 from geometry import Vector, Point, Polygon, Transform
-import car_model.camera_calibration as calibration
 
 import geometry_msgs.msg
 from gazebo_simulation.msg import CarState as CarStateMsg
 
 from . import export
 
+from simulation.src.gazebo_simulation.src.car_model.car_specs import CarSpecs
+from simulation.src.gazebo_simulation.src.car_model.camera_specs import CameraSpecs
+
 __copyright__ = "KITcar"
+
 
 @export
 class CarStateNode(NodeBase):
@@ -73,7 +71,9 @@ class CarStateNode(NodeBase):
         rospy.wait_for_message(self.model_pose_subscriber.name, geometry_msgs.msg.Pose)
         rospy.wait_for_message(self.model_twist_subscriber.name, geometry_msgs.msg.Twist)
 
-        self.publisher = rospy.Publisher(self.param.topics.car_state, CarStateMsg, queue_size=1)
+        self.publisher = rospy.Publisher(
+            self.param.topics.car_state, CarStateMsg, queue_size=1
+        )
 
         super().start()
 
@@ -88,20 +88,22 @@ class CarStateNode(NodeBase):
         """Process car parameters.
 
         """
-
-        with open(os.environ.get("KITCAR_REPO_PATH") + self.param.car_config, "r") as stream:
-            try:
-                car_config = yaml.safe_load(stream)
-            except yaml.YAMLError as exc:
-                print("Failed to open car_config: " + exc)
-                return None
+        car_specs = CarSpecs.from_file(self.param.car_specs_path)
+        camera_specs = CameraSpecs.from_file(self.param.camera_specs_path)
 
         """ Car frame config """
-        chassis_size = Vector(car_config["chassis"]["size"])
-        chassis_position = Point(car_config["chassis"]["pose"][0:3])
+        chassis_size = Vector(
+            car_specs.distance_to_rear_bumper
+            # + car_specs.wheelbase
+            + car_specs.distance_cog_front,
+            car_specs.vehicle_width,
+        )
+        chassis_position = Point(car_specs.center_rear_axle.x, car_specs.center_rear_axle.y)
 
         # get dimensions
-        x_span = Vector(0.5 * chassis_size.x, 0)  # Vector in x direction of length = width/2
+        x_span = Vector(
+            0.5 * chassis_size.x, 0
+        )  # Vector in x direction of length = width/2
         y_span = Vector(0, 0.5 * chassis_size.y)
         self.car_frame = Polygon(
             [
@@ -113,16 +115,11 @@ class CarStateNode(NodeBase):
         )
 
         """ Camera config """
-
         # This parameter tells how far the camera can see
-        view_distance: float = car_config["front_camera"]["clip"]["far"]
-        # Focal length of camera
-        f: float = car_config["front_camera"]["focal_length"]
-        # Number of pixels in horizontal direction
-        w_pixels: float = car_config["front_camera"]["output"]["width"]
+        view_distance: float = camera_specs.clip["far"]
 
-        # Calculate field of view (opening angle of camera)
-        fov: float = calibration.fov(f, w_pixels)
+        # field of view (opening angle of camera)
+        fov: float = camera_specs.horizontal_fov
 
         if self.param.cone_points == 0:
             self.view_cone = None
@@ -134,7 +131,10 @@ class CarStateNode(NodeBase):
         # Create geom.Polygon from points
         self.view_cone = Polygon(
             [Point(0, 0)]
-            + [Point(r=view_distance, phi=alpha) for alpha in np.linspace(-fov / 2, fov / 2, self.param.cone_points)]
+            + [
+                Point(r=view_distance, phi=alpha)
+                for alpha in np.linspace(-fov / 2, fov / 2, self.param.cone_points)
+            ]
         )
 
     def state_update(self):

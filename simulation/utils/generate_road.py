@@ -121,7 +121,7 @@ def render_commonroad(xml: str, road_name: str):
             "utils",
         ),  # Directory which contains commonroad
         "road_name": road_name,  # Name of road
-        "add_vehicle": True,  # Add dr_drift model to world
+        "add_vehicle": False,  # Add dr_drift model to world
         "background": False,  # If background wall images should be included
         "segmentation": False,  # If segmentation colors should be used for rendering
         "fast_physics": False,  # If segmentation colors should be used for rendering

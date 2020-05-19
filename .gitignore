@@ -66,3 +66,6 @@ datasets
 .vim/
 .vscode/
 .ccls-cache/
+
+# Hypothesis results
+*.hypothesis

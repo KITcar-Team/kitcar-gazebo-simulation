@@ -45,6 +45,9 @@
 
   <include file="$(find gazebo_simulation)/launch/car_state_node.launch">
     <arg name="car_name" value="$(arg car_name)"/>
+    <!--If the following args are not passed a unit_box/car_specs.yaml is searched for which does not exist! -->
+    <arg name="car_specs_path" value="$(find gazebo_simulation)/param/car_specs/dr_drift/car_specs.yaml" />
+    <arg name="camera_specs_path" value="$(find gazebo_simulation)/param/car_specs/dr_drift/camera.yaml" />
   </include>
 
   <test test-name="test_vehicle_simulation_link_node" pkg="simulation_brain_link" time-limit="$(arg time_limit)" type="test_vehicle_simulation_link_node">

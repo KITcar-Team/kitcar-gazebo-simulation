@@ -20,6 +20,8 @@ Use this launch file to start the complete simulation.-->
   <!--
        Indicate which processes are launched.
   -->
+  <!-- Indicate whether the car is spawned. -->
+  <arg name="include_car" default="true" />
   <!-- Indicate whether the KITcar_brain is started. -->
   <arg name="include_brain" default="true" />
   <!-- Indicate whether to include the vehicle simulation or automatic_drive.
@@ -62,6 +64,8 @@ Use this launch file to start the complete simulation.-->
   <!--
        Launch processes
   -->
+  <!-- Spawn the car -->
+  <include if="$(arg include_car)" file="$(find gazebo_simulation)/launch/spawn_car.launch" />
   <!-- Launch KITcar_brain -->
   <include if="$(arg include_brain)" file="$(find simulation_brain_link)/launch/brain.launch">
     <arg name="car_name" value="$(arg car_name)" />

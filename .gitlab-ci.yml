@@ -48,14 +48,6 @@ build-code:
 
 ######## TEST STAGE #########
 
-# Test if dr_drift generation script works
-test-dr_drift:
-  stage: test
-  script: &test-dr_drift
-    - cd simulation/models/model_db/dr_drift
-    - ./generate.sh
-    #TODO: Also test if the calibration is actually correct.
-
 # Run module test in utils packages
 test-python-packages:
   stage: test
@@ -71,6 +63,9 @@ test-python-packages:
     - python3 -m speaker.speakers.test
     - python3 -m state_machine.test
     - python3 -m referee.test
+
+    # Test the urdf package
+    - python3 simulation/utils/urdf/test/test_core.py
 
 test-ros-packages:
   stage: test

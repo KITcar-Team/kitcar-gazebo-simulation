@@ -1,0 +1,28 @@
+vehicle_to_ir_ahead:
+  pitch: 0
+  roll: 0
+  x: 0.285
+  y: 0.0
+  yaw: 0
+  z: 0.08
+vehicle_to_ir_back:
+  pitch: 0
+  roll: 0
+  x: 0
+  y: -0.112
+  yaw: -1.570796327
+  z: 0.08
+vehicle_to_ir_front:
+  pitch: 0
+  roll: 0
+  x: 0.168
+  y: -0.1
+  yaw: -1.570796327
+  z: 0.08
+vehicle_to_ir_middle:
+  pitch: 0
+  roll: 0
+  x: 0.105
+  y: -0.1
+  yaw: -1.570796327
+  z: 0.08
