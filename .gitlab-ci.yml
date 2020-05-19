@@ -48,14 +48,6 @@ build-code:
 
 ######## TEST STAGE #########
 
-# Test if dr_drift generation script works
-test-dr_drift:
-  stage: test
-  script: &test-dr_drift
-    - cd simulation/models/model_db/dr_drift
-    - ./generate.sh
-    #TODO: Also test if the calibration is actually correct.
-
 # Run module test in utils packages
 test-python-packages:
   stage: test

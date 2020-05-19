@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <test test-name="test_car_generation" pkg="gazebo_simulation" type="test_car_model_generation" />
+</launch>

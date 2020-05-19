@@ -13,6 +13,8 @@ ROS package to better communicate with Gazebo.
    :maxdepth: 1
    :caption: Packages and Modules
 
+   ../_source_files/simulation.src.gazebo_simulation.src.automatic_drive
+   ../_source_files/simulation.src.gazebo_simulation.src.car_model
    ../_source_files/simulation.src.gazebo_simulation.src.car_state
    ../_source_files/simulation.src.gazebo_simulation.src.gazebo_rate_control
 
@@ -35,6 +37,45 @@ Refer to the actual source code for more details on available parameters.
 .. seealso::
 
    :ref:`getting_started` for more details.
+
+
+Model of the Car
+----------------
+
+An important part of the simulation is the vehicle it self.
+It should be a realistic representation of the real car.
+In our case we do not simulate the actual tire movement and basically
+move a box around the simulated world.
+This simplifies the model significantly!
+Nevertheless, the sensors must be defined and should be as close
+to their real specifications as possible.
+Instead of calculating or estimating their position and calibrations,
+the sensors specifications are extracted from the **car_specs**
+ROS package within KITcar_brain.
+
+Gazebo allows to define models using the `urdf <http://wiki.ros.org/urdf>`_ standard.
+However, defining a model consisting of multiple parts and sensors is repetetive.
+So instead of writing the **urdf** by hand, there's a Python script that generates it!
+
+.. admonition:: Generate Dr. Drift
+
+   Generate a new model definition of Dr. Drift and an updated calibration by running:
+
+   .. prompt:: bash
+
+      rosrun gazebo_simulation generate_dr_drift
+
+Behind the scenes, there are multiple things going on:
+
+1. The **car_specs** and **camera_specs** are loaded using
+   :py:class:`simulation.src.gazebo_simulation.src.car_model.car_specs.CarSpecs`
+   and :py:class:`simulation.src.gazebo_simulation.src.car_model.camera_specs.CameraSpecs`.
+1. The model of Dr.Drift is defined as an :py:class:`simulation.utils.urdf.core.XmlObject`
+   in :py:mod:`simulation.src.gazebo_simulation.src.car_model.dr_drift`.
+   Using the **urdf** package allows to define classes for the individual parts of the vehicle.
+1. The model, the car specs and the camera calibration is saved to
+   ``simulation/src/gazebo_simulation/param/car_specs/dr_drift/``.
+
 
 CarStateNode
 --------------

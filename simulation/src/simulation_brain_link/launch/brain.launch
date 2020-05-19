@@ -10,7 +10,7 @@
   <include file="$(find perception)/launch/perception.launch">
     <arg name="start_camera" value="false" />
     <arg name="car_name" value="$(arg car_name)" />
-    <arg name="camera_parameters_prefix" value="$(find simulation_brain_link)/param/car_specs/$(arg car_name)"/>
+    <arg name="camera_parameters_prefix" value="$(find gazebo_simulation)/param/car_specs/$(arg car_name)"/>
     <arg name="use_nodelet" value="false"/>
   </include>
 
