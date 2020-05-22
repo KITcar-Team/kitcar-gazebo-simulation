@@ -53,6 +53,12 @@ Ensure that your Python-Version is 3.8 or larger::
 If not, upgrade your system to Python 3.8.
 (*KITcar internal: Goto* `KITcar-Gazebo-Simulation Python <https://wiki.kitcar-team.de/doku.php?id=teams:simulation:python>`_ )
 
+ROS
+---
+
+ROS must also be installed on your machine.
+If it's not yet installed, follow the `installation guide <http://wiki.ros.org/melodic/Installation/Ubuntu>`_.
+
 Init-Script
 -----------
 
