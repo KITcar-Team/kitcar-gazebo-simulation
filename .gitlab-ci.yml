@@ -74,16 +74,25 @@ test-ros-packages:
     - catkin_make run_tests -j1
     - catkin_test_results  # Ensure that pipeline fails when test fails
 
+test-documentation:
+  stage: test
+  variables:
+    GIT_LFS_SKIP_SMUDGE: "0"  #  Pull git lfs
+  script:
+    # Test if the onboarding documentation is correct
+    - python3 docs/content/tutorials/road_examples/example.py
+    - cd docs
+    - make doctest
+
 ######### Documentation ########
 
 # Build the sphinx documentation
 # If this is the master branch, the website deployer will also update doc.kitcar-team.de!
 build-documentation:
   stage: deploy
+  variables:
+    GIT_LFS_SKIP_SMUDGE: "0"  #  Pull git lfs
   script:
-    - git lfs pull
-    # Test if the onboarding documentation is correct
-    - python3 docs/content/tutorials/road_examples/example.py
     # Build the documentation
     - cd docs
     - make html
@@ -91,3 +100,4 @@ build-documentation:
     paths:
       - docs/_build/html/*
     expire_in: 2 day
+
