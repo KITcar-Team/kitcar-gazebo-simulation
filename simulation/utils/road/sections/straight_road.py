@@ -33,7 +33,10 @@ class StraightRoad(_StraightRoad):
         >>> road = Road()
         >>> road.append(StraightRoad(length=2))
         >>> road
-        Road(seed='KITCAR', sections=[ID=0, StraightRoad(length=2)])
+        Road(use_seed=True, sections=[\
+StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), is_start=False, \
+left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], length=2)])
+
     """
 
     @property

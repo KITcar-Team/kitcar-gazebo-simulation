@@ -19,50 +19,44 @@ class NodeBase:
 
     A basic node with a subscriber and publisher can be created in the following way:
 
-    .. highlight::python
-    .. code-block:: python
-
-        from node_base import NodeBase
-
-        class NodeSubClass(NodeBase):
-            def __init__(self):
-                super(NodeSubClass,self).__init__("node_name") # Important!
-                ...
-                self.run() # Calls .start() if self.param.active is True (default: True)
-
-            def start(self):
-                self.subscriber = ...
-                self.publisher = ...
-                super().start() # Make sure to call this!
-
-            # Called when deactivating the node by setting self.param.active to false
-            # E.g. through command line with: rosparam set .../node/active false
-            # or when ROS is shutting down
-            def stop(self):
-                self.subscriber.unregister()
-                self.publisher.unregister()
-                super().stop() # Make sure to call this!
+    >>> from ros_base.node_base import NodeBase
+    >>> class NodeSubClass(NodeBase):
+    ...     def __init__(self):
+    ...         super(NodeSubClass,self).__init__("node_name") # Important!
+    ...         # ...
+    ...         self.run() # Calls .start() if self.param.active is True (default: True)
+    ...     def start(self):
+    ...         # self.subscriber = ...
+    ...         # self.publisher = ...
+    ...         super().start() # Make sure to call this!
+    ...     # Called when deactivating the node by setting self.param.active to false
+    ...     # E.g. through command line with: rosparam set .../node/active false
+    ...     # or when ROS is shutting down
+    ...     def stop(self):
+    ...         # self.subscriber.unregister()
+    ...         # self.publisher.unregister()
+    ...         super().stop() # Make sure to call this!
 
     Attributes:
         param (ParameterObject): Attribute of type :class:`ParameterObject`,
             which provides an abstraction layer to access ROS parameters.
             The following line shows how to access a ROS parameter in any subclass of called *param_1*:
 
-            >>> self.param.param_1
+            >>> self.param.param_1  # doctest: +SKIP
             \'value_1\'
 
             This is equivalent to:
 
-            >>> rospy.get_param(\'~param_1\')
+            >>> rospy.get_param(\'~param_1\')  # doctest: +SKIP
             'value_1'
 
             Setting a parameter is equally easy:
 
-            >>> self.param.param_2 = \'value_2\'
+            >>> self.param.param_2 = \'value_2\'  # doctest: +SKIP
 
             This is equivalent to:
 
-            >>> rospy.set_param(\'~param_2\', \'value_2\')
+            >>> rospy.set_param(\'~param_2\', \'value_2\')  # doctest: +SKIP
 
             The magic begins when parameters are defined in a hierarchical structure.
             After starting a node with the following YAML parameter file:
@@ -79,15 +73,15 @@ class NodeBase:
 
             the cars dimensions can be retrieved just like any other python attribute:
 
-            >>> self.param.car.size.length
+            >>> self.param.car.size.length  # doctest: +SKIP
             0.6
 
             and changes are also synchronized with ROS:
 
-            >>> rospy.get_param(\"~car/name\")
+            >>> rospy.get_param(\"~car/name\")  # doctest: +SKIP
             \'dr_drift\'
-            >>> self.param.car.name = \'captain_rapid\'
-            >>> rospy.get_param(\"~car/name\")
+            >>> self.param.car.name = \'captain_rapid\'  # doctest: +SKIP
+            >>> rospy.get_param(\"~car/name\")  # doctest: +SKIP
             \'captain_rapid\'
     """
 
@@ -194,11 +188,11 @@ class ParameterObject:
     This class enables to access nested parameters within nodes.
     For example in any subclass of NodeBase one can call nested parameters (if they are defined!) in the following way:
 
-    >>> self.param.dict_of_parameters.key
+    >>> self.param.dict_of_parameters.key  # doctest: +SKIP
 
     Which is the same as calling:
 
-    >>> rospy.get_param(\"~dict_of_parameters/key\")
+    >>> rospy.get_param(\"~dict_of_parameters/key\")  # doctest: +SKIP
 
     This is achieved by overriding the __getattr__ and __setattr__ functions and passing calls through to the
 

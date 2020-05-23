@@ -5,16 +5,19 @@ Example:
     A simple joint connecting :py:attr:`link2` to
     :py:attr:`link1` with a revolute joint that can rotate along the z-axis:
 
+    >>> from urdf import Origin, Link, Joint, Parent, Child, Axis, JointLimit, JointDynamics
+    >>> link1 = Link("link_1")
+    >>> link2 = Link("link_2")
     >>> simple_joint = Joint(
-            name="simple_joint"),
-            parent=Parent(link1.name),
-            child=Child(link2.name),
-            type=Joint.REVOLUTE,
-            origin=some_origin,
-            axis=Axis([0, 0, 1]),
-            limit=JointLimit(effort=1000, lower=-10, upper=10)
-            dynamics=JointDynamics(damping=1, friction=1),
-        )
+    ...     name="simple_joint",
+    ...     parent=Parent(link1.name),
+    ...     child=Child(link2.name),
+    ...     type=Joint.REVOLUTE,
+    ...     origin=Origin([1,3,2]),
+    ...     axis=Axis([0, 0, 1]),
+    ...     limit=JointLimit(effort=1000, lower=-10, upper=10),
+    ...     dynamics=JointDynamics(damping=1, friction=1),
+    ... )
 """
 
 from dataclasses import dataclass

@@ -17,12 +17,14 @@ class Attribute(str):
     by simply annotating a class variable with py:class:`Attribute`!
 
     Example:
+        >>> from dataclasses import dataclass
+        >>> from urdf.core import XmlObject, Attribute
         >>> @dataclass
-            class Example(XmlObject):
-                TAG = "example"
-                name: Attribute
-                value1: str
-                value2: float = None
+        ... class Example(XmlObject):
+        ...     TAG = "example"
+        ...     name: Attribute
+        ...     value1: str
+        ...     value2: float = None
         >>> ex = Example("example_name",value1="I'm an example.")
 
         The code block defines a simple example class that results in the xml string:

@@ -54,7 +54,7 @@ a circle:
 
 >>> p = Point(0,0)
 >>> shapely_poly = p.buffer(1, resolution=32)
->>> shapely_poly
+>>> shapely_poly  # doctest: +SKIP
 <shapely.geometry.polygon.Polygon object at 0x7f8d159ecf40>
 
 The :py:attr:`shapely_poly` is a shapely polygon in the shape of a circle.
@@ -80,7 +80,7 @@ We can also create a new line by adding two lines:
 >>> straight_line = Line([Point(-1,0),Point(-1,-1)])
 >>> half_oval = half_circle + straight_line
 >>> half_oval.get_points()[-5:]
-[Point(-0.98078528, -0.19509032, 0.0), Point(-0.99518473, -0.09801714, 0.0), Point(-1.0, -0.0, 0.0), Point(-1.0, 0.0, 0.0), Point(-1.0, -1.0, 0.0)]
+[Point(-0.99518473, -0.09801714, 0.0), Point(-0.99879546, -0.04906767, 0.0), Point(-1.0, -0.0, 0.0), Point(-1.0, 0.0, 0.0), Point(-1.0, -1.0, 0.0)]
 
 Another neat feature of lines is \
 :py:func:`simulation.utils.geometry.line.Line.interpolate_pose`.
@@ -102,7 +102,7 @@ You can use it to translate and rotate all other geometry classes, through simpl
 
 >>> import math
 >>> from geometry import Transform, Point, Line
->>> tf = Transform([1, 1, 0], math.pi / 2)  # Rotate around (0,0) by 90 degrees and shift by x=1, y=1.
+>>> tf = Transform(Point(1, 1, 0), math.pi / 2)  # Rotate around (0,0) by 90 degrees and shift by x=1, y=1.
 >>> tf * Point(4, 2)
 Point(-1.0, 5.0, 0.0)
 >>> long_line = Line([Point(0, 0), Point(10, 0)])
@@ -144,7 +144,7 @@ you are prepared to tackle the last, but also the hardest task of the Onboarding
      Try to figure out, what the middle line of the individual road section would be
      and then just add the middle lines together:
 
-     >>> complete_middle_line = middle_line_1 + middle_line_2 + ...
+     >>> complete_middle_line = middle_line_1 + middle_line_2 + ...  # doctest: +SKIP
 
    * Once you know the middle line of the road you can use :py:func:`simulation.utils.geometry.line.Line.parallel_offset` to get the middle of the right lane (*where the car should drive*).
 
@@ -163,7 +163,7 @@ you are prepared to tackle the last, but also the hardest task of the Onboarding
    * Once you have the pose, it's easy to get the orientation as a quaternion:
 
      >>> pose = half_circle.interpolate_pose(arc_length = 0)
-     >>> pose.to_geometry_msg()
+     >>> pose.to_geometry_msg()  # doctest: +NORMALIZE_WHITESPACE
      position:
        x: 1.0
        y: 0.0
@@ -171,8 +171,9 @@ you are prepared to tackle the last, but also the hardest task of the Onboarding
      orientation:
        x: -0.0
        y: -0.0
-       z: -0.7242470829513219
-       w: 0.6895405447372193
+       z: -0.715730825283741
+       w: 0.6983762494090524
+
 
    * Last but not least: Ask other team members for help!
 
