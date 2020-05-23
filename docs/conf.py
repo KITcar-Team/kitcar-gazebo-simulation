@@ -29,8 +29,6 @@ sys.path.insert(0, os.path.abspath(".."))
 # Prevent all of these libraries to be installed just for the configuration
 MOCK_MODULES = [
     "yaml",
-    "numpy",
-    "numpy.core.multiarray",
     "PIL",
     "pyxb",
     "pyxb.binding",
