@@ -5,14 +5,17 @@ Example:
     A simple link with the shape of a rectangular box
     can be defined as follows:
 
+    >>> from geometry import Vector
+    >>> from urdf import Geometry, Box, Material, Link, Collision, Visual
     >>> box = Geometry(Box(Vector(2, 2, 2)))
     >>> material = Material("mat", color=Vector(1, 1, 1))
     >>> link = Link(
-            name + "_link",
-            collision=Collision(geometry=box),
-            visual=Visual(geometry=box, material=material),
-        )
+    ...     "link",
+    ...     collision=Collision(geometry=box),
+    ...     visual=Visual(geometry=box, material=material),
+    ... )
     >>> link.use_inertial_from_collision(mass=1.0)
+    ...  # Calculate inertial tensor from geometry and mass
 """
 
 from dataclasses import dataclass, field

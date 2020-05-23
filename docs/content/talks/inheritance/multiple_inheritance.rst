@@ -4,35 +4,31 @@ Multiple Inheritance
 Python also allows for a class to inherit from multiple base classes.
 Adding to our existing :py:class:`BaseClass` we can now define another class:
 
-.. code-block:: python
-
-    class BaseClass:
-      def __init__(self, name: str):
-          self.name = name
-      def say_hi(self):
-          print(f"I'm {self.name} of type {type(self)}")
-      def short_desc(self) -> str:
-          return f"BaseClass({self.name})"
-    class SecondBaseClass:
-      def say_ho(self) -> str:
-          return f"I don't have a name, but the type {type(self)}."
-      def short_desc(self) -> str:
-          return f"SecondBaseClass()"
+>>> class BaseClass:
+...      def __init__(self, name: str):
+...          self.name = name
+...      def say_hi(self):
+...          print(f"I'm {self.name} of type {type(self)}")
+...      def short_desc(self) -> str:
+...          return f"BaseClass({self.name})"
+>>> class SecondBaseClass:
+...     def say_ho(self) -> str:
+...         return f"I don't have a name, but the type {type(self)}."
+...     def short_desc(self) -> str:
+...         return f"SecondBaseClass()"
 
 Let's create a class that inherits from both classes:
 
-.. code-block:: python
-
-   class DoubleChildClass(BaseClass, SecondBaseClass):
-      pass
+>>> class DoubleChildClass(BaseClass, SecondBaseClass):
+...     pass
 
 As to expect, we can access the functions of **both** base classes:
 
 >>> double_child = DoubleChildClass("double_child_foo")
 >>> double_child.say_hi()
-I'm double_child_foo of type <class '__main__.DoubleChildClass'>
+I'm double_child_foo of type <class 'DoubleChildClass'>
 >>> double_child.say_ho()
-"I don't have a name, but the type <class '__main__.DoubleChildClass'>."
+"I don't have a name, but the type <class 'DoubleChildClass'>."
 
 However, :py:func:`short_desc` is defined in both base classes.
 What happens if we attempt to call :py:func:`short_desc`?
@@ -74,9 +70,9 @@ Whose functions will be prioritized? The dependency graph is a puzzle:
 
 But help is on the way:
 
->>> help(I)
-Help on class I in module __main__:
-...
+>>> help(I)  # doctest: +NORMALIZE_WHITESPACE
+Help on class I in module builtins:
+<BLANKLINE>
 class I(E, H)
  |  Method resolution order:
  |      I
@@ -88,7 +84,7 @@ class I(E, H)
  |      G
  |      A
  |      B
- |      builtins.object
+ |      object
  |
  |  Data descriptors inherited from A:
  |
@@ -97,6 +93,7 @@ class I(E, H)
  |
  |  __weakref__
  |      list of weak references to the object (if defined)
+<BLANKLINE>
 
  The **method resolution order** defines which base class comes next when looking for attributes and functions.
 Python uses the `C3 <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.19.3910&rep=rep1&type=pdf>`_ algorithm to linearize the dependency graph.

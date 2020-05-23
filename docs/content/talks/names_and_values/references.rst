@@ -20,11 +20,14 @@ What are references?
 
 .. topic:: Assignments
 
-  >>> x = ...
-  >>> def 
-  >>> for x in ...:
-  >>> import x
-  >>> ...
+   .. doctest::
+      :options: +SKIP
+
+      >>> x = ...
+      >>> def ...
+      >>> for x in ...:
+      >>> import x
+      >>> ...
 
 Ok. Interesting. So what?
 -------------------------
@@ -36,15 +39,15 @@ Let's see why:
 >>> class DummyBase:
 ...     def __init__(self, val):
 ...         self.value = val
-...     
+...
 ...     def __repr__(self):
 ...         return f"{self.__class__.__name__}({self.value})"
-... 
+...
 >>> class Dummy1(DummyBase):
 ...     def __iadd__(self, other):
 ...         self.value += other.value
 ...         return self
-... 
+...
 >>> class Dummy2(DummyBase):
 ...     def __iadd__(self, other):
 ...         return Dummy2(self.value + other.value)
@@ -54,7 +57,7 @@ Let's consider:
 >>> dummies = [Dummy1(1), Dummy2(1)]
 >>> for d in dummies:
 ...     d += DummyBase(10)
-... 
+...
 >>> dummies
 [Dummy1(11), Dummy2(1)]
 

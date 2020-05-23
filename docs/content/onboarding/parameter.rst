@@ -14,7 +14,7 @@ making them accessible in your node.
 When subclassing from :py:class:`simulation.utils.ros_base.NodeBase`,
 you can access the parameters inside the node with
 
->>> self.param.{NAME_OF_PARAMETER}
+>>> self.param.{NAME_OF_PARAMETER}  # doctest: +SKIP
 
 Our nodes usually have two parameter files:
 
@@ -48,10 +48,13 @@ In the node's launch file, the parameters are loaded using **<rosparam>**:
 
 Inside the node, you can now access the parameters with:
 
->>> print(self.param.param_name_1)
-'param_value_1'
->>> print(self.param.param_name_2)
-'param_value_2'
+.. doctest::
+   :options: +SKIP
+
+   >>> print(self.param.param_name_1)
+   'param_value_1'
+   >>> print(self.param.param_name_2)
+   'param_value_2'
 
 When taking a closer look, you can see that topics are loaded with *ns="topics"*.
 Whenever
@@ -62,11 +65,11 @@ Whenever
 
 is provided, parameters from that file are accessible through:
 
->>> self.param.NAMESPACE...
+>>> self.param.NAMESPACE...  # doctest: +SKIP
 
 Therefore, the topic can be accessed with:
 
->>> print(self.param.topics.topic_name)
+>>> print(self.param.topics.topic_name)  # doctest: +SKIP
 'topic'
 
 Replace Constants with Parameters

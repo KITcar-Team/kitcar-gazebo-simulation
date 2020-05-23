@@ -7,7 +7,7 @@ Let's look at two more examples:
 >>> str2 = str1
 >>> str2 += " world"
 
-What values are **str1** and **str2** assigned to? 
+What values are **str1** and **str2** assigned to?
 
 >>> str1
 'hello'
@@ -131,7 +131,7 @@ Mutable types
 
 is actually
 
->>> list2.__iadd__([" world"])
+>>> list2.__iadd__(["world"])  # doctest: +SKIP
 
 . So the behavior depends on the implementation of **__iadd__**. However
 
@@ -139,6 +139,6 @@ is actually
 
 is actually
 
->>> list2.__add__([" world"])
+>>> list2.__add__(["world"])  # doctest: +SKIP
 
 . So the behavior depends on the implementation of **__add__**.

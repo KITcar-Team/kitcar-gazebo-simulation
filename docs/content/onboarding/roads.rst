@@ -59,6 +59,14 @@ Let’s take a look at ``onboarding_simple.py``:
    :language: python
    :linenos:
 
+.. testsetup::
+
+   from road.road import Road  # Definition of the road class
+   from road.sections import StraightRoad
+   from road.sections import Intersection
+   road = Road()
+   road_section = StraightRoad()  # Just a dummy
+
 Lines 3 to 5 are imports for the abstract road class and the used road sections.
 In line 8 a *Road* called road is constructed and in the following lines different road sections are added to this road:
 
@@ -67,10 +75,12 @@ In line 8 a *Road* called road is constructed and in the following lines differe
 A *StraightRoad* with the default length of 1 m can be added by calling:
 
 >>> StraightRoad()
+StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], length=1)
 
 If you want to pass a different length add the argument :py:attr:`length` in the constructor. For example a 2 m long *StraightRoad*:
 
 >>> StraightRoad(length=2)
+StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], length=2)
 
 Render road
 -----------
