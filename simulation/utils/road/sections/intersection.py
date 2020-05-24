@@ -3,20 +3,61 @@
 import math
 import numpy as np
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Tuple, List
 
-from geometry import Point, Polygon, Line, Vector, Transform, Pose
+from geometry import Point, Line, Vector, Pose, Polygon
 
 from road.sections.road_section import RoadSection
-from road.sections.road_section import Export
+from road.sections.road_section import MarkedLine
 from road.config import Config
 import road.sections.type as road_section_type
-from road import schema
+from road.sections.traffic_sign import TrafficSign
+from road.sections.surface_marking import SurfaceMarkingRect
+
+
+def _get_stop_line(line1: Line, line2: Line, kind) -> SurfaceMarkingRect:
+    """Return a line perpendicular to both provided (assumed parallel) lines.
+
+    The returned line will be at the first point where both lines are parallel to each other plus 2cm offset.
+    """
+    beginning_line1 = line1.interpolate(0.02)
+    beginning_line2 = line2.interpolate(0.02)
+
+    # Test which line to draw the stop line at
+    if beginning_line1.distance(line2) < beginning_line2.distance(line1):
+        # End of line 1 is the starting point of the stop line
+        p1 = beginning_line1
+        p2 = line2.interpolate(line2.project(beginning_line1))
+    else:
+        # End of line 2 is the starting point
+        p1 = line1.interpolate(line1.project(beginning_line2))
+        p2 = beginning_line2
+
+    line = Line([p1, p2])
+    width = line.length
+    center = 0.5 * (Vector(line.coords[0]) + Vector(line.coords[1]))
+    angle = Pose([0, 0], Vector(line.coords[1]) - Vector(line.coords[0])).get_angle()
+
+    return SurfaceMarkingRect(
+        kind=kind, angle=angle, width=width, normalize_x=False, center=center, depth=0.04
+    )
+
+
+def arange_with_end(start: float, end: float, step: float):
+    return np.arange(start, end + step, step)
 
 
 @dataclass
 class Intersection(RoadSection):
-    """Road section representing an intersection."""
+    """Road section representing an intersection.
+
+    Args:
+        angle (float) = math.pi/2: Angle [radian] between crossing roads.
+        closing (int) = None: Optionally close one direction to create a T-intersection.
+        turn (int) = Intersection.STRAIGHT: Direction in which the road continues.
+        rule (int) = Intersection.EQUAL: Priority-rule at intersection.
+        size (float) = 1.8: Length of the crossing roads.
+    """
 
     TYPE = road_section_type.INTERSECTION
 
@@ -44,8 +85,8 @@ class Intersection(RoadSection):
     Intersecting road must stop.
     """
 
-    angle: float = 90
-    """Angle between intersecting roads."""
+    angle: float = math.pi / 2
+    """Angle between intersecting roads [radian]."""
     closing: str = None
     """Closed direction (T-intersection)."""
     turn: str = STRAIGHT
@@ -56,10 +97,16 @@ class Intersection(RoadSection):
     """Size of intersection (from one side to the other)."""
 
     def __post_init__(self):
-        self._alpha = math.radians(self.angle - 90)
+        self._alpha = self.angle - math.pi / 2
         self._closing = self.closing
 
         self._size = self.size / 2
+
+        self.traffic_signs.extend(self._get_intersection_traffic_signs())
+        self.surface_markings.extend(self._get_intersection_surface_markings())
+
+        # Check if size is large enough
+        assert (-1 * self.w + self.v).y > (-1 * self.u).y and self.z.x > (self.x - self.u).x
 
         super().__post_init__()
 
@@ -255,7 +302,7 @@ class Intersection(RoadSection):
     def ls_circle(self) -> Line:
         if self.turn == Intersection.LEFT:
             points_ls = []
-            for theta in np.arange(0, 0.5 * math.pi + self._alpha, math.pi / 20):
+            for theta in arange_with_end(0, 0.5 * math.pi + self._alpha, math.pi / 20):
                 points_ls.append(Point(self.z - self.x + self.ls - self.ls.rotated(theta)))
             return self.transform * Line(points_ls)
 
@@ -263,7 +310,7 @@ class Intersection(RoadSection):
     def ll_circle(self) -> Line:
         if self.turn == Intersection.LEFT:
             points_ll = []
-            for theta in np.arange(0, 0.5 * math.pi + self._alpha, math.pi / 40):
+            for theta in arange_with_end(0, 0.5 * math.pi + self._alpha, math.pi / 40):
                 points_ll.append(
                     Point(self.z - self.x + self.u + self.ll - self.ll.rotated(theta))
                 )
@@ -273,7 +320,7 @@ class Intersection(RoadSection):
     def rs_circle(self) -> Line:
         if self.turn == Intersection.RIGHT:
             points_rs = []
-            for theta in np.arange(0, -math.pi / 2 + self._alpha, -math.pi / 20):
+            for theta in arange_with_end(0, -math.pi / 2 + self._alpha, -math.pi / 20):
                 points_rs.append(Point(self.z - self.x + self.rs - self.rs.rotated(theta)))
             return self.transform * Line(points_rs)
 
@@ -281,7 +328,7 @@ class Intersection(RoadSection):
     def rl_circle(self) -> Line:
         if self.turn == Intersection.RIGHT:
             points_rl = []
-            for theta in np.arange(0, -math.pi / 2 + self._alpha, -math.pi / 40):
+            for theta in arange_with_end(0, -math.pi / 2 + self._alpha, -math.pi / 40):
                 points_rl.append(
                     Point(self.z - self.x - self.u + self.rl - self.rl.rotated(theta))
                 )
@@ -289,6 +336,7 @@ class Intersection(RoadSection):
 
     @property
     def middle_line(self) -> Line:
+        """Line: Middle line of the intersection."""
         if self.turn == Intersection.LEFT:
             return self.middle_line_south + self.ls_circle + self.middle_line_west
         elif self.turn == Intersection.RIGHT:
@@ -303,66 +351,127 @@ class Intersection(RoadSection):
             return self.middle_line_south + straight_m_l + self.middle_line_north
 
     @property
-    def arrow_left_south(self) -> Polygon:
-        poly = Polygon(
-            [
-                Point(
-                    self.cp_surface_south()
-                    + Vector(-Config.TURN_SF_MARK_LENGTH, Config.TURN_SF_MARK_WIDTH)
-                ),
-                Point(self.cp_surface_south() + Vector(-Config.TURN_SF_MARK_LENGTH, 0)),
-                Point(self.cp_surface_south() + Vector(0, 0)),
-                Point(self.cp_surface_south() + Vector(0, Config.TURN_SF_MARK_WIDTH)),
-            ]
-        )
-        return self.transform * poly
+    def lines(self) -> List[MarkedLine]:
+        """List[MarkedLine]: All road lines with their marking type."""
+        lines = []
+        south_middle_end_length = self.prev_length + self.middle_line_south.length
+        north_middle_start_length = -0.1
+        north_left_start_length = -0.1
+        north_right_start_length = -0.1
+        west_middle_start_length = -0.1
+        east_middle_start_length = -0.1
 
-    @property
-    def arrow_right_west(self) -> Polygon:
-        poly = Polygon(
-            [
-                Point(Config.TURN_SF_MARK_WIDTH, Config.TURN_SF_MARK_LENGTH),
-                Point(0, Config.TURN_SF_MARK_LENGTH),
-                Point(0, 0),
-                Point(Config.TURN_SF_MARK_WIDTH, 0),
-            ]
-        )
-        t = Transform(
-            self.transform * self.cp_surface_west(),
-            self.transform.get_angle() + self._alpha,
-        )
-        return t * poly
+        if self.turn == Intersection.LEFT:
+            lines.append(
+                MarkedLine.from_line(
+                    self.ls_circle, self.DASHED_LINE_MARKING, south_middle_end_length
+                )
+            )
+            lines.append(
+                MarkedLine.from_line(self.ll_circle, self.DASHED_LINE_MARKING, -0.1)
+            )
+            west_middle_start_length = south_middle_end_length + self.ls_circle.length
+        elif self.turn == Intersection.RIGHT:
+            lines.append(
+                MarkedLine.from_line(
+                    self.rs_circle, self.DASHED_LINE_MARKING, south_middle_end_length
+                )
+            )
+            lines.append(
+                MarkedLine.from_line(self.rl_circle, self.DASHED_LINE_MARKING, -0.1)
+            )
+            east_middle_start_length = south_middle_end_length + self.rs_circle.length
+        else:
+            north_middle_start_length = (
+                south_middle_end_length
+                + Line(
+                    [
+                        self.middle_line_south.get_points()[-1],
+                        self.middle_line_north.get_points()[0],
+                    ]
+                ).length
+            )
+            north_left_start_length = (
+                self.prev_length
+                + self.left_line_south.length
+                + Line(
+                    [
+                        self.left_line_south.get_points()[-1],
+                        self.left_line_north.get_points()[0],
+                    ]
+                ).length
+            )
+            north_right_start_length = (
+                self.prev_length
+                + self.right_line_south.length
+                + Line(
+                    [
+                        self.right_line_south.get_points()[-1],
+                        self.right_line_north.get_points()[0],
+                    ]
+                ).length
+            )
 
-    @property
-    def arrow_right_south(self) -> Polygon:
-        poly = Polygon(
-            [
-                Point(
-                    self.cp_surface_south()
-                    + Vector(-Config.TURN_SF_MARK_LENGTH, Config.TURN_SF_MARK_WIDTH,)
-                ),
-                Point(self.cp_surface_south() + Vector(-Config.TURN_SF_MARK_LENGTH, 0)),
-                Point(self.cp_surface_south() + Vector(0, 0)),
-                Point(self.cp_surface_south() + Vector(0, Config.TURN_SF_MARK_WIDTH)),
-            ]
+        # south + left west + right east
+        lines.append(
+            MarkedLine.from_line(
+                self.left_line_south + self.left_line_west,
+                self.left_line_marking,
+                self.prev_length,
+            )
         )
-        return self.transform * poly
+        lines.append(
+            MarkedLine.from_line(
+                self.middle_line_south, self.middle_line_marking, self.prev_length
+            )
+        )
+        lines.append(
+            MarkedLine.from_line(
+                self.right_line_south + self.right_line_east,
+                self.right_line_marking,
+                self.prev_length,
+            )
+        )
+        # west
+        lines.append(
+            MarkedLine.from_line(
+                self.middle_line_west, self.middle_line_marking, west_middle_start_length
+            )
+        )
+        lines.append(
+            MarkedLine.from_line(
+                self.right_line_west, self.right_line_marking, south_middle_end_length
+            )
+        )
+        # north
+        lines.append(
+            MarkedLine.from_line(
+                self.left_line_north, self.left_line_marking, north_left_start_length
+            )
+        )
+        lines.append(
+            MarkedLine.from_line(
+                self.middle_line_north, self.middle_line_marking, north_middle_start_length
+            )
+        )
+        lines.append(
+            MarkedLine.from_line(
+                self.right_line_north, self.right_line_marking, north_right_start_length
+            )
+        )
+        # east
+        lines.append(
+            MarkedLine.from_line(
+                self.left_line_east, self.left_line_marking, south_middle_end_length
+            )
+        )
+        lines.append(
+            MarkedLine.from_line(
+                self.middle_line_east, self.middle_line_marking, east_middle_start_length
+            )
+        )
 
-    @property
-    def arrow_left_east(self) -> Polygon:
-        poly = Polygon(
-            [
-                Point(Config.TURN_SF_MARK_WIDTH, Config.TURN_SF_MARK_LENGTH),
-                Point(0, Config.TURN_SF_MARK_LENGTH),
-                Point(0, 0),
-                Point(Config.TURN_SF_MARK_WIDTH, 0),
-            ]
-        )
-        t = Transform(
-            self.transform * self.cp_surface_east(),
-            self.transform.get_angle() + self._alpha + math.pi,
-        )
-        return t * poly
+        return lines
 
     def get_beginning(self) -> Tuple[Pose, float]:
         return (Pose(self.transform * Point(0, 0), self.transform.get_angle() + math.pi), 0)
@@ -380,310 +489,71 @@ class Intersection(RoadSection):
 
         return (Pose(self.transform * end_point, self.transform.get_angle() + end_angle), 0)
 
-    def export_direction(
-        self, left, middle, right
-    ) -> Tuple[schema.lanelet, schema.lanelet]:
-        right_lanelet = schema.lanelet(
-            leftBoundary=middle.to_schema_boundary(),
-            rightBoundary=right.to_schema_boundary(),
-        )
-        right_lanelet.rightBoundary.lineMarking = "solid"
-        right_lanelet.leftBoundary.lineMarking = "dashed"
-        left_lanelet = schema.lanelet(
-            leftBoundary=middle.to_schema_boundary(),
-            rightBoundary=left.to_schema_boundary(),
-        )
-        left_lanelet.leftBoundary.point.reverse()
-        left_lanelet.rightBoundary.point.reverse()
-        left_lanelet.rightBoundary.lineMarking = "solid"
-        return (right_lanelet, left_lanelet)
+    def get_bounding_box(self) -> Polygon:
+        """Get a polygon around the road section.
 
-    def export(self):
-        # Check if size is large enough
-        assert (-1 * self.w + self.v).y > (-1 * self.u).y and self.z.x > (self.x - self.u).x
+        Bounding box is an approximate representation of all points within a given distance \
+        of this geometric object.
+        """
+        return Polygon(self.middle_line.buffer(1.5 * self.size))
 
-        others = []  # [southRight, southLeft, ...]
-        last_pair = ()
-
-        southRight, southLeft = self.export_direction(
-            self.left_line_south, self.middle_line_south, self.right_line_south
-        )
-
-        eastRight, eastLeft = self.export_direction(
-            self.left_line_east, self.middle_line_east, self.right_line_east
-        )
-
-        northRight, northLeft = self.export_direction(
-            self.left_line_north, self.middle_line_north, self.right_line_north
-        )
-
-        westRight, westLeft = self.export_direction(
-            self.left_line_west, self.middle_line_west, self.right_line_west
-        )
-
-        if self.rule == Intersection.EQUAL and self.turn == Intersection.STRAIGHT:
-            westLeft.stopLine = "dashed"
-            southRight.stopLine = "dashed"
-            northLeft.stopLine = "dashed"
-            eastLeft.stopLine = "dashed"
-        elif (
-            self.rule == Intersection.PRIORITY_YIELD and self.turn == Intersection.STRAIGHT
-        ):
-            westLeft.stopLine = "dashed"
-            eastLeft.stopLine = "dashed"
-        elif self.rule == Intersection.PRIORITY_STOP and self.turn == Intersection.STRAIGHT:
-            westLeft.stopLine = "solid"
-            eastLeft.stopLine = "solid"
-        elif self.rule == Intersection.YIELD:
-            southRight.stopLine = "dashed"
-            northLeft.stopLine = "dashed"
-        elif self.rule == Intersection.STOP:
-            southRight.stopLine = "solid"
-            northLeft.stopLine = "solid"
-
-        closing_lanelet = schema.lanelet(
-            leftBoundary=schema.boundary(), rightBoundary=schema.boundary()
-        )
-        closing_lanelet.rightBoundary.lineMarking = "solid"
-        if self.closing == Intersection.STRAIGHT:
-            closing_lanelet.rightBoundary.point.append(
-                self.right_line_north.get_points()[0].to_schema()
-            )
-            closing_lanelet.rightBoundary.point.append(
-                self.left_line_north.get_points()[0].to_schema()
-            )
-            closing_lanelet.leftBoundary.point.append(
-                self.right_line_north.get_points()[0].to_schema()
-            )
-            closing_lanelet.leftBoundary.point.append(
-                self.left_line_north.get_points()[0].to_schema()
-            )
-            others.append(closing_lanelet)
-        else:
-            others.append(northRight)
-            others.append(northLeft)
-
-        if self.closing == Intersection.LEFT:
-            closing_lanelet.rightBoundary.point.append(
-                self.right_line_west.get_points()[0].to_schema()
-            )
-            closing_lanelet.rightBoundary.point.append(
-                self.left_line_west.get_points()[0].to_schema()
-            )
-            closing_lanelet.leftBoundary.point.append(
-                self.right_line_west.get_points()[0].to_schema()
-            )
-            closing_lanelet.leftBoundary.point.append(
-                self.left_line_west.get_points()[0].to_schema()
-            )
-            others.append(closing_lanelet)
-        else:
-            others.append(westRight)
-            others.append(westLeft)
-
-        if self.closing == Intersection.RIGHT:
-            closing_lanelet.rightBoundary.point.append(
-                self.right_line_east.get_points()[0].to_schema()
-            )
-            closing_lanelet.rightBoundary.point.append(
-                self.left_line_east.get_points()[0].to_schema()
-            )
-            closing_lanelet.leftBoundary.point.append(
-                self.right_line_east.get_points()[0].to_schema()
-            )
-            closing_lanelet.leftBoundary.point.append(
-                self.left_line_east.get_points()[0].to_schema()
-            )
-            others.append(closing_lanelet)
-        else:
-            others.append(eastRight)
-            others.append(eastLeft)
-
+    def _get_intersection_traffic_signs(self) -> List[TrafficSign]:
+        signs = []
         if self.turn == Intersection.LEFT:
-            turn_lines_right = schema.lanelet(
-                leftBoundary=self.ls_circle.to_schema_boundary(),
-                rightBoundary=self.ll_circle.to_schema_boundary(),
-            )
-            turn_lines_right.rightBoundary.lineMarking = "dashed"
-            turn_lines_right.leftBoundary.lineMarking = "dashed"
-
-            turn_lines_left = schema.lanelet(
-                leftBoundary=self.ls_circle.to_schema_boundary(),
-                rightBoundary=schema.boundary(),
-            )
-            turn_lines_left.leftBoundary.point.reverse()
-            turn_lines_left.rightBoundary.point.append(
-                (self.transform * Point(self.z - self.x - self.u)).to_schema()
-            )
-
-            others.append(turn_lines_right)
-            others.append(turn_lines_left)
-
             # sign "turn left" in south
-            sign = schema.trafficSign(
-                type="stvo-209-10",
-                orientation=self.transform.get_angle() + math.pi,
-                centerPoint=(
-                    self.transform * Point(self.cp_sign_south(Config.get_turn_sign_dist()))
-                ).to_schema(),
+            signs.append(
+                TrafficSign(
+                    kind=TrafficSign.TURN_LEFT,
+                    center=Point(self.cp_sign_south(Config.get_turn_sign_dist())),
+                    angle=math.pi,
+                )
             )
-            others.append(sign)
-            # roadmarking "turn left" in south
-            road_marking = schema.roadMarking(
-                type=schema.roadMarkingType.turn_right,
-                orientation=self.transform.get_angle() + 0.5 * math.pi,
-                centerPoint=(self.transform * Point(self.cp_surface_south())).to_schema(),
-            )
-            others.append(road_marking)
-
             if self.rule != Intersection.YIELD:
                 # sign "turn right" in west
-                sign = schema.trafficSign(
-                    type="stvo-209-20",
-                    orientation=self.transform.get_angle() + 0.5 * math.pi + self._alpha,
-                    centerPoint=(
-                        self.transform
-                        * Point(self.cp_sign_west(Config.get_turn_sign_dist()))
-                    ).to_schema(),
+                signs.append(
+                    TrafficSign(
+                        kind=TrafficSign.TURN_RIGHT,
+                        center=Point(self.cp_sign_west(Config.get_turn_sign_dist())),
+                        angle=0.5 * math.pi + self._alpha,
+                    )
                 )
-                others.append(sign)
-                # roadmarking "turn right" in west
-                road_marking = schema.roadMarking(
-                    type=schema.roadMarkingType.turn_left,
-                    orientation=self.transform.get_angle() + self._alpha,
-                    centerPoint=(
-                        self.transform * Point(self.cp_surface_west())
-                    ).to_schema(),
-                )
-                others.append(road_marking)
-
-            last_pair = (westRight, westLeft)
-
         elif self.turn == Intersection.RIGHT:
-            turn_lines_right = schema.lanelet(
-                leftBoundary=schema.boundary(), rightBoundary=schema.boundary()
-            )
-            turn_lines_right.leftBoundary.lineMarking = "dashed"
-            turn_lines_right = schema.lanelet(
-                leftBoundary=self.rs_circle.to_schema_boundary(),
-                rightBoundary=schema.boundary(),
-            )
-            turn_lines_right.rightBoundary.point.append(
-                (self.transform * Point(self.z - self.x + self.u)).to_schema()
-            )
-
-            turn_lines_left = schema.lanelet(
-                leftBoundary=self.rs_circle.to_schema_boundary(),
-                rightBoundary=self.rl_circle.to_schema_boundary(),
-            )
-            turn_lines_left.leftBoundary.point.reverse()
-            turn_lines_left.leftBoundary.point.reverse()
-            turn_lines_left.rightBoundary.lineMarking = "dashed"
-            turn_lines_left.leftBoundary.lineMarking = "dashed"
-
-            others.append(turn_lines_right)
-            others.append(turn_lines_left)
-
             # sign "turn right" in south
-            sign = schema.trafficSign(
-                type="stvo-209-20",
-                orientation=self.transform.get_angle() + math.pi,
-                centerPoint=(
-                    self.transform * Point(self.cp_sign_south(Config.get_turn_sign_dist()))
-                ).to_schema(),
+            signs.append(
+                TrafficSign(
+                    kind=TrafficSign.TURN_RIGHT,
+                    center=Point(self.cp_sign_south(Config.get_turn_sign_dist())),
+                    angle=math.pi,
+                )
             )
-            others.append(sign)
-            # roadmarking "turn right" in south
-            road_marking = schema.roadMarking(
-                type=schema.roadMarkingType.turn_left,
-                orientation=self.transform.get_angle() + 0.5 * math.pi,
-                centerPoint=(self.transform * Point(self.cp_surface_south())).to_schema(),
-            )
-            others.append(road_marking)
-
             if self.rule != Intersection.YIELD:
                 # sign "turn left" in east
-                sign = schema.trafficSign(
-                    type="stvo-209-10",
-                    orientation=self.transform.get_angle() - 0.5 * math.pi + self._alpha,
-                    centerPoint=(
-                        self.transform
-                        * Point(self.cp_sign_east(Config.get_turn_sign_dist()))
-                    ).to_schema(),
+                signs.append(
+                    TrafficSign(
+                        kind=TrafficSign.TURN_LEFT,
+                        center=Point(self.cp_sign_east(Config.get_turn_sign_dist())),
+                        angle=-0.5 * math.pi + self._alpha,
+                    )
                 )
-                others.append(sign)
-                # roadmarking "turn left" in east
-                road_marking = schema.roadMarking(
-                    type=schema.roadMarkingType.turn_right,
-                    orientation=self.transform.get_angle() - math.pi + self._alpha,
-                    centerPoint=(
-                        self.transform * Point(self.cp_surface_east())
-                    ).to_schema(),
-                )
-                others.append(road_marking)
-
-            last_pair = (eastRight, eastLeft)
-
-        elif self.turn == Intersection.STRAIGHT:
-            straight_m_l = Line(
-                [
-                    self.middle_line_south.get_points()[-1],
-                    self.middle_line_north.get_points()[0],
-                ]
-            )
-            straight_l_l = Line(
-                [
-                    self.left_line_south.get_points()[-1],
-                    self.left_line_north.get_points()[0],
-                ]
-            )
-            straight_r_l = Line(
-                [
-                    self.right_line_south.get_points()[-1],
-                    self.right_line_north.get_points()[0],
-                ]
-            )
-
-            turn_lines_right = schema.lanelet(
-                leftBoundary=straight_m_l.to_schema_boundary(),
-                rightBoundary=straight_r_l.to_schema_boundary(),
-            )
-            turn_lines_left = schema.lanelet(
-                leftBoundary=straight_m_l.to_schema_boundary(),
-                rightBoundary=straight_l_l.to_schema_boundary(),
-            )
-            turn_lines_left.rightBoundary.point.reverse()
-            turn_lines_left.leftBoundary.point.reverse()
-            others.append(turn_lines_right)
-            others.append(turn_lines_left)
-
-            last_pair = (northRight, northLeft)
 
         type_map = {
-            Intersection.PRIORITY_YIELD: "stvo-306",
-            Intersection.PRIORITY_STOP: "stvo-306",
-            Intersection.YIELD: "stvo-205",
-            Intersection.STOP: "stvo-206",
+            Intersection.PRIORITY_YIELD: TrafficSign.PRIORITY,
+            Intersection.PRIORITY_STOP: TrafficSign.PRIORITY,
+            Intersection.YIELD: TrafficSign.YIELD,
+            Intersection.STOP: TrafficSign.STOP,
         }
         if self.rule in type_map:
-            others.append(
-                schema.trafficSign(
-                    type=type_map[self.rule],
-                    orientation=self.transform.get_angle() + math.pi,
-                    centerPoint=(
-                        self.transform
-                        * Point(self.cp_sign_south(Config.get_prio_sign_dist(1)))
-                    ).to_schema(),
+            signs.append(
+                TrafficSign(
+                    kind=type_map[self.rule],
+                    center=Point(self.cp_sign_south(Config.get_prio_sign_dist(1))),
+                    angle=math.pi,
                 )
             )
-            others.append(
-                schema.trafficSign(
-                    type=type_map[self.rule],
-                    orientation=self.transform.get_angle(),
-                    centerPoint=(
-                        self.transform
-                        * Point(self.cp_sign_north(Config.get_prio_sign_dist(1)))
-                    ).to_schema(),
+            signs.append(
+                TrafficSign(
+                    kind=type_map[self.rule],
+                    center=Point(self.cp_sign_north(Config.get_prio_sign_dist(1))),
                 )
             )
 
@@ -692,37 +562,142 @@ class Intersection(RoadSection):
         # todo: also add turning signal if we are not on the outer turn lane
         # on the opposite side
         type_map_opposite = {
-            Intersection.PRIORITY_YIELD: "stvo-206",
-            Intersection.PRIORITY_STOP: "stvo-306",
-            Intersection.YIELD: "stvo-306",
-            Intersection.STOP: "stvo-306",
+            Intersection.PRIORITY_YIELD: TrafficSign.YIELD,
+            Intersection.PRIORITY_STOP: TrafficSign.STOP,
+            Intersection.YIELD: TrafficSign.PRIORITY,
+            Intersection.STOP: TrafficSign.PRIORITY,
         }
 
         if self.rule in type_map_opposite:
-            others.append(
-                schema.trafficSign(
-                    type=type_map_opposite[self.rule],
-                    orientation=self.transform.get_angle() + 0.5 * math.pi + self._alpha,
-                    centerPoint=(
-                        self.transform
-                        * Point(self.cp_sign_west(Config.get_prio_sign_dist(1)))
-                    ).to_schema(),
+            signs.append(
+                TrafficSign(
+                    kind=type_map_opposite[self.rule],
+                    center=Point(self.cp_sign_west(Config.get_prio_sign_dist(1))),
+                    angle=0.5 * math.pi + self._alpha,
                 )
             )
-            others.append(
-                schema.trafficSign(
-                    type=type_map_opposite[self.rule],
-                    orientation=self.transform.get_angle() - 0.5 * math.pi + self._alpha,
-                    centerPoint=(
-                        self.transform
-                        * Point(self.cp_sign_east(Config.get_prio_sign_dist(1)))
-                    ).to_schema(),
+            signs.append(
+                TrafficSign(
+                    kind=type_map_opposite[self.rule],
+                    center=Point(self.cp_sign_east(Config.get_prio_sign_dist(1))),
+                    angle=-0.5 * math.pi + self._alpha,
                 )
             )
 
-        for obstacle in self.obstacles:
-            others.extend(obstacle.export())
-        export = Export(southRight, southLeft, others)
-        export.lanelet_pairs.append((turn_lines_right, turn_lines_left))
-        export.lanelet_pairs.append(last_pair)
-        return export
+        for sign in signs:
+            sign.transform = self.transform
+            sign.normalize_x = False
+
+        return signs
+
+    def _get_intersection_surface_markings(self) -> List[SurfaceMarkingRect]:
+        markings = []
+        if self.turn == Intersection.LEFT or self.turn == Intersection.RIGHT:
+            own_marking = (
+                SurfaceMarkingRect.LEFT_TURN_MARKING
+                if self.turn == Intersection.LEFT
+                else SurfaceMarkingRect.RIGHT_TURN_MARKING
+            )
+
+            # roadmarking "turn left" in south
+            markings.append(
+                SurfaceMarkingRect(
+                    kind=own_marking,
+                    angle=0.5 * math.pi,
+                    center=Point(self.cp_surface_south()),
+                )
+            )
+            if self.rule != Intersection.YIELD:
+                opposite_marking = (
+                    SurfaceMarkingRect.RIGHT_TURN_MARKING
+                    if self.turn == Intersection.LEFT
+                    else SurfaceMarkingRect.LEFT_TURN_MARKING
+                )
+                opposite_angle = self._alpha + (
+                    0 if self.turn == Intersection.LEFT else math.pi
+                )
+                opposite_center = Point(
+                    self.cp_surface_west()
+                    if self.turn == Intersection.LEFT
+                    else self.cp_surface_east()
+                )
+                # roadmarking "turn right" in west
+                markings.append(
+                    SurfaceMarkingRect(
+                        kind=opposite_marking, angle=opposite_angle, center=opposite_center,
+                    )
+                )
+
+        # Add stop lines
+        west_line = None
+        east_line = None
+        north_line = None
+        south_line = None
+        if self.rule == Intersection.EQUAL and self.turn == Intersection.STRAIGHT:
+            west_line = SurfaceMarkingRect.GIVE_WAY_LINE
+            east_line = SurfaceMarkingRect.GIVE_WAY_LINE
+            north_line = SurfaceMarkingRect.GIVE_WAY_LINE
+            south_line = SurfaceMarkingRect.GIVE_WAY_LINE
+        elif (
+            self.rule == Intersection.PRIORITY_YIELD and self.turn == Intersection.STRAIGHT
+        ):
+            west_line = SurfaceMarkingRect.GIVE_WAY_LINE
+            east_line = SurfaceMarkingRect.GIVE_WAY_LINE
+        elif self.rule == Intersection.PRIORITY_STOP and self.turn == Intersection.STRAIGHT:
+            west_line = SurfaceMarkingRect.STOP_LINE
+            east_line = SurfaceMarkingRect.STOP_LINE
+        elif self.rule == Intersection.YIELD:
+            north_line = SurfaceMarkingRect.GIVE_WAY_LINE
+            south_line = SurfaceMarkingRect.GIVE_WAY_LINE
+        elif self.rule == Intersection.STOP:
+            north_line = SurfaceMarkingRect.STOP_LINE
+            south_line = SurfaceMarkingRect.STOP_LINE
+
+        # These stop lines are always the direction's middle and right line
+        # going away from the center of the intersection in local coordinates
+        if west_line is not None:
+            markings.append(
+                _get_stop_line(
+                    Line([Point(self.z - self.u), Point(self.z - self.w)]),
+                    Line(
+                        [Point(self.z - self.x - self.u), Point(self.z - self.w - self.v)]
+                    ),
+                    kind=west_line,
+                )
+            )
+        if north_line is not None:
+            markings.append(
+                _get_stop_line(
+                    Line(
+                        [Point(self.z + self.x), Point(2 * self.z)]
+                    ),  # Middle line north in local coords
+                    Line(
+                        [Point(self.z + self.x - self.u), Point(2 * self.z - self.y)]
+                    ),  # Right line
+                    kind=north_line,
+                )
+            )
+        if south_line is not None:
+            markings.append(
+                _get_stop_line(
+                    Line([Point(self.z - self.x), Point(0, 0)]),
+                    Line([Point(self.z - self.x + self.u), Point(0, -Config.road_width)]),
+                    kind=south_line,
+                )
+            )
+        if east_line is not None:
+            markings.append(
+                _get_stop_line(
+                    Line([Point(self.z + self.u), Point(self.z + self.w)]),
+                    Line(
+                        [Point(self.z + self.x + self.u), Point(self.z + self.w + self.v)]
+                    ),
+                    kind=east_line,
+                )
+            )
+
+        for marking in markings:
+            marking.transform = self.transform
+            marking.normalize_x = False
+
+        return markings

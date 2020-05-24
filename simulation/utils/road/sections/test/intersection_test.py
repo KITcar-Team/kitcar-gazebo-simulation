@@ -12,7 +12,7 @@ class ModuleTest(unittest.TestCase):
     def test_intersection(self):
         TF = Transform([1, 1], math.pi / 2)
         TF = Transform([0, 0], 0)
-        ANGLE = 90
+        ANGLE = math.pi / 2
         CLOSING = None
         SIZE = 2
         RULE = Intersection.EQUAL
@@ -44,7 +44,7 @@ class ModuleTest(unittest.TestCase):
             ]
         )
         # rotate vt lines 110 - 90 degree
-        angle = math.radians(ANGLE - 90)
+        angle = ANGLE - math.pi / 2
         inter_mid_point = TF * Point(1, 0)
 
         left_line_vt_tf = self.rotate_around_point(left_line_vt, angle, inter_mid_point)

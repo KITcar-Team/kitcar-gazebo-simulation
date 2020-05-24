@@ -7,7 +7,6 @@ from road.sections import (
     ParkingArea,
     ParkingLot,
     ParkingSpot,
-    StartLine,
 )
 
 from road.config import Config
@@ -24,7 +23,7 @@ class ModuleTest(unittest.TestCase):
         right_spot = ParkingSpot(width=0.6, kind=ParkingSpot.BLOCKED)
 
         # opening_angle 55 degrees
-        OPENING_ANGLE = 55
+        OPENING_ANGLE = math.radians(55)
         LEFT_START = 2.25
         LEFT_DEPTH = 0.5
         RIGHT_START = 1.75
@@ -44,14 +43,8 @@ class ModuleTest(unittest.TestCase):
             spots=[right_spot],
         )
 
-        sl = StartLine()
-
         pa = ParkingArea(
-            length=LENGTH,
-            start_line=sl,
-            left_lots=[left_lot],
-            right_lots=[right_lot],
-            transform=TF,
+            length=LENGTH, left_lots=[left_lot], right_lots=[right_lot], transform=TF,
         )
         self.assertEqual(pa.__class__.TYPE, road_section_type.PARKING_AREA)
 
@@ -61,15 +54,12 @@ class ModuleTest(unittest.TestCase):
         si = Point(LEFT_START, Config.road_width)
         # start_outer
         so = Point(
-            si.x + LEFT_DEPTH / math.tan(math.radians(OPENING_ANGLE)),
-            Config.road_width + LEFT_DEPTH,
+            si.x + LEFT_DEPTH / math.tan(OPENING_ANGLE), Config.road_width + LEFT_DEPTH,
         )
         # end outer, both lots have 0.4 width
         eo = Point(so.x + 0.8, so.y)
         # end inner
-        ei = Point(
-            eo.x + LEFT_DEPTH / math.tan(math.radians(OPENING_ANGLE)), Config.road_width
-        )
+        ei = Point(eo.x + LEFT_DEPTH / math.tan(OPENING_ANGLE), Config.road_width)
         self.assertLineAlmostEqual(pa.left_lots[0].border, TF * Line([si, so, eo, ei]))
 
         # check first parking spot on left side width: 0.4
@@ -97,15 +87,12 @@ class ModuleTest(unittest.TestCase):
         si = Point(RIGHT_START, -Config.road_width)
         # start_outer
         so = Point(
-            si.x + RIGHT_DEPTH / math.tan(math.radians(OPENING_ANGLE)),
-            -Config.road_width - RIGHT_DEPTH,
+            si.x + RIGHT_DEPTH / math.tan(OPENING_ANGLE), -Config.road_width - RIGHT_DEPTH,
         )
         # end outer, lot has 0.6 width
         eo = Point(so.x + 0.6, -Config.road_width - RIGHT_DEPTH)
         # end inner
-        ei = Point(
-            eo.x + RIGHT_DEPTH / math.tan(math.radians(OPENING_ANGLE)), -Config.road_width
-        )
+        ei = Point(eo.x + RIGHT_DEPTH / math.tan(OPENING_ANGLE), -Config.road_width)
         self.assertLineAlmostEqual(pa.right_lots[0].border, TF * Line([si, so, eo, ei]))
         # check first parking spot on right side width: 0.6
         # polygon points on right side are reversed

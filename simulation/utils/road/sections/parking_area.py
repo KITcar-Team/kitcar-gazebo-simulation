@@ -8,49 +8,12 @@ import itertools
 from geometry import Point, Vector, Line, Polygon, Transform
 
 from road.config import Config
-from road.sections.road_section import Export
+from road.sections.road_section import MarkedLine
 import road.sections.type as road_section_type
 from road.sections import StraightRoad
 from road.sections import ParkingObstacle
-from road import schema
-
-
-@dataclass
-class StartLine:
-    """Object representing a start line."""
-
-    length: float = 0.06
-    """Length in direction of the road."""
-    transform: Transform = None
-    """Transform to the start line.
-
-    The transform points to the beginning in direction of the road
-    and in the middle of the startline perpendicular to the road.
-    """
-
-    def __post_init__(self):
-        # prevents execution when building documentation
-        if self.transform is None:
-            self.transform = Transform([0, 0], 0)
-
-    @property
-    def frame(self) -> Polygon:
-        """Polygon: Frame of the start line."""
-        # polygon.to_lanelet reverses the points in left boundary
-        poly = Polygon(
-            [
-                Point(0, -Config.road_width),
-                Point(0, Config.road_width),
-                Point(self.length, Config.road_width),
-                Point(self.length, -Config.road_width),
-            ]
-        )
-        return self.transform * poly
-
-    def export(self) -> Export:
-        startLane = self.frame.to_schema_lanelet()
-        startLane.type = "startLane"
-        return startLane
+from road.sections import SurfaceMarkingRect
+from road.sections import RoadSection
 
 
 @dataclass
@@ -88,6 +51,14 @@ class _ParkingSpot:
 
 
 class ParkingSpot(_ParkingSpot):
+    """Parking spot with a type and optionally an obstacle placed on top.
+
+    Args:
+        width (float): Width of the spot.
+        kind (int) = ParkingSpot.FREE: Type of the spot.
+        obstacle (ParkingObstacle) = None: Obstacle within the spot.
+    """
+
     @property
     def frame(self) -> Polygon:
         """Polygon: Frame of the parking spot in global coordinates."""
@@ -102,6 +73,20 @@ class ParkingSpot(_ParkingSpot):
         return self.transform * poly
 
     @property
+    def lines(self) -> List[MarkedLine]:
+        """List[MarkedLine]: Borderlines for spot if spot is on the left.
+
+        Marking type is always solid."""
+        lines = []
+        if self._side == ParkingLot.LEFT_SIDE or self.kind == self.BLOCKED:
+            spot_points = self.frame.get_points()
+            left_border = Line(spot_points[:2])
+            right_border = Line(spot_points[2:4])
+            lines.append(MarkedLine.from_line(left_border, RoadSection.SOLID_LINE_MARKING))
+            lines.append(MarkedLine.from_line(right_border, RoadSection.SOLID_LINE_MARKING))
+        return lines
+
+    @property
     def obstacle(self) -> ParkingObstacle:
         """ParkingObstacle: Obstacle that is on the spot (if any)."""
         if self._obstacle is not None:
@@ -112,23 +97,9 @@ class ParkingSpot(_ParkingSpot):
     def obstacle(self, obs):
         self._obstacle = obs
 
-    def export(self) -> Export:
-        lanelet = self.frame.to_schema_lanelet()
-        if self._side == "left" or self.kind == ParkingSpot.BLOCKED:
-            lanelet.leftBoundary.lineMarking = "solid"
-            lanelet.rightBoundary.lineMarking = "solid"
-        if self.kind == ParkingSpot.BLOCKED:
-            lanelet.type = "parking_spot_x"
-
-        if self.obstacle:
-            return [lanelet, self.obstacle.export()]
-        else:
-            return [lanelet]
-
 
 @dataclass
 class _ParkingLot:
-    """Outline of a parking lot (right/left side) and all parking spots contained within."""
 
     RIGHT_SIDE = "right"
     """Possible value of :attr:`side`. Parking lot is on the left side of the road."""
@@ -141,7 +112,7 @@ class _ParkingLot:
     """Parking spots within this parking lot."""
     _side: str = RIGHT_SIDE
     """Side of the road."""
-    opening_angle: float = 60
+    opening_angle: float = math.radians(60)
     """Opening angle of parking lot."""
     depth: float = 0.4
     """Depth of parking spots within this lot."""
@@ -158,10 +129,18 @@ class _ParkingLot:
         if self.transform is None:
             self.transform = Transform([0, 0], 0)
 
-        self.opening_angle = math.radians(self.opening_angle)
-
 
 class ParkingLot(_ParkingLot):
+    """Outline of a parking lot (right/left side) and all parking spots contained within.
+
+    Args:
+        start (float): Beginning relative to the start of the section.
+        opening_angle (float): Opening angle of the outside border of the parking lot.
+        depth (float): Depth of the parking spots within the parking lot.
+        spots (List[ParkingSpot]): Parking spots within the lot.
+
+    """
+
     @property
     def length(self) -> float:
         """float: Sum of the widths of all parking spots."""
@@ -234,26 +213,14 @@ class ParkingLot(_ParkingLot):
         """List[ParkingObstacle]: All obstacles on spots."""
         return [spot.obstacle for spot in self.spots if spot.obstacle is not None]
 
-    def export(self) -> Export:
-        # Export outline of parking lot
-        border = self.border.get_points()
-        inner_boundary = Line([border[0], border[-1]]).to_schema_boundary()
-        outer_boundary = self.border.to_schema_boundary()
-        outer_boundary.lineMarking = "solid"
-
-        left_boundary = inner_boundary if self._side == "right" else outer_boundary
-        right_boundary = outer_boundary if self._side == "right" else inner_boundary
-
-        lanelet_list = []
-        lanelet_list.extend(
-            [schema.lanelet(leftBoundary=left_boundary, rightBoundary=right_boundary)]
-        )
-
+    @property
+    def lines(self) -> List[MarkedLine]:
+        """List[MarkedLine]: All border lines with solid marking type."""
+        lines = []
+        lines.append(MarkedLine.from_line(self.border, RoadSection.SOLID_LINE_MARKING))
         for spot in self.spots:
-            lanelet = spot.export()
-            lanelet_list.extend(lanelet)
-
-        return lanelet_list
+            lines.extend(spot.lines)
+        return lines
 
 
 @dataclass
@@ -261,7 +228,10 @@ class _ParkingArea(StraightRoad):
 
     TYPE = road_section_type.PARKING_AREA
 
-    start_line: StartLine = None
+    start_line: bool = False
+    """If the parking area has a start line."""
+    start_line_length: float = 0.06
+    """Length of the start line (if one is added."""
     left_lots: List[ParkingLot] = field(default_factory=list)
     """Parking lots on the left side."""
     right_lots: List[ParkingLot] = field(default_factory=list)
@@ -269,18 +239,64 @@ class _ParkingArea(StraightRoad):
 
 
 class ParkingArea(_ParkingArea):
-    """Part of the road with parking lots and a start line."""
+    """Part of the road with parking lots and a start line.
+
+    Args:
+        left_lots (List[ParkingLot]): Parking lots on the left side.
+        right_lots (List[ParkingLot]): Parking lots on the right side.
+        start_line (bool): Indicate whether the parking area starts with a start line.
+        start_line_length (float): Manually set the length of the start line.
+    """
 
     @property
-    def start_line(self) -> StartLine:
-        """StartLine: When provided, start line of the parking area."""
-        if self._start_line is not None:
-            self._start_line.transform = self.transform
-        return self._start_line
+    def surface_markings(self) -> List[SurfaceMarkingRect]:
+        markings = []
+        if self.start_line:
+            # Create a start line.
+            markings.append(
+                SurfaceMarkingRect(
+                    center=self.transform * Point(self.start_line_length / 2, 0),
+                    normalize_x=False,
+                    depth=self.start_line_length,
+                    width=2 * Config.road_width,
+                    kind=SurfaceMarkingRect.START_LINE,
+                    angle=self.transform.get_angle(),
+                )
+            )
 
-    @start_line.setter
-    def start_line(self, sl: StartLine):
-        self._start_line = sl
+        for lot in itertools.chain(self.left_lots, self.right_lots):
+            for spot in lot.spots:
+                if spot.kind == ParkingSpot.BLOCKED:
+                    c = spot.frame.centroid
+                    markings.append(
+                        SurfaceMarkingRect(
+                            width=spot.width,
+                            depth=spot._depth,
+                            kind=SurfaceMarkingRect.PARKING_SPOT_X,
+                            center=Point(c.x, c.y),
+                            angle=spot.transform.get_angle(),
+                            normalize_x=False,
+                        )
+                    )
+        return super().surface_markings + markings
+
+    @surface_markings.setter
+    def surface_markings(self, markings: List[SurfaceMarkingRect]):
+        self._surface_markings = markings
+
+    def get_bounding_box(self) -> Polygon:
+        """Get a polygon around the road section.
+
+        Bounding box is an approximate representation of all points within a given distance \
+        of this geometric object.
+        """
+        biggest_depth = 0
+        for ll, rl in zip(self.left_lots, self.right_lots):
+            if ll.depth > biggest_depth:
+                biggest_depth = ll.depth
+            if rl.depth > biggest_depth:
+                biggest_depth = rl.depth
+        return Polygon(self.middle_line.buffer(1.5 * (biggest_depth + Config.road_width)))
 
     @property
     def left_lots(self) -> List[ParkingLot]:
@@ -313,16 +329,13 @@ class ParkingArea(_ParkingArea):
             (lot.obstacles for lot in itertools.chain(self.left_lots, self.right_lots)), []
         )
 
-    def export(self) -> Export:
-        # Defines a straight line
-        export = super().export()
-
-        # Include start line
-        if self._start_line is not None:
-            export.objects.append(self.start_line.export())
-
-        # Add left and right lot
-        for ll, rl in zip(self.left_lots, self.right_lots):
-            export.objects.extend(ll.export())
-            export.objects.extend(rl.export())
-        return export
+    @property
+    def lines(self) -> List[MarkedLine]:
+        """List[MarkedLine]: All borderlines with their marking type."""
+        lines = []
+        lines.extend(super().lines)
+        for lot in self.left_lots:
+            lines.extend(lot.lines)
+        for lot in self.right_lots:
+            lines.extend(lot.lines)
+        return lines

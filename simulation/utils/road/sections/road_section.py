@@ -7,20 +7,35 @@ import math
 from geometry import Transform, Polygon, Line, Pose
 
 from road.config import Config
-from road.sections import StaticObstacle
-from road import schema
+from road.sections import StaticObstacle, TrafficSign, SurfaceMarking
 
 
-class Export:
-    def __init__(self, lanelet1, lanelet2, others=[]):
-        self.objects = [lanelet1, lanelet2]
-        self.objects.extend(others)
-        self.lanelet_pairs = [(lanelet1, lanelet2)]
+class MarkedLine(Line):
+    """Line with a defined line marking style."""
+
+    def __init__(self, *args, **kwargs):
+        assert "style" in kwargs
+        if "prev_length" not in kwargs:
+            kwargs["prev_length"] = 0
+        self.style = kwargs["style"]
+        self.prev_length = kwargs["prev_length"]
+        del kwargs["style"]
+        del kwargs["prev_length"]
+
+        super().__init__(*args, **kwargs)
+
+    @classmethod
+    def from_line(cls, line: Line, style, prev_length=0):
+        m = cls(style=style, prev_length=prev_length)
+        m._set_coords(line.coords)
+        return m
+
+    def __repr__(self) -> str:
+        return super().__repr__()[:-1] + f", style={self.style})"
 
 
 @dataclass
 class _RoadSection:
-
     SOLID_LINE_MARKING = "solid"
     """Continuous white line."""
     DASHED_LINE_MARKING = "dashed"
@@ -43,6 +58,10 @@ class _RoadSection:
     """Marking type of the right line."""
     obstacles: List[StaticObstacle] = field(default_factory=list)
     """Obstacles in the road section."""
+    traffic_signs: List[TrafficSign] = field(default_factory=list)
+    """Traffic signs in the road section."""
+    surface_markings: List[SurfaceMarking] = field(default_factory=list)
+    """Surface markings in the road section."""
 
     def __post_init__(self):
         assert (
@@ -58,6 +77,8 @@ class RoadSection(_RoadSection):
 
     TYPE = None
     """Type of the road section."""
+    prev_length: float = 0
+    """Length of Road up to this section."""
 
     @property
     def middle_line(self) -> Line:
@@ -75,16 +96,54 @@ class RoadSection(_RoadSection):
         return self.middle_line.parallel_offset(Config.road_width, "right")
 
     @property
+    def lines(self) -> List[MarkedLine]:
+        """List[MarkedLine]: All road lines with their marking type."""
+        lines = []
+        lines.append(
+            MarkedLine.from_line(self.left_line, self.left_line_marking, self.prev_length)
+        )
+        lines.append(
+            MarkedLine.from_line(
+                self.middle_line, self.middle_line_marking, self.prev_length
+            )
+        )
+        lines.append(
+            MarkedLine.from_line(self.right_line, self.right_line_marking, self.prev_length)
+        )
+        return lines
+
+    @property
     def obstacles(self) -> List[StaticObstacle]:
         """List[StaticObstacle]: All obstacles within this section of the road."""
         for obstacle in self._obstacles:
-            pose = self.middle_line.interpolate_pose(arc_length=obstacle._center.x)
-            obstacle.transform = Transform(pose, pose.get_angle())
+            obstacle.set_transform(self.middle_line)
         return self._obstacles
 
     @obstacles.setter
     def obstacles(self, obs: List[StaticObstacle]):
         self._obstacles = obs
+
+    @property
+    def traffic_signs(self) -> List[TrafficSign]:
+        """List[TrafficSign]: All traffic signs within this section of the road."""
+        for sign in self._traffic_signs:
+            sign.set_transform(self.middle_line)
+        return self._traffic_signs
+
+    @traffic_signs.setter
+    def traffic_signs(self, signs: List[TrafficSign]):
+        self._traffic_signs = signs
+
+    @property
+    def surface_markings(self) -> List[SurfaceMarking]:
+        """List[SurfaceMarking]: All surface markings within this section of the road."""
+        for marking in self._surface_markings:
+            marking.set_transform(self.middle_line)
+        return self._surface_markings
+
+    @surface_markings.setter
+    def surface_markings(self, markings: List[SurfaceMarking]):
+        self._surface_markings = markings
 
     def get_bounding_box(self) -> Polygon:
         """Get a polygon around the road section.
@@ -121,25 +180,3 @@ class RoadSection(_RoadSection):
         )
 
         return (pose, curvature)
-
-    def export(self) -> Export:
-        lanelet1 = schema.lanelet(
-            leftBoundary=schema.boundary(), rightBoundary=schema.boundary()
-        )
-        lanelet2 = schema.lanelet(
-            leftBoundary=schema.boundary(), rightBoundary=schema.boundary()
-        )
-        lanelet1.isStart = self.is_start
-        lanelet1.leftBoundary = self.middle_line.to_schema_boundary()
-        lanelet1.rightBoundary = self.right_line.to_schema_boundary()
-        lanelet2.leftBoundary = self.middle_line.to_schema_boundary()
-        lanelet2.rightBoundary = self.left_line.to_schema_boundary()
-        # reverse boundary of left lanelet to match driving direction
-        lanelet2.leftBoundary.point.reverse()
-        lanelet2.rightBoundary.point.reverse()
-
-        lanelet1.rightBoundary.lineMarking = self.right_line_marking
-        lanelet1.leftBoundary.lineMarking = self.middle_line_marking
-        lanelet2.rightBoundary.lineMarking = self.left_line_marking
-
-        return Export(lanelet1, lanelet2, others=[obs.export() for obs in self.obstacles])

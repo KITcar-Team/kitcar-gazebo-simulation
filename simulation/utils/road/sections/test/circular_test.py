@@ -11,7 +11,7 @@ from road.sections import (
 
 class ModuleTest(unittest.TestCase):
     def assert_line_is_arc(self, line, center, radius, angle):
-        self.assertAlmostEqual(line.length, radius * math.pi * (angle / 180), delta=0.001)
+        self.assertAlmostEqual(line.length, radius * angle, delta=0.001)
 
         for p in (Transform(-1 * Vector(center), 0) * line).get_points():
             self.assertAlmostEqual(abs(p), radius)
@@ -19,7 +19,7 @@ class ModuleTest(unittest.TestCase):
     def test_left_circular_arc(self):
         TF = Transform([1, 1], math.pi / 2)
         RADIUS = 1
-        ANGLE = 90
+        ANGLE = math.pi / 2
 
         lca = LeftCircularArc(radius=RADIUS, angle=ANGLE, transform=TF)
         self.assertEqual(lca.__class__.TYPE, road_section_type.LEFT_CIRCULAR_ARC)
@@ -30,7 +30,7 @@ class ModuleTest(unittest.TestCase):
     def test_right_circular_arc(self):
         TF = Transform([1, 1], math.pi / 2)
         RADIUS = 1
-        ANGLE = 90
+        ANGLE = math.pi / 2
 
         rca = RightCircularArc(radius=RADIUS, angle=ANGLE, transform=TF)
         self.assertEqual(rca.__class__.TYPE, road_section_type.RIGHT_CIRCULAR_ARC)

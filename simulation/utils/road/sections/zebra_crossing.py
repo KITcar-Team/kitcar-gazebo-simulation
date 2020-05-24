@@ -5,8 +5,7 @@ from dataclasses import dataclass
 from geometry import Point, Polygon
 
 from road.config import Config
-from road.sections import StraightRoad
-from road.sections.road_section import RoadSection
+from road.sections import StraightRoad, SurfaceMarkingRect
 import road.sections.type as road_section_type
 
 
@@ -15,9 +14,18 @@ class ZebraCrossing(StraightRoad):
     TYPE = road_section_type.ZEBRA_CROSSING
 
     length: float = 0.45
-    right_line_marking: int = RoadSection.SOLID_LINE_MARKING
-    middle_line_marking: int = RoadSection.MISSING_LINE_MARKING
-    left_line_marking: int = RoadSection.SOLID_LINE_MARKING
+
+    def __post_init__(self):
+        self.surface_markings.append(
+            SurfaceMarkingRect(
+                center=Point(self.length / 2, 0),
+                depth=self.length,
+                width=2 * Config.road_width,
+                kind=SurfaceMarkingRect.ZEBRA_CROSSING,
+            )
+        )
+        self.middle_line_marking = self.MISSING_LINE_MARKING
+        super().__post_init__()
 
     @property
     def frame(self) -> Polygon:
@@ -30,10 +38,3 @@ class ZebraCrossing(StraightRoad):
             ]
         )
         return self.transform * poly
-
-    def export(self):
-        export = super().export()
-        zebra = self.frame.to_schema_lanelet()
-        zebra.type = "zebraCrossing"
-        export.objects.append(zebra)
-        return export

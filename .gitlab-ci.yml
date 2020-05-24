@@ -57,9 +57,6 @@ test-python-packages:
 
     - python3 -m road.sections.test
 
-    # Generate roads, just for testing
-    - python3 -m generate_road default_road
-
     - python3 -m speaker.speakers.test
     - python3 -m state_machine.test
     - python3 -m referee.test
