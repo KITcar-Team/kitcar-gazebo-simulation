@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="road" />
+  <arg name="seed" default="__no_value__" />
+
+  <arg name="start_groundtruth" default="false" />
+  <arg name="start_renderer" default="true" />
+  <arg name="start_object_controller" default="true" />
+
+  <include file="$(find gazebo_simulation)/launch/master.launch">
+    <arg name="road" value="$(arg road)" />
+    <arg name="seed" value="$(arg seed)" />
+    <arg name="include_car" value="false" />
+    <arg name="include_brain" value="false" />
+    <arg name="include_groundtruth" value="$(arg start_groundtruth)" />
+    <arg name="include_renderer" value="$(arg start_renderer)" />
+    <arg name="include_object_controller" value="$(arg start_object_controller)" />
+    <arg name="include_vehicle_simulation" value="false" />
+    <arg name="include_mission_mode_plugin" value="false" />
+  </include>
+
+  <node pkg="simulation_rqt" type="rqt_renderer" name="rqt_renderer" output="screen"/>
+</launch>
