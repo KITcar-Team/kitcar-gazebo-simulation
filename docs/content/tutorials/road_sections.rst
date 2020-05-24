@@ -13,6 +13,8 @@ Required and optional arguments are not explained in detail for every road secti
 However, all arguments can always be found by checking out the implementation of each
 section. (*Simply click on the link!*)
 
+**Please note that all angles must be specified in radians!**
+
 .. onboarding_start
 StraightRoad
 ------------

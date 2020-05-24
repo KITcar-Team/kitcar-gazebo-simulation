@@ -75,26 +75,12 @@ In line 8 a *Road* called road is constructed and in the following lines differe
 A *StraightRoad* with the default length of 1 m can be added by calling:
 
 >>> StraightRoad()
-StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], length=1)
+StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], length=1)
 
 If you want to pass a different length add the argument :py:attr:`length` in the constructor. For example a 2 m long *StraightRoad*:
 
 >>> StraightRoad(length=2)
-StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], length=2)
+StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], length=2)
 
-Render road
------------
-To render a road file ``<ROAD_NAME>.py`` open a terminal and execute:
 
-.. prompt:: bash
-
-    python3 -m generate_road <ROAD_NAME>
-
-.. admonition:: Your Task
-
-   Render the **onboarding_simple** road.
-
-In the next section you are going to learn how to start the simulation with a rendered road.
-
-After completing the task, you don't have to commit and push anything. Why? Because the (rather large) rendered images stay on your local machine.
-Only the road file is tracked by git. This means a new road always has to be rendered first before launching the simulation.
+In the next section you are going to learn how to start the simulation with a custom road.

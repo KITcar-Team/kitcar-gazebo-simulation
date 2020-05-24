@@ -39,14 +39,6 @@ MOCK_MODULES = [
     "pyxb.utils.six",
     "pyxb.binding",
     "pyxb.binding.datatypes",
-    "road.renderer",
-    "road.schema",
-    "road.schema_backup",
-    "machine_learning.color_classes",
-    "simulation.utils.machine_learning",
-    "simulation.utils.machine_learning.nn",
-    "simulation.utils.machine_learning.database",
-    "simulation.utils.machine_learning.img",
 ]
 
 for mod_name in MOCK_MODULES:
