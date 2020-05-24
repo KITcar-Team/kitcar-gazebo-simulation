@@ -11,6 +11,9 @@ from simulation_groundtruth.msg import (
 from geometry import Line
 
 from road.sections import Intersection
+from road.road import Road
+
+from dataclasses import dataclass
 
 
 def _lane_msg_from_lines(left: Line, middle: Line, right: Line) -> LaneMsg:
@@ -42,20 +45,17 @@ IntersectionTuple.north.__doc__ = (
 )
 
 
+@dataclass
 class Groundtruth:
-    """Provide functionality to extract groundtruth information as ROS messages.
+    """Provide functionality to extract groundtruth information as ROS messages."""
 
-    Args:
-        sections (List[RoadSection]): List containing all road sections.
-    """
-
-    def __init__(self, sections: List["RoadSection"]):
-        self.sections = sections
+    road: Road
+    """Store the current road."""
 
     def get_section_msgs(self) -> List[SectionMsg]:
         """Section message for all sections."""
         messages = []
-        for section in self.sections:
+        for section in self.road.sections:
             msg = SectionMsg()
             msg.id = section.id
             msg.type = section.__class__.TYPE
@@ -68,7 +68,7 @@ class Groundtruth:
         Args:
             id: section id
         """
-        section = self.sections[id]
+        section = self.road.sections[id]
         return _lane_msg_from_lines(
             section.left_line, section.middle_line, section.right_line
         )
@@ -79,7 +79,7 @@ class Groundtruth:
         Args:
             id: section id
         """
-        intersection: Intersection = self.sections[id]
+        intersection: Intersection = self.road.sections[id]
         assert intersection.__class__.TYPE == Intersection.TYPE
 
         south = _lane_msg_from_lines(
@@ -127,8 +127,8 @@ class Groundtruth:
 
             return msg
 
-        left_msg = msg_from(self.sections[id].left_lots)
-        right_msg = msg_from(self.sections[id].right_lots)
+        left_msg = msg_from(self.road.sections[id].left_lots)
+        right_msg = msg_from(self.road.sections[id].right_lots)
 
         return left_msg, right_msg
 
@@ -138,11 +138,11 @@ class Groundtruth:
         Args:
             id: section id
         """
-        obstacles = self.sections[id].obstacles
+        obstacles = self.road.sections[id].obstacles
         if obstacles is None:
             return []
         msgs = []
-        for obstacle in self.sections[id].obstacles:
+        for obstacle in self.road.sections[id].obstacles:
             msg = LabeledPolygonMsg()
             msg.frame = obstacle.frame.to_geometry_msg()
             msg.type = LabeledPolygonMsg.OBSTACLE

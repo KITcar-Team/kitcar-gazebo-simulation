@@ -23,6 +23,8 @@ from simulation_groundtruth.srv import (
     IntersectionSrv,
 )
 
+from simulation_groundtruth.msg import GroundtruthStatus
+
 
 class SpeakerNode(NodeBase):
     """ROS node that integrates all speakers into the ROS framework.
@@ -36,8 +38,6 @@ class SpeakerNode(NodeBase):
         section_proxy, lane_proxy, parking_proxy, obstacle_proxy, intersection_proxy \
                 (rospy.ServiceProxy): Proxies that the speakers need to request \
                 groundtruth information.
-
-
     """
 
     def __init__(self):
@@ -69,6 +69,12 @@ class SpeakerNode(NodeBase):
         )
 
         rospy.wait_for_service(groundtruth_topics.section)
+
+        self.groundtruth_status_subscriber = rospy.Subscriber(
+            self.param.topics.groundtruth.status,
+            GroundtruthStatus,
+            callback=self.receive_groundtruth_update,
+        )
 
         # Add all speakers
         self.speakers = []
@@ -161,6 +167,14 @@ class SpeakerNode(NodeBase):
         for speaker, _ in self.speakers:
             speaker.listen(msg)
         rospy.logdebug("RECEIVED CARSTATE")
+
+    def receive_groundtruth_update(self, msg: GroundtruthStatus):
+        """Receive GroundtruthStatus message.
+
+        Args:
+            msg: New GroundtruthStatus message
+        """
+        self.param.active = msg.status == GroundtruthStatus.READY
 
     def publish_speakers(self):
         """Publish the output of all speakers."""

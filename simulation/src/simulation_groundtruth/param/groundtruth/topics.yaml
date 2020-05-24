@@ -14,6 +14,8 @@ renderer:
   reload: "/simulation/renderer/reload"
   interrupt: "/simulation/renderer/interrupt"
 
+status: "/simulation/groundtruth/status"
+
 visualization:
   right_line: '/simulation/visualization/groundtruth/right_line'
   middle_line: '/simulation/visualization/groundtruth/middle_line'
