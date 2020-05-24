@@ -8,7 +8,6 @@ import shapely.affinity as affinity
 
 import numpy as np
 import geometry_msgs.msg as geometry_msgs
-from road import schema
 
 from geometry.point import Point
 from geometry.vector import Vector
@@ -198,19 +197,6 @@ class Line(shapely.geometry.linestring.LineString):
         orientation = self.interpolate_direction(arc_length=arc_length)
 
         return Pose(Point(point), orientation)
-
-    def to_schema_boundary(self) -> schema.boundary:
-        """To schema.boundary.
-
-        Export line as the boundary of a schema lanelet.
-        E.g. the left boundary of the right lanelet (= middle line).
-
-        Returns:
-            Line as schema.boundary
-        """
-        boundary = schema.boundary()
-        boundary.point = [p.to_schema() for p in self.get_points()]
-        return boundary
 
     def to_geometry_msgs(self) -> List[geometry_msgs.Point]:
         """To ROS geometry_msgs.

@@ -7,10 +7,8 @@ import shapely.affinity as affinity
 
 import numpy as np
 import geometry_msgs.msg as geometry_msgs
-from road import schema
 
 from geometry.point import Point
-from geometry.line import Line
 from geometry.transform import Transform
 
 from contextlib import suppress
@@ -77,34 +75,6 @@ class Polygon(shapely.geometry.polygon.Polygon):
             list of points on the polygon.
         """
         return [Point(x, y, z) for x, y, z in self.exterior.coords]
-
-    def to_schema_lanelet(self, split_idx: int = 0) -> schema.lanelet:
-        """To schema lanelet.
-
-        This is done by splitting the polygon in two parts.
-        The first number of points (split_idx) are considered to
-        be on the right side. The returned lanelet has no line markings.
-
-        Args:
-            split_idx (int): Points in polygon before this index are considered \
-            as the right boundary of the resulting lanelet, \
-            the other points as the left boundary.
-
-        Returns:
-            Schema lanelet without lane markings from polygon
-        """
-        if split_idx == 0:
-            split_idx = int((len(self.exterior.coords) - 1) / 2)
-
-        right_line = Line(self.exterior.coords[:split_idx])
-        left_line = Line(reversed(self.exterior.coords[split_idx:-1]))
-
-        # Create lanelet
-        lanelet = schema.lanelet()
-        lanelet.rightBoundary = right_line.to_schema_boundary()
-        lanelet.leftBoundary = left_line.to_schema_boundary()
-
-        return lanelet
 
     def to_geometry_msg(self):
         """To ROS geometry_msg.
