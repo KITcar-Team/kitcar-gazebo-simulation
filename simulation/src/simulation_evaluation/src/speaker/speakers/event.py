@@ -4,9 +4,9 @@ import functools
 
 from . import export
 
-from speaker.speakers.speaker import Speaker
+from simulation.src.simulation_evaluation.src.speaker.speakers.speaker import Speaker
 
-from geometry import Polygon
+from simulation.utils.geometry import Polygon
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 
@@ -18,7 +18,7 @@ from simulation_groundtruth.msg import (
     Parking as ParkingMsg,
 )
 
-import road.sections.type as road_section_type
+import simulation.utils.road.sections.type as road_section_type
 
 # Used to simplify the polygons
 BUFFER = 0.0001

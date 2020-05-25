@@ -1,9 +1,9 @@
 import unittest
 import math
 
-from geometry import Line, Transform
-import road.sections.type as road_section_type
-from road.sections import StraightRoad
+from simulation.utils.geometry import Line, Transform
+import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections import StraightRoad
 
 
 class ModuleTest(unittest.TestCase):

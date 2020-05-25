@@ -6,7 +6,7 @@ import bisect
 import itertools
 import functools
 
-from geometry import Polygon, Line, Pose, Vector
+from simulation.utils.geometry import Polygon, Line, Pose, Vector
 from typing import Callable, List, Any, Iterable, Tuple
 
 from . import export
@@ -19,7 +19,7 @@ from simulation_groundtruth.msg import (
 )
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 
-from road.sections.line_tuple import LineTuple
+from simulation.utils.road.sections.line_tuple import LineTuple
 
 
 @export

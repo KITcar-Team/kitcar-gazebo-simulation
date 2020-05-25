@@ -31,8 +31,8 @@ E.g. the file ``simulation/models/env_db/custom_road.py`` with content:
 
 .. code-block:: python
 
-   from road.road import Road
-   from road.sections import *
+   from simulation.utils.road.road import Road
+   from simulation.utils.road.sections import *
 
    road = Road()
 

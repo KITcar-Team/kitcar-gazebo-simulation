@@ -2,7 +2,7 @@
 import rospy
 from contextlib import suppress
 
-from speaker.node import SpeakerNode
+from simulation.src.simulation_evaluation.src.speaker.node import SpeakerNode
 
 if __name__ == "__main__":
     # Start the node

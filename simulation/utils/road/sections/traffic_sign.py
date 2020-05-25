@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from road.sections.road_element import RoadElementRect
+from simulation.utils.road.sections.road_element import RoadElementRect
 
 from typing import Tuple
 

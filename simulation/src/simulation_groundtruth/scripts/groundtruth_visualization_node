@@ -2,7 +2,9 @@
 import rospy
 from contextlib import suppress
 
-from groundtruth.visualization import GroundtruthVisualizationNode
+from simulation.src.simulation_groundtruth.src.groundtruth.visualization import (
+    GroundtruthVisualizationNode,
+)
 
 if __name__ == "__main__":
     # Start the node

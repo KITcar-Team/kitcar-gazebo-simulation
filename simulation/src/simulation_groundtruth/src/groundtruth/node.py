@@ -21,14 +21,16 @@ from simulation_groundtruth.srv import (
     IntersectionSrvResponse,
 )
 
-from geometry import Vector
-from ros_base.node_base import NodeBase
+from simulation.utils.geometry import Vector
+from simulation.utils.ros_base.node_base import NodeBase
 
-import road.road as road_module
+import simulation.utils.road.road as road_module
 
-from groundtruth.groundtruth import Groundtruth
-from groundtruth.renderer import Renderer
-from groundtruth.object_controller import ObjectController
+from simulation.src.simulation_groundtruth.src.groundtruth.groundtruth import Groundtruth
+from simulation.src.simulation_groundtruth.src.groundtruth.renderer import Renderer
+from simulation.src.simulation_groundtruth.src.groundtruth.object_controller import (
+    ObjectController,
+)
 
 from simulation_groundtruth.msg import GroundtruthStatus
 

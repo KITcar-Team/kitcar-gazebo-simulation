@@ -2,7 +2,7 @@
 import rospy
 from contextlib import suppress
 
-from automatic_drive.node import AutomaticDriveNode
+from simulation.src.gazebo_simulation.src.automatic_drive.node import AutomaticDriveNode
 
 if __name__ == "__main__":
     # Start the node

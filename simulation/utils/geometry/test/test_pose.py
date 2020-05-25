@@ -1,10 +1,10 @@
 import unittest
 import math
 
-from geometry.point import Point
-from geometry.vector import Vector
-from geometry.pose import Pose
-from geometry.transform import Transform
+from simulation.utils.geometry.point import Point
+from simulation.utils.geometry.vector import Vector
+from simulation.utils.geometry.pose import Pose
+from simulation.utils.geometry.transform import Transform
 
 from pyquaternion import Quaternion
 

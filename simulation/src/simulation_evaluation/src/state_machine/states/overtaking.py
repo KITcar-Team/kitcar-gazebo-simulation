@@ -3,8 +3,10 @@
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 from simulation_evaluation.msg import State as StateMsg
-from state_machine.state_machines.state_machine import StateMachine
-from state_machine.states.active import ActiveState
+from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
+    StateMachine,
+)
+from simulation.src.simulation_evaluation.src.state_machine.states.active import ActiveState
 
 __copyright__ = "KITcar"
 

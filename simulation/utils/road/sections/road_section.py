@@ -4,10 +4,10 @@ from dataclasses import dataclass, field
 from typing import List, Tuple
 import math
 
-from geometry import Transform, Polygon, Line, Pose
+from simulation.utils.geometry import Transform, Polygon, Line, Pose
 
-from road.config import Config
-from road.sections import StaticObstacle, TrafficSign, SurfaceMarking
+from simulation.utils.road.config import Config
+from simulation.utils.road.sections import StaticObstacle, TrafficSign, SurfaceMarking
 
 
 class MarkedLine(Line):

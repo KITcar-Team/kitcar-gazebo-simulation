@@ -2,12 +2,17 @@
 
 import math
 
-from road.road import Road  # Definition of the road class
-from road.sections import ParkingArea, ParkingLot, ParkingSpot, ParkingObstacle
-from road.sections import Intersection
-from road.sections import ZebraCrossing
-from road.sections import LeftCircularArc
-from road.sections import StraightRoad
+from simulation.utils.road.road import Road  # Definition of the road class
+from simulation.utils.road.sections import (
+    ParkingArea,
+    ParkingLot,
+    ParkingSpot,
+    ParkingObstacle,
+)
+from simulation.utils.road.sections import Intersection
+from simulation.utils.road.sections import ZebraCrossing
+from simulation.utils.road.sections import LeftCircularArc
+from simulation.utils.road.sections import StraightRoad
 
 # - Beginning sphinx straight_road -
 straight_road = StraightRoad(length=2)

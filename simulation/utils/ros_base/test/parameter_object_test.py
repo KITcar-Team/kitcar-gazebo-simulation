@@ -4,7 +4,7 @@
 """
 import unittest
 
-from ros_base.node_base import ParameterObject
+from simulation.utils.ros_base.node_base import ParameterObject
 
 
 class TestParameterObject(unittest.TestCase):
@@ -32,12 +32,17 @@ class TestParameterObject(unittest.TestCase):
             self.last_key = key
             self.last_val = val
 
-        self.param_object = ParameterObject(ns=dummy_ns, set_param_func=set_param, get_param_func=get_param)
+        self.param_object = ParameterObject(
+            ns=dummy_ns, set_param_func=set_param, get_param_func=get_param
+        )
 
     def test_getting_params(self):
 
         self.assertEqual(self.param_object.dummy_param, self.param_dict["dummy_param"])
-        self.assertEqual(self.param_object.outer_dict.inner_param, self.param_dict["outer_dict"]["inner_param"])
+        self.assertEqual(
+            self.param_object.outer_dict.inner_param,
+            self.param_dict["outer_dict"]["inner_param"],
+        )
         self.assertEqual(
             self.param_object.very_outer_dict.inner_dict.very_inner_param,
             self.param_dict["very_outer_dict"]["inner_dict"]["very_inner_param"],

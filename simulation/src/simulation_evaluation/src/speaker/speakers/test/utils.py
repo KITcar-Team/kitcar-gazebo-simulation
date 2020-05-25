@@ -1,4 +1,4 @@
-from geometry import Polygon
+from simulation.utils.geometry import Polygon
 from typing import Iterable
 
 

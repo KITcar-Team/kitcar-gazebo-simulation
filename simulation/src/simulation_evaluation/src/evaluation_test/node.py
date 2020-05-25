@@ -2,8 +2,8 @@ from typing import List, Tuple
 from geometry_msgs.msg import Twist
 import rospy
 
-from ros_base.node_base import NodeBase
-from geometry import Line, Polygon, Transform, Vector
+from simulation.utils.ros_base.node_base import NodeBase
+from simulation.utils.geometry import Line, Polygon, Transform, Vector
 from gazebo_simulation.msg import CarState as CarStateMsg
 
 

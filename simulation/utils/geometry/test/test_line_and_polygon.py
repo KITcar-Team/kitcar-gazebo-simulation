@@ -2,12 +2,12 @@ import unittest
 import random
 import math
 
-from geometry.point import Point
-from geometry.pose import Pose
-from geometry.vector import Vector
-from geometry.line import Line
-from geometry.polygon import Polygon
-from geometry.transform import Transform
+from simulation.utils.geometry.point import Point
+from simulation.utils.geometry.pose import Pose
+from simulation.utils.geometry.vector import Vector
+from simulation.utils.geometry.line import Line
+from simulation.utils.geometry.polygon import Polygon
+from simulation.utils.geometry.transform import Transform
 
 import geometry_msgs.msg as g_msgs
 import numpy as np

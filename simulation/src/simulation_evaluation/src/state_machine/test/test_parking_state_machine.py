@@ -3,8 +3,10 @@
 import unittest
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
-from state_machine.state_machines.parking import ParkingStateMachine
-from state_machine.test.test import Test
+from simulation.src.simulation_evaluation.src.state_machine.state_machines.parking import (
+    ParkingStateMachine,
+)
+from simulation.src.simulation_evaluation.src.state_machine.test.test import Test
 
 
 __copyright__ = "KITcar"

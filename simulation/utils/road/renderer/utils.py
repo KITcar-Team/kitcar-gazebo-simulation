@@ -1,5 +1,5 @@
-from geometry import Polygon
-from road.sections.road_section import RoadSection, MarkedLine
+from simulation.utils.geometry import Polygon
+from simulation.utils.road.sections.road_section import RoadSection, MarkedLine
 
 from typing import List
 

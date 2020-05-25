@@ -2,7 +2,7 @@
 import rospy
 from contextlib import suppress
 
-from referee.node import RefereeNode
+from simulation.src.simulation_evaluation.src.referee.node import RefereeNode
 
 if __name__ == "__main__":
     # Start the node

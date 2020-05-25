@@ -5,15 +5,15 @@ from dataclasses import dataclass, field
 from typing import List
 import itertools
 
-from geometry import Point, Vector, Line, Polygon, Transform
+from simulation.utils.geometry import Point, Vector, Line, Polygon, Transform
 
-from road.config import Config
-from road.sections.road_section import MarkedLine
-import road.sections.type as road_section_type
-from road.sections import StraightRoad
-from road.sections import ParkingObstacle
-from road.sections import SurfaceMarkingRect
-from road.sections import RoadSection
+from simulation.utils.road.config import Config
+from simulation.utils.road.sections.road_section import MarkedLine
+import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections import StraightRoad
+from simulation.utils.road.sections import ParkingObstacle
+from simulation.utils.road.sections import SurfaceMarkingRect
+from simulation.utils.road.sections import RoadSection
 
 
 @dataclass

@@ -5,18 +5,28 @@
 from typing import Callable
 
 import rospy
-from ros_base.node_base import NodeBase
+from simulation.utils.ros_base.node_base import NodeBase
 
 # Messages
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 from simulation_evaluation.msg import State as StateMsg
-from state_machine.state_machines.overtaking import OvertakingStateMachine
-from state_machine.state_machines.parking import ParkingStateMachine
-from state_machine.state_machines.priority import PriorityStateMachine
+from simulation.src.simulation_evaluation.src.state_machine.state_machines.overtaking import (
+    OvertakingStateMachine,
+)
+from simulation.src.simulation_evaluation.src.state_machine.state_machines.parking import (
+    ParkingStateMachine,
+)
+from simulation.src.simulation_evaluation.src.state_machine.state_machines.priority import (
+    PriorityStateMachine,
+)
 
 # StateMachines
-from state_machine.state_machines.progress import ProgressStateMachine
-from state_machine.state_machines.state_machine import StateMachine
+from simulation.src.simulation_evaluation.src.state_machine.state_machines.progress import (
+    ProgressStateMachine,
+)
+from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
+    StateMachine,
+)
 
 __copyright__ = "KITcar"
 

@@ -13,7 +13,7 @@ from gazebo_msgs.srv import (
 
 import rostopic
 
-from ros_base.node_base import NodeBase
+from simulation.utils.ros_base.node_base import NodeBase
 
 
 class GazeboRateControlNode(NodeBase):
@@ -28,12 +28,19 @@ class GazeboRateControlNode(NodeBase):
         self.run(function=self.update, rate=self.param.update_rate.control.rate)
 
     def start(self):
-        self.set_physics = rospy.ServiceProxy(self.param.topics.set_physics, SetPhysicsProperties)
-        self.get_physics = rospy.ServiceProxy(self.param.topics.get_physics, GetPhysicsProperties)
+        self.set_physics = rospy.ServiceProxy(
+            self.param.topics.set_physics, SetPhysicsProperties
+        )
+        self.get_physics = rospy.ServiceProxy(
+            self.param.topics.get_physics, GetPhysicsProperties
+        )
 
         self.rater = rostopic.ROSTopicHz(10)
         self.subscriber = rospy.Subscriber(
-            self.param.topics.target, rospy.AnyMsg, self.rater.callback_hz, callback_args=self.param.topics.target,
+            self.param.topics.target,
+            rospy.AnyMsg,
+            self.rater.callback_hz,
+            callback_args=self.param.topics.target,
         )
         super().start()
 
@@ -51,7 +58,9 @@ class GazeboRateControlNode(NodeBase):
         frequency = frequency[0] if frequency else None
 
         # Check if there's anything to do:
-        if not frequency or (frequency > self.param.frequency.min and frequency < self.param.frequency.max):
+        if not frequency or (
+            frequency > self.param.frequency.min and frequency < self.param.frequency.max
+        ):
             return
 
         current_properties = self.get_physics(GetPhysicsPropertiesRequest())

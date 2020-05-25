@@ -11,9 +11,9 @@ import os
 from dataclasses import dataclass, field
 from typing import List, Tuple
 
-from road.sections.road_section import RoadSection
+from simulation.utils.road.sections.road_section import RoadSection
 
-from geometry import Transform, Pose
+from simulation.utils.geometry import Transform, Pose
 
 
 @dataclass

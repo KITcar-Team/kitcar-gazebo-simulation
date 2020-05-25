@@ -4,15 +4,17 @@ import rospy
 import unittest
 from typing import List
 
-from ros_base.node_base import NodeBase
+from simulation.utils.ros_base.node_base import NodeBase
 
-from road.sections import RoadSection
+from simulation.utils.road.sections import RoadSection
 
-from groundtruth.node import GroundtruthNode
+from simulation.src.simulation_groundtruth.src.groundtruth.node import GroundtruthNode
 
-from groundtruth.object_controller import ObjectController
+from simulation.src.simulation_groundtruth.src.groundtruth.object_controller import (
+    ObjectController,
+)
 
-from road.road import Road
+from simulation.utils.road.road import Road
 from gazebo_simulation.msg import CarState as CarStateMsg
 from simulation_groundtruth.msg import GroundtruthStatus
 

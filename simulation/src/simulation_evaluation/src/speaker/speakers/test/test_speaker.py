@@ -4,9 +4,9 @@ import functools
 import random
 from . import fake_msgs
 
-from geometry import Line, Vector, Pose, Polygon, Point
+from simulation.utils.geometry import Line, Vector, Pose, Polygon, Point
 
-from speaker.speakers import Speaker
+from simulation.src.simulation_evaluation.src.speaker.speakers import Speaker
 
 import geometry_msgs.msg as geometry_msgs
 import gazebo_simulation.msg as gazebo_sim_msgs

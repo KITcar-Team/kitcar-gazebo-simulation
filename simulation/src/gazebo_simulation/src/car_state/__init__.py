@@ -1,6 +1,11 @@
-"""The CarStateNode publishes up to date information about the simulated vehicle. Thereby allowing easy access to the vehicle’s position and speed, but also the vehicle’s frame and view cone.
+"""The CarStateNode publishes up to date information about the simulated vehicle.
 
-The CarStateVisualizationNode then processes this information and publishes messages which can be displayed in RVIZ.""" 
+Thereby allowing easy access to the vehicle’s position and speed,
+but also the vehicle’s frame and view cone.
+
+The CarStateVisualizationNode then processes this information
+and publishes messages which can be displayed in RVIZ.
+"""
 
 from typing import List, Any
 
@@ -13,8 +18,10 @@ def export(define):
     return define
 
 
-__all__: List[Any] = []  # Will hold all classes/functions which can be imported with 'from geometry import ...'
+__all__: List[
+    Any
+] = []  # Will hold all classes/functions which can be imported with 'from simulation.utils.geometry import ...'
 
 # import all files which are part of the geometry module
-import car_state.node # noqa:402
-import car_state.visualization # noqa:402
+import simulation.src.gazebo_simulation.src.car_state.node  # noqa:402
+import simulation.src.gazebo_simulation.src.car_state.visualization  # noqa:402

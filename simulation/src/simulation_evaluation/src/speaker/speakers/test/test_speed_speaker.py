@@ -1,6 +1,6 @@
 import unittest
-from speaker.speakers import SpeedSpeaker
-from geometry import Point
+from simulation.src.simulation_evaluation.src.speaker.speakers import SpeedSpeaker
+from simulation.utils.geometry import Point
 
 from gazebo_simulation.msg import CarState as CarStateMsg
 from simulation_evaluation.msg import Speaker as SpeakerMsg

@@ -9,10 +9,10 @@ import shapely.affinity as affinity
 import numpy as np
 import geometry_msgs.msg as geometry_msgs
 
-from geometry.point import Point
-from geometry.vector import Vector
-from geometry.transform import Transform
-from geometry.pose import Pose
+from simulation.utils.geometry.point import Point
+from simulation.utils.geometry.vector import Vector
+from simulation.utils.geometry.transform import Transform
+from simulation.utils.geometry.pose import Pose
 
 from contextlib import suppress
 

@@ -4,7 +4,10 @@ import unittest
 from simulation_evaluation.msg import State as StateMsg
 from simulation_evaluation.msg import Referee as RefereeMsg
 
-from referee.referee import Referee, StateMachineConnector
+from simulation.src.simulation_evaluation.src.referee.referee import (
+    Referee,
+    StateMachineConnector,
+)
 
 
 class ModuleTest(unittest.TestCase):

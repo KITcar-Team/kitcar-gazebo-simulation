@@ -14,7 +14,7 @@ import xml.etree.ElementTree as ET
 from hypothesis import given
 import hypothesis.strategies as st
 
-from geometry import Vector
+from simulation.utils.geometry import Vector
 
 from simulation.utils.urdf.core import Attribute, XmlObject
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Class definition of the ZoneSpeaker."""
 
-from geometry import Point
+from simulation.utils.geometry import Point
 
 # Messages
 from simulation_evaluation.msg import Speaker as SpeakerMsg
@@ -18,9 +18,9 @@ import bisect
 
 import functools
 
-import road.sections.type as road_section_type
+import simulation.utils.road.sections.type as road_section_type
 
-from speaker.speakers.speaker import Speaker
+from simulation.src.simulation_evaluation.src.speaker.speakers.speaker import Speaker
 
 from . import export
 

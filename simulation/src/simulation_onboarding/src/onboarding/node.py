@@ -2,7 +2,7 @@
 
 __copyright__ = "KITcar"
 
-from ros_base.node_base import NodeBase
+from simulation.utils.ros_base.node_base import NodeBase
 
 
 class OnboardingNode(NodeBase):

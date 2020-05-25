@@ -2,7 +2,9 @@
 import rospy
 from contextlib import suppress
 
-from vehicle_simulation_link.node import VehicleSimulationLinkNode
+from simulation.src.simulation_brain_link.src.vehicle_simulation_link.node import (
+    VehicleSimulationLinkNode,
+)
 
 if __name__ == "__main__":
     # Start the node

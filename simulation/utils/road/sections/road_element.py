@@ -5,7 +5,7 @@ Examples are traffic signs, obstacles or surface markings (e.g. turn arrow on th
 
 from dataclasses import dataclass
 
-from geometry import Polygon, Point, Transform, Vector, Line
+from simulation.utils.geometry import Polygon, Point, Transform, Vector, Line
 
 
 @dataclass
@@ -27,8 +27,8 @@ class RoadElement:
         If :attr:`self.normalize_x` is True, the element is aligned along the provided line.
 
         Example:
-            >>> from geometry import Line, Point, Transform
-            >>> from road.sections.road_element import RoadElementRect
+            >>> from simulation.utils.geometry import Line, Point, Transform
+            >>> from simulation.utils.road.sections.road_element import RoadElementRect
             >>> line = Line([Point(0, 0), Point(0, 10)])  # y axis
             >>> normalized_el = RoadElementRect(center=Point(1, 1))  # normalize_x is True by default
             >>> normalized_el.set_transform(line)

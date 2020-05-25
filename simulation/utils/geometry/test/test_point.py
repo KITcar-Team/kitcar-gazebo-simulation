@@ -1,9 +1,9 @@
 import unittest
 import math
 
-from geometry.point import Point
-from geometry.point import InvalidPointOperationError
-from geometry.vector import Vector
+from simulation.utils.geometry.point import Point
+from simulation.utils.geometry.point import InvalidPointOperationError
+from simulation.utils.geometry.vector import Vector
 
 import geometry_msgs.msg as g_msgs
 import numpy as np

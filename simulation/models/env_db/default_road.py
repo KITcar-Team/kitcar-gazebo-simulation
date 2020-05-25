@@ -1,8 +1,8 @@
 """The default road when launching this simulation."""
 import math
 
-from road.road import Road  # Definition of the road class
-from road.sections import (
+from simulation.utils.road.road import Road  # Definition of the road class
+from simulation.utils.road.sections import (
     StraightRoad,
     LeftCircularArc,
     ZebraCrossing,
@@ -13,7 +13,7 @@ from road.sections import (
     ParkingObstacle,
     StaticObstacle,
 )
-from road.sections.road_section import RoadSection
+from simulation.utils.road.sections.road_section import RoadSection
 
 road = Road()
 road.append(StraightRoad(length=1))

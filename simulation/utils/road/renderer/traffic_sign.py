@@ -1,4 +1,4 @@
-from road.sections import TrafficSign
+from simulation.utils.road.sections import TrafficSign
 
 
 def draw(name: str, sign: TrafficSign):

@@ -5,7 +5,7 @@ Example:
     A simple joint connecting :py:attr:`link2` to
     :py:attr:`link1` with a revolute joint that can rotate along the z-axis:
 
-    >>> from urdf import Origin, Link, Joint, Parent, Child, Axis, JointLimit, JointDynamics
+    >>> from simulation.utils.urdf import Origin, Link, Joint, Parent, Child, Axis, JointLimit, JointDynamics
     >>> link1 = Link("link_1")
     >>> link2 = Link("link_2")
     >>> simple_joint = Joint(
@@ -22,7 +22,7 @@ Example:
 
 from dataclasses import dataclass
 
-from geometry import Vector
+from simulation.utils.geometry import Vector
 
 from .core import XmlObject, Attribute, Origin
 

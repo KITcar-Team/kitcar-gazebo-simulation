@@ -16,9 +16,9 @@ def export(define):
 __all__: List[Any] = []  # Will hold all classes/functions which can be imported with
 
 # import all files which are part of the geometry module
-import speaker.speakers.speaker  # noqa:
-import speaker.speakers.event  # noqa:402
-import speaker.speakers.area  # noqa:402
-import speaker.speakers.speed  # noqa:402
-import speaker.speakers.zone  # noqa:402
-import speaker.speakers.broadcast  # noqa:402
+import simulation.src.simulation_evaluation.src.speaker.speakers.speaker  # noqa:
+import simulation.src.simulation_evaluation.src.speaker.speakers.event  # noqa:402
+import simulation.src.simulation_evaluation.src.speaker.speakers.area  # noqa:402
+import simulation.src.simulation_evaluation.src.speaker.speakers.speed  # noqa:402
+import simulation.src.simulation_evaluation.src.speaker.speakers.zone  # noqa:402
+import simulation.src.simulation_evaluation.src.speaker.speakers.broadcast  # noqa:402

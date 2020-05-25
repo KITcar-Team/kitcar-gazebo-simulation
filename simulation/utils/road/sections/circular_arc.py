@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from typing import Tuple
 import math
 
-from road.sections.road_section import RoadSection
-import road.sections.type as road_section_type
-from geometry import Point, Line, Pose
+from simulation.utils.road.sections.road_section import RoadSection
+import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.geometry import Point, Line, Pose
 
 
 @dataclass

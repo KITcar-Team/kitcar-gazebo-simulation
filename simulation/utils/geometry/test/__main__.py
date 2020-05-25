@@ -2,11 +2,11 @@
 
 Whenever this module is executed, all of the tests included below are run."""
 
-import geometry.test.test_vector as vector
-import geometry.test.test_point as point
-import geometry.test.test_pose as pose
-import geometry.test.test_transform as transform
-import geometry.test.test_line_and_polygon as line_and_polygon
+import simulation.utils.geometry.test.test_vector as vector
+import simulation.utils.geometry.test.test_point as point
+import simulation.utils.geometry.test.test_pose as pose
+import simulation.utils.geometry.test.test_transform as transform
+import simulation.utils.geometry.test.test_line_and_polygon as line_and_polygon
 
 # Create test suite
 import unittest

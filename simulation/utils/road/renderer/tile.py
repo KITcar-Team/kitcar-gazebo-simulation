@@ -6,10 +6,10 @@ import hashlib
 
 import cairo
 
-from geometry import Vector, Transform, Polygon
-import road.renderer.utils as utils
-from road.sections.road_section import RoadSection
-import road.renderer.surface_markings as render_surface_markings
+from simulation.utils.geometry import Vector, Transform, Polygon
+import simulation.utils.road.renderer.utils as utils
+from simulation.utils.road.sections.road_section import RoadSection
+import simulation.utils.road.renderer.surface_markings as render_surface_markings
 
 
 @dataclass

@@ -4,9 +4,9 @@
 import rospy
 from typing import List
 
-from geometry import Polygon, Point
+from simulation.utils.geometry import Polygon, Point
 
-# Received from groundtruth extractor
+# Received from simulation.src.simulation_groundtruth.src.groundtruth extractor
 from simulation_groundtruth.srv import (
     SectionSrv,
     LaneSrv,
@@ -21,10 +21,10 @@ from simulation_groundtruth.msg import (
 from geometry_msgs.msg import Point32 as GeomPoint
 
 
-import road.sections.type as road_section_type
+import simulation.utils.road.sections.type as road_section_type
 
-from ros_base.node_base import NodeBase
-import ros_base.visualization as visualization
+from simulation.utils.ros_base.node_base import NodeBase
+import simulation.utils.ros_base.visualization as visualization
 
 from visualization_msgs.msg import Marker
 

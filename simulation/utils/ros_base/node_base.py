@@ -19,7 +19,7 @@ class NodeBase:
 
     A basic node with a subscriber and publisher can be created in the following way:
 
-    >>> from ros_base.node_base import NodeBase
+    >>> from simulation.utils.ros_base.node_base import NodeBase
     >>> class NodeSubClass(NodeBase):
     ...     def __init__(self):
     ...         super(NodeSubClass,self).__init__("node_name") # Important!
