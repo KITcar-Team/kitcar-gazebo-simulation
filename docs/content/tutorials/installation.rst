@@ -2,10 +2,7 @@
 
 .. _installation:
 
-Installation
-============
-
 .. include:: ../../../README.rst
-   :start-line: 2
+   :start-after: readme_installation
 
 .. skip title
