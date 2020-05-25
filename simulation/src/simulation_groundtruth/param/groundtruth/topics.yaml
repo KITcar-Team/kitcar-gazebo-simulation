@@ -4,6 +4,18 @@ intersection: "/simulation/groundtruth/intersection"
 parking: "/simulation/groundtruth/parking"
 obstacle: "/simulation/groundtruth/obstacle"
 
+spawn_model: "/simulation/gazebo/world/spawn_sdf_model"
+remove_model: "/simulation/gazebo/world/remove_model"
+gazebo_models: "/gazebo/model_states"
+pause_gazebo: "/gazebo/pause_physics"
+unpause_gazebo: "/gazebo/unpause_physics"
+
+renderer:
+  reload: "/simulation/renderer/reload"
+  interrupt: "/simulation/renderer/interrupt"
+
+status: "/simulation/groundtruth/status"
+
 visualization:
   right_line: '/simulation/visualization/groundtruth/right_line'
   middle_line: '/simulation/visualization/groundtruth/middle_line'

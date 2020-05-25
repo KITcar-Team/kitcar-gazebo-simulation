@@ -58,27 +58,6 @@ class ModuleTest(unittest.TestCase):
             returned_obs.frame, Polygon([[0.1, 1], [0.1, 2], [0.3, 2], [0.3, 1]])
         )
 
-        # test schema
-        # rect = schema.rectangle(
-        #    length=test_length,
-        #    width=test_width,
-        #    orientation=0,
-        #    centerPoint=Point(test_mid).to_schema(),
-        # )
-        # obs_schema = schema.obstacle(
-        #    role="static", type="parkedVehicle", shape=schema.shape()
-        # )
-        # obs_schema.shape.rectangle.append(rect)
-
-        # compare schemas
-        # export_schema = obstacle.export().shape.rectangle[0]
-        # test_schema = obs_schema.shape.rectangle[0]
-        # self.assertAlmostEqual(export_schema.length, test_schema.length)
-        # self.assertAlmostEqual(export_schema.width, test_schema.width)
-        # self.assertAlmostEqual(export_schema.orientation, test_schema.orientation)
-        # self.assertAlmostEqual(export_schema.centerPoint.x, test_schema.centerPoint.x)
-        # self.assertAlmostEqual(export_schema.centerPoint.y, test_schema.centerPoint.y)
-
         #
         # Test obstacle with angle 90 degrees and
         # Transform(Vector(0, 0), 90°)
@@ -108,27 +87,6 @@ class ModuleTest(unittest.TestCase):
 
         # compare obstacles
         # self.assertPolygonAlmostEqual(gt, test_poly)
-
-        # test schema
-        # export = obstacle.export()
-        # rect = schema.rectangle(
-        #    length=test_length,
-        #    width=test_width,
-        #    orientation=test_angle + test_transform.get_angle(),
-        #    centerPoint=Point(test_mid).to_schema(),
-        # )
-        # obs_schema = schema.obstacle(
-        #    role="static", type="parkedVehicle", shape=schema.shape()
-        # )
-        # obs_schema.shape.rectangle.append(rect)
-        # compare schemas
-        # export_schema = export.shape.rectangle[0]
-        # test_schema = obs_schema.shape.rectangle[0]
-        # self.assertAlmostEqual(export_schema.length, test_schema.length)
-        # self.assertAlmostEqual(export_schema.width, test_schema.width)
-        # self.assertAlmostEqual(export_schema.orientation, test_schema.orientation)
-        # self.assertAlmostEqual(export_schema.centerPoint.x, test_schema.centerPoint.x)
-        # self.assertAlmostEqual(export_schema.centerPoint.y, test_schema.centerPoint.y)
 
         #
         # Helper functions

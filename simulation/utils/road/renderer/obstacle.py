@@ -1,18 +1,13 @@
-def draw(obst):
-    result = ""
-    i = 0
-    for rect in obst.shape.rectangle:
-        result += obstacle_model(
-            "Obstacle/{0}/{1}".format(obst.id, i),
-            rect.centerPoint.x,
-            rect.centerPoint.y,
-            rect.length,
-            rect.width,
-            0.2,
-            rect.orientation,
-        )
-        i += 1
-    return result
+def draw(name, obst):
+    return obstacle_model(
+        name,
+        obst.center.x,
+        obst.center.y,
+        obst.depth,
+        obst.width,
+        obst.height,
+        obst.orientation,
+    )
 
 
 # large masses make model instable

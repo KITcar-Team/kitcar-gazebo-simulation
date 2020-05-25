@@ -59,6 +59,7 @@ add_message_files(
   Parking.msg
   LabeledPolygon.msg
   Line.msg
+  GroundtruthStatus.msg
 )
 
 
@@ -197,4 +198,6 @@ include_directories()
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
   add_rostest(launch/test/groundtruth_node.test)
+  add_rostest(launch/test/renderer.test)
+  add_rostest(launch/test/object_controller.test)
 endif()

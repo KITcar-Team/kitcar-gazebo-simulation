@@ -20,7 +20,12 @@ from simulation_groundtruth.srv import (
     LabeledPolygonSrv,
     IntersectionSrv,
 )
-from simulation_groundtruth.msg import Lane as LaneMsg, LabeledPolygon as LabeledPolygonMsg
+from simulation_groundtruth.msg import (
+    Lane as LaneMsg,
+    LabeledPolygon as LabeledPolygonMsg,
+    GroundtruthStatus,
+)
+from road.road import Road
 
 PKG = "simulation_groundtruth"
 
@@ -36,6 +41,10 @@ class GroundtruthTestNode(unittest.TestCase, GroundtruthMockNode):
     def setUp(self):
         self.__road_sections = []
         NodeBase.__init__(self, name="groundtruth_node_test", log_level=rospy.DEBUG)
+
+        road = Road()
+        self.groundtruth = Groundtruth(road=road)
+        self._groundtruth_status = GroundtruthStatus()
 
         self.start()
 
@@ -116,8 +125,8 @@ class GroundtruthTestNode(unittest.TestCase, GroundtruthMockNode):
         )
 
     def _test_road(self):
-        self.__road_sections = self._load_road_sections()
-        self.groundtruth = Groundtruth(self._load_road_sections())
+        self.__road_sections = self._load_road().sections
+        self.groundtruth = Groundtruth(self._load_road())
 
         rospy.logdebug(f"Testing groundtruth for road sections {self.__road_sections}")
 

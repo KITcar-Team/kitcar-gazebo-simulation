@@ -7,6 +7,7 @@
   <arg name="set_twist" default="true" />
   <arg name="set_pose" default="true" />
   <arg name="include_vehicle_simulation" default="true" />
+  <arg name="include_mission_mode_plugin" default="true" />
 
   <!-- Remap simulated sensors to the topics used in KITcar brain -->
   <remap from="/simulation/sensors/prepared/camera" to="/camera/image_raw"/>
@@ -51,14 +52,10 @@
   </include> 
 
   <!-- GUI -->
-  <group if="$(arg gui)">
-    <!-- Mission Mode GUI -->
-    <node pkg="rqt_mission_mode" type="rqt_mission_mode" name="rqt_mission_mode" output="screen"/>
+  <!-- Mission Mode GUI -->
+  <node if="$(arg include_mission_mode_plugin)" pkg="rqt_mission_mode" type="rqt_mission_mode" name="rqt_mission_mode" output="screen"/>
 
-    <!-- RVIZ -->
-    <group if="$(arg rviz)">
-      <include file="$(find visualization)/launch/visualization.launch" />
-    </group>
-  </group>
+  <!-- RVIZ -->
+  <include if="$(arg rviz)" file="$(find visualization)/launch/visualization.launch" />
 
 </launch>

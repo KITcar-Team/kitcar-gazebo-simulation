@@ -1,0 +1,49 @@
+<launch>
+  <arg name="time_limit" value="120"/>
+  <arg name="start_groundtruth" default="false" />
+  <arg name="start_renderer" default="true" />
+  <arg name="start_object_controller" default="false" />
+  <arg name="road" default="default_road" />
+
+  <arg name="use_sim_time" default="true" />
+  <!-- params gazebo -->
+  <arg name="gz_paused" default="false"/>
+  <arg name="gz_recording" default="false"/>
+  <arg name="gz_debug" default="false"/>
+  <arg name="gz_physics" default="ode"/>
+  <arg name="gz_verbose" default="false"/>
+  <arg name="gz_respawn" default="false"/>
+  <arg name="gz_use_clock_frequency" default="false"/>
+  <arg name="gz_pub_clock_frequency" default="100"/>
+  <arg name="gz_extra_args" default=""/>
+
+
+  <!-- Launch Gazebo -->
+  <include file="$(find gazebo_simulation)/launch/world.launch">
+    <arg name="world_name" value="base_world"/>
+    <arg name="paused" value="$(arg gz_paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="false"/>
+    <arg name="recording" value="$(arg gz_recording)"/>
+    <arg name="debug" value="$(arg gz_debug)"/>
+    <arg name="physics" default="$(arg gz_physics)"/>
+    <arg name="verbose" default="$(arg gz_verbose)"/>
+    <arg name="respawn_gazebo" default="$(arg gz_respawn)"/>
+    <arg name="use_clock_frequency" default="$(arg gz_use_clock_frequency)"/>
+    <arg name="pub_clock_frequency" default="$(arg gz_pub_clock_frequency)"/>
+  </include>
+
+  <test test-name="test_groundtruth_node" pkg="simulation_groundtruth" time-limit="$(arg time_limit)" type="test_renderer">
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state" />
+    <rosparam file="$(find simulation_groundtruth)/param/mock_groundtruth/default.yaml" command="load"/>
+    <param name="start_groundtruth" value="$(arg start_groundtruth)" />
+    <param name="start_renderer" value="$(arg start_renderer)" />
+    <param name="start_object_controller" value="$(arg start_object_controller)" />
+    <param name="road" value="$(arg road)" />
+    <param name="seed" value="__no_value__" />
+  </test>
+
+</launch>
+

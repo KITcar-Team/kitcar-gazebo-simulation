@@ -11,7 +11,6 @@ from geometry.transform import Transform
 
 import geometry_msgs.msg as g_msgs
 import numpy as np
-from road import schema
 
 
 TOLERANCE = 0.007
@@ -59,10 +58,6 @@ class ModuleTest(unittest.TestCase):
 
         np_array = np.array([p.to_numpy() for p in points])
         self.assertEqual(np_array.all(), line.to_numpy().all())
-
-        boundary = schema.boundary()
-        boundary.point = [p.to_schema() for p in points]
-        self.assertEqual(boundary, line.to_schema_boundary())
 
     def test_line_interpolation_func(self):
         line = Line([Point(0, 0), Point(1, 1)])
@@ -212,26 +207,13 @@ class ModuleTest(unittest.TestCase):
 
         g_polygon = g_msgs.Polygon()
         g_polygon.points = [p.to_geometry_msg() for p in points]
+        # append first point at the end to match behaviour of Polygon
+        g_polygon.points.append(points[0].to_geometry_msg())
 
         array = np.array([p.to_numpy() for p in points])
 
-        # self.assertEqual(poly.to_geometry_msg(),g_polygon)
+        self.assertEqual(poly.to_geometry_msg(), g_polygon)
         self.assertEqual(poly.to_numpy().all(), array.all())
-
-        # Test if lanelet is created correctly
-        left_points = self.create_points(10)
-        right_points = self.create_points(10)
-
-        lanelet = schema.lanelet()
-        lanelet.leftBoundary = Line(left_points).to_schema_boundary()
-        lanelet.rightBoundary = Line(right_points).to_schema_boundary()
-
-        # Points for polygon
-        poly_points = right_points
-        poly_points.extend(reversed(left_points))
-
-        p = Polygon(poly_points)
-        self.assertEqual(p.to_schema_lanelet(), lanelet)
 
     def test_polygon_func(self):
         """Test polygon functions."""

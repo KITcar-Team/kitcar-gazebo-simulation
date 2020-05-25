@@ -6,7 +6,6 @@ __copyright__ = "KITcar"
 
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
-from road import schema
 
 from geometry.transform import Transform
 from geometry.vector import Vector  # Base class
@@ -32,15 +31,6 @@ class Point(Vector):
         Returns:
             This point as a geometry_msgs/Point """
         return geometry_msgs.Point32(x=self.x, y=self.y, z=self.z)
-
-    def to_schema(self) -> schema.point:
-        """To schema Point.
-
-        Mainly used in lanelets for road generation.
-
-        Returns:
-            This point as a schema Point."""
-        return schema.point(x=self.x, y=self.y)
 
     def rotated(self, *args, **kwargs):
         raise InvalidPointOperationError("A point cannot be rotated.")

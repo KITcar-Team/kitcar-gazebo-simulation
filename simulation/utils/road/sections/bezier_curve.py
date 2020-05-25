@@ -53,8 +53,10 @@ class BezierCurve(RoadSection):
 class QuadBezier(BezierCurve):
     """Quadratic bezier curve, defined by two control points.
 
-    By default (0,0) is used as a start point, this can be variied \
-    by overwriting :attr:`p0` in the constructor.
+    Args:
+        p0 (Union[Point, Sequence[float]]) = [0,0]: Control point 0.
+        p1 (Union[Point, Sequence[float]]): Control point 1.
+        p2 (Union[Point, Sequence[float]]): Control point 2.
     """
 
     TYPE = road_section_type.QUAD_BEZIER
@@ -81,8 +83,11 @@ class QuadBezier(BezierCurve):
 class CubicBezier(BezierCurve):
     """Cubic bezier curve, defined by three control points.
 
-    By default (0,0) is used as a start point, this can be variied \
-    by overwriting :attr:`p0` in the constructor.
+    Args:
+        p0 (Union[Point, Sequence[float]]) = [0,0]: Control point 0.
+        p1 (Union[Point, Sequence[float]]): Control point 1.
+        p2 (Union[Point, Sequence[float]]): Control point 2.
+        p3 (Union[Point, Sequence[float]]): Control point 3.
     """
 
     TYPE = road_section_type.CUBIC_BEZIER

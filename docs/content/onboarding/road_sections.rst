@@ -18,17 +18,12 @@ In this section, you are going to create a more complex world by adding further 
 
       road.append(StraightRoad())  # Replace with other road sections
 
-   You can then generate the road
-
-   .. prompt:: bash
-
-      python3 -m generate_road example_road
-
-   and start the simulation:
+   Then start the simulation:
 
    .. prompt:: bash
 
       roslaunch gazebo_simulation master.launch road:=example_road
+
 
 .. include:: ../tutorials/road_sections.rst
    :start-after: .. onboarding_start
@@ -70,7 +65,8 @@ If you want more information on the road sections just have all look at :ref:`si
 .. hint::
 
    * Do not forget to import necessary sections.
-   * You can look at the road you have defined by generating it and starting  the simulation!
+   * You can look at the road you have defined by starting the simulation!
+   * All angles must be specified in radians!
 
 Don’t forget to commit and push your changes after completing the task!
 

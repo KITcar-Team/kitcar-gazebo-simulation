@@ -9,6 +9,8 @@ from road.sections.line_tuple import LineTuple
 from simulation_groundtruth.srv import IntersectionSrvResponse
 from simulation_groundtruth.msg import Parking as ParkingMsg
 
+from unittest.mock import Mock
+
 PKG = "simulation_groundtruth"
 
 
@@ -205,7 +207,7 @@ class GroundtruthMockNode(GroundtruthNode):
 
     """
 
-    def _load_road_sections(self):
+    def _load_road(self):
         road_sections = []
         road_sections.append(create_straight_section(0))
 
@@ -225,4 +227,7 @@ class GroundtruthMockNode(GroundtruthNode):
             road_sections.append(create_intersection(1, rule=IntersectionSrvResponse.STOP))
 
         road_sections.append(create_straight_section(2))
-        return road_sections
+
+        m = Mock()
+        m.sections = road_sections
+        return m

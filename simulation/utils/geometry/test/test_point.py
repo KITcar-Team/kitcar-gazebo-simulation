@@ -7,7 +7,6 @@ from geometry.vector import Vector
 
 import geometry_msgs.msg as g_msgs
 import numpy as np
-from road import schema
 
 
 class ModuleTest(unittest.TestCase):
@@ -36,7 +35,6 @@ class ModuleTest(unittest.TestCase):
         p1 = Point(1, 3, 2)
 
         self.assertEqual(p1.to_geometry_msg(), g_msgs.Point32(1, 3, 2))
-        self.assertEqual(p1.to_schema(), schema.point(x=1, y=3))
 
     def test_point_func(self):
         p1 = Point(1, 2, 3)

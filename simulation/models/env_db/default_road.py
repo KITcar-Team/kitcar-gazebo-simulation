@@ -1,4 +1,5 @@
 """The default road when launching this simulation."""
+import math
 
 from road.road import Road  # Definition of the road class
 from road.sections import (
@@ -9,7 +10,6 @@ from road.sections import (
     ParkingArea,
     ParkingLot,
     ParkingSpot,
-    StartLine,
     ParkingObstacle,
     StaticObstacle,
 )
@@ -22,10 +22,10 @@ road.append(StraightRoad(length=1))
 road.append(
     ParkingArea(
         length=4,
-        start_line=StartLine(),
+        start_line=True,
         left_lots=[
             ParkingLot(
-                start=1, spots=[ParkingSpot(), ParkingSpot(kind=ParkingSpot.BLOCKED)],
+                start=1, spots=[ParkingSpot(), ParkingSpot(kind=ParkingSpot.BLOCKED)]
             )
         ],
         right_lots=[
@@ -44,19 +44,21 @@ road.append(
     )
 )
 road.append(
-    LeftCircularArc(radius=2, angle=90, right_line_marking=RoadSection.MISSING_LINE_MARKING)
+    LeftCircularArc(
+        radius=2, angle=math.pi / 2, right_line_marking=RoadSection.MISSING_LINE_MARKING
+    )
 )
 road.append(StraightRoad(length=0.45))
-road.append(LeftCircularArc(radius=2, angle=90))
+road.append(LeftCircularArc(radius=2, angle=math.pi / 2))
 road.append(Intersection(size=3, turn=Intersection.RIGHT))
-road.append(LeftCircularArc(radius=1.5, angle=180, obstacles=[StaticObstacle()]))
+road.append(LeftCircularArc(radius=1.5, angle=math.pi, obstacles=[StaticObstacle()]))
 road.append(Intersection(size=3, turn=Intersection.RIGHT))
 road.append(
     LeftCircularArc(
-        radius=1.5, angle=90, left_line_marking=RoadSection.MISSING_LINE_MARKING
+        radius=1.5, angle=math.pi / 2, left_line_marking=RoadSection.MISSING_LINE_MARKING
     )
 )
 road.append(ZebraCrossing())
 road.append(StraightRoad(length=1))
-road.append(LeftCircularArc(radius=1.5, angle=90))
+road.append(LeftCircularArc(radius=1.5, angle=math.pi / 2))
 road.append(StraightRoad(length=1))

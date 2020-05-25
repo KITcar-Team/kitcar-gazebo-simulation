@@ -1,0 +1,13 @@
+<library path="src">
+  <class name="SimulationRendererPlugin" type="rqt_renderer.plugin.SimulationRendererPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      A Python GUI plugin for controlling the simulation's renderer.
+    </description>
+    <qtgui>
+      <label>Simulation Renderer</label>
+      <icon type="theme">applications-other</icon>
+      <statustip>A Python GUI plugin for controlling the simulation's renderer. </statustip>
+    </qtgui>
+  </class>
+</library>
+
