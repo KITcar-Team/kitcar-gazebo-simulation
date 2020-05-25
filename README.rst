@@ -1,5 +1,28 @@
+========================
 kitcar-gazebo-simulation
 ========================
+
+A ROS_ and Gazebo_ based simulation tool that can generate CaroloCup_ roads \
+and simulate a car driving on the generated roads.
+
+.. figure:: docs/content/tutorials/resources/simulation_video.gif
+   :width: 400
+
+   View of the Gazebo user interface displaying the default_road.
+
+ROS_ topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the bevahior of the car.
+
+.. figure:: docs/content/tutorials/resources/simulation_camera.gif
+   :width: 400
+
+   Front Camera Output of the Car.
+
+The documentation is available at https://doc.kitcar-team.de/kitcar-gazebo-simulation.
+
+.. readme_installation
+
+Installation
+============
 
 The simulation has been developed and primarily used on Ubuntu 18.04.
 Other Linux distributions were not tested.
