@@ -3,10 +3,10 @@ from dataclasses import dataclass
 
 import rospy
 
-from road.road import Road
-from road.sections import StaticObstacle
-import road.renderer.obstacle as render_obstacle
-import road.renderer.traffic_sign as render_sign
+from simulation.utils.road.road import Road
+from simulation.utils.road.sections import StaticObstacle
+import simulation.utils.road.renderer.obstacle as render_obstacle
+import simulation.utils.road.renderer.traffic_sign as render_sign
 
 from gazebo_simulation.msg import CarState as CarStateMsg
 

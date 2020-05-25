@@ -5,10 +5,10 @@ As any other road sections, line markings can be variied and obstacles created o
 
 from dataclasses import dataclass
 
-from geometry import Point, Line
+from simulation.utils.geometry import Point, Line
 
-from road.sections.road_section import RoadSection
-import road.sections.type as road_section_type
+from simulation.utils.road.sections.road_section import RoadSection
+import simulation.utils.road.sections.type as road_section_type
 
 
 @dataclass
@@ -31,8 +31,8 @@ class StraightRoad(_StraightRoad):
         length (float): Length [m] of the section.
 
     Example:
-        >>> from road.sections import StraightRoad
-        >>> from road.road import Road
+        >>> from simulation.utils.road.sections import StraightRoad
+        >>> from simulation.utils.road.road import Road
         >>> road = Road()
         >>> road.append(StraightRoad(length=2))
         >>> road

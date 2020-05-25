@@ -2,7 +2,7 @@
 import rospy
 from contextlib import suppress
 
-from state_machine.node import StateMachineNode
+from simulation.src.simulation_evaluation.src.state_machine.node import StateMachineNode
 
 if __name__ == "__main__":
     with suppress(rospy.ROSInterruptException):

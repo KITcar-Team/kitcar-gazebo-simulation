@@ -4,7 +4,7 @@ __copyright__ = "KITcar"
 
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
-from geometry.vector import Vector
+from simulation.utils.geometry.vector import Vector
 from pyquaternion import Quaternion
 
 import numbers

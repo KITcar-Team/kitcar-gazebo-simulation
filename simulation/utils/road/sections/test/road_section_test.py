@@ -1,11 +1,11 @@
 import unittest
 import math
 
-from geometry import Point, Polygon, Transform, Line, Pose
+from simulation.utils.geometry import Point, Polygon, Transform, Line, Pose
 
-from road.sections.road_section import RoadSection
-from road.sections import StaticObstacle
-from road.config import Config
+from simulation.utils.road.sections.road_section import RoadSection
+from simulation.utils.road.sections import StaticObstacle
+from simulation.utils.road.config import Config
 
 
 class DummyRoadSection(RoadSection):

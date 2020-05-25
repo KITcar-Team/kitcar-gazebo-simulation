@@ -2,8 +2,8 @@
 import sys
 import unittest
 import rospy
-from ros_base.node_base import NodeBase
-from geometry import Line, Polygon, Pose
+from simulation.utils.ros_base.node_base import NodeBase
+from simulation.utils.geometry import Line, Polygon, Pose
 
 from simulation_groundtruth.srv import (
     SectionSrv,
@@ -22,7 +22,7 @@ from typing import Iterable, Set
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 from simulation_evaluation.msg import Broadcast as BroadcastMsg
 
-import speaker.speakers.test.fake_msgs as fake_msgs
+import simulation.src.simulation_evaluation.src.speaker.speakers.test.fake_msgs as fake_msgs
 
 PKG = "simulation_evaluation"
 

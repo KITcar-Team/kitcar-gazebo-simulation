@@ -6,7 +6,7 @@ import math
 import numpy as np
 import yaml
 
-from geometry import Vector
+from simulation.utils.geometry import Vector
 
 
 @dataclass

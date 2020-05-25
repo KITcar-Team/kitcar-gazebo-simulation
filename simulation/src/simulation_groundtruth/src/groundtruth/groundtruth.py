@@ -8,10 +8,10 @@ from simulation_groundtruth.msg import (
     Parking as ParkingMsg,
     LabeledPolygon as LabeledPolygonMsg,
 )
-from geometry import Line
+from simulation.utils.geometry import Line
 
-from road.sections import Intersection
-from road.road import Road
+from simulation.utils.road.sections import Intersection
+from simulation.utils.road.road import Road
 
 from dataclasses import dataclass
 

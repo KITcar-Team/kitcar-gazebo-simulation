@@ -1,6 +1,6 @@
 """Class definitions of tags used to define cameras."""
 from dataclasses import dataclass
-from geometry import Vector
+from simulation.utils.geometry import Vector
 
 from .core import (
     Attribute,

@@ -1,10 +1,12 @@
-from geometry import Line, Polygon, Transform, Point
+from simulation.utils.geometry import Line, Polygon, Transform, Point
 
-from groundtruth.node import GroundtruthNode
-from groundtruth.test import road_section_mocks as section_mocks
+from simulation.src.simulation_groundtruth.src.groundtruth.node import GroundtruthNode
+from simulation.src.simulation_groundtruth.src.groundtruth.test import (
+    road_section_mocks as section_mocks,
+)
 
-import road.sections.type as road_section_type
-from road.sections.line_tuple import LineTuple
+import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections.line_tuple import LineTuple
 
 from simulation_groundtruth.srv import IntersectionSrvResponse
 from simulation_groundtruth.msg import Parking as ParkingMsg

@@ -2,7 +2,7 @@
 import rospy
 from contextlib import suppress
 
-from sensor_tof.node import SensorTofNode
+from simulation.src.simulation_brain_link.src.sensor_tof.node import SensorTofNode
 
 if __name__ == "__main__":
     # Start the node

@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
-from geometry import Vector, Transform
+from simulation.utils.geometry import Vector, Transform
 from typing import Tuple, Set, DefaultDict, List, Dict, Callable
 import itertools
 from collections import defaultdict
 import os
-from road.road import Road
+from simulation.utils.road.road import Road
 
-from road.renderer.tile import Tile
+from simulation.utils.road.renderer.tile import Tile
 from time import gmtime, strftime
 import time as time_module
 import yaml

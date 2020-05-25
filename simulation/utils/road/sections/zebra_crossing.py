@@ -2,11 +2,11 @@
 
 from dataclasses import dataclass
 
-from geometry import Point, Polygon
+from simulation.utils.geometry import Point, Polygon
 
-from road.config import Config
-from road.sections import StraightRoad, SurfaceMarkingRect
-import road.sections.type as road_section_type
+from simulation.utils.road.config import Config
+from simulation.utils.road.sections import StraightRoad, SurfaceMarkingRect
+import simulation.utils.road.sections.type as road_section_type
 
 
 @dataclass

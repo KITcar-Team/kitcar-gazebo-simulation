@@ -2,10 +2,10 @@
 from unittest.mock import Mock
 from typing import List, Tuple
 
-from geometry import Line, Polygon
+from simulation.utils.geometry import Line, Polygon
 import inspect
 
-from road.sections.line_tuple import LineTuple
+from simulation.utils.road.sections.line_tuple import LineTuple
 
 """A word on what's going on here.
 

@@ -2,12 +2,12 @@ import unittest
 import math
 import random
 
-from geometry.point import Point
-from geometry.vector import Vector
-from geometry.line import Line
-from geometry.polygon import Polygon
-from geometry.pose import Pose
-from geometry.transform import Transform
+from simulation.utils.geometry.point import Point
+from simulation.utils.geometry.vector import Vector
+from simulation.utils.geometry.line import Line
+from simulation.utils.geometry.polygon import Polygon
+from simulation.utils.geometry.pose import Pose
+from simulation.utils.geometry.transform import Transform
 
 from pyquaternion import Quaternion
 

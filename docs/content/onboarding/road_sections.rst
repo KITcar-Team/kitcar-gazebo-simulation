@@ -11,8 +11,8 @@ In this section, you are going to create a more complex world by adding further 
 
    .. code-block:: python
 
-      from road.road import Road
-      from road.sections import *
+      from simulation.utils.road.road import Road
+      from simulation.utils.road.sections import *
 
       road = Road()
 

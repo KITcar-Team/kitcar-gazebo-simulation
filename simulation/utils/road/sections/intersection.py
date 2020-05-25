@@ -5,14 +5,14 @@ import numpy as np
 from dataclasses import dataclass
 from typing import Tuple, List
 
-from geometry import Point, Line, Vector, Pose, Polygon
+from simulation.utils.geometry import Point, Line, Vector, Pose, Polygon
 
-from road.sections.road_section import RoadSection
-from road.sections.road_section import MarkedLine
-from road.config import Config
-import road.sections.type as road_section_type
-from road.sections.traffic_sign import TrafficSign
-from road.sections.surface_marking import SurfaceMarkingRect
+from simulation.utils.road.sections.road_section import RoadSection
+from simulation.utils.road.sections.road_section import MarkedLine
+from simulation.utils.road.config import Config
+import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections.traffic_sign import TrafficSign
+from simulation.utils.road.sections.surface_marking import SurfaceMarkingRect
 
 
 def _get_stop_line(line1: Line, line2: Line, kind) -> SurfaceMarkingRect:

@@ -4,7 +4,7 @@ import xml.etree.ElementTree
 import xml.dom.minidom
 from dataclasses import dataclass, field
 
-from geometry import Vector
+from simulation.utils.geometry import Vector
 
 from typing import Any, List
 from collections import Iterable

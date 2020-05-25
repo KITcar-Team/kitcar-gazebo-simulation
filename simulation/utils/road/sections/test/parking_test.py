@@ -1,15 +1,15 @@
 import unittest
 import math
 
-from geometry import Point, Transform, Line, Polygon
-import road.sections.type as road_section_type
-from road.sections import (
+from simulation.utils.geometry import Point, Transform, Line, Polygon
+import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections import (
     ParkingArea,
     ParkingLot,
     ParkingSpot,
 )
 
-from road.config import Config
+from simulation.utils.road.config import Config
 
 
 class ModuleTest(unittest.TestCase):

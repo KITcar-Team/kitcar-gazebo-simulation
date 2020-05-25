@@ -5,10 +5,10 @@ from simulation_evaluation.msg import Speaker as SpeakerMsg
 import random
 import numpy
 
-from geometry import Line, Pose, Polygon, Transform
-import road.sections.type as road_section_type
+from simulation.utils.geometry import Line, Pose, Polygon, Transform
+import simulation.utils.road.sections.type as road_section_type
 
-from speaker.speakers import ZoneSpeaker
+from simulation.src.simulation_evaluation.src.speaker.speakers import ZoneSpeaker
 
 import functools
 

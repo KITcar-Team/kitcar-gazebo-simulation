@@ -2,8 +2,8 @@
 
 import rospy
 
-from ros_base.node_base import NodeBase
-from speaker.speakers import (
+from simulation.utils.ros_base.node_base import NodeBase
+from simulation.src.simulation_evaluation.src.speaker.speakers import (
     AreaSpeaker,
     ZoneSpeaker,
     EventSpeaker,

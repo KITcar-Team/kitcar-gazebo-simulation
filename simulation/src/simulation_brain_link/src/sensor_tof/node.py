@@ -1,19 +1,22 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""Gazebo does not provide distance sensors out of the box. As a workaround, the simulated `Dr. Drift` is equipped with depth cameras.
-The depth camera sensor data is then converted into a distance by extracting the closest point inside the depth cameras point cloud.
+"""Gazebo does not provide distance sensors out of the box.
 
-This is done separately for each time of flight sensor through an instance of the SensorTofNode."""
+As a workaround, the simulated `Dr. Drift` is equipped with depth cameras.
+The depth camera sensor data is then converted into a distance
+by extracting the closest point inside the depth cameras point cloud.
+
+This is done separately for each time of flight sensor through an instance
+of the SensorTofNode.
+"""
 
 import rospy
-
-from geometry.vector import Vector
 
 # Messages
 import sensor_msgs.point_cloud2
 from sensor_msgs.msg import Range, PointCloud2
 
-from ros_base.node_base import NodeBase
+from simulation.utils.geometry.vector import Vector
+
+from simulation.utils.ros_base.node_base import NodeBase
 
 __copyright__ = "KITcar"
 
@@ -38,7 +41,10 @@ class SensorTofNode(NodeBase):
         """Start node."""
         self.publisher = rospy.Publisher(self.param.topics.tof_sensor, Range, queue_size=1)
         self.subscriber = rospy.Subscriber(
-            self.param.topics.depth_camera, PointCloud2, callback=self.pointcloud_cb, queue_size=1
+            self.param.topics.depth_camera,
+            PointCloud2,
+            callback=self.pointcloud_cb,
+            queue_size=1,
         )
         super().start()
 
@@ -58,7 +64,10 @@ class SensorTofNode(NodeBase):
         out_msg.max_range = self.param.tof.max_range
         out_msg.header.frame_id = self.param.frame_id
 
-        vecs = (Vector(p) for p in sensor_msgs.point_cloud2.read_points(pc, field_names=("x", "y", "z")))
+        vecs = (
+            Vector(p)
+            for p in sensor_msgs.point_cloud2.read_points(pc, field_names=("x", "y", "z"))
+        )
         out_msg.range = min(v.norm for v in vecs)
 
         rospy.logdebug(f"Pointcloud received in {rospy.get_name()}:{vecs}")

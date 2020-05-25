@@ -2,7 +2,9 @@
 import rospy
 from contextlib import suppress
 
-from gazebo_rate_control.node import GazeboRateControlNode
+from simulation.src.gazebo_simulation.src.gazebo_rate_control.node import (
+    GazeboRateControlNode,
+)
 
 if __name__ == "__main__":
     # Start the node

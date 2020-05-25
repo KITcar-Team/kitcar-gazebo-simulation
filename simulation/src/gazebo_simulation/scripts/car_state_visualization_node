@@ -2,7 +2,7 @@
 import rospy
 from contextlib import suppress
 
-from car_state import CarStateVisualizationNode
+from simulation.src.gazebo_simulation.src.car_state import CarStateVisualizationNode
 
 if __name__ == "__main__":
     # Start the node

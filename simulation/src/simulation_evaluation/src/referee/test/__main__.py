@@ -3,7 +3,7 @@
 Whenever this module is executed, all of the tests included below are run.
 """
 
-import referee.test.test_referee as referee
+import simulation.src.simulation_evaluation.src.referee.test.test_referee as referee
 
 # Create test suite
 import unittest

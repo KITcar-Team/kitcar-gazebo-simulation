@@ -61,9 +61,9 @@ Let’s take a look at ``onboarding_simple.py``:
 
 .. testsetup::
 
-   from road.road import Road  # Definition of the road class
-   from road.sections import StraightRoad
-   from road.sections import Intersection
+   from simulation.utils.road.road import Road  # Definition of the road class
+   from simulation.utils.road.sections import StraightRoad
+   from simulation.utils.road.sections import Intersection
    road = Road()
    road_section = StraightRoad()  # Just a dummy
 

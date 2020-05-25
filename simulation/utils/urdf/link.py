@@ -5,8 +5,8 @@ Example:
     A simple link with the shape of a rectangular box
     can be defined as follows:
 
-    >>> from geometry import Vector
-    >>> from urdf import Geometry, Box, Material, Link, Collision, Visual
+    >>> from simulation.utils.geometry import Vector
+    >>> from simulation.utils.urdf import Geometry, Box, Material, Link, Collision, Visual
     >>> box = Geometry(Box(Vector(2, 2, 2)))
     >>> material = Material("mat", color=Vector(1, 1, 1))
     >>> link = Link(
@@ -15,14 +15,14 @@ Example:
     ...     visual=Visual(geometry=box, material=material),
     ... )
     >>> link.use_inertial_from_collision(mass=1.0)
-    ...  # Calculate inertial tensor from geometry and mass
+    ...  # Calculate inertial tensor from simulation.utils.geometry and mass
 """
 
 from dataclasses import dataclass, field
 import xml.etree.cElementTree as cET
 from typing import Tuple
 
-from geometry import Vector
+from simulation.utils.geometry import Vector
 
 from .core import XmlObject, Attribute, Origin
 

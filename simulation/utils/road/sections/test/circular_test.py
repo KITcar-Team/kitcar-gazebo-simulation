@@ -1,9 +1,9 @@
 import unittest
 import math
 
-from geometry import Point, Transform, Vector
-import road.sections.type as road_section_type
-from road.sections import (
+from simulation.utils.geometry import Point, Transform, Vector
+import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections import (
     LeftCircularArc,
     RightCircularArc,
 )

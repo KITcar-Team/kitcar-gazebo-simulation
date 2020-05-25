@@ -1,11 +1,11 @@
 import unittest
 
-from geometry import Point, Polygon, Transform
+from simulation.utils.geometry import Point, Polygon, Transform
 
-from road.sections.zebra_crossing import ZebraCrossing
-import road.sections.type as road_section_type
+from simulation.utils.road.sections.zebra_crossing import ZebraCrossing
+import simulation.utils.road.sections.type as road_section_type
 
-from road.config import Config
+from simulation.utils.road.config import Config
 
 
 class ModuleTest(unittest.TestCase):

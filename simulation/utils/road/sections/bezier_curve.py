@@ -4,10 +4,10 @@ from typing import Union, Sequence
 from dataclasses import dataclass
 import numpy as np
 
-from geometry import Point, Line
+from simulation.utils.geometry import Point, Line
 
-import road.sections.type as road_section_type
-from road.sections.road_section import RoadSection
+import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections.road_section import RoadSection
 
 
 def _read_point(p: Union[Point, Sequence[float]]) -> np.ndarray:

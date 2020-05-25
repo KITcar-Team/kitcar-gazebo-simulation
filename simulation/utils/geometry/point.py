@@ -7,8 +7,8 @@ __copyright__ = "KITcar"
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
 
-from geometry.transform import Transform
-from geometry.vector import Vector  # Base class
+from simulation.utils.geometry.transform import Transform
+from simulation.utils.geometry.vector import Vector  # Base class
 
 
 class InvalidPointOperationError(Exception):

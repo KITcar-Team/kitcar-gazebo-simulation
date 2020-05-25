@@ -3,15 +3,17 @@ import sys
 import rospy
 import unittest
 
-from ros_base.node_base import NodeBase
+from simulation.utils.ros_base.node_base import NodeBase
 
-from geometry import Line, Polygon
+from simulation.utils.geometry import Line, Polygon
 
-import road.sections.type as road_section_type
-from road.sections.line_tuple import LineTuple
+import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections.line_tuple import LineTuple
 
-from groundtruth.groundtruth import Groundtruth
-from groundtruth.test.mock_node import GroundtruthMockNode
+from simulation.src.simulation_groundtruth.src.groundtruth.groundtruth import Groundtruth
+from simulation.src.simulation_groundtruth.src.groundtruth.test.mock_node import (
+    GroundtruthMockNode,
+)
 
 from simulation_groundtruth.srv import (
     SectionSrv,
@@ -25,7 +27,7 @@ from simulation_groundtruth.msg import (
     LabeledPolygon as LabeledPolygonMsg,
     GroundtruthStatus,
 )
-from road.road import Road
+from simulation.utils.road.road import Road
 
 PKG = "simulation_groundtruth"
 

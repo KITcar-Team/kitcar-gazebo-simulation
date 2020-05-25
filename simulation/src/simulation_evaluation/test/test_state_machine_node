@@ -3,7 +3,7 @@ import sys
 import unittest
 
 import rospy
-from ros_base.node_base import NodeBase
+from simulation.utils.ros_base.node_base import NodeBase
 
 # Messages
 from simulation_evaluation.msg import Speaker as SpeakerMsg
@@ -21,7 +21,7 @@ class StateMachineNodeTest(unittest.TestCase, NodeBase):
     def setUp(self):
         NodeBase.__init__(self, name="test_state_machine_node", log_level=rospy.DEBUG)
 
-        # Publishers from speaker. Input of StateMachineNode.
+        # Publishers from simulation.src.simulation_evaluation.src.speaker. Input of StateMachineNode.
         topics = self.param.topics
         self.zone_publisher = rospy.Publisher(
             topics.speaker.zone, SpeakerMsg, queue_size=10

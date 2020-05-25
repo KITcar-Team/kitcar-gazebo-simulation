@@ -3,7 +3,7 @@
 """Definition of the SpeedSpeaker class."""
 import rospy
 
-from speaker.speakers.speaker import Speaker
+from simulation.src.simulation_evaluation.src.speaker.speakers.speaker import Speaker
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 

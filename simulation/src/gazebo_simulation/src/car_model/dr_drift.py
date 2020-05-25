@@ -20,7 +20,7 @@ from simulation.utils.urdf import (
     CameraProperties,
     DepthCamera,
 )
-from geometry import Vector
+from simulation.utils.geometry import Vector
 
 from .car_specs import CarSpecs
 from .camera_specs import CameraSpecs

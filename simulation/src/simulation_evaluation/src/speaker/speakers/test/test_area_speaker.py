@@ -2,9 +2,9 @@ import unittest
 import random
 import functools
 
-from geometry import Line, Pose, Polygon, Point
+from simulation.utils.geometry import Line, Pose, Polygon, Point
 
-from speaker.speakers import AreaSpeaker
+from simulation.src.simulation_evaluation.src.speaker.speakers import AreaSpeaker
 
 from . import fake_msgs
 from . import utils

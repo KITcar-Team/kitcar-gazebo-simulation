@@ -7,7 +7,7 @@ import math
 
 from visualization_msgs.msg import Marker
 
-from geometry.point import Point
+from simulation.utils.geometry.point import Point
 
 from typing import List
 

@@ -1,8 +1,8 @@
 """StaticObstacle on road and ParkingObstacle on ParkingSpot."""
 from dataclasses import dataclass
 
-from road.sections.road_element import RoadElementRect
-from geometry import Point
+from simulation.utils.road.sections.road_element import RoadElementRect
+from simulation.utils.geometry import Point
 
 
 @dataclass

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from road.sections.road_element import RoadElementRect, RoadElementPoly
+from simulation.utils.road.sections.road_element import RoadElementRect, RoadElementPoly
 
 
 @dataclass

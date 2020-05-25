@@ -7,8 +7,14 @@ See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.overtaki
 
 from typing import Callable
 
-from state_machine.state_machines.state_machine import StateMachine
-from state_machine.states.overtaking import Left, Off, Right
+from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
+    StateMachine,
+)
+from simulation.src.simulation_evaluation.src.state_machine.states.overtaking import (
+    Left,
+    Off,
+    Right,
+)
 
 __copyright__ = "KITcar"
 

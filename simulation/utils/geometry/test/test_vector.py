@@ -1,7 +1,7 @@
 import unittest
 import math
 
-from geometry.vector import Vector
+from simulation.utils.geometry.vector import Vector
 
 import geometry_msgs.msg as g_msgs
 import numpy as np

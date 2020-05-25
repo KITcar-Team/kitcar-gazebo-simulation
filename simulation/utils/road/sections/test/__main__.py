@@ -3,13 +3,13 @@
 Whenever this module is executed, all of the tests included below are run.
 """
 
-import road.sections.test.road_section_test as road_section
-import road.sections.test.straight_road_test as straight_road
-import road.sections.test.circular_test as circular
-import road.sections.test.bezier_test as bezier
-import road.sections.test.zebra_crossing_test as zebra_crossing
-import road.sections.test.intersection_test as intersection
-import road.sections.test.parking_test as parking
+import simulation.utils.road.sections.test.road_section_test as road_section
+import simulation.utils.road.sections.test.straight_road_test as straight_road
+import simulation.utils.road.sections.test.circular_test as circular
+import simulation.utils.road.sections.test.bezier_test as bezier
+import simulation.utils.road.sections.test.zebra_crossing_test as zebra_crossing
+import simulation.utils.road.sections.test.intersection_test as intersection
+import simulation.utils.road.sections.test.parking_test as parking
 
 # Create test suite
 import unittest

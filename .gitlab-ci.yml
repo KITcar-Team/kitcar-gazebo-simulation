@@ -52,14 +52,14 @@ build-code:
 test-python-packages:
   stage: test
   script: &test-utils
-    - python3 -m geometry.test
+    - python3 -m simulation.utils.geometry.test
     - python3 simulation/utils/ros_base/test/parameter_object_test.py
 
-    - python3 -m road.sections.test
+    - python3 -m simulation.utils.road.sections.test
 
-    - python3 -m speaker.speakers.test
-    - python3 -m state_machine.test
-    - python3 -m referee.test
+    - python3 -m simulation.src.simulation_evaluation.src.speaker.speakers.test
+    - python3 -m simulation.src.simulation_evaluation.src.state_machine.test
+    - python3 -m simulation.src.simulation_evaluation.src.referee.test
 
     # Test the urdf package
     - python3 simulation/utils/urdf/test/test_core.py

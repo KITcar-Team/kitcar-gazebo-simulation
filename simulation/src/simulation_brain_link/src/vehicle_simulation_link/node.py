@@ -3,8 +3,8 @@
 """VehicleSimulationLinkNode"""
 
 import rospy
-from ros_base.node_base import NodeBase
-from geometry import Transform, Vector
+from simulation.utils.ros_base.node_base import NodeBase
+from simulation.utils.geometry import Transform, Vector
 
 # Messages
 from simulation_brain_link.msg import State as StateEstimationMsg

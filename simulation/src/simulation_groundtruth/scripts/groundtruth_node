@@ -2,7 +2,7 @@
 import rospy
 from contextlib import suppress
 
-from groundtruth.node import GroundtruthNode
+from simulation.src.simulation_groundtruth.src.groundtruth.node import GroundtruthNode
 
 if __name__ == "__main__":
     # Start the node

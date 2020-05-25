@@ -2,7 +2,9 @@
 """ActiveState checks for failure states."""
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
-from state_machine.state_machines.state_machine import StateMachine
+from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
+    StateMachine,
+)
 
 from .state import State
 

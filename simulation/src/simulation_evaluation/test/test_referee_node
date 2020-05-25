@@ -6,7 +6,7 @@ from typing import Iterable, Tuple
 
 from std_msgs.msg import Bool as BoolMsg
 
-from ros_base.node_base import NodeBase
+from simulation.utils.ros_base.node_base import NodeBase
 
 from simulation_evaluation.msg import State as StateMsg
 from simulation_evaluation.msg import Referee as RefereeMsg, Broadcast as BroadcastMsg
