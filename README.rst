@@ -121,11 +121,7 @@ Test
 
 Let's test if everything works. Open up a new terminal.
 
-#. Before being able to start the simulation, we must generate (build + render) a road::
-
-      python3 -m generate_road default_road
-
-#. That's it. You can now start the simulation with
+You can now start the simulation with
 
   ::
 
