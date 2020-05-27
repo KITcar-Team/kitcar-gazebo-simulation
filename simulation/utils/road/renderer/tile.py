@@ -34,8 +34,11 @@ class Tile:
     """Size of the tile."""
     resolution: Vector
     """Resolution of the tile's image."""
-    materials_path: str = field(default=None, repr=False)
-    """Path to all tiles of the current road."""
+    road_folder_name: str = field(default=None, repr=False)
+    """Name of the folder in which all tiles of the current road are.
+
+    (Not the complete path, just the name of the folder!)
+    """
     sections: Dict[int, RoadSection] = field(default_factory=set)
     """All sections that are (atleast partly) on this tile."""
     id: str = None
@@ -126,7 +129,7 @@ class Tile:
               </geometry>
               <material>
                 <script>
-                  <uri>model://{self.materials_path}/{self.id}</uri>
+                  <uri>model://{self.road_folder_name}/{self.id}</uri>
                   <name>{self.id}</name>
                 </script>
               </material>
@@ -139,8 +142,12 @@ class Tile:
         </model>
         """
 
-    def render_to_file(self):
-        """Render an image of the tile and save it to a file."""
+    def render_to_file(self, roads_path: str):
+        """Render an image of the tile and save it to a file.
+
+        Args:
+            roads_path: Directory in which all roads are located.
+        """
         surface = cairo.ImageSurface(
             cairo.FORMAT_RGB24, int(self.resolution.x), int(self.resolution.y)
         )
@@ -177,7 +184,7 @@ class Tile:
 
         self.id = "tile-{0}".format(hash)
 
-        dir = os.path.join(self.materials_path, self.id)
+        dir = os.path.join(roads_path, self.road_folder_name, self.id)
         if not os.path.exists(dir):
             try:
                 os.makedirs(dir)

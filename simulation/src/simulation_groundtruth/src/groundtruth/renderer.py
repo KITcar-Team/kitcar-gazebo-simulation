@@ -86,26 +86,22 @@ class Renderer:
     tile_resolution: Vector = Vector(512, 512)
 
     @property
-    def materials_path(self) -> str:
+    def roads_path(self) -> str:
         return os.path.join(
             os.environ.get("KITCAR_REPO_PATH"),
             "kitcar-gazebo-simulation",
             "simulation",
             "models",
             "env_db",
-            f".{self.road._name}",
         )
 
     @property
+    def materials_path(self) -> str:
+        return os.path.join(self.roads_path, f".{self.road._name}",)
+
+    @property
     def road_file_path(self) -> str:
-        return os.path.join(
-            os.environ.get("KITCAR_REPO_PATH"),
-            "kitcar-gazebo-simulation",
-            "simulation",
-            "models",
-            "env_db",
-            f"{self.road._name}.py",
-        )
+        return os.path.join(self.roads_path, f"{self.road._name}.py",)
 
     # Previous
     @property
@@ -128,7 +124,7 @@ class Renderer:
                 key,
                 size=self.tile_size,
                 resolution=self.tile_resolution,
-                materials_path=self.materials_path,
+                road_folder_name=f".{self.road._name}",
                 id=id,
                 already_rendered=True,
             )
@@ -184,7 +180,7 @@ class Renderer:
                 sections={sec_id: sections[sec_id] for sec_id in secs},
                 size=self.tile_size,
                 resolution=self.tile_resolution,
-                materials_path=self.materials_path,
+                road_folder_name=f".{self.road._name}",
             )
             for key, secs in active_tiles.items()
         ]
@@ -240,7 +236,7 @@ class Renderer:
                     return
                 rospy.loginfo(f"Render tile {i + 1}/{len(tiles)}.")
                 if not tile.already_rendered:
-                    tile.render_to_file()
+                    tile.render_to_file(roads_path=self.materials_prefix)
 
                 if self.stop_requested:
                     return
