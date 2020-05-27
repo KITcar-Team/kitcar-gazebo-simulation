@@ -66,7 +66,7 @@ class AutomaticDriveNode(NodeBase):
 
         groundtruth_topics = self.param.topics.groundtruth
 
-        rospy.wait_for_service(groundtruth_topics.section, timeout=5)
+        rospy.wait_for_service(groundtruth_topics.section, timeout=30)
 
         # Create groundtruth service proxies
         self.section_proxy = rospy.ServiceProxy(groundtruth_topics.section, SectionSrv)
@@ -97,6 +97,12 @@ class AutomaticDriveNode(NodeBase):
         """Line: Line in the middle of the right lane (where car drives)."""
         # Get all sections
         sections: List[int] = self.section_proxy().sections
+
+        assert len(sections) > 0, (
+            "There must be atleast one road section. "
+            "(The groundtruth node might not be working correctly.)"
+        )
+
         # Concatenate the middle line of all sections
         middle_line = sum(
             (Line(self.lane_proxy(sec.id).lane_msg.middle_line) for sec in sections), Line()

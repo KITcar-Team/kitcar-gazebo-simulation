@@ -42,7 +42,7 @@ Use this launch file to start the complete simulation.-->
        * simulation_evaluation/referee_node -->
   <arg name="evaluate" default="false" />
   <!-- Indicate whether to launch the groundtruth node. -->
-  <arg name="include_groundtruth" default="$(arg evaluate)" />
+  <arg name="include_groundtruth" default="true" />
   <!-- Indicate whether to include the renderer and object controller. -->
   <arg name="include_renderer" default="true" />
   <arg name="include_object_controller" default="true" />

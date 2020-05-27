@@ -105,9 +105,6 @@ Build
 Then build `kitcar-gazebo-repository` by calling `catkin_make` in the simulation folder \
 of this repository.
 
-(*KITcar internal: Other information can be found in* \
-`KITcar-Gazebo-Simulation Wiki <https://wiki.kitcar-team.de/doku.php?id=technik:systemstruktur:simulation:start>`_ ).
-
 Git Lfs
 -------
 
