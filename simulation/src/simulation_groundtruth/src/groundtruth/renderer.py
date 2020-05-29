@@ -236,7 +236,7 @@ class Renderer:
                     return
                 rospy.loginfo(f"Render tile {i + 1}/{len(tiles)}.")
                 if not tile.already_rendered:
-                    tile.render_to_file(roads_path=self.materials_prefix)
+                    tile.render_to_file(roads_path=self.roads_path)
 
                 if self.stop_requested:
                     return
