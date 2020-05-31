@@ -1,12 +1,12 @@
 import unittest
 import random
 import functools
-from simulation.utils.geometry import Line, Polygon, Transform
-
-from simulation.src.simulation_evaluation.src.speaker.speakers import EventSpeaker
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 
+from simulation.utils.geometry import Line, Polygon, Transform
+
+from .. import EventSpeaker
 from . import fake_msgs
 from . import utils
 

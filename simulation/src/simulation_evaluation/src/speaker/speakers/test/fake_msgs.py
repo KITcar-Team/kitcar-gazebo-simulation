@@ -1,5 +1,4 @@
 from typing import List
-from simulation.utils.geometry import Line, Vector, Polygon, Point
 import math
 import itertools
 import random
@@ -8,6 +7,7 @@ import simulation_groundtruth.msg as groundtruth_msgs
 import simulation_groundtruth.srv as groundtruth_srvs
 
 from simulation.utils.road.sections.line_tuple import LineTuple
+from simulation.utils.geometry import Line, Vector, Polygon, Point
 
 
 def create_points(
