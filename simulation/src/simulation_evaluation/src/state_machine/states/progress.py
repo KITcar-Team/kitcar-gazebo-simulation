@@ -41,9 +41,6 @@ class BeforeStart(State):
             Class object of next state. If no state change was detected here, check for failure state before
             returning this state.
         """
-        # Throw an error when car goes from start to end directly.
-        assert input_msg != SpeakerMsg.END_ZONE
-
         if input_msg == SpeakerMsg.DRIVING_ZONE:
             return state_machine.running
 
@@ -77,9 +74,6 @@ class Running(State):
             Class object of next state. If no state change was detected here, check for failure state before
             returning this state.
         """
-        # Throw an error when car goes into start zone again. (Will throw on round trips on purpose)
-        assert input_msg != SpeakerMsg.START_ZONE
-
         if input_msg == SpeakerMsg.END_ZONE:
             return state_machine.finished
 
