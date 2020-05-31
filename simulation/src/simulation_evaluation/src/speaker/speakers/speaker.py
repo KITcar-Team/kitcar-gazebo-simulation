@@ -1,15 +1,8 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""The base class for all other speakers and the definition of a namedtuple containing \
-        road lines of a section."""
+"""Base class for all other speakers."""
 import bisect
 import itertools
 import functools
-
-from simulation.utils.geometry import Polygon, Line, Pose, Vector
 from typing import Callable, List, Any, Iterable, Tuple
-
-from . import export
 
 from gazebo_simulation.msg import CarState as CarStateMsg
 from simulation_groundtruth.msg import (
@@ -19,10 +12,10 @@ from simulation_groundtruth.msg import (
 )
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 
+from simulation.utils.geometry import Polygon, Line, Pose, Vector
 from simulation.utils.road.sections.line_tuple import LineTuple
 
 
-@export
 class Speaker:
     """Base class for all speakers.
 
@@ -76,8 +69,7 @@ class Speaker:
         """Speak about the current observations."""
         return []
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def middle_line(self) -> Line:
         """Complete middle line."""
         # Get the middle line of each seaction
@@ -85,8 +77,7 @@ class Speaker:
         # Sum it up (and start with empty line)
         return sum(middle_line_pieces, Line())
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def left_line(self) -> Line:
         """Complete left line."""
         # Get the left line of each seaction
@@ -94,8 +85,7 @@ class Speaker:
         # Sum it up (and start with empty line)
         return sum(left_line_pieces, Line())
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def right_line(self) -> Line:
         """Complete right line."""
         # Get the right line of each seaction
@@ -108,8 +98,7 @@ class Speaker:
         """Position of the car projected on the middle line (== Length driven so far)."""
         return self.middle_line.project(self.car_pose)
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def section_intervals(self) -> List[Tuple[float, float]]:
         """Get (start,end) intervals of all sections."""
         # First extract the individual lengths of each section

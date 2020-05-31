@@ -1,13 +1,10 @@
-from simulation.src.simulation_evaluation.src.speaker.speakers.speaker import Speaker
+from typing import List
 
 from simulation_evaluation.msg import Broadcast as BroadcastMsg
 
-from typing import List
-
-from . import export
+from .speaker import Speaker
 
 
-@export
 class BroadcastSpeaker(Speaker):
     """Keep high level information about the drive \
             (like speed, distance driven, current section).

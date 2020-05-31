@@ -2,16 +2,14 @@ import unittest
 import random
 import functools
 
-from simulation.utils.geometry import Line, Pose, Polygon, Point
-
-from simulation.src.simulation_evaluation.src.speaker.speakers import AreaSpeaker
-
-from . import fake_msgs
-from . import utils
-
-
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 from gazebo_simulation.msg import CarState as CarStateMsg
+
+from simulation.utils.geometry import Line, Pose, Polygon, Point
+
+from .. import AreaSpeaker
+from . import fake_msgs
+from . import utils
 
 
 class ModuleTest(unittest.TestCase):

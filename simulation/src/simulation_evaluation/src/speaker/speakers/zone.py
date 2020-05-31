@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Class definition of the ZoneSpeaker."""
 
-from simulation.utils.geometry import Point
+import bisect
+import functools
+from typing import Callable, List, Any, Tuple
 
 # Messages
 from simulation_evaluation.msg import Speaker as SpeakerMsg
@@ -11,21 +11,14 @@ from simulation_groundtruth.msg import (
     Lane as LaneMsg,
     LabeledPolygon as LabeledPolygonMsg,
 )
-from typing import Callable, List, Any, Tuple
-
 import simulation_groundtruth.srv as groundtruth_srv
-import bisect
 
-import functools
-
+from simulation.utils.geometry import Point
 import simulation.utils.road.sections.type as road_section_type
 
-from simulation.src.simulation_evaluation.src.speaker.speakers.speaker import Speaker
-
-from . import export
+from .speaker import Speaker
 
 
-@export
 class ZoneSpeaker(Speaker):
     """Information about the zone of the road the car is in."""
 
@@ -73,8 +66,7 @@ class ZoneSpeaker(Speaker):
         # Get total length.
         self.total_length = self.middle_line.length
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def overtaking_zones(self) -> List[Tuple[float, float]]:
         """Intervals in which the car is allowed to overtake \
                 along the :py:attr:`Speaker.middle_line`.
@@ -142,14 +134,12 @@ class ZoneSpeaker(Speaker):
 
         return intervals
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def stop_zones(self) -> List[Tuple[float, float]]:
         """Intervals in which the car is supposed to stop (in front of intersections)."""
         return self._intersection_yield_zones(groundtruth_srv.IntersectionSrvResponse.STOP)
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def halt_zones(self) -> List[Tuple[float, float]]:
         """Intervals in which the car is supposed to halt (in front of intersections)."""
         return self._intersection_yield_zones(groundtruth_srv.IntersectionSrvResponse.YIELD)
