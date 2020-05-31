@@ -165,13 +165,15 @@ class VehicleSimulationLinkNode(NodeBase):
 
             # The state_estimation message contains the speed in vehicle coordinates,
             # the vehicle world rotation converts the speed into simulation coordinates.
-            speed_x, speed_y, _ = vehicle_simulation_rotation.rotate(
+            speed_x, speed_y, speed_z = vehicle_simulation_rotation.rotate(
                 (state_estimation.speed_x, state_estimation.speed_y, 0)
             )
 
             new_vals = []
             new_vals.append((SetModelTwistMsg.LINEAR_X, speed_x))
             new_vals.append((SetModelTwistMsg.LINEAR_Y, speed_y))
+            if self.param.set_z_twist:
+                new_vals.append((SetModelTwistMsg.LINEAR_Z, speed_z))
             new_vals.append(
                 (SetModelTwistMsg.ANGULAR_Z, self.latest_state_estimation.yaw_rate)
             )
@@ -197,6 +199,8 @@ class VehicleSimulationLinkNode(NodeBase):
             new_vals = []
             new_vals.append((SetModelPoseMsg.POSITION_X, tf.x))
             new_vals.append((SetModelPoseMsg.POSITION_Y, tf.y))
+            if self.param.set_z_pose:
+                new_vals.append((SetModelPoseMsg.POSITION_Z, tf.z))
             new_vals.append((SetModelPoseMsg.ORIENTATION_W, tf.rotation.w))
             new_vals.append((SetModelPoseMsg.ORIENTATION_X, tf.rotation.x))
             new_vals.append((SetModelPoseMsg.ORIENTATION_Y, tf.rotation.y))
