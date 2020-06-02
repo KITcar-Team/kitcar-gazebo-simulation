@@ -14,14 +14,16 @@ Gazebo also allows to programmatically change the position (and other properties
 In particular, plugins can be defined and attached to multiple models, sensors, and more,
 to modify a wide variety of properties.
 
-If you take a look at the beginning of **Dr.Drift**'s model definition in \
-``simulation/models/model_db/dr_drift/model.sdf``
+If you take a look **Dr.Drift**'s model definition in \
+``simulation/src/gazebo_simulation/param/car_specs/dr_drift/model.urdf``
+you will find the line
 
-.. literalinclude:: ../../../simulation/models/model_db/dr_drift/model.sdf
-   :language: xml
-   :lines: 1-7
+.. code-block:: xml
 
-you can see that the *dr_drift*-model is equipped with the *model_plugin_link*.
+   <plugin name="model_plugin_link" filename="libmodel_plugin_link.so"/>
+
+
+which equipes the *model_plugin_link*.
 
 The *model_plugin_link* is defined in :ref:`gazebo_simulation`.
 When attached to a model it listens to topics through which the pose and \
