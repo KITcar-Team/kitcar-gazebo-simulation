@@ -19,6 +19,13 @@ ROS_ topics allow to easily access sensor data and modify the car's position or 
 
 The documentation is available at https://doc.kitcar-team.de/kitcar-gazebo-simulation.
 
+.. _CaroloCup: https://wiki.ifr.ing.tu-bs.de/carolocup/news
+.. _Gazebo: http://gazebosim.org
+.. _ROS: https://www.ros.org/
+
+The repositories usage is licensed under a MIT license (''LICENSE'').
+If external files are used, a specific LICENSE-file is provided in the same folder, covering the usage of those files.
+
 .. readme_installation
 
 Installation
