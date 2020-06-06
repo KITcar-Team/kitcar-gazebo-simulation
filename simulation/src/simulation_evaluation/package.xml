@@ -4,8 +4,8 @@
   <version>0.0.0</version>
   <description>The simulation_evaluation package</description>
 
-  <maintainer email="kitcar-organisation@lists.kit.edu">KITcar</maintainer>
-  <license>TODO</license>
+  <maintainer email="kitcar-simulation@lists.kit.edu">KITcar Simulation</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>message_generation</build_depend>
