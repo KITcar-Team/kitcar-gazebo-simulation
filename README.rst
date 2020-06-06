@@ -10,7 +10,7 @@ and simulate a car driving on the generated roads.
 
    View of the Gazebo user interface displaying the default_road.
 
-ROS_ topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the bevahior of the car.
+ROS topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the bevahior of the car.
 
 .. figure:: docs/content/tutorials/resources/simulation_camera.gif
    :width: 400
@@ -31,10 +31,10 @@ If external files are used, a specific LICENSE-file is provided in the same fold
 Installation
 ============
 
-The simulation has been developed and primarily used on Ubuntu 18.04.
+The simulation has been developed and primarily used on Ubuntu 18.04 and Ubuntu 20.04.
 Other Linux distributions were not tested.
-Additionally, `ROS melodic <http://wiki.ros.org/melodic/Installation/Ubuntu>`_ \
-must be installed with all dependencies.
+Additionally, `ROS Installation <http://wiki.ros.org/ROS/Installation>`_ \
+must be installed.
 
 Clone
 -----
@@ -87,24 +87,16 @@ ROS
 ---
 
 ROS must also be installed on your machine.
-If it's not yet installed, follow the `installation guide <http://wiki.ros.org/melodic/Installation/Ubuntu>`_.
+If it's not yet installed, follow the `installation guide <http://wiki.ros.org/ROS/Installation>`_.
 
 Init-Script
 -----------
 
-Therefore the init script must be called.
+To install required packages run the init script. The packages are installed for the current user.
 Change into `kitcar-gazebo-simulation` folder and run the script::
 
    cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation
    ./init/init.sh
-
-(*Ignore any error thrown by pip when trying to install pygobject,
-it seems to be irrelevant.*)
-
-If there is an error with `libignition-math2` make sure \
-you have the latest version installed by running::
-
-   sudo apt upgrade libignition-math2 libcairo2-dev
 
 Build
 -----
@@ -127,8 +119,8 @@ Let's test if everything works. Open up a new terminal.
 
 You can now start the simulation with
 
-  ::
+::
 
-     roslaunch gazebo_simulation master.launch
+   roslaunch gazebo_simulation master.launch
 
 Gazebo should now open with the car and a road.

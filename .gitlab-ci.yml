@@ -12,20 +12,20 @@ before_script:
   #Run the container start script to enable the pulseaudio & xserver
   - bash /start_script.sh
 
-  # Install packages
-  - sudo apt-get update && cat packages.txt | xargs sudo apt-get install -y
-
   # Print out python version for debugging
   - python3 -V
   #Install python packages # use a virtual environment to use CI cache
   - pip3 install virtualenv
   - virtualenv .venv
   - source .venv/bin/activate
-  - pip3 install -r requirements.txt
 
-  - export KITCAR_REPO_PATH=/builds/kitcar/
-  #Source init / This fails when the simulation has not been built
+  - export KITCAR_REPO_PATH=/builds/kitcar
+
+  # Install packages and requirements
+  - yes 1 | ./init/init.sh || true
+
   - source init/bashrc || true
+
 
 stages:
   - build
