@@ -30,7 +30,7 @@ Use this launch file to start the complete simulation.-->
   <!-- Indicate whether the car is spawned. -->
   <arg name="include_car" default="true" />
   <!-- Indicate whether the KITcar_brain is started. -->
-  <arg name="include_brain" default="true" />
+  <arg name="include_brain" default="false" />
   <!-- Indicate whether KITcar_jetson is started. -->
   <arg name="include_jetson" default="false" />
   <arg name="jetson_debug" default="false" />
@@ -39,9 +39,9 @@ Use this launch file to start the complete simulation.-->
        The vehicle simulation is used to simulate vehicle's movement based on KITcar_brain's commands.
        If KITcar_brain is not running, automatic_drive can be used to "drive" the vehicle on the road.
    -->
-  <arg name="include_vehicle_simulation" default="true" />
-  <arg name="include_automatic_drive" default="false" />
-  <arg name="include_mission_mode_plugin" default="$(arg gui)" />
+  <arg name="include_vehicle_simulation" default="false" />
+  <arg name="include_automatic_drive" default="true" />
+  <arg name="include_mission_mode_plugin" default="false" />
   <!-- Indicate whether to launch the car_state_node. -->
   <arg name="car_state" default="true" />
   <!-- Indicate whether to launch the evaluation pipeline. This includes:
