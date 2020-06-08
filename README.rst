@@ -17,7 +17,7 @@ ROS topics allow to easily access sensor data and modify the car's position or s
 
    Front Camera Output of the Car.
 
-The documentation is available at https://doc.kitcar-team.de/kitcar-gazebo-simulation.
+The documentation is available at https://public-doc.kitcar-team.de/kitcar-gazebo-simulation.
 
 .. _CaroloCup: https://wiki.ifr.ing.tu-bs.de/carolocup/news
 .. _Gazebo: http://gazebosim.org
@@ -45,6 +45,8 @@ These are some ways to get it:
 * **KITcar internal**. Clone this repository in the same directory as `kitcar-ros`. ::
 
    git clone git@git.kitcar-team.de:kitcar/kitcar-gazebo-simulation.git $KITCAR_REPO_PATH/kitcar-gazebo-simulation
+
+* **KITcar external**. You can clone the repository from `Github <https://github.com/KITcar-Team/kitcar-gazebo-simulation.git>`_.
 
 
 $KITCAR_REPO_PATH
