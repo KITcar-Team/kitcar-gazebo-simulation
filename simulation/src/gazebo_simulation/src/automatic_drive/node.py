@@ -45,7 +45,7 @@ class AutomaticDriveNode(NodeBase):
     def __init__(self):
 
         super().__init__(
-            name="automatic_drive_node", log_level=rospy.DEBUG
+            name="automatic_drive_node", log_level=rospy.INFO
         )  # Name can be overwritten in launch file
 
         self._driving_state = DrivingState(0, rospy.Time.now().to_sec())

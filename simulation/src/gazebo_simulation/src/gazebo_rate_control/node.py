@@ -21,9 +21,9 @@ class GazeboRateControlNode(NodeBase):
     """
 
     def __init__(self):
-        """ initialize the node"""
+        """Initialize the node"""
 
-        super().__init__(name="gazebo_rate_control_node", log_level=rospy.DEBUG)
+        super().__init__(name="gazebo_rate_control_node", log_level=rospy.INFO)
 
         self.run(function=self.update, rate=self.param.update_rate.control.rate)
 
