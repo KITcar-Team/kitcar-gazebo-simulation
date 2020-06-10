@@ -1,11 +1,14 @@
 from simulation.utils.road.sections import SurfaceMarking
 import os
 
-from gi.repository import Rsvg  # noqa: 402
-
 import simulation.utils.road.renderer.utils as utils  # no
 from simulation.utils.road.sections.road_section import RoadSection, MarkedLine
 from simulation.utils.geometry import Vector, Line, Polygon
+
+from gi import require_version
+
+require_version("Rsvg", "2.0")
+from gi.repository import Rsvg  # noqa: 402
 
 
 def draw(ctx, surface_marking: SurfaceMarking):

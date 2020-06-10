@@ -53,6 +53,7 @@ case "$option" in
     source ~/.profile
 
     # Install pre-commit hook
+    cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation
     pre-commit install
   ;;
 
