@@ -1,12 +1,13 @@
 from dataclasses import dataclass
-import yaml
 
 from simulation.utils.geometry import Point, Vector
 from simulation.utils.urdf import JointDynamics, JointLimit
 
+from .specs import Specs
+
 
 @dataclass
-class CarSpecs:
+class CarSpecs(Specs):
     wheelbase: float
     track: float
     vehicle_width: float
@@ -26,23 +27,6 @@ class CarSpecs:
     max_steering_angle_back_right: float
 
     tire_mass: float = 0.5
-
-    @classmethod
-    def from_file(cls, file_path: str) -> "CarSpecs":
-        with open(file_path) as file:
-            car_specs = CarSpecs(**yaml.load(file, Loader=yaml.SafeLoader))
-        return car_specs
-
-    def save(self, file_path: str):
-        """Save to file.
-
-        Args:
-            file_path: Path to file.
-        """
-        with open(file_path, "w+") as file:
-            yaml.dump(
-                dict(self.__dict__), file, Dumper=yaml.SafeDumper, default_flow_style=False
-            )
 
     @property
     def body_height(self):

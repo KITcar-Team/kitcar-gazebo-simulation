@@ -8,9 +8,11 @@ import yaml
 
 from simulation.utils.geometry import Vector
 
+from .specs import Specs
+
 
 @dataclass
-class CameraSpecs:
+class CameraSpecs(Specs):
     """Camera specifications usually defined in kitcar-ros.
 
     With this class, the real calibration is used to create the simulated camera model.
@@ -60,13 +62,6 @@ class CameraSpecs:
 
     image_topic: str = "/simulation/sensors/raw/camera"
     info_topic: str = "/simulation/sensors/camera/info"
-
-    @classmethod
-    def from_file(cls, file_path: str) -> "CameraSpecs":
-        """Load camera specs from file."""
-        with open(file_path) as file:
-            car_specs = CameraSpecs(**yaml.load(file, Loader=yaml.SafeLoader))
-        return car_specs
 
     @property
     def R(self) -> np.matrix:
@@ -135,5 +130,6 @@ class CameraSpecs:
         if remove_sizes:
             del data["capture_size"]
             del data["output_size"]
+
         with open(file_path, "w+") as file:
             yaml.dump(data, file, Dumper=yaml.SafeDumper, default_flow_style=False)
