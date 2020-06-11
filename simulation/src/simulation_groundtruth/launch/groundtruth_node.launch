@@ -6,12 +6,15 @@
   <arg name="road" />
   <!-- If the value of seed is not changed, it will not be considered by the groundtruth node! -->
   <arg name="seed" default="__no_value__" />
+  <!-- Ensure that the road is not loaded from cache but rendered from scratch. -->
+  <arg name="force_reload_road" default="false" />
   <arg name="rviz" default="true" />
   <arg name="rate" default="1" />
   <!-- Start the groundtruth node -->
   <node name="groundtruth_node" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="groundtruth_node" output="screen">
     <param name="road" value="$(arg road)" />
     <param name="seed" value="$(arg seed)" />
+    <param name="force_reload_road" value="$(arg force_reload_road)" />
     <param name="start_groundtruth" value="$(arg start_groundtruth)" />
     <param name="start_renderer" value="$(arg start_renderer)" />
     <param name="start_object_controller" value="$(arg start_object_controller)" />

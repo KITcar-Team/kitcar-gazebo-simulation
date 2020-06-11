@@ -84,6 +84,7 @@ class Renderer:
     """Function that is called, when the renderer's state changes."""
     tile_size: Vector = Vector(2, 2)
     tile_resolution: Vector = Vector(512, 512)
+    force_reload: bool = False
 
     @property
     def roads_path(self) -> str:
@@ -220,7 +221,7 @@ class Renderer:
 
         try:
             self.info_callback(GroundtruthStatus.RENDER_NEW_TILES)
-            if self._prev_rendering_available():
+            if self._prev_rendering_available() and not self.force_reload:
                 tiles = self._load_prev_tiles()
             else:
                 # Delete old tiles
