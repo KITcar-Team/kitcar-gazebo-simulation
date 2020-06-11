@@ -12,7 +12,7 @@ def _get_depth_properties(name: str) -> DepthCameraProperties:
         image_width=2,
         image_height=2,
         image_format="L8",
-        clip_near=0.01,
+        clip_near=0.03,
         clip_far=2,
         point_cloud_cutoff=0.005,
         image_topic=NS + f"raw/distance_{name}",

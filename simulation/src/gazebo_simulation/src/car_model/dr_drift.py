@@ -74,7 +74,7 @@ class DrDrift(XmlObject):
         )
         chassis_visual = Visual(
             origin=visual_origin,
-            geometry=Geometry(Mesh(filename="file://meshes/dr_drift.stl")),
+            geometry=Geometry(Mesh(filename="file://meshes/mr_fast.stl")),
             material=Material("mat", color=Vector(1, 1, 1)),
         )
         chassis_collision = Collision(origin=chassis_origin, geometry=Geometry(chassis_box))
