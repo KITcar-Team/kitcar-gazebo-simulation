@@ -98,6 +98,8 @@ Change into `kitcar-gazebo-simulation` folder and run the script::
    cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation
    ./init/init.sh
 
+(*Ubuntu 18.04: Ignore any error thrown by pip when trying to install pygobject, it seems to be irrelevant.*)
+
 Build
 -----
 

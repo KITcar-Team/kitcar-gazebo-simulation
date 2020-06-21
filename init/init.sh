@@ -48,8 +48,17 @@ case "$option" in
     sudo apt-get update && sudo xargs --arg-file=$INIT_DIR/packages_$UBUNTU_VERSION.txt apt-get install -y
 
     # Install python packages
-    echo -e "\nStart installing python packages from \e[2minit/requirements.txt\e[22m (requires sudo priviliges)"
-    pip3 install --no-warn-script-location -r $INIT_DIR/requirements.txt
+    echo -e "\nStart installing python packages from \e[2minit/requirements.txt\e[22m"
+    case "$UBUNTU_VERSION" in
+      "focal") # Ubuntu 20.04
+        pip3 install --no-warn-script-location -r $INIT_DIR/requirements.txt;;
+      "bionic")
+        pip3 install -r $INIT_DIR/requirements.txt;;
+      *)
+        echo -e "\n\e[31mERROR: You are not using the correct version of Ubuntu (bionic or focal)!\e[39m" ;
+        exit;
+    esac
+    
     source ~/.profile
 
     # Install pre-commit hook
