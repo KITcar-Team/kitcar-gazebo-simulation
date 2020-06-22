@@ -1,1 +1,1 @@
-state_estimation: "/state_estimation/state_estimation/state_estimation"
+state_estimation: "/control_debug/vehicle_simulation/true_state"

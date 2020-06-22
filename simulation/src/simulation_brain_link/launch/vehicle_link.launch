@@ -19,11 +19,14 @@
 
 
   <!-- Start the vehicle simulation -->
-  <include if="$(arg include_vehicle_simulation)" file="$(find control_debug)/launch/vehicle_simulation_node.launch">
+  <include if="$(arg include_vehicle_simulation)" file="$(find control_debug)/launch/vehicle_simulation.launch">
     <arg name="car_name" value="$(arg car_name)"/>
     <!--arg name="coupled_type" value="high"/>
     <arg name="vehicle_simulation" value="coupled"/-->
   </include>
+
+  <!-- Ensure that the state estimation is published -->
+  <include if="$(arg include_vehicle_simulation)" file="$(find control_debug)/launch/state_estimation_simulation_node.launch"/>
 
   <include file="$(find simulation_brain_link)/launch/vehicle_simulation_link.launch">
     <arg name="car_name" value="$(arg car_name)"/>
