@@ -1,4 +1,5 @@
 git-lfs
+ros-melodic-desktop
 ros-melodic-gazebo-ros-control
 ros-melodic-gazebo-ros-pkgs
 python3.8
