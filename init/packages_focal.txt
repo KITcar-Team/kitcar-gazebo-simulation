@@ -1,4 +1,5 @@
 git-lfs
+ros-noetic-desktop
 ros-noetic-gazebo-ros-control
 ros-noetic-gazebo-ros-pkgs
 python3.8

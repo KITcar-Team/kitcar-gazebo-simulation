@@ -1,36 +1,28 @@
-image: kitcar/docker-gazebo-build:python3.8
+image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation:focal
 
 variables:
   GIT_STRATEGY: clone
   GIT_LFS_SKIP_SMUDGE: "1"  #  Don't pull Git LFS
-
-cache:
-  paths:
-    - .venv/
+  CAR_NAME: dr_drift
+  KITCAR_REPO_PATH: /builds/kitcar
 
 before_script:
-  #Run the container start script to enable the pulseaudio & xserver
-  - bash /start_script.sh
+  # Run the container start script to enable the pulseaudio & xserver
+  - bash init/docker_start_script.sh
 
   # Print out python version for debugging
   - python3 -V
-  #Install python packages # use a virtual environment to use CI cache
-  - pip3 install virtualenv
-  - virtualenv .venv
-  - source .venv/bin/activate
-
-  - export KITCAR_REPO_PATH=/builds/kitcar
 
   # Install packages and requirements
   - yes 1 | ./init/init.sh || true
 
   - source init/bashrc || true
 
-
 stages:
   - build
   - test
   - deploy
+
 
 ######## BUILD STAGE ########
 # buikd kitcar-ros and simulation
@@ -97,4 +89,3 @@ build-documentation:
     paths:
       - docs/_build/html/*
     expire_in: 2 day
-
