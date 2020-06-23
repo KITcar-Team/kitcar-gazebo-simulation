@@ -1,0 +1,17 @@
+git-lfs
+ros-melodic-gazebo-ros-control
+ros-melodic-gazebo-ros-pkgs
+python3.8
+gazebo9
+libgazebo9-dev
+python-opencv
+python3-pip
+libgirepository1.0-dev
+gcc
+libignition-math2
+libcairo2-dev
+pkg-config
+python3.8-dev
+gir1.2-gtk-3.0
+tree
+doxygen

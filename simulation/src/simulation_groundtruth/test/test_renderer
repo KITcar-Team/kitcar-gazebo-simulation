@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+import sys
+import rospy
+import unittest
+from typing import List
+
+from simulation.utils.ros_base.node_base import NodeBase
+
+from simulation.utils.road.sections import RoadSection
+
+from simulation.utils.road.renderer.tile import Tile
+
+from simulation.src.simulation_groundtruth.src.groundtruth.node import GroundtruthNode
+
+from simulation.src.simulation_groundtruth.src.groundtruth.renderer import Renderer
+from shapely.geometry import MultiPolygon
+
+from simulation.utils.road.road import Road
+from simulation.utils.geometry import Vector
+from gazebo_simulation.msg import CarState as CarStateMsg
+from simulation_groundtruth.msg import GroundtruthStatus
+
+PKG = "simulation_groundtruth"
+
+
+class RendererTestNode(unittest.TestCase, GroundtruthNode):
+    """Unittest which tests the groundtruth node.
+
+    The basic idea is to subclass the groundtruth node
+    and write functions to test if the renderer \
+    works as it should.
+
+    Primarily two things are tested:
+        _test_tile_generation: Are the correct tiles being generated?
+        _test_tile_spawning: Are all tiles spawned?
+    """
+
+    def setUp(self):
+        self.__road_sections: List[RoadSection] = []
+        self.__spawned_models: List[str] = []
+        NodeBase.__init__(self, name="renderer_test", log_level=rospy.DEBUG)
+
+        self.renderer = Renderer(
+            Road(),
+            remove_model=self._remove_model,
+            spawn_model=self._spawn_model,
+            pause_gazebo=self._pause_gazebo,
+            unpause_gazebo=self._unpause_gazebo,
+            info_callback=self.update_groundtruth_status,
+            tile_size=Vector(self.param.tile_size),
+            tile_resolution=Vector(self.param.tile_resolution),
+        )
+        self.model_names = []
+        self.car_state = CarStateMsg()
+        self._groundtruth_status = GroundtruthStatus()
+
+        self.start()
+
+    def _prev_rendering_available(self):
+        return False
+
+    @property
+    def prev_rendering(self):
+        return None
+
+    def _spawn_model(self, model_xml):
+        """Catch all models that are being spawned."""
+        self.__spawned_models.append(model_xml)
+        super()._spawn_model(model_xml)
+
+    def _test_tile_generation(self):
+        self.update()
+        self.__road_sections = self._load_road().sections
+
+        rospy.logdebug(f"Testing renderer with road sections {self.__road_sections}")
+
+        tiles: List[Tile] = self.renderer._create_new_tiles()
+
+        for tile in tiles:
+            for sec in self.__road_sections:
+                # Ensure that iff the section is within the tile,
+                # it is also added to the tiles sections list
+                self.assertEqual(
+                    tile.frame.intersects(sec.get_bounding_box()),
+                    sec.id in tile.sections,
+                    msg=f"tile frame: {tile.frame}, section's box: {sec.get_bounding_box()},"
+                    f"sec id: {sec.id}, tile's sections:{tile.sections.keys()}",
+                )
+
+        # Assert that every road section is completely covered with tiles
+        for sec in self.__road_sections:
+            self.assertTrue(
+                MultiPolygon(tile.frame for tile in tiles if (sec.id in tile.sections))
+                .buffer(0.01)
+                .contains(sec.get_bounding_box()),
+                msg=f"Section: {sec}, Tile sections: {[tile.sections.keys() for tile in tiles]},",
+            )
+
+    def _test_tile_spawning(self):
+        self.__spawned_models = []
+        tiles: List[Tile] = self.renderer._create_new_tiles()
+        self.renderer.load([])
+
+        for tile in tiles:
+            self.assertTrue(
+                any((tile.name in model_xml) for model_xml in self.__spawned_models),
+                msg=f"tile name: {tile.name}, {self.__spawned_models}",
+            )
+
+    def test_renderer(self):
+        self._test_tile_generation()
+        self._test_tile_spawning()
+
+
+if __name__ == "__main__":
+    import rostest
+
+    rostest.rosrun(PKG, "test_renderer", RendererTestNode, sys.argv)

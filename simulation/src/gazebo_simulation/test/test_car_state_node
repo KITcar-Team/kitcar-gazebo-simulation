@@ -1,0 +1,188 @@
+#!/usr/bin/env python3
+import sys
+import unittest
+import rospy
+import math
+import random
+
+# Messages
+from gazebo_simulation.msg import CarState as CarStateMsg
+from gazebo_simulation.msg import SetModelTwist, SetModelPose
+from visualization_msgs.msg import Marker
+
+from simulation.utils.geometry import Vector, Pose, Point, Polygon
+from simulation.utils.ros_base.node_base import NodeBase
+from functools import partial
+
+# NOT NICE
+
+PKG = "gazebo_simulation"
+
+
+class CarStateNodeTest(unittest.TestCase, NodeBase):
+    """Unittest that is executed through a ROS test and checks the functionality of the car_state_node
+    and the car_state_visualization_node.
+    """
+
+    @property
+    def set_twist_topic(self):
+        return (
+            self.param.topics.model_plugin.namespace
+            + "/"
+            + self.param.car_name
+            + "/"
+            + self.param.topics.model_plugin.set.twist
+        )
+
+    @property
+    def set_pose_topic(self):
+        return (
+            self.param.topics.model_plugin.namespace
+            + "/"
+            + self.param.car_name
+            + "/"
+            + self.param.topics.model_plugin.set.pose
+        )
+
+    def assert_approx_equal_pose(self, pose, pose2):
+        self.assertAlmostEqual(Vector(pose), Vector(pose2))
+        self.assertAlmostEqual(
+            pose.get_angle(), pose2.get_angle(), delta=math.radians(0.02)
+        )
+
+    def setUp(self):
+        NodeBase.__init__(self, name="test_model_plugin_node")
+
+        self.set_twist_publisher = rospy.Publisher(
+            self.set_twist_topic, SetModelTwist, queue_size=1
+        )
+        self.set_pose_publisher = rospy.Publisher(
+            self.set_pose_topic, SetModelPose, queue_size=1
+        )
+
+        self.car_state_listener = rospy.Subscriber(
+            self.param.topics.car_state, CarStateMsg, partial(self.callbacks, "car_state")
+        )
+        self.rviz_frame_listener = rospy.Subscriber(
+            self.param.topics.rviz.frame, Marker, partial(self.callbacks, "frame")
+        )
+        self.rviz_cone_listener = rospy.Subscriber(
+            self.param.topics.rviz.cone, Marker, partial(self.callbacks, "cone")
+        )
+
+        # Reset pose / Reset twist
+        self.set_twist(
+            (SetModelTwist.LINEAR_X, 0),
+            (SetModelTwist.LINEAR_Y, 0),
+            (SetModelTwist.ANGULAR_Z, 0),
+        )
+        self.set_complete_pose(Pose([0, 0, 0], 0))
+
+        random.seed(self.param.seed + self._testMethodName)
+        # Wait
+        rospy.wait_for_message(self.param.topics.car_state, CarStateMsg)
+        rospy.sleep(self.param.sleep_time)
+
+        # Get initial z
+        self.init_z = self.last_received_pose.z
+
+    def set_twist(self, *args):
+        req = SetModelTwist()
+        req.keys, req.values = zip(*args)
+
+        self.set_twist_publisher.publish(req)
+
+    def set_pose(self, *args):
+        req = SetModelPose()
+        req.keys, req.values = zip(*args)
+        self.set_pose_publisher.publish(req)
+
+    def set_complete_pose(self, pose: Pose):
+        self.set_pose(
+            (SetModelPose.POSITION_X, pose.x),
+            (SetModelPose.POSITION_Y, pose.y),
+            (SetModelPose.POSITION_Z, pose.z),
+            (SetModelPose.ORIENTATION_W, pose.orientation.w),
+            (SetModelPose.ORIENTATION_X, pose.orientation.x),
+            (SetModelPose.ORIENTATION_Y, pose.orientation.y),
+            (SetModelPose.ORIENTATION_Z, pose.orientation.z),
+        )
+
+    def callbacks(self, desc, msg):
+        if desc == "car_state":
+            self.last_received_pose = Pose(msg.pose)
+            self.last_received_twist = msg.twist
+            self.last_car_state = msg
+        elif desc == "frame":
+            self.last_frame = msg
+        elif desc == "cone":
+            self.last_cone = msg
+
+    def test_set_pose(self):
+        """Test to set a number of random poses and check if the model is always placed, where it should be!"""
+
+        for i in range(0, 20):
+            pose = Pose([random.random(), random.random(), self.init_z], random.random())
+            self.set_complete_pose(pose)
+
+            # Wait
+            rospy.sleep(self.param.sleep_time)
+
+            self.assert_approx_equal_pose(pose, self.last_received_pose)
+
+    def test_set_twist(self):
+        """Test to set a number of random twists and check if the model is always moving how it should be!"""
+
+        for i in range(0, 20):
+            lin = Vector(random.random(), random.random(), 0)
+            ang = Vector(0, 0, random.random())
+
+            self.set_twist(
+                (SetModelTwist.LINEAR_X, lin.x),
+                (SetModelTwist.LINEAR_Y, lin.y),
+                (SetModelTwist.ANGULAR_Z, ang.z),
+            )
+
+            # Wait
+            rospy.sleep(self.param.sleep_time)
+
+            rospy.loginfo(
+                f"Received: lin:{Vector(self.last_received_twist.linear)}, \
+                        ang:{Vector(self.last_received_twist.linear)},\nexpected: lin:{lin}, ang:{ang}"
+            )
+
+            self.assertAlmostEqual(Vector(self.last_received_twist.linear), lin)
+            self.assertAlmostEqual(Vector(self.last_received_twist.angular), ang)
+
+    def test_frame_cone_and_viz(self):
+        """Basically just tell gazebo to put the car somewhere and check if CarStateMsg contains the new position.
+        Also test the visualization by making sure, that the topics receive rviz markers."""
+
+        pose = Pose(Point(3, 4, self.init_z), math.pi)
+
+        self.set_complete_pose(pose)
+
+        # Wait for some time...
+        rospy.sleep(self.param.sleep_time)
+
+        # Check if last message is correct
+        self.assert_approx_equal_pose(pose, self.last_received_pose)
+
+        # Check if there were any rviz markers
+        self.assertIsNotNone(self.last_frame)
+        self.assertIsNotNone(self.last_cone)
+
+        # Some minimal sanity checks
+        frame = Polygon(self.last_frame.points)
+        cone = Polygon(self.last_cone.points)
+
+        self.assertTrue(frame.contains(pose))  # Frame should contains the vehicles position
+        self.assertTrue(
+            frame.intersects(cone)
+        )  # View cone should start inside the cars frame and therefore also intersect
+
+
+if __name__ == "__main__":
+    import rostest
+
+    rostest.rosrun(PKG, "test_car_state_node", CarStateNodeTest, sys.argv)

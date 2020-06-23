@@ -1,0 +1,64 @@
+<!-- Start nodes which are used to connect Gazebo and KITcar_brain -->
+<launch>
+  <arg name="gui" default="true"/>
+  <arg name="rviz" default="false"/>
+  <arg name="car_name" default="dr_drift" />
+
+  <arg name="set_twist" default="true" />
+  <arg name="set_pose" default="true" />
+  <arg name="include_vehicle_simulation" default="true" />
+  <arg name="include_mission_mode_plugin" default="true" />
+
+  <!-- Remap simulated sensors to the topics used in KITcar brain -->
+  <remap from="/simulation/sensors/prepared/camera" to="/camera/image_raw"/>
+  <remap from="/simulation/sensors/prepared/depth_camera" to="/depth_camera/image_raw"/>
+  <remap from="/simulation/sensors/prepared/ultrasonic_sensor_back" to="/controller_interface/controller_interface/ultrasonic_sensor_back"/>
+  <remap from="/simulation/sensors/prepared/ultrasonic_sensor_front" to="/controller_interface/controller_interface/ultrasonic_sensor_front"/>
+  <remap from="/simulation/sensors/prepared/infrared_sensor_back" to="/controller_interface/controller_interface/infrared_sensor_back"/>
+  <remap from="/simulation/sensors/prepared/infrared_sensor_front" to="/controller_interface/controller_interface/infrared_sensor_front"/>
+
+
+  <!-- Start the vehicle simulation -->
+  <include if="$(arg include_vehicle_simulation)" file="$(find control_debug)/launch/vehicle_simulation.launch">
+    <arg name="car_name" value="$(arg car_name)"/>
+    <!--arg name="coupled_type" value="high"/>
+    <arg name="vehicle_simulation" value="coupled"/-->
+  </include>
+
+  <!-- Ensure that the state estimation is published -->
+  <include if="$(arg include_vehicle_simulation)" file="$(find control_debug)/launch/state_estimation_simulation_node.launch"/>
+
+  <include file="$(find simulation_brain_link)/launch/vehicle_simulation_link.launch">
+    <arg name="car_name" value="$(arg car_name)"/>
+    <arg name="set_twist" value="$(arg set_twist)"/>
+    <arg name="set_pose" value="$(arg set_pose)"/>
+  </include>
+
+  <include file="$(find simulation_brain_link)/launch/sensor_camera_node.launch"/>
+
+  <!-- Simulate all time of flight sensors -->
+  <include file="$(find simulation_brain_link)/launch/sensor_tof_node.launch">
+    <arg name="name" value="back"/> 
+    <arg name="topic" value="ultrasonic_sensor_back"/>
+  </include>
+  <include file="$(find simulation_brain_link)/launch/sensor_tof_node.launch">
+    <arg name="name" value="middle"/> 
+    <arg name="topic" value="infrared_sensor_back"/>
+  </include> 
+  <include file="$(find simulation_brain_link)/launch/sensor_tof_node.launch">
+    <arg name="name" value="front"/> 
+    <arg name="topic" value="infrared_sensor_front"/>
+  </include>
+  <include file="$(find simulation_brain_link)/launch/sensor_tof_node.launch">
+    <arg name="name" value="ahead"/> 
+    <arg name="topic" value="ultrasonic_sensor_front"/>
+  </include> 
+
+  <!-- GUI -->
+  <!-- Mission Mode GUI -->
+  <node if="$(arg include_mission_mode_plugin)" pkg="rqt_mission_mode" type="rqt_mission_mode" name="rqt_mission_mode" output="screen"/>
+
+  <!-- RVIZ -->
+  <include if="$(arg rviz)" file="$(find visualization)/launch/visualization.launch" />
+
+</launch>

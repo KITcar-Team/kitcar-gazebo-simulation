@@ -1,0 +1,75 @@
+# The road used for pipeline is a 6m long straight road which can be configured:
+# 0 - Straight road
+# 1 - Obstacle on the right side
+# 2 - Parking lots right and left
+# 3 - Intersection with priority rule
+# 4 - Intersection with yield rule
+# 5 - Intersection with stop rule
+#road: 0
+
+# Other road options:
+lane_width: 0.4
+speed: 0.5
+update_rate: 30
+
+
+# There are a couple of paths available:
+# 0 - straight through the road
+# 1 - off road on the right
+# 2 - evading the obstacle
+# 3 - parking front on the right side
+# 4 - parking back on the right side
+# 5 - parking front on the left side
+# 6 - parking back on the left side
+#path: 0
+
+# The stops list tells the car to stop at certain points on the path:
+#stops: [[3.2,3]]
+
+
+# Common options
+#
+# 1) Straight road / no obstacle
+# road: 0
+# path: 1
+# stops: []
+
+# 2) Straight / obstacle
+# road: 1
+# path: 2
+# stops: []
+
+# 3) Intersection (no yield)
+# road: 3
+# path: 0
+# stops: []
+
+# 4) Intersection (yield)
+#road: 4
+#path: 0
+#stops: [[2.1,1]]
+
+# 5) Intersection (stop)
+# road: 5
+# path: 0
+# stops: [[2.1,3]]
+
+# 6) Parking front right
+road: 2
+path: 3
+stops: [[2.7,1.1]]
+
+# 7) Parking back right
+#road: 2
+#path: 4
+#stops: [[3.7,1]]
+
+# 8) Parking back right
+#road: 2
+#path: 5
+#stops: [[3.1,1]]
+
+# 9) Parking back right
+#road: 2
+#path: 6
+#stops: [[4.3,1]]

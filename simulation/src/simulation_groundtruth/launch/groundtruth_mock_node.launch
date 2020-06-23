@@ -1,0 +1,27 @@
+<!-- KITcar launch script for groundtruth mock node-->
+<launch>
+  <arg name="rviz" default="true"/>
+  <arg name="rate" default="0.5"/>
+  <arg name="start_groundtruth" default="true" />
+  <arg name="start_renderer" default="false" />
+  <arg name="start_object_controller" default="false" />
+
+  <node name="groundtruth_node" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="groundtruth_mock_node" output="screen">
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state" />
+    <rosparam file="$(find simulation_groundtruth)/param/mock_groundtruth/default.yaml" command="load"/>
+    <param name="start_groundtruth" value="$(arg start_groundtruth)" />
+    <param name="start_renderer" value="$(arg start_renderer)" />
+    <param name="start_object_controller" value="$(arg start_object_controller)" />
+  </node>
+
+  <group if="$(arg rviz)">
+    <node name="groundtruth_visualization_node" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="groundtruth_visualization_node" output="screen">
+      <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load"/>
+      <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics"/>
+      <param name="rate" value="$(arg rate)"/>
+    </node>
+  </group>
+
+</launch>

@@ -1,0 +1,10 @@
+#! /usr/bin/env python3
+import rospy
+from contextlib import suppress
+
+from simulation.src.simulation_evaluation.src.evaluation_test.node import EvaluationTestNode
+
+if __name__ == "__main__":
+    # Start the node
+    with suppress(rospy.ROSInterruptException):
+        EvaluationTestNode()

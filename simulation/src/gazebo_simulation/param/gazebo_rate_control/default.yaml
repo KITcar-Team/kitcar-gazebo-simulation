@@ -1,0 +1,18 @@
+# Topic frequency requirements
+# (attempting to increasy the frequency up to 60Hz comes with a large computational cost)
+frequency:
+  max: 55
+  min: 45
+  desired: 50
+
+# Restrictions on how much the gazebo update rate can be changed
+# Prevent stopping the simulation
+update_rate:
+  min: 10
+  max: 1500
+
+  # Parameters for adjusting the gazebo update rate
+  control:
+    up: 0.05 # factor controlling the increase of the update rate
+    down: 0.001 # factor controlling the decrease of the update rate
+    rate: 60 # Rate with which the update_rate is changed

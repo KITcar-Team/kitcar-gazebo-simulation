@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+import sys
+import rospy
+import unittest
+from typing import Iterable, Tuple
+
+from std_msgs.msg import Bool as BoolMsg
+
+from simulation.utils.ros_base.node_base import NodeBase
+
+from simulation_evaluation.msg import State as StateMsg
+from simulation_evaluation.msg import Referee as RefereeMsg, Broadcast as BroadcastMsg
+
+
+PKG = "simulation_evaluation"
+
+
+class PositiveRefereeTest(unittest.TestCase, NodeBase):
+    """Unittest which tests if the referee acts as expected on changes \
+            in the state machines.
+
+    The state machine output is faked and in this test states are created that let \
+            the drive succeed!
+    """
+
+    def setUp(self):
+        NodeBase.__init__(
+            self, name="generic_simulation_evaluation_test", log_level=rospy.DEBUG
+        )
+
+        self.referee_subscriber = rospy.Subscriber(
+            self.param.topics.info, RefereeMsg, callback=self.referee_cb
+        )  # Subscribe to referee
+
+        # Fake progress state machine
+        self.progress_publisher = rospy.Publisher(
+            self.param.topics.state_machine.progress.get, StateMsg, queue_size=1
+        )
+        self.overtaking_publisher = rospy.Publisher(
+            self.param.topics.state_machine.overtaking.get, StateMsg, queue_size=1
+        )
+        self.parking_publisher = rospy.Publisher(
+            self.param.topics.state_machine.parking.get, StateMsg, queue_size=1
+        )
+        self.priority_publisher = rospy.Publisher(
+            self.param.topics.state_machine.priority.get, StateMsg, queue_size=1
+        )
+
+        self.broadcast_publisher = rospy.Publisher(
+            self.param.topics.speaker.broadcast, BroadcastMsg, queue_size=1
+        )
+
+        self.reset_publisher = rospy.Publisher(
+            self.param.topics.reset, BoolMsg, queue_size=1
+        )
+
+        # Ensure that publisher is ready
+        rospy.sleep(self.param.sleep_time)
+
+    def tearDown(self):
+
+        self.referee_subscriber.unregister()
+
+        self.progress_publisher.unregister()
+        self.overtaking_publisher.unregister()
+        self.parking_publisher.unregister()
+        self.priority_publisher.unregister()
+
+    def publish_state(self, publisher: rospy.Publisher, state: int):
+        rospy.logdebug(f"Faking {publisher.name} state machine with state {state}.")
+        state_msg = StateMsg()
+        state_msg.state = state
+        publisher.publish(state_msg)
+
+    def update(self, msg: BroadcastMsg = None):
+        if msg is None:
+            msg = BroadcastMsg()
+        rospy.logdebug(f"Updating referee with broadcast {msg}")
+
+        self.broadcast_publisher.publish(msg)
+
+    def reset(self, reset_observation=False):
+        msg = BoolMsg(reset_observation)
+        self.reset_publisher.publish(msg)
+
+    def referee_cb(self, msg: RefereeMsg):
+        rospy.loginfo(f"Referee state: {msg.state}")
+        self.last_referee_msg = msg
+
+    def assert_sequence(
+        self, *seq: Iterable[Tuple[rospy.Publisher, int, int]], start=False
+    ):
+
+        if start:
+            seq = [
+                (self.progress_publisher, StateMsg.PROGRESS_BEFORE_START, RefereeMsg.READY),
+                (self.progress_publisher, StateMsg.PROGRESS_RUNNING, RefereeMsg.DRIVING),
+            ] + list(seq)
+
+        self.reset()
+        rospy.sleep(self.param.sleep_time)
+
+        for publisher, state, exp_ref in seq:
+            self.publish_state(publisher, state)
+            self.update()
+            rospy.sleep(self.param.sleep_time)
+
+            self.assertEqual(self.last_referee_msg.state, exp_ref)
+
+    def test_referee(self):
+        rospy.loginfo("Starting positive test")
+
+        self.assert_sequence(
+            (self.progress_publisher, StateMsg.PROGRESS_BEFORE_START, RefereeMsg.READY),
+            (self.progress_publisher, StateMsg.PROGRESS_RUNNING, RefereeMsg.DRIVING),
+            (self.progress_publisher, StateMsg.PROGRESS_FINISHED, RefereeMsg.COMPLETED),
+        )
+
+        self.assert_sequence(
+            (self.progress_publisher, StateMsg.PROGRESS_BEFORE_START, RefereeMsg.READY),
+            (self.progress_publisher, StateMsg.PROGRESS_BEFORE_START, RefereeMsg.READY),
+            (self.progress_publisher, StateMsg.PROGRESS_BEFORE_START, RefereeMsg.READY),
+            (self.progress_publisher, StateMsg.PROGRESS_RUNNING, RefereeMsg.DRIVING),
+            (self.progress_publisher, StateMsg.PROGRESS_RUNNING, RefereeMsg.DRIVING),
+            (self.progress_publisher, StateMsg.PROGRESS_RUNNING, RefereeMsg.DRIVING),
+            (self.progress_publisher, StateMsg.PROGRESS_FINISHED, RefereeMsg.COMPLETED),
+        )
+
+        self.assert_sequence(
+            (self.parking_publisher, StateMsg.PARKING_BEFORE_START, RefereeMsg.DRIVING),
+            (self.parking_publisher, StateMsg.PARKING_IN_ZONE, RefereeMsg.DRIVING),
+            (self.parking_publisher, StateMsg.PARKING_IN_SPOT, RefereeMsg.DRIVING),
+            (self.parking_publisher, StateMsg.PARKING_SUCCESS, RefereeMsg.DRIVING),
+            (self.parking_publisher, StateMsg.PARKING_SUCCESS, RefereeMsg.DRIVING),
+            (self.parking_publisher, StateMsg.PARKING_IN_SPOT, RefereeMsg.DRIVING),
+            start=True,
+        )
+        self.assertEqual(self.last_referee_msg.parking_successes, 1)
+        self.assertEqual(self.last_referee_msg.multiplicator, 2)
+
+        # Let individual state machines fail, but not all
+        self.assert_sequence(
+            (self.parking_publisher, StateMsg.PARKING_FORBIDDEN_IN_LOT, RefereeMsg.DRIVING),
+            (self.progress_publisher, StateMsg.PROGRESS_RUNNING, RefereeMsg.DRIVING),
+            start=True,
+        )
+
+        self.assert_sequence(
+            (self.overtaking_publisher, StateMsg.OFF_ROAD, RefereeMsg.DRIVING),
+            (self.progress_publisher, StateMsg.PROGRESS_RUNNING, RefereeMsg.DRIVING),
+            start=True,
+        )
+
+        self.assert_sequence(
+            (
+                self.priority_publisher,
+                StateMsg.PRIORITY_FORBIDDEN_IN_STOP_ZONE,
+                RefereeMsg.FAILED,
+            ),
+            start=True,
+        )
+
+        self.assert_sequence(
+            (self.overtaking_publisher, StateMsg.OFF_ROAD, RefereeMsg.DRIVING),
+            (self.priority_publisher, StateMsg.OFF_ROAD, RefereeMsg.DRIVING),
+            (self.parking_publisher, StateMsg.OFF_ROAD, RefereeMsg.FAILED),
+            start=True,
+        )
+
+
+print(__name__)
+if __name__ == "__main__":
+    print("main")
+    import rostest
+
+    rostest.rosrun(PKG, "test_referee_node", PositiveRefereeTest, sys.argv)

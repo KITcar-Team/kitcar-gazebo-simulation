@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+import sys
+import rospy
+import unittest
+
+from simulation.utils.ros_base.node_base import NodeBase
+
+from simulation.utils.geometry import Line, Polygon
+
+import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections.line_tuple import LineTuple
+
+from simulation.src.simulation_groundtruth.src.groundtruth.groundtruth import Groundtruth
+from simulation.src.simulation_groundtruth.src.groundtruth.test.mock_node import (
+    GroundtruthMockNode,
+)
+
+from simulation_groundtruth.srv import (
+    SectionSrv,
+    LaneSrv,
+    ParkingSrv,
+    LabeledPolygonSrv,
+    IntersectionSrv,
+)
+from simulation_groundtruth.msg import (
+    Lane as LaneMsg,
+    LabeledPolygon as LabeledPolygonMsg,
+    GroundtruthStatus,
+)
+from simulation.utils.road.road import Road
+
+PKG = "simulation_groundtruth"
+
+
+class GroundtruthTestNode(unittest.TestCase, GroundtruthMockNode):
+    """Unittest which tests the groundtruth node.
+
+    The basic idea is to subclass the GroundtruthMockNode which already creates \
+    a number of *mocked* test roads and write functions to test if the groundtruth \
+    is correctly extracted and made available through services.
+    """
+
+    def setUp(self):
+        self.__road_sections = []
+        NodeBase.__init__(self, name="groundtruth_node_test", log_level=rospy.DEBUG)
+
+        road = Road()
+        self.groundtruth = Groundtruth(road=road)
+        self._groundtruth_status = GroundtruthStatus()
+
+        self.start()
+
+        self.get_sections = rospy.ServiceProxy(self.param.topics.section, SectionSrv)
+        self.get_lane = rospy.ServiceProxy(self.param.topics.lane, LaneSrv)
+        self.get_parking = rospy.ServiceProxy(self.param.topics.parking, ParkingSrv)
+        self.get_obstacles = rospy.ServiceProxy(
+            self.param.topics.obstacle, LabeledPolygonSrv
+        )
+        self.get_intersection = rospy.ServiceProxy(
+            self.param.topics.intersection, IntersectionSrv
+        )
+
+    def _assert_equal_line_tuple(self, t: LineTuple, lane_msg: LaneMsg):
+        self.assertEqual(t.left, Line(lane_msg.left_line))
+        self.assertEqual(t.middle, Line(lane_msg.middle_line))
+        self.assertEqual(t.right, Line(lane_msg.right_line))
+
+    def _assert_obstacles(self, obstacles, obstacle_msgs):
+        rospy.logdebug(f"Obstacles: {obstacles}")
+        if obstacles is None:
+            obstacles = []
+
+        self.assertEqual(len(obstacle_msgs), len(obstacles))
+        for obstacle_msg, obstacle in zip(obstacle_msgs, obstacles):
+            rospy.logdebug(
+                f"MSG: {Polygon(obstacle_msg.frame).get_points()} and {obstacle.get_points()}"
+            )
+            self.assertEqual(Polygon(obstacle_msg.frame), obstacle.frame)
+            self.assertEqual(obstacle_msg.type, LabeledPolygonMsg.OBSTACLE)
+
+    def _assert_intersection(self, intersection_gt, intersection):
+        rospy.logdebug(f"Asserting intersection.")
+
+        self._assert_equal_line_tuple(intersection.south, intersection_gt.south)
+        self._assert_equal_line_tuple(intersection.west, intersection_gt.west)
+        self._assert_equal_line_tuple(intersection.east, intersection_gt.east)
+        self._assert_equal_line_tuple(intersection.north, intersection_gt.north)
+
+        self.assertEqual(intersection_gt.turn, intersection.turn)
+        self.assertEqual(intersection_gt.rule, intersection.rule)
+
+        # self.assertEqual(
+        #    len(intersection_gt.surface_markings), len(intersection.surface_markings)
+        # )
+        # for marking_gt, marking in zip(
+        #    intersection_gt.surface_markings, intersection.surface_markings
+        # ):
+        #    self.assertEqual(Polygon(marking_gt.frame), marking[0])
+        #    self.assertEqual(marking_gt.type, marking[1])
+
+    def _assert_parking_section(self, parking_gt, parking_section):
+        def assert_parking_borders(msg_borders, borders):
+            self.assertEqual(len(msg_borders), len(borders))
+            for msg_border, border in zip(msg_borders, borders):
+                self.assertEqual(Line(msg_border.points), border)
+
+        assert_parking_borders(
+            parking_gt.right_msg.borders, [lot.border for lot in parking_section.right_lots]
+        )
+        assert_parking_borders(
+            parking_gt.left_msg.borders, [lot.border for lot in parking_section.left_lots]
+        )
+
+        def assert_parking_spots(msg_spots, spots):
+            self.assertEqual(len(msg_spots), len(spots))
+            for spot_msg, spot in zip(msg_spots, spots):
+                self.assertEqual(Polygon(spot_msg.frame), spot.frame)
+                self.assertEqual(spot_msg.type, spot.kind)
+
+        assert_parking_spots(
+            parking_gt.right_msg.spots,
+            sum((lot.spots for lot in parking_section.right_lots), []),
+        )
+        assert_parking_spots(
+            parking_gt.left_msg.spots,
+            sum((lot.spots for lot in parking_section.left_lots), []),
+        )
+
+    def _test_road(self):
+        self.__road_sections = self._load_road().sections
+        self.groundtruth = Groundtruth(self._load_road())
+
+        rospy.logdebug(f"Testing groundtruth for road sections {self.__road_sections}")
+
+        msg_sections = self.get_sections().sections
+        self.assertEqual(len(msg_sections), len(self.__road_sections))
+        for msg_sec, sec in zip(msg_sections, self.__road_sections):
+            rospy.logdebug(f"Testing section: {sec.id} {sec.__class__.TYPE}")
+
+            # Check type and id of the section
+            self.assertEqual(msg_sec.type, sec.__class__.TYPE)
+            self.assertEqual(msg_sec.id, sec.id)
+
+            # Test the lane msg
+            lane_msg = self.get_lane(sec.id).lane_msg
+            self._assert_equal_line_tuple(
+                LineTuple(sec.left_line, sec.middle_line, sec.right_line), lane_msg
+            )
+
+            # Test obstacles
+            obstacle_msgs = self.get_obstacles(sec.id).polygons
+            self._assert_obstacles(sec.obstacles, obstacle_msgs)
+
+            # If section is an intersection
+            if sec.__class__.TYPE == road_section_type.INTERSECTION:
+                intersection_gt = self.get_intersection(sec.id)
+                self._assert_intersection(intersection_gt, sec)
+
+            # If section is a parking section
+            if sec.__class__.TYPE == road_section_type.PARKING_AREA:
+                parking_section_gt = self.get_parking(sec.id)
+                self._assert_parking_section(parking_section_gt, sec)
+
+    def test_roads(self):
+        """Construct multiple roads and check the output."""
+
+        # Check the output generated for predefined mock roads!
+        for i in range(6):
+            self.param.road = i
+            self._test_road()
+
+
+if __name__ == "__main__":
+    import rostest
+
+    rostest.rosrun(PKG, "test_groundtruth_node", GroundtruthTestNode, sys.argv)

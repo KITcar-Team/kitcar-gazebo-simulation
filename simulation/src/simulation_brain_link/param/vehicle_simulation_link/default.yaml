@@ -1,0 +1,9 @@
+frame:
+  # Root frame representing the simulation's coordinate frame
+  simulation: "sim_world"
+  # Vehicle's own coordinate frame (at the center of the rear axle, z=0)
+  vehicle: "vehicle"
+  # World coordinate frame from the perspective of the vehicle
+  world: "odom"
+
+initial_pose: [0.4, -0.2]

@@ -1,0 +1,22 @@
+<launch>
+
+  <arg name="rviz" default="true"/>
+
+  <node name="car_state_visualization_node" ns="gazebo_simulation" pkg="gazebo_simulation" type="car_state_visualization_node" output="screen">
+    <rosparam file="$(find gazebo_simulation)/param/car_state/default.yaml" command="load"/>
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics"/>
+  </node>
+
+
+  <node name="evaluation_test_node" pkg="simulation_evaluation" type="evaluation_test_node">
+    <rosparam file="$(find simulation_groundtruth)/param/mock_groundtruth/default.yaml" command="load"/>
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state"/>
+  </node>
+
+  <!-- RVIZ -->
+  <group if="$(arg rviz)">
+    <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-f simulation -d  $(find gazebo_simulation)/res/simulation.rviz -s $(find gazebo_simulation)/res/KITcar_Logo.png"/>
+  </group>
+
+</launch>
+

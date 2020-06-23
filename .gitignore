@@ -1,0 +1,71 @@
+*~
+.*.swp
+.*.swo
+.cproject
+.project
+.pydevproject
+cmake_install.cmake
+build/
+bin/
+lib/
+msg_gen/
+srv_gen/
+devel/
+doc/*
+!doc/doxygen_tag_template.yaml
+!doc/generate_documentation.sh
+!doc/index_template.html
+!doc/package_template.tag
+*.slo
+*.lo
+*.o
+*.so
+*.dylib
+*.lai
+*.la
+*.kate-swp
+*.a
+*.pyc
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
+CMakeLists.txt.user
+CMakeLists.txt.user.*
+*.autosave
+*.orig
+*-build/
+KITcar_external/src/executive_smach
+Tests/polyfit_comparison/polyfit_comparison
+.catkin_workspace
+.clang_complete
+compile_commands.json
+# pycharm 
+.idea/
+# ctags
+tags
+msg-tags
+
+
+# catkin
+*/.catkin_tools/
+*/logs/
+
+# Qt ROS workspace
+*.workspace
+*.workspace.user
+
+# Code::Blocks
+*.cbp
+
+# Ignore Datasets folder
+datasets
+
+#Editors
+.vim/
+.vscode/
+.ccls-cache/
+
+# Hypothesis results
+*.hypothesis

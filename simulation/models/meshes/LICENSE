@@ -1,0 +1,126 @@
+The files
+
+- 10zone_end.dae
+- 10zone_end.png
+- 10zone_start.dae
+- 10zone_start.png
+- 20zone_end.dae
+- 20zone_end.png
+- 20zone_start.dae
+- 20zone_start.png
+- 30zone_end.dae
+- 30zone_end.png
+- 30zone_start.dae
+- 30zone_start.png
+- 40zone_end.dae
+- 40zone_end.png
+- 40zone_start.dae
+- 40zone_start.png
+- 50zone_end.dae
+- 50zone_end.png
+- 50zone_start.dae
+- 50zone_start.png
+- 60zone_end.dae
+- 60zone_end.png
+- 60zone_start.dae
+- 60zone_start.png
+- 70zone_end.dae
+- 70zone_end.png
+- 70zone_start.dae
+- 70zone_start.png
+- 80zone_end.dae
+- 80zone_end.png
+- 80zone_start.dae
+- 80zone_start.png
+- 90zone_end.dae
+- 90zone_end.png
+- 90zone_start.dae
+- 90zone_start.png
+- Abbiegeschild.blend
+- Abbiegeschild_gross.blend
+- Abbiegeschild_gross_links.dae
+- Abbiegeschild_gross_links.png
+- Abbiegeschild_gross_rechts.dae
+- Abbiegeschild_gross_rechts.png
+- Abbiegeschild_klein_links.png
+- Abbiegeschild_klein_rechts.png
+- Abbiegeschild_links.dae
+- Abbiegeschild_rechts.dae
+- AllQuadratic.blend
+- AllQuadratic.blend1
+- All_round.blend
+- Balsa_Wood_Texture.jpg
+- Balsa_Wood_Texture.jpg.001.jpg
+- Barred_area.dae
+- Barred_area.png
+- Dreieckig_Steigung.blend
+- Expressway_end.dae
+- Expressway_end.png
+- Expressway_start.dae
+- Expressway_start.png
+- Links_abbiegen.blend
+- Links_abbiegen.blend1
+- Links_abbiegen.dae
+- Links_abbiegen.png
+- No_pass_end.dae
+- No_pass_end.png
+- No_pass_start.dae
+- No_pass_start.png
+- ParkingStart.dae
+- Parking_start.png
+- PedestrianCrossing.dae
+- PedestrianCrossing.png
+- Ramp.dae
+- Rechts_abbiegen.blend
+- Rechts_abbiegen.dae
+- Rechts_abbiegen.png
+- Steigung_beginn.png
+- Steigung_Ende.dae
+- Steigung_ende.png
+- Steigung_Start.dae
+- Stopschild.blend
+- Stopschild.dae
+- Stopschild.png
+- VorbeifahrtRechts_pedestrian.blend
+- VorbeifahrtRechts_pedestrian.dae
+- Vorbeifahrt_rechts.png
+- Vorfahrt.blend
+- Vorfahrt.dae
+- VorfahrtGewaehren.blend
+- VorfahrtGewaehren.dae
+- VorfahrtGewahren.png
+- Vorfahrt.png
+
+are licensed under the license (https://github.com/tum-phoenix/drive_gazebo_worlds/blob/master/LICENSE):
+
+    MIT License
+
+    Copyright (c) 2019 Phoenix Robotics
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+
+The files
+
+- Fahrbahnmarkierung_Pfeil_L.svg
+- Fahrbahnmarkierung_Pfeil_R.svg
+
+are licensed under the license (https://commons.wikimedia.org/wiki/File:Fahrbahnmarkierung_Pfeil_L.svg, https://commons.wikimedia.org/wiki/File:Fahrbahnmarkierung_Pfeil_R.svg):
+
+    The copyright holder of this work allows anyone to use it for any purpose including unrestricted redistribution, commercial use, and modification.

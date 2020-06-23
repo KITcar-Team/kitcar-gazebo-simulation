@@ -1,0 +1,100 @@
+image: kitcar/docker-gazebo-build:python3.8
+
+variables:
+  GIT_STRATEGY: clone
+  GIT_LFS_SKIP_SMUDGE: "1"  #  Don't pull Git LFS
+
+cache:
+  paths:
+    - .venv/
+
+before_script:
+  #Run the container start script to enable the pulseaudio & xserver
+  - bash /start_script.sh
+
+  # Print out python version for debugging
+  - python3 -V
+  #Install python packages # use a virtual environment to use CI cache
+  - pip3 install virtualenv
+  - virtualenv .venv
+  - source .venv/bin/activate
+
+  - export KITCAR_REPO_PATH=/builds/kitcar
+
+  # Install packages and requirements
+  - yes 1 | ./init/init.sh || true
+
+  - source init/bashrc || true
+
+
+stages:
+  - build
+  - test
+  - deploy
+
+######## BUILD STAGE ########
+# buikd kitcar-ros and simulation
+build-code:
+  stage: build
+  script: &build-all
+    - cd  simulation
+    - catkin_make
+  artifacts:
+    paths:
+      - simulation/devel
+      - simulation/build
+    expire_in: 2 day
+
+
+######## TEST STAGE #########
+
+# Run module test in utils packages
+test-python-packages:
+  stage: test
+  script: &test-utils
+    - python3 -m simulation.utils.geometry.test
+    - python3 simulation/utils/ros_base/test/parameter_object_test.py
+
+    - python3 -m simulation.utils.road.sections.test
+
+    - python3 -m simulation.src.simulation_evaluation.src.speaker.speakers.test
+    - python3 -m simulation.src.simulation_evaluation.src.state_machine.test
+    - python3 -m simulation.src.simulation_evaluation.src.referee.test
+
+    # Test the urdf package
+    - python3 simulation/utils/urdf/test/test_core.py
+
+test-ros-packages:
+  stage: test
+  script:
+    - cd simulation
+    - catkin_make run_tests -j1
+    - catkin_test_results  # Ensure that pipeline fails when test fails
+
+test-documentation:
+  stage: test
+  variables:
+    GIT_LFS_SKIP_SMUDGE: "0"  #  Pull git lfs
+  script:
+    # Test if the onboarding documentation is correct
+    - python3 docs/content/tutorials/road_examples/example.py
+    - cd docs
+    - make doctest
+
+######### Documentation ########
+
+# Build the sphinx documentation
+# If this is the master branch, the website deployer will also update doc.kitcar-team.de!
+build-documentation:
+  stage: deploy
+  variables:
+    GIT_LFS_SKIP_SMUDGE: "0"  #  Pull git lfs
+  script:
+    # Build the documentation
+    - cd docs
+    - make html
+  artifacts: # Extract artifacts to view the documentation that has been generated
+    paths:
+      - docs/_build/html/*
+    expire_in: 2 day
+

@@ -1,0 +1,198 @@
+#!/usr/bin/env python3
+import sys
+import unittest
+import rospy
+from simulation.utils.ros_base.node_base import NodeBase
+from simulation.utils.geometry import Line, Polygon, Pose
+
+from simulation_groundtruth.srv import (
+    SectionSrv,
+    LaneSrv,
+    ParkingSrv,
+    LabeledPolygonSrv,
+    IntersectionSrv,
+)
+
+from simulation_groundtruth.msg import Lane as LaneMsg
+
+# Messages
+from gazebo_simulation.msg import CarState as CarStateMsg
+
+from typing import Iterable, Set
+from simulation_evaluation.msg import Speaker as SpeakerMsg
+from simulation_evaluation.msg import Broadcast as BroadcastMsg
+
+import simulation.src.simulation_evaluation.src.speaker.speakers.test.fake_msgs as fake_msgs
+
+PKG = "simulation_evaluation"
+
+
+class SpeakerNodeTest(unittest.TestCase, NodeBase):
+    """Unittest that is executed through a ROS test and performs some checks on the speaker node.
+    """
+
+    def setUp(self):
+        NodeBase.__init__(self, name="test_speaker_node", log_level=rospy.DEBUG)
+
+        self.car_state_publisher = rospy.Publisher(
+            self.param.topics.car_state.car_state, CarStateMsg
+        )
+
+        # Fake groundtruth services
+        groundtruth_topics = self.param.topics.groundtruth
+        lines = fake_msgs.create_points(section_count=1)
+
+        self.section_proxy = rospy.Service(
+            groundtruth_topics.section, SectionSrv, fake_msgs.section_srv(section_count=1),
+        )
+        self.lane_proxy = rospy.Service(
+            groundtruth_topics.lane, LaneSrv, fake_msgs.lane_srv(lines)
+        )
+        self.parking_proxy = rospy.Service(
+            groundtruth_topics.parking,
+            ParkingSrv,
+            fake_msgs.parking_srv(
+                [], [], Line([[0, 0], [1, 0], [1, 1]]), Line([[0, 0], [1, 0], [1, 1]])
+            ),
+        )
+        self.obstacle_proxy = rospy.Service(
+            groundtruth_topics.obstacle, LabeledPolygonSrv, fake_msgs.obstacle_srv()
+        )
+        self.intersection_proxy = rospy.Service(
+            groundtruth_topics.intersection,
+            IntersectionSrv,
+            fake_msgs.intersection_srv(
+                south=LaneMsg(
+                    lines[0].left.to_geometry_msgs(),
+                    lines[0].middle.to_geometry_msgs(),
+                    lines[0].right.to_geometry_msgs(),
+                )
+            ),
+        )
+
+        rospy.sleep(1)
+
+    def dummy_car_state():
+        msg = CarStateMsg()
+        msg.frame = Polygon([[0, 0], [1, 0], [1, 1]]).to_geometry_msg()
+        msg.pose = Pose([0, 0], 0).to_geometry_msg()
+        return msg
+
+    def assert_receive_msgs(
+        self,
+        publish_msg: CarStateMsg,
+        receive_topic: str,
+        *expected_msgs: Iterable[Set[int]],
+    ):
+        """Check if msgs are received when a new CarStateMsg is published.
+
+        Args:
+            publish_msg: CarStateMsg that should be published.
+            receive_topic: Speaker topic to subscribe to.
+            expected_msgs: List of sets with SpeakerMsg types. Out of each tuple one message must be received.
+        """
+        received_msgs: Set[int] = set()
+
+        def speaker_cb(msg):
+            rospy.logdebug(f"RECEIVING: {msg}")
+            received_msgs.add(msg.type)
+
+        subscriber = rospy.Subscriber(receive_topic, SpeakerMsg, speaker_cb)
+
+        self.car_state_publisher.publish(publish_msg)
+
+        # Wait until all msgs are received
+        while len(received_msgs) < len(expected_msgs):
+            rospy.sleep(0.5)
+
+        rospy.logdebug(f"RECEIVED: {received_msgs}")
+
+        for msg in expected_msgs:
+            self.assertTrue(len(msg & received_msgs) > 0)
+
+        subscriber.unregister()
+
+    def test_publishers(self):
+        rospy.logdebug("TEST AREA PUBLISHER")
+
+        self.assert_receive_msgs(
+            SpeakerNodeTest.dummy_car_state(),
+            self.param.topics.area,
+            {
+                SpeakerMsg.RIGHT_LANE,
+                SpeakerMsg.LEFT_LANE,
+                SpeakerMsg.PARKING_LOT,
+                SpeakerMsg.OFF_ROAD,
+            },
+        )
+
+        rospy.logdebug("TEST Zone PUBLISHER")
+
+        expected_msgs = []
+
+        expected_msgs.append(
+            {
+                SpeakerMsg.START_ZONE,
+                SpeakerMsg.DRIVING_ZONE,
+                SpeakerMsg.END_ZONE,
+            }  # noqa: E231
+        )
+        expected_msgs.append(
+            {
+                SpeakerMsg.HALT_ZONE,
+                SpeakerMsg.STOP_ZONE,
+                SpeakerMsg.NO_STOP_ZONE,
+            }  # noqa: E231
+        )
+        expected_msgs.append(
+            {SpeakerMsg.OVERTAKING_ZONE, SpeakerMsg.NO_OVERTAKING_ZONE,}  # noqa: E231
+        )
+        expected_msgs.append(
+            {SpeakerMsg.PARKING_ZONE, SpeakerMsg.NO_PARKING_ZONE,}  # noqa: E231
+        )
+
+        self.assert_receive_msgs(
+            SpeakerNodeTest.dummy_car_state(), self.param.topics.zone, *expected_msgs
+        )
+
+        rospy.logdebug("TEST SPEED PUBLISHER")
+
+        self.assert_receive_msgs(
+            SpeakerNodeTest.dummy_car_state(),
+            self.param.topics.speed,
+            {
+                SpeakerMsg.SPEED_0,
+                SpeakerMsg.SPEED_HALTED,
+                SpeakerMsg.SPEED_STOPPED,
+            },  # noqa: E231
+        )
+
+        rospy.logdebug("TEST MODERATOR PUBLISHER")
+
+        broadcast_msg: BroadcastMsg = None
+
+        def broadcast_cb(msg):
+            nonlocal broadcast_msg
+            rospy.logdebug(f"RECEIVING: {msg}")
+            broadcast_msg = msg
+
+        subscriber = rospy.Subscriber(
+            self.param.topics.broadcast, BroadcastMsg, broadcast_cb
+        )
+
+        self.car_state_publisher.publish(SpeakerNodeTest.dummy_car_state())
+
+        rospy.wait_for_message(self.param.topics.broadcast, BroadcastMsg)
+
+        self.assertEqual(broadcast_msg.current_section.id, 0)
+        self.assertEqual(broadcast_msg.current_section.type, 5)
+        self.assertEqual(broadcast_msg.speed, 0)
+        self.assertEqual(broadcast_msg.distance, 0)
+
+        subscriber.unregister()
+
+
+if __name__ == "__main__":
+    import rostest
+
+    rostest.rosrun(PKG, "test_speaker_node", SpeakerNodeTest, sys.argv)

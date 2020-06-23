@@ -1,0 +1,21 @@
+<launch>
+  <arg name="time_limit" value="120"/>
+  <arg name="start_groundtruth" default="true" />
+  <arg name="start_renderer" default="false" />
+  <arg name="start_object_controller" default="false" />
+  <arg name="seed" default="KITCAR" />
+  <arg name="road" default="KITCAR" />
+
+  <test test-name="test_groundtruth_node" pkg="simulation_groundtruth" time-limit="$(arg time_limit)" type="test_groundtruth_node">
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state" />
+    <rosparam file="$(find simulation_groundtruth)/param/mock_groundtruth/default.yaml" command="load"/>
+    <param name="start_groundtruth" value="$(arg start_groundtruth)" />
+    <param name="start_renderer" value="$(arg start_renderer)" />
+    <param name="start_object_controller" value="$(arg start_object_controller)" />
+    <param name="seed" value="$(arg seed)" />
+  </test>
+
+</launch>
+

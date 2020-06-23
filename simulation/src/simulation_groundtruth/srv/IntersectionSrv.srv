@@ -1,0 +1,25 @@
+# Definition of groundtruth srv about an intersection
+uint8 id
+---
+# -- Definition of msg content-- #
+
+uint8 turn  # direction in which the car leaves the intersection
+uint8 rule  # Defines priority
+
+# Opening directions of intersection
+Lane north
+Lane west
+Lane east
+Lane south  # one always arrives at an intersection from the south!
+
+# TurnDirection
+int8 STRAIGHT = 0
+int8 RIGHT = 1
+int8 LEFT = 2
+
+# Rule
+int8 EQUAL = 0
+int8 YIELD = 1
+int8 STOP = 2
+int8 PRIORITY_YIELD = 3
+int8 PRIORITY_STOP = 4

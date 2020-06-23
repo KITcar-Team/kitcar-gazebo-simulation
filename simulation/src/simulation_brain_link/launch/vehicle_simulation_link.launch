@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KITcar launch script for vehicle_simulation_link -->
+<launch>
+  <arg name="car_name" />
+  <arg name="set_twist" default="true" />
+  <arg name="set_pose" default="true" />
+  <node pkg="simulation_brain_link" type="vehicle_simulation_link_node" output="screen" ns="simulation_brain_link" name="vehicle_simulation_link_node">
+    <rosparam file="$(find gazebo_simulation)/param/model_plugin_link/topics.yaml" command="load" ns="topics/model_plugin" />
+    <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/default.yaml" command="load" />
+    <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/topics.yaml" command="load" ns="topics" />
+    <param name="car_name" value="$(arg car_name)" />
+    <param name="set_pose" value="$(arg set_pose)" />
+    <param name="set_twist" value="$(arg set_twist)" />
+  </node>
+</launch>

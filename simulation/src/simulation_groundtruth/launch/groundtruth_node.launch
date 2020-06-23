@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="start_groundtruth" default="true" />
+  <arg name="start_renderer" default="true" />
+  <arg name="start_object_controller" default="true" />
+  <arg name="road" />
+  <!-- If the value of seed is not changed, it will not be considered by the groundtruth node! -->
+  <arg name="seed" default="__no_value__" />
+  <arg name="rviz" default="true" />
+  <arg name="rate" default="1" />
+  <!-- Start the groundtruth node -->
+  <node name="groundtruth_node" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="groundtruth_node" output="screen">
+    <param name="road" value="$(arg road)" />
+    <param name="seed" value="$(arg seed)" />
+    <param name="start_groundtruth" value="$(arg start_groundtruth)" />
+    <param name="start_renderer" value="$(arg start_renderer)" />
+    <param name="start_object_controller" value="$(arg start_object_controller)" />
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load" />
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics" />
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state" />
+  </node>
+  <!-- Only include the visualization node if the rviz parameter is true -->
+  <node if="$(arg rviz)" name="groundtruth_visualization_node" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="groundtruth_visualization_node" output="screen">
+    <param name="rate" value="$(arg rate)" />
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load" />
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics" />
+  </node>
+</launch>

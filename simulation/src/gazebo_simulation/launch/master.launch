@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The simulation master launch file
+
+Use this launch file to start the complete simulation.-->
+<launch>
+  <!--
+       General parameters
+  -->
+  <!-- Name of the car used. Currently, only dr_drift is supported.-->
+  <arg name="car_name" default="dr_drift" />
+  <!-- Name of the simulation road and seed used to render the road.-->
+  <arg name="road" default="default_road" />
+  <arg name="seed" default="__no_value__"/>
+  <!-- Name of the gazebo world.
+       By default, the empty base_world is used. -->
+  <arg name="world" default="base_world" />
+  <!-- Indicate whether the simulation should overwrite /clock. -->
+  <arg name="use_sim_time" default="true" />
+  <!-- Indicate whether the graphical interface should launch. -->
+  <arg name="gui" default="true" />
+  <!-- Indicate whether rviz is launched. -->
+  <arg name="rviz" default="false" />
+  <!--
+       Indicate which processes are launched.
+  -->
+  <!-- Indicate whether the car is spawned. -->
+  <arg name="include_car" default="true" />
+  <!-- Indicate whether the KITcar_brain is started. -->
+  <arg name="include_brain" default="true" />
+  <!-- Indicate whether to include the vehicle simulation or automatic_drive.
+       The vehicle simulation is used to simulate vehicle's movement based on KITcar_brain's commands.
+       If KITcar_brain is not running, automatic_drive can be used to "drive" the vehicle on the road.
+   -->
+  <arg name="include_vehicle_simulation" default="true" />
+  <arg name="include_automatic_drive" default="false" />
+  <arg name="include_mission_mode_plugin" default="$(arg gui)" />
+  <!-- Indicate whether to launch the car_state_node. -->
+  <arg name="car_state" default="true" />
+  <!-- Indicate whether to launch the evaluation pipeline. This includes:
+       * simulation_evaluation/speaker_node
+       * simulation_evaluation/state_machine_node
+       * simulation_evaluation/referee_node -->
+  <arg name="evaluate" default="false" />
+  <!-- Indicate whether to launch the groundtruth node. -->
+  <arg name="include_groundtruth" default="true" />
+  <!-- Indicate whether to include the renderer and object controller. -->
+  <arg name="include_renderer" default="true" />
+  <arg name="include_object_controller" default="true" />
+  <!-- Indicate whether to manually control Gazebo's simulation rate.
+       Normally doing this is a bad idea. However, inside of Docker containers Gazebo does not update correctly.
+       Setting this argument to true starts the gazebo_rate_control_node. -->
+  <arg name="control_sim_rate" default="false" />
+  <!--
+       Vehicle Simulation
+  -->
+  <!-- Whether the pose or the twist of the vehicle is given to Gazebo. -->
+  <arg name="link_pose" default="true" />
+  <arg name="link_twist" default="true" />
+  <!--
+       Gazebo
+  -->
+  <arg name="gz_paused" default="false" />
+  <arg name="gz_recording" default="false" />
+  <arg name="gz_debug" default="false" />
+  <arg name="gz_physics" default="ode" />
+  <arg name="gz_verbose" default="false" />
+  <arg name="gz_respawn" default="false" />
+  <arg name="gz_use_clock_frequency" default="false" />
+  <arg name="gz_pub_clock_frequency" default="100" />
+  <arg name="gz_extra_args" default="" />
+  <!--
+       Launch processes
+  -->
+  <!-- Spawn the car -->
+  <include if="$(arg include_car)" file="$(find gazebo_simulation)/launch/spawn_car.launch" />
+  <!-- Launch KITcar_brain -->
+  <include if="$(arg include_brain)" file="$(find simulation_brain_link)/launch/brain.launch">
+    <arg name="car_name" value="$(arg car_name)" />
+  </include>
+  <!-- Launch nodes to connect gazebo and kitcar brain -->
+  <include file="$(find simulation_brain_link)/launch/vehicle_link.launch">
+    <arg name="car_name" value="$(arg car_name)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="rviz" value="$(arg rviz)" />
+    <arg name="set_pose" value="$(arg link_pose)" />
+    <arg name="set_twist" value="$(arg link_twist)" />
+    <arg name="include_vehicle_simulation" value="$(arg include_vehicle_simulation)" />
+    <arg name="include_mission_mode_plugin" value="$(arg include_mission_mode_plugin)" />
+  </include>
+  <!-- Launch automatic drive-->
+  <include if="$(arg include_automatic_drive)" file="$(find gazebo_simulation)/launch/automatic_drive.launch" />
+  <!-- Launch car state -->
+  <group if="$(arg car_state)">
+    <include file="$(find gazebo_simulation)/launch/car_state_node.launch">
+      <arg name="car_name" value="$(arg car_name)" />
+      <arg name="rviz" value="$(arg rviz)" />
+    </include>
+  </group>
+  <!-- Launch groundtruth, This includes the groundtruth, the renderer,
+  and the object controller. These components, located in the groundtruth_node,
+  can create and update the world in Gazebo, place and control obstacles,
+  and provide services makeing road lines and other information is easily accessible. -->
+  <include file="$(find simulation_groundtruth)/launch/groundtruth_node.launch">
+    <arg name="road" value="$(arg road)"/>
+    <arg name="rviz" value="$(arg rviz)"/>
+    <arg name="start_groundtruth" default="$(arg include_groundtruth)" />
+    <arg name="start_renderer" default="$(arg include_renderer)" />
+    <arg name="start_object_controller" default="$(arg include_object_controller)" />
+  </include>
+  <!-- Launch evaluation pipeline -->
+  <include if="$(arg evaluate)" file="$(find simulation_evaluation)/launch/evaluation.launch" />
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" output="screen" args="-f simulation -d  $(find gazebo_simulation)/res/simulation.rviz -s $(find gazebo_simulation)/res/kitcar_logo.png" />
+  <!-- Launch Gazebo -->
+  <include file="$(find gazebo_simulation)/launch/world.launch">
+    <arg name="world_name" value="$(arg world)"/>
+    <arg name="paused" value="$(arg gz_paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="recording" value="$(arg gz_recording)"/>
+    <arg name="debug" value="$(arg gz_debug)"/>
+    <arg name="physics" default="$(arg gz_physics)"/>
+    <arg name="verbose" default="$(arg gz_verbose)"/>
+    <arg name="respawn_gazebo" default="$(arg gz_respawn)"/>
+    <arg name="use_clock_frequency" default="$(arg gz_use_clock_frequency)"/>
+    <arg name="pub_clock_frequency" default="$(arg gz_pub_clock_frequency)"/>
+  </include>
+  <include if="$(arg control_sim_rate)" file="$(find gazebo_simulation)/launch/gazebo_rate_control_node.launch" />
+</launch>
+
+

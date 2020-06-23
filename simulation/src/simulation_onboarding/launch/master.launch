@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Launch script for starting onboarding node and full simulation -->
+<launch>
+  <!-- Define a launch argument with the <arg>. The argument is called `road` and must be set when using roslaunch: `roslaunch simulation_onboarding master.launch road:=${NAME_OF_ROAD}`-->
+  <arg name="road" />
+  <!-- include_brain is false by default.-->
+  <arg name="include_brain" default="false" />
+
+  <!-- Use <include> to include other launch files. In this case the simulation master.launch file is included; it starts a Gazebo-world and by default also the KITcar_brain. KITcar_brain is the software which controls our vehicle! -->
+  <include file="$(find gazebo_simulation)/launch/master.launch">
+    <!-- Tell the master.launch which road to launch. -->
+    <arg name="road" value="$(arg road)" />
+    <!-- The include_brain argument is passed to tell the master.launch file if KITcar_brain should be launch as well. -->
+    <arg name="include_brain" value="$(arg include_brain)" />
+  </include>
+
+  <!-- Launch onboarding node -->
+  <include file="$(find simulation_onboarding)/launch/onboarding_node.launch" />
+</launch>

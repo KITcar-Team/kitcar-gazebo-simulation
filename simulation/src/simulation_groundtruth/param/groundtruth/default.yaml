@@ -1,0 +1,16 @@
+colors:
+  right_line: [0.4, 0.4, 0.4, 0.8]
+  middle_line: [0.4, 0.4, 0.4, 0.8]
+  left_line: [0.4, 0.4, 0.4, 0.8]
+  parking_border: [0.4, 0.4, 0.4, 0.8]
+  parking_spot_free: [0.4, 0.4, 0.4, 0.5]
+  parking_spot_x: [0.4, 0.4, 0.4, 0.5]
+  parking_spot_occupied: [0.4, 0, 0, 0.5]
+  obstacle: [0, 0, 0, 1]
+  surface_marking: [1, 0.5, 0, 1]
+
+# Renderer
+tile_size: [4, 4]
+tile_resolution: [1024, 1024]
+
+default_seed: "KITCAR"

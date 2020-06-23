@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+import sys
+import unittest
+
+import rospy
+from simulation.utils.ros_base.node_base import NodeBase
+
+# Messages
+from simulation_evaluation.msg import Speaker as SpeakerMsg
+from simulation_evaluation.msg import State as StateMsg
+
+PKG = "simulation_evaluation"
+
+
+__copyright__ = "KITcar"
+
+
+class StateMachineNodeTest(unittest.TestCase, NodeBase):
+    """Unittest that is executed through a ROS test and performs some checks on the speaker node."""
+
+    def setUp(self):
+        NodeBase.__init__(self, name="test_state_machine_node", log_level=rospy.DEBUG)
+
+        # Publishers from simulation.src.simulation_evaluation.src.speaker. Input of StateMachineNode.
+        topics = self.param.topics
+        self.zone_publisher = rospy.Publisher(
+            topics.speaker.zone, SpeakerMsg, queue_size=10
+        )
+        self.location_publisher = rospy.Publisher(
+            topics.speaker.area, SpeakerMsg, queue_size=10
+        )
+        self.events_publisher = rospy.Publisher(
+            topics.speaker.event, SpeakerMsg, queue_size=10
+        )
+        self.speed_publisher = rospy.Publisher(
+            topics.speaker.speed, SpeakerMsg, queue_size=10
+        )
+
+        # Subscribe and publish to StateMachineNode.
+        self.definitions = []
+        self.definitions.append((topics.progress.get, topics.progress.set))
+        self.definitions.append((topics.overtaking.get, topics.overtaking.set))
+        self.definitions.append((topics.parking.get, topics.parking.set))
+        self.definitions.append((topics.priority.get, topics.priority.set))
+
+        topics_get, topics_set = zip(*self.definitions)
+
+        self.state_machine_subscribers = [
+            rospy.Subscriber(topic, StateMsg) for topic in topics_get
+        ]
+        self.set_sm_manually_publishers = [
+            rospy.Publisher(topic, StateMsg, queue_size=10) for topic in topics_set
+        ]
+
+        rospy.sleep(self.param.sleep_time)
+
+    def assert_receive_msgs(
+        self,
+        receive_topic: str,
+        publisher: rospy.Publisher,
+        publish_msg: int,
+        expected_msg: int,
+        message_type,
+    ):
+        """Check if expected_msg is received when a new SpeakerMsg is published.
+
+        Args:
+            receive_topic: StateMachine topic to subscribe to.
+            pulisher: Publiser to publish to.
+            publish_msg: Value of message that should be published.
+            expected_msgs: Value of message that should be received.
+            message_type: Type of message
+        """
+        self._received_msg = None
+
+        def subscribe_cb(msg):
+            rospy.logdebug(f"RECEIVING: {msg}")
+            self._received_msg = msg.state
+
+        subscriber = rospy.Subscriber(receive_topic, StateMsg, subscribe_cb)
+
+        if message_type == SpeakerMsg:
+            publisher.publish(publish_msg, "xy")
+        else:
+            publisher.publish(publish_msg)
+
+        rospy.sleep(self.param.sleep_time)
+        rospy.logdebug(f"RECEIVED: {self._received_msg}")
+
+        self.assertEqual(self._received_msg, expected_msg)
+
+        subscriber.unregister()
+
+    def test_subscribers(self):
+        rospy.logdebug("TEST zone SUBSCRIBER")
+        self.assert_receive_msgs(
+            self.param.topics.parking.get,
+            self.zone_publisher,
+            SpeakerMsg.PARKING_ZONE,
+            StateMsg.PARKING_IN_ZONE,
+            SpeakerMsg,
+        )
+
+        self.assert_receive_msgs(
+            self.param.topics.priority.get,
+            self.zone_publisher,
+            SpeakerMsg.HALT_ZONE,
+            StateMsg.PRIORITY_IN_HALT_ZONE,
+            SpeakerMsg,
+        )
+
+        rospy.logdebug("TEST events SUBSCRIBER")
+        self.assert_receive_msgs(
+            self.param.topics.parking.get,
+            self.events_publisher,
+            SpeakerMsg.PARKING_SPOT,
+            StateMsg.PARKING_IN_SPOT,
+            SpeakerMsg,
+        )
+
+        rospy.logdebug("TEST speed SUBSCRIBER")
+        self.assert_receive_msgs(
+            self.param.topics.priority.get,
+            self.speed_publisher,
+            SpeakerMsg.SPEED_HALTED,
+            StateMsg.PRIORITY_BEFORE_START,
+            SpeakerMsg,
+        )
+
+        rospy.logdebug("TEST location SUBSCRIBER")
+        self.assert_receive_msgs(
+            self.param.topics.parking.get,
+            self.location_publisher,
+            SpeakerMsg.OFF_ROAD,
+            StateMsg.OFF_ROAD,
+            SpeakerMsg,
+        )
+
+        rospy.logdebug("TEST ALL set SUBSCRIBERS")
+        publish_msgs = [
+            StateMsg.PROGRESS_RUNNING,
+            StateMsg.OVERTAKING_BEFORE_START,
+            StateMsg.PARKING_BEFORE_START,
+            StateMsg.PRIORITY_BEFORE_START,
+        ]
+        for i, publisher in enumerate(self.set_sm_manually_publishers):
+            self.assert_receive_msgs(
+                self.definitions[i][0],
+                publisher,
+                publish_msgs[i],
+                publish_msgs[i],
+                StateMsg,
+            )
+
+
+if __name__ == "__main__":
+    import rostest
+
+    rostest.rosrun(PKG, "test_state_machine_node", StateMachineNodeTest, sys.argv)

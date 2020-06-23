@@ -1,0 +1,21 @@
+# Default parameter of sensor camera
+
+output_start_x: 0
+output_end_x: 1280
+
+output_start_y: 374       # 1024 - 650
+output_end_y: 1024
+
+
+
+# Available noise types:
+# 0 -> off
+# 1 -> gaussian noise
+# 2 -> salt pepper noise
+noise_type: 0
+
+# Options for gaussion noise
+mean_value: 0
+standard_deviation: 150   # 0..255
+# Options for salt pepper noise
+step: 40

@@ -1,0 +1,281 @@
+<?xml version="1.0" ?>
+<robot name="dr_drift" version="1.0.0">
+  <link name="chassis">
+    <collision>
+      <origin xyz="0.12 0 0.0397" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.24 0.2207 0.0794"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.095 0 0.0497" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/dr_drift.stl"/>
+      </geometry>
+      <material name="mat">
+        <color>1.0 1.0 1.0</color>
+      </material>
+    </visual>
+    <inertial>
+      <inertia ixx="0.02200514" ixy="0" ixz="0" iyx="0" iyy="0.025561743999999994" iyz="0" izx="0" izy="0" izz="0.042523396"/>
+      <origin xyz="0.12 0 0.0397" rpy="0 0 0"/>
+      <mass value="4.8"/>
+    </inertial>
+  </link>
+  <link name="front_camera_link">
+    <collision>
+      <geometry>
+        <box size="0.05 0.04 0.04"/>
+      </geometry>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="0.05 0.04 0.04"/>
+      </geometry>
+      <material name="mat">
+        <color>1.0 1.0 1.0</color>
+      </material>
+    </visual>
+    <inertial>
+      <inertia ixx="2.6666666666666667e-07" ixy="0" ixz="0" iyx="0" iyy="3.416666666666667e-07" iyz="0" izx="0" izy="0" izz="3.416666666666667e-07"/>
+      <mass value="0.001"/>
+    </inertial>
+  </link>
+  <joint name="front_camera_joint" type="fixed">
+    <parent link="chassis"/>
+    <child link="front_camera_link"/>
+    <origin xyz="-0.006256036655947976 0.0017242800000000001 0.2645206675581313" rpy="0.0 0.15771603452297908 0.0"/>
+  </joint>
+  <gazebo reference="front_camera_link">
+    <sensor name="front_camera" type="camera">
+      <plugin name="camera_plugin" filename="libgazebo_ros_camera.so">
+        <alwaysOn>1</alwaysOn>
+        <updateRate>0</updateRate>
+        <frameName>front_camera</frameName>
+        <cameraName>front_camera</cameraName>
+        <imageTopicName>/simulation/sensors/raw/camera</imageTopicName>
+        <cameraInfoTopicName>/simulation/sensors/camera/info</cameraInfoTopicName>
+      </plugin>
+      <update_rate>60</update_rate>
+      <camera>
+        <horizontal_fov>2.064911321881509</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>1024</height>
+          <format>L8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>4</far>
+        </clip>
+      </camera>
+    </sensor>
+  </gazebo>
+  <link name="ir_ahead_sensor_link">
+    <collision>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+      <material name="mat">
+        <color>1.0 1.0 1.0</color>
+      </material>
+    </visual>
+    <inertial>
+      <inertia ixx="6.666666666666667e-10" ixy="0" ixz="0" iyx="0" iyy="6.666666666666667e-10" iyz="0" izx="0" izy="0" izz="6.666666666666667e-10"/>
+      <mass value="1e-05"/>
+    </inertial>
+  </link>
+  <joint name="ir_ahead_sensor_joint" type="fixed">
+    <parent link="chassis"/>
+    <child link="ir_ahead_sensor_link"/>
+    <origin xyz="0.285 0.0 0.08" rpy="0 0 0"/>
+  </joint>
+  <gazebo reference="ir_ahead_sensor_link">
+    <sensor name="ir_ahead_sensor" type="depth">
+      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+        <alwaysOn>1</alwaysOn>
+        <updateRate>0</updateRate>
+        <frameName>ir_ahead</frameName>
+        <cameraName>ir_ahead_sensor</cameraName>
+        <depthImageTopicName>/simulation/sensors/raw/distance_ahead</depthImageTopicName>
+        <depthImageCameraInfoTopicName>/simulation/sensors/info/distance_ahead</depthImageCameraInfoTopicName>
+        <pointCloudTopicName>/simulation/sensors/raw/distance_ahead_points</pointCloudTopicName>
+        <pointCloudCutoff>0.005</pointCloudCutoff>
+      </plugin>
+      <update_rate>20</update_rate>
+      <camera>
+        <horizontal_fov>0.0349</horizontal_fov>
+        <image>
+          <width>2</width>
+          <height>2</height>
+          <format>L8</format>
+        </image>
+        <clip>
+          <near>0.01</near>
+          <far>2</far>
+        </clip>
+      </camera>
+    </sensor>
+  </gazebo>
+  <link name="ir_front_sensor_link">
+    <collision>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+      <material name="mat">
+        <color>1.0 1.0 1.0</color>
+      </material>
+    </visual>
+    <inertial>
+      <inertia ixx="6.666666666666667e-10" ixy="0" ixz="0" iyx="0" iyy="6.666666666666667e-10" iyz="0" izx="0" izy="0" izz="6.666666666666667e-10"/>
+      <mass value="1e-05"/>
+    </inertial>
+  </link>
+  <joint name="ir_front_sensor_joint" type="fixed">
+    <parent link="chassis"/>
+    <child link="ir_front_sensor_link"/>
+    <origin xyz="0.168 -0.1 0.08" rpy="0 0 -1.570796327"/>
+  </joint>
+  <gazebo reference="ir_front_sensor_link">
+    <sensor name="ir_front_sensor" type="depth">
+      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+        <alwaysOn>1</alwaysOn>
+        <updateRate>0</updateRate>
+        <frameName>ir_front</frameName>
+        <cameraName>ir_front_sensor</cameraName>
+        <depthImageTopicName>/simulation/sensors/raw/distance_front</depthImageTopicName>
+        <depthImageCameraInfoTopicName>/simulation/sensors/info/distance_front</depthImageCameraInfoTopicName>
+        <pointCloudTopicName>/simulation/sensors/raw/distance_front_points</pointCloudTopicName>
+        <pointCloudCutoff>0.005</pointCloudCutoff>
+      </plugin>
+      <update_rate>20</update_rate>
+      <camera>
+        <horizontal_fov>0.0349</horizontal_fov>
+        <image>
+          <width>2</width>
+          <height>2</height>
+          <format>L8</format>
+        </image>
+        <clip>
+          <near>0.01</near>
+          <far>2</far>
+        </clip>
+      </camera>
+    </sensor>
+  </gazebo>
+  <link name="ir_middle_sensor_link">
+    <collision>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+      <material name="mat">
+        <color>1.0 1.0 1.0</color>
+      </material>
+    </visual>
+    <inertial>
+      <inertia ixx="6.666666666666667e-10" ixy="0" ixz="0" iyx="0" iyy="6.666666666666667e-10" iyz="0" izx="0" izy="0" izz="6.666666666666667e-10"/>
+      <mass value="1e-05"/>
+    </inertial>
+  </link>
+  <joint name="ir_middle_sensor_joint" type="fixed">
+    <parent link="chassis"/>
+    <child link="ir_middle_sensor_link"/>
+    <origin xyz="0.105 -0.1 0.08" rpy="0 0 -1.570796327"/>
+  </joint>
+  <gazebo reference="ir_middle_sensor_link">
+    <sensor name="ir_middle_sensor" type="depth">
+      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+        <alwaysOn>1</alwaysOn>
+        <updateRate>0</updateRate>
+        <frameName>ir_middle</frameName>
+        <cameraName>ir_middle_sensor</cameraName>
+        <depthImageTopicName>/simulation/sensors/raw/distance_middle</depthImageTopicName>
+        <depthImageCameraInfoTopicName>/simulation/sensors/info/distance_middle</depthImageCameraInfoTopicName>
+        <pointCloudTopicName>/simulation/sensors/raw/distance_middle_points</pointCloudTopicName>
+        <pointCloudCutoff>0.005</pointCloudCutoff>
+      </plugin>
+      <update_rate>20</update_rate>
+      <camera>
+        <horizontal_fov>0.0349</horizontal_fov>
+        <image>
+          <width>2</width>
+          <height>2</height>
+          <format>L8</format>
+        </image>
+        <clip>
+          <near>0.01</near>
+          <far>2</far>
+        </clip>
+      </camera>
+    </sensor>
+  </gazebo>
+  <link name="ir_back_sensor_link">
+    <collision>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+      <material name="mat">
+        <color>1.0 1.0 1.0</color>
+      </material>
+    </visual>
+    <inertial>
+      <inertia ixx="6.666666666666667e-10" ixy="0" ixz="0" iyx="0" iyy="6.666666666666667e-10" iyz="0" izx="0" izy="0" izz="6.666666666666667e-10"/>
+      <mass value="1e-05"/>
+    </inertial>
+  </link>
+  <joint name="ir_back_sensor_joint" type="fixed">
+    <parent link="chassis"/>
+    <child link="ir_back_sensor_link"/>
+    <origin xyz="0 -0.112 0.08" rpy="0 0 -1.570796327"/>
+  </joint>
+  <gazebo reference="ir_back_sensor_link">
+    <sensor name="ir_back_sensor" type="depth">
+      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+        <alwaysOn>1</alwaysOn>
+        <updateRate>0</updateRate>
+        <frameName>ir_back</frameName>
+        <cameraName>ir_back_sensor</cameraName>
+        <depthImageTopicName>/simulation/sensors/raw/distance_back</depthImageTopicName>
+        <depthImageCameraInfoTopicName>/simulation/sensors/info/distance_back</depthImageCameraInfoTopicName>
+        <pointCloudTopicName>/simulation/sensors/raw/distance_back_points</pointCloudTopicName>
+        <pointCloudCutoff>0.005</pointCloudCutoff>
+      </plugin>
+      <update_rate>20</update_rate>
+      <camera>
+        <horizontal_fov>0.0349</horizontal_fov>
+        <image>
+          <width>2</width>
+          <height>2</height>
+          <format>L8</format>
+        </image>
+        <clip>
+          <near>0.01</near>
+          <far>2</far>
+        </clip>
+      </camera>
+    </sensor>
+  </gazebo>
+  <gazebo>
+    <plugin name="model_plugin_link" filename="libmodel_plugin_link.so"/>
+  </gazebo>
+</robot>

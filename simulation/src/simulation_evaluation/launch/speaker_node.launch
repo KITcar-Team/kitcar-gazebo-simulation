@@ -1,0 +1,11 @@
+<!-- KITcar launch script -->
+<launch>
+
+  <node name="speaker_node" ns="simulation_evaluation" pkg="simulation_evaluation" type="speaker_node" output="screen">
+    <rosparam file="$(find simulation_evaluation)/param/speaker/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_evaluation)/param/speaker/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics/groundtruth"/>
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state"/>
+  </node>
+
+</launch>

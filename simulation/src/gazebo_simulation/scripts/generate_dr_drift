@@ -1,0 +1,28 @@
+#! /usr/bin/env python3
+import os
+
+import rospkg
+from simulation.src.gazebo_simulation.src.car_model.dr_drift import load_dr_drift
+
+rospack = rospkg.RosPack()
+
+
+def generate(base, car_specs_base):
+    dr_drift = load_dr_drift(
+        f"{car_specs_base}/car_specs.yaml",
+        f"{car_specs_base}/camera.yaml",
+        f"{car_specs_base}/static_coordinate_systems.yaml",
+        save_camera_calibration=f"{base}/camera.yaml",
+        save_car_specs=f"{base}/car_specs.yaml",
+        save_static_coordinates=f"{base}/static_coordinate_systems.yaml",
+    )
+    dr_drift.save(f"{base}/model.urdf")
+
+
+if __name__ == "__main__":
+    generate(
+        base=os.path.join(
+            rospack.get_path("gazebo_simulation"), "param", "car_specs", "dr_drift"
+        ),
+        car_specs_base=os.path.join(rospack.get_path("car_specs"), "param", "dr_drift"),
+    )

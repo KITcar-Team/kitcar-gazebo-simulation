@@ -1,0 +1,11 @@
+# Beware: The plugin does not use these parameters! It is not launched through a launch file...
+# However: It uses equivalent values, therefore changes to these parameters must be in synchronization with the actual plugin code!
+namespace: "/simulation/gazebo/model"
+
+set:
+  pose: "set_pose"
+  twist: "set_twist"
+
+get:
+  pose: "pose"
+  twist: "twist"

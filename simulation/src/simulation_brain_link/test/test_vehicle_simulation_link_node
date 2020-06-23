@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+import sys
+import unittest
+import rospy
+import math
+import random
+from simulation.utils.geometry import Vector, Transform
+from simulation.utils.ros_base.node_base import NodeBase
+
+# Messages
+from simulation_brain_link.msg import State as StateEstimationMsg
+from gazebo_simulation.msg import CarState as CarStateMsg
+from tf2_msgs.msg import TFMessage
+import std_msgs.msg
+import geometry_msgs.msg
+
+PKG = "simulation_brain_link"
+
+
+class VehicleSimulationLinkNodeTest(unittest.TestCase, NodeBase):
+    """Unittest that is executed through a ROS test and performs some checks on the vehicle simulation link node.
+    """
+
+    def assert_approx_equal_pose(self, pose, pose2):
+        self.assertAlmostEqual(Vector(pose), Vector(pose2))
+        self.assertAlmostEqual(
+            pose.get_angle(), pose2.get_angle(), delta=math.radians(0.02)
+        )
+
+    def setUp(self):
+        NodeBase.__init__(
+            self, name="test_vehicle_simulation_link_node", log_level=rospy.DEBUG
+        )
+
+        self.state_estimation_publisher = rospy.Publisher(
+            self.param.topics.state_estimation, StateEstimationMsg, queue_size=1
+        )
+        self.tf_publisher = rospy.Publisher("/tf", TFMessage, queue_size=1)
+
+        self.car_state_listener = rospy.Subscriber(
+            self.param.topics.car_state.car_state, CarStateMsg, self.receive_car_state
+        )
+
+        self.tf_listener = rospy.Subscriber("/tf", TFMessage, self.receive_tf)
+
+        # In order for the vehicle simulation link node to start publishing a simulation<->world transform,
+        # a world a state estimation msg must be received.
+        # Give the node time to wake up..
+        rospy.sleep(self.param.sleep_time)
+        self.set_state_estimation()
+        random.seed(self.param.seed + self._testMethodName)
+
+        # Wait for vehicle simulation node to start publishing the transform
+        rospy.wait_for_message("/tf", TFMessage)
+
+    def set_state_estimation(self, **kwargs):
+        """Publish a state_estimation msg. See the definition of StateEstimationMsg for all available fields.
+        """
+        msg = StateEstimationMsg(**kwargs)
+        self.state_estimation_publisher.publish(msg)
+
+    def set_world_vehicle(self, tf: Transform):
+        """Publish a transformation to '/tf'"""
+        msg = geometry_msgs.msg.TransformStamped()
+        msg.header = std_msgs.msg.Header()
+        msg.header.frame_id = self.param.frame.world
+        msg.child_frame_id = self.param.frame.vehicle
+        msg.transform = tf.to_geometry_msg()
+
+        self.tf_publisher.publish([msg])
+
+    def receive_car_state(self, msg: CarStateMsg):
+        self.last_car_state_msg = msg
+
+    def receive_tf(self, msg: TFMessage):
+        """Receive new message from the /tf topic and extract the simulation to world transformation."""
+
+        # Only select world to vehicle transformations
+        def select_tf(tf):
+            return (
+                tf.header.frame_id == self.param.frame.simulation
+                and tf.child_frame_id == self.param.frame.world
+            )
+
+        # Select first tf (default: None)
+        simulation_world: geometry_msgs.msg.TransformStamped = next(
+            filter(select_tf, msg.transforms), None
+        )
+        if simulation_world:
+            rospy.logdebug(f"Received simulation_world transform {simulation_world}")
+            self.last_simulation_world_tf = Transform(simulation_world.transform)
+        else:
+            rospy.logdebug("Received no simulation world transformation.")
+
+    def test_sending_state_estimation(self):
+        """Test to set a number of random twists and check if the model is always moving how it should be!"""
+
+        for i in range(0, 20):
+            lin = Vector(random.random() * 10, random.random() * 10, 0)
+            ang = Vector(0, 0, 0)  # No angular because it's hard to test!!
+
+            # Adjust coordinates to be in vehicle coordinate frame!
+            veh_lin = Transform([0, 0, 0], self.last_simulation_world_tf.rotation) * lin
+
+            self.set_state_estimation(speed_x=veh_lin.x, speed_y=veh_lin.y, yaw_rate=ang.z)
+
+            # Wait
+            rospy.sleep(self.param.sleep_time)
+
+            # Last car state message contains speed
+            received_twist = self.last_car_state_msg.twist
+
+            rospy.loginfo(
+                f"Received: lin:{Vector(received_twist.linear)}, ang:{Vector(received_twist.linear)},\
+                        \nexpected: lin:{lin}, ang:{ang}"
+            )
+            self.assertAlmostEqual(Vector(received_twist.linear), lin, delta=0.1)
+            self.assertAlmostEqual(Vector(received_twist.angular), ang)
+
+
+if __name__ == "__main__":
+    import rostest
+
+    rostest.rosrun(
+        PKG, "test_vehicle_simulation_link_node", VehicleSimulationLinkNodeTest, sys.argv
+    )
