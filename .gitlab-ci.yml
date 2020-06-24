@@ -5,6 +5,8 @@ variables:
   GIT_LFS_SKIP_SMUDGE: "1"  #  Don't pull Git LFS
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
 
 before_script:
   # Run the container start script to enable the pulseaudio & xserver
@@ -37,6 +39,27 @@ build-code:
       - simulation/build
     expire_in: 2 day
 
+# Allow to manually build the ci image
+# E.g. to test if the Dockerfile is still working
+build-ci-image:
+  stage: build
+  image: docker:19.03.11
+  when: manual
+  tags:
+    - docker
+  services:
+    - docker:19.03.11-dind
+  before_script: []
+  script:
+    - docker --version
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    # Link necessary files into scope of the Dockerfile
+    - cd simulation/docker/ci_image
+    - mkdir init
+    - ln ../../../init/* init/
+    # Build & deploy docker image:
+    - docker build -t $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:focal .
 
 ######## TEST STAGE #########
 
@@ -89,3 +112,28 @@ build-documentation:
     paths:
       - docs/_build/html/*
     expire_in: 2 day
+
+# Build and deploy the CI docker image to the gitlab registry
+# This is done everytime the master branch is updated
+deploy-ci-image:
+  stage: deploy
+  image: docker:19.03.11
+  only:
+    - master
+  tags:
+    - docker
+  services:
+    - docker:19.03.11-dind
+  before_script: []
+  script:
+    - docker --version
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    # Link necessary files into scope of the Dockerfile
+    - cd simulation/docker/ci_image
+    - mkdir init
+    - ln ../../../init/* init/
+    # Build & deploy docker image:
+    - docker build -t $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:test .
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:test
+
