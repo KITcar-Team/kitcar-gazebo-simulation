@@ -134,6 +134,6 @@ deploy-ci-image:
     - mkdir init
     - ln ../../../init/* init/
     # Build & deploy docker image:
-    - docker build -t $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:test .
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:test
+    - docker build -t $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:focal .
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:focal
 
