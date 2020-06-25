@@ -1,42 +1,46 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """VehicleSimulationLinkNode"""
 
+from contextlib import suppress
+
+from pyquaternion import Quaternion
+
 import rospy
+import geometry_msgs.msg
+from tf2_msgs.msg import TFMessage
+import std_msgs.msg
+
 from simulation.utils.ros_base.node_base import NodeBase
 from simulation.utils.geometry import Transform, Vector
 
 # Messages
 from simulation_brain_link.msg import State as StateEstimationMsg
-import geometry_msgs.msg
 from gazebo_simulation.msg import (
     SetModelTwist as SetModelTwistMsg,
     SetModelPose as SetModelPoseMsg,
 )
-from tf2_msgs.msg import TFMessage
-
-import std_msgs.msg
-
-from pyquaternion import Quaternion
-
-__copyright__ = "KITcar"
 
 
 class VehicleSimulationLinkNode(NodeBase):
-    """ROS node to translate state_estimation messages into movement of the vehicle in Gazebo
-    and provide a simulation to world transformation.
+    """ROS node to translate state_estimation messages into movement
+    of the vehicle in Gazebo and provide a simulation to world transformation.
 
-    Whenever the pose of the vehicle is updated and a new message is received the updated twist is calculated
-    and published.
+    Whenever the pose of the vehicle is updated and a new message
+    is received the updated twist is calculated and published.
 
     Attributes:
-        set_model_twist_publisher (rospy.publisher): Publishes the new twist on the model plugins set_twist topic.
-        get_model_pose_subscriber (rospy.subscriber): Receives the current pose of the model in Gazebo.
-        state_estimation_subscriber (rospy.subscriber): Receives the state_estimation messages.
-        latest_state_estimation (StateEstimationMsg): Latest received state estimation message.
+        set_model_twist_publisher (rospy.publisher):
+            Publishes the new twist on the model plugins set_twist topic.
+        get_model_pose_subscriber (rospy.subscriber):
+            Receives the current pose of the model in Gazebo.
+        state_estimation_subscriber (rospy.subscriber):
+            Receives the state_estimation messages.
+        latest_state_estimation (StateEstimationMsg):
+            Latest received state estimation message.
         sub_tf (rospy.subscriber): Receive transformation updates
-        pub_tf (rospy.publisher): Publish updates about the world to simulation transformation
-        vehicle_world_tf (Transform): Transformation between the vehicle and world coordinate frame.
+        pub_tf (rospy.publisher):
+            Publish updates about the world to simulation transformation
+        vehicle_world_tf (Transform):
+            Transformation between the vehicle and world coordinate frame.
     """
 
     def __init__(self):
@@ -120,11 +124,15 @@ class VehicleSimulationLinkNode(NodeBase):
         super().start()
 
     def stop(self):
-        self.state_estimation_subscriber.unregister()
-        self.set_model_twist_publisher.unregister()
-        self.get_model_pose_subscriber.unregister()
-        self.sub_tf.unregister()
-        self.pub_tf.unregister()
+        # Attribute errors can occur if the node has not been completely started
+        # before shutting down.
+        with suppress(AttributeError):
+            self.state_estimation_subscriber.unregister()
+            self.get_model_pose_subscriber.unregister()
+            self.sub_tf.unregister()
+
+            self.set_model_twist_publisher.unregister()
+            self.pub_tf.unregister()
         super().stop()
 
     def receive_model_pose_cb(self, msg: geometry_msgs.msg.Pose):
@@ -146,12 +154,12 @@ class VehicleSimulationLinkNode(NodeBase):
     def update_twist(
         self, state_estimation: StateEstimationMsg, vehicle_simulation_rotation: Quaternion
     ):
-        """Update the vehicle's twist by publishing an update on the model plugins set_twist topic.
+        """Update the vehicle's twist with an update on the model plugins set_twist topic.
 
         Args:
             state_estimation (StateEstimationMsg): latest state estimation message
-            vehicle_simulation_rotation (Transform): latest update of the rotation between the simulation
-                and vehicle coordinate frames
+            vehicle_simulation_rotation (Transform): latest update of the
+                rotation between the simulation and vehicle coordinate frames
         """
         try:
 
@@ -205,7 +213,7 @@ class VehicleSimulationLinkNode(NodeBase):
             rospy.logerr(f"Error updating the vehicles pose {e}.")
 
     def receive_tf(self, tf_msg: TFMessage):
-        """Receive new message from the /tf topic and extract the world to vehicle transformation."""
+        """Receive msg from the tf topic and extract the world to vehicle transformation."""
         # Only select world to vehicle transformations
         def select_tf(tf):
             return (
@@ -229,7 +237,8 @@ class VehicleSimulationLinkNode(NodeBase):
         """Publish up to date simulation to world transformation to /tf.
 
         Args:
-            vehicle_simulation_tf (Transform): Transformation between vehicle and simulation frames.
+            vehicle_simulation_tf (Transform): Transformation between vehicle
+                and simulation frames.
         """
         tf_stamped = geometry_msgs.msg.TransformStamped()
 
@@ -239,7 +248,8 @@ class VehicleSimulationLinkNode(NodeBase):
         tf_stamped.header.frame_id = self.param.frame.simulation
         tf_stamped.child_frame_id = self.param.frame.world
 
-        # Transformation from world to simulation == (world to vehicle -> vehicle to simulation)
+        # Transformation from world to
+        # simulation == (world to vehicle -> vehicle to simulation)
         tf_stamped.transform = (
             vehicle_simulation_tf * self.vehicle_world_tf.inverse
         ).to_geometry_msg()
