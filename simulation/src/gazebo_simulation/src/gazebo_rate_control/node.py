@@ -23,45 +23,80 @@ class GazeboRateControlNode(NodeBase):
     def __init__(self):
         """Initialize the node"""
 
-        super().__init__(name="gazebo_rate_control_node", log_level=rospy.INFO)
+        super().__init__(name="gazebo_rate_control_node")
+
+        self._last_target_frequencies = {}
 
         self.run(function=self.update, rate=self.param.update_rate.control.rate)
 
     def start(self):
+
+        rospy.wait_for_service(self.param.topics.get_physics, timeout=5)
         self.set_physics = rospy.ServiceProxy(
-            self.param.topics.set_physics, SetPhysicsProperties
+            self.param.topics.set_physics, SetPhysicsProperties, persistent=True
         )
         self.get_physics = rospy.ServiceProxy(
-            self.param.topics.get_physics, GetPhysicsProperties
+            self.param.topics.get_physics, GetPhysicsProperties, persistent=True
         )
 
-        self.rater = rostopic.ROSTopicHz(10)
-        self.subscriber = rospy.Subscriber(
-            self.param.topics.target,
-            rospy.AnyMsg,
-            self.rater.callback_hz,
-            callback_args=self.param.topics.target,
-        )
+        self.rater = rostopic.ROSTopicHz(5)
+
+        self.subscribers = {}
+        for target in self.param.targets:
+            topic = target["topic"]
+            self.subscribers[topic] = rospy.Subscriber(
+                topic, rospy.AnyMsg, self.rater.callback_hz, callback_args=topic,
+            )
+
         super().start()
 
     def stop(self):
-        self.subscriber.unregister()
+        for sub in self.subscribers.values():
+            sub.unregister()
+        self.subscribers.clear()
+
         self.set_physics.close()
         self.get_physics.close()
         super().stop()
 
+    def _calculate_update_rate(
+        self, update_rate: float, frequency: float, desired_frequency: float,
+    ) -> float:
+        """Calculate new update rate.
+
+        Args:
+            update_rate: Gazebo's current maximum update_rate
+            frequency: Current frequency
+            desired_frequency: Optimal frequency
+        Return:
+            New maximum update rate.
+        """
+        if frequency == 0:
+            return
+
+        # Calculate new update rate
+        if frequency < desired_frequency:
+            return max(
+                update_rate
+                - (update_rate - self.param.update_rate.min)
+                * self.param.update_rate.control.down
+                * desired_frequency
+                / frequency,
+                self.param.update_rate.min,
+            )
+        elif frequency > desired_frequency:
+            return min(
+                update_rate
+                + (self.param.update_rate.max - update_rate)
+                * self.param.update_rate.control.up
+                * desired_frequency
+                / frequency,
+                self.param.update_rate.max,
+            )
+
     def update(self):
         """Adjust Gazebos update rate to meet desired output frequency of the target topic.
         """
-
-        frequency = self.rater.get_hz(self.param.topics.target)
-        frequency = frequency[0] if frequency else None
-
-        # Check if there's anything to do:
-        if not frequency or (
-            frequency > self.param.frequency.min and frequency < self.param.frequency.max
-        ):
-            return
 
         current_properties = self.get_physics(GetPhysicsPropertiesRequest())
 
@@ -70,29 +105,43 @@ class GazeboRateControlNode(NodeBase):
         new_properties.ode_config = current_properties.ode_config
         new_properties.time_step = current_properties.time_step
 
-        # Calculate new update rate
-        if frequency < self.param.frequency.min:
-            new_update_rate = (
-                current_properties.max_update_rate
-                - (current_properties.max_update_rate - self.param.update_rate.min)
-                * self.param.update_rate.control.down
-                * self.param.frequency.desired
-                / frequency
-            )
-            new_update_rate = max(new_update_rate, self.param.update_rate.min)
-        elif frequency > self.param.frequency.max:
-            new_update_rate = (
-                current_properties.max_update_rate
-                + (self.param.update_rate.max - current_properties.max_update_rate)
-                * self.param.update_rate.control.up
-                * self.param.frequency.desired
-                / frequency
-            )
-            new_update_rate = min(new_update_rate, self.param.update_rate.max)
+        # Calculate new update rate considering all targets
+        update_rates = []
+        for target in self.param.targets:
+            topic = target["topic"]
+            desired_frequency = target["desired"]
 
-        new_properties.max_update_rate = new_update_rate
+            frequency = self.rater.get_hz(topic)
+            frequency = (
+                frequency[0] if frequency else self._last_target_frequencies.get(topic, 0)
+            )
+            self._last_target_frequencies[topic] = frequency
 
-        rospy.logdebug(f"NEW GAZEBO PHYSICS PROPERTIES: {new_properties}")
-        rospy.logdebug(f"CURRENT CAMERA UPDATE RATE: {frequency} ")
+            rate = self._calculate_update_rate(
+                current_properties.max_update_rate,
+                frequency=frequency,
+                desired_frequency=desired_frequency,
+            )
+            if rate is not None:
+                rospy.logdebug(
+                    f"Frequency of topic {topic}: {frequency}"
+                    f" (supposed: {desired_frequency})"
+                )
+                update_rates.append(rate)
+
+        if len(update_rates) > 0:
+            new_properties.max_update_rate = min(update_rates)
+        else:
+            return
+
+        rospy.logdebug(
+            (
+                "Lowering"
+                if new_properties.max_update_rate < current_properties.max_update_rate
+                else "Increasing"
+            )
+            + f" Gazebo's update rate: {current_properties.max_update_rate}"
+            f" -> {new_properties.max_update_rate}"
+        )
 
         self.set_physics(new_properties)
