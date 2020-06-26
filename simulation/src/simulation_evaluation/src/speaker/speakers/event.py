@@ -1,16 +1,8 @@
 """Definition of the EventSpeaker class."""
-
 import functools
-
-from . import export
-
-from simulation.src.simulation_evaluation.src.speaker.speakers.speaker import Speaker
-
-from simulation.utils.geometry import Polygon
+from typing import Callable, List, Any
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
-
-from typing import Callable, List, Any
 from simulation_groundtruth.msg import (
     Section as SectionMsg,
     Lane as LaneMsg,
@@ -18,13 +10,15 @@ from simulation_groundtruth.msg import (
     Parking as ParkingMsg,
 )
 
+from simulation.utils.geometry import Polygon
 import simulation.utils.road.sections.type as road_section_type
+
+from .speaker import Speaker
 
 # Used to simplify the polygons
 BUFFER = 0.0001
 
 
-@export
 class EventSpeaker(Speaker):
     """Find events that happen during a drive e.g collision, parked in spot."""
 
@@ -63,8 +57,7 @@ class EventSpeaker(Speaker):
         self.parking_spot_buffer = parking_spot_buffer
         self.min_parking_wheels = min_parking_wheels
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def parking_spots(self) -> List[Polygon]:
         """Return all parking spots as a list of polygons."""
         parking_spots = []

@@ -11,6 +11,7 @@ Use this launch file to start the complete simulation.-->
   <!-- Name of the simulation road and seed used to render the road.-->
   <arg name="road" default="default_road" />
   <arg name="seed" default="__no_value__"/>
+  <arg name="force_reload_road" default="false" />
   <!-- Name of the gazebo world.
        By default, the empty base_world is used. -->
   <arg name="world" default="base_world" />
@@ -106,6 +107,7 @@ Use this launch file to start the complete simulation.-->
     <arg name="start_groundtruth" default="$(arg include_groundtruth)" />
     <arg name="start_renderer" default="$(arg include_renderer)" />
     <arg name="start_object_controller" default="$(arg include_object_controller)" />
+    <arg name="force_reload_road" default="$(arg force_reload_road)" />
   </include>
   <!-- Launch evaluation pipeline -->
   <include if="$(arg evaluate)" file="$(find simulation_evaluation)/launch/evaluation.launch" />
