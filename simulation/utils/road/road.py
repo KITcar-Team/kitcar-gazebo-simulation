@@ -93,8 +93,11 @@ def load(road_name: str, seed: str = "KITCAR") -> Road:
 
     sys.path.append(DEFAULT_ROAD_DIR)
 
+    # Replace dashes in the road name with dots
+    module_name = road_name.replace("/", ".")
+
     try:
-        road_module = importlib.import_module(road_name, DEFAULT_ROAD_DIR)
+        road_module = importlib.import_module(module_name, DEFAULT_ROAD_DIR)
     except ModuleNotFoundError:
         raise ValueError(f"Road of name {road_name} not found in {DEFAULT_ROAD_DIR}.")
 
