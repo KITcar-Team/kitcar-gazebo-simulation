@@ -1,18 +1,13 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Definition of the SpeedSpeaker class."""
-import rospy
+from typing import List
 
-from simulation.src.simulation_evaluation.src.speaker.speakers.speaker import Speaker
+import rospy
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 
-from typing import List
-
-from . import export
+from .speaker import Speaker
 
 
-@export
 class SpeedSpeaker(Speaker):
     """Publish information about the cars speed."""
 

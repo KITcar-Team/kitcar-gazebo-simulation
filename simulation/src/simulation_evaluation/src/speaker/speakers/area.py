@@ -1,19 +1,15 @@
 import functools
-from simulation.utils.geometry import Polygon
-
 from typing import Callable, List, Any
-
-from simulation.src.simulation_evaluation.src.speaker.speakers.speaker import Speaker
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 from simulation_groundtruth.msg import Section as SectionMsg, Lane as LaneMsg
 
-from . import export
-
+from simulation.utils.geometry import Polygon
 import simulation.utils.road.sections.type as road_section_type
 
+from .speaker import Speaker
 
-@export
+
 class AreaSpeaker(Speaker):
     """Check in which area of the road the vehicle is (e.g. right corridor, parking lot)."""
 
@@ -42,8 +38,7 @@ class AreaSpeaker(Speaker):
         self.min_wheel_count = min_wheel_count
         self.area_buffer = area_buffer
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def left_corridor(self) -> Polygon:
         """Concatenated left corridor from all sections."""
         return Polygon(
@@ -52,8 +47,7 @@ class AreaSpeaker(Speaker):
             .exterior.coords
         )
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def right_corridor(self) -> Polygon:
         """Concatenated right corridor from all sections."""
         return Polygon(
@@ -62,8 +56,7 @@ class AreaSpeaker(Speaker):
             .exterior.coords
         )
 
-    @property
-    @functools.lru_cache()
+    @functools.cached_property
     def parking_lots(self) -> List[Polygon]:
         """Return all parking bays as a list of polygons."""
         parking_polygons = []

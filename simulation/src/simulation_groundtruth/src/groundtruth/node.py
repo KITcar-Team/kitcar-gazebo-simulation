@@ -68,6 +68,7 @@ class GroundtruthNode(NodeBase):
             info_callback=self.update_groundtruth_status,
             tile_size=Vector(self.param.tile_size),
             tile_resolution=Vector(self.param.tile_resolution),
+            force_reload=self.param.force_reload_road,
         )
         self.object_controller = ObjectController(
             road, remove_model=self._remove_model, spawn_model=self._spawn_model,

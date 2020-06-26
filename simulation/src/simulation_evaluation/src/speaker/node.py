@@ -180,10 +180,15 @@ class SpeakerNode(NodeBase):
         """Publish the output of all speakers."""
         # Publish in all speaker handlers
         for speaker, publisher in self.speakers:
-            msgs = speaker.speak()
+            try:
+                msgs = speaker.speak()
 
-            for msg in msgs:
-                rospy.logdebug(f"PUBLISHING {msg} on speaker {speaker.__class__.__name__}")
-                if type(msg) == SpeakerMsg:
-                    msg.name = self.msg_names[msg.type]
-                publisher.publish(msg)
+                for msg in msgs:
+                    rospy.logdebug(
+                        f"PUBLISHING {msg} on speaker {speaker.__class__.__name__}"
+                    )
+                    if type(msg) == SpeakerMsg:
+                        msg.name = self.msg_names[msg.type]
+                    publisher.publish(msg)
+            except Exception as e:
+                rospy.logerr(f"Exception occured in {type(speaker)}: {e}")
