@@ -61,6 +61,7 @@ catkin_python_setup()
 add_message_files(
   FILES
   State.msg
+  MissionMode.msg
 )
 #
 ### Generate services in the 'srv' folder
