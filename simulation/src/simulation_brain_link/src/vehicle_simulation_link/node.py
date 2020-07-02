@@ -48,6 +48,7 @@ class VehicleSimulationLinkNode(NodeBase):
         self.speed = Vector(0, 0)
         self.yaw_rate = 0
         self.vehicle_simulation_rotation = Transform([0, 0], 0)
+        self._last_tf_update = 0
 
         super().__init__(
             name="vehicle_simulation_link_node"
@@ -244,6 +245,10 @@ class VehicleSimulationLinkNode(NodeBase):
             vehicle_simulation_tf (Transform): Transformation between vehicle
                 and simulation frames.
         """
+        if rospy.Time.now().to_sec() - self._last_tf_update == 0:
+            return
+        self._last_tf_update = rospy.Time.now().to_sec()
+
         tf_stamped = geometry_msgs.msg.TransformStamped()
 
         tf_stamped.header = std_msgs.msg.Header()
