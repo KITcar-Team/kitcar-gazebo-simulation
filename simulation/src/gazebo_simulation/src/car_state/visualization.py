@@ -53,12 +53,16 @@ class CarStateVisualizationNode(NodeBase):
             msg (CarStateMsg): Msg published by car state node
         """
         frame_marker = visualization.get_marker_for_points(
-            (Point(p) for p in msg.frame.points), frame_id="simulation", rgba=[0, 0, 1, 0.7]
+            (Point(p) for p in msg.frame.points),
+            frame_id=self.param.vehicle_simulation_link.frame.simulation,
+            rgba=[0, 0, 1, 0.7],
         )
         self.frame_publisher.publish(frame_marker)
 
         if len(msg.view_cone.points):
             cone_marker = visualization.get_marker_for_points(
-                (Point(p) for p in msg.view_cone.points), frame_id="simulation", id=1
+                (Point(p) for p in msg.view_cone.points),
+                frame_id=self.param.vehicle_simulation_link.frame.simulation,
+                id=1,
             )
             self.view_cone_publisher.publish(cone_marker)
