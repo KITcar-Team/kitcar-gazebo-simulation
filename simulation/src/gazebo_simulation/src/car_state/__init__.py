@@ -7,21 +7,7 @@ The CarStateVisualizationNode then processes this information
 and publishes messages which can be displayed in RVIZ.
 """
 
-from typing import List, Any
+from .node import CarStateNode
+from .visualization import CarStateVisualizationNode
 
-# Decorator to easily add classes/functions to the geometry module.
-def export(define):
-    # Add new object to globals
-    globals()[define.__name__] = define
-    # Append the object to __all__ which is visible when the module is imported
-    __all__.append(define.__name__)
-    return define
-
-
-__all__: List[
-    Any
-] = []  # Will hold all classes/functions which can be imported with 'from simulation.utils.geometry import ...'
-
-# import all files which are part of the geometry module
-import simulation.src.gazebo_simulation.src.car_state.node  # noqa:402
-import simulation.src.gazebo_simulation.src.car_state.visualization  # noqa:402
+__all__ = ["CarStateNode", "CarStateVisualizationNode"]

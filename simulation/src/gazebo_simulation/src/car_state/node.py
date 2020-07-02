@@ -1,21 +1,16 @@
 import rospy
 import numpy as np
-
-from simulation.utils.ros_base.node_base import NodeBase
-from simulation.utils.geometry import Vector, Point, Polygon, Transform
-
 import geometry_msgs.msg
+
 from gazebo_simulation.msg import CarState as CarStateMsg
 
-from . import export
+from simulation.utils.ros_base.node_base import NodeBase
+from simulation.utils.geometry import Point, Polygon, Transform
 
 from simulation.src.gazebo_simulation.src.car_model.car_specs import CarSpecs
 from simulation.src.gazebo_simulation.src.car_model.camera_specs import CameraSpecs
 
-__copyright__ = "KITcar"
 
-
-@export
 class CarStateNode(NodeBase):
     """ROS node which publishes information about the model in a CarState.
 
@@ -45,7 +40,6 @@ class CarStateNode(NodeBase):
 
     def start(self):
         """Start node."""
-
         self.model_pose_subscriber = rospy.Subscriber(
             self.param.topics.model_plugin.namespace
             + "/"
@@ -85,32 +79,31 @@ class CarStateNode(NodeBase):
         self.publisher.unregister()
 
     def read_car_config(self):
-        """Process car parameters.
-
-        """
+        """Process car parameters."""
         car_specs = CarSpecs.from_file(self.param.car_specs_path)
         camera_specs = CameraSpecs.from_file(self.param.camera_specs_path)
 
         """ Car frame config """
-        chassis_size = Vector(
-            car_specs.distance_to_rear_bumper
-            # + car_specs.wheelbase
-            + car_specs.distance_cog_front,
-            car_specs.vehicle_width,
-        )
-        chassis_position = Point(car_specs.center_rear_axle.x, car_specs.center_rear_axle.y)
-
-        # get dimensions
-        x_span = Vector(
-            0.5 * chassis_size.x, 0
-        )  # Vector in x direction of length = width/2
-        y_span = Vector(0, 0.5 * chassis_size.y)
+        # Car frame should have it's origin at the center of the rear axle:
+        # Distance to rear/front is measured in respect to the front axle!!
         self.car_frame = Polygon(
             [
-                chassis_position + x_span + y_span,  # Front right
-                chassis_position - x_span + y_span,  # Front left
-                chassis_position - x_span - y_span,  # Back left
-                chassis_position + x_span - y_span,  # Back right
+                [
+                    -car_specs.distance_to_rear_bumper + car_specs.wheelbase,
+                    car_specs.vehicle_width / 2,
+                ],
+                [
+                    -car_specs.distance_to_rear_bumper + car_specs.wheelbase,
+                    -car_specs.vehicle_width / 2,
+                ],
+                [
+                    car_specs.distance_to_front_bumper + car_specs.wheelbase,
+                    -car_specs.vehicle_width / 2,
+                ],
+                [
+                    car_specs.distance_to_front_bumper + car_specs.wheelbase,
+                    car_specs.vehicle_width / 2,
+                ],
             ]
         )
 
@@ -127,7 +120,6 @@ class CarStateNode(NodeBase):
 
         # Calculate a few points to approximate view frame
         # Add points on horizon of our camera (at view_distance away from vehicle) /approximates a view cone
-
         # Create geom.Polygon from points
         self.view_cone = Polygon(
             [Point(0, 0)]
@@ -139,7 +131,6 @@ class CarStateNode(NodeBase):
 
     def state_update(self):
         """Publish new CarState with updated information."""
-
         # Request current pose and twist from model_interface
         pose: geometry_msgs.msg.Pose = self.latest_vehicle_pose
         twist: geometry_msgs.msg.Twist = self.latest_vehicle_twist
