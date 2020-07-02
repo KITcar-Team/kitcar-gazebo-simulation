@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import rospy
 
 from visualization_msgs.msg import Marker
@@ -12,12 +9,7 @@ from simulation.utils.geometry.point import Point
 from simulation.utils.ros_base.node_base import NodeBase
 import simulation.utils.ros_base.visualization as visualization
 
-from . import export
 
-__copyright__ = "KITcar"
-
-
-@export
 class CarStateVisualizationNode(NodeBase):
     """ROS node which allows to visualize the car state in rviz.
 
@@ -29,14 +21,13 @@ class CarStateVisualizationNode(NodeBase):
     """
 
     def __init__(self):
-        """ initialize the node"""
-
+        """Initialize the node."""
         super(CarStateVisualizationNode, self).__init__(name="car_state_visualization_node")
 
         self.run()
 
     def start(self):
-        """ Start visualization. """
+        """Start visualization."""
         self.frame_publisher = rospy.Publisher(
             self.param.topics.rviz.frame, Marker, queue_size=1
         )
@@ -49,18 +40,17 @@ class CarStateVisualizationNode(NodeBase):
         super().start()
 
     def stop(self):
-        """ Stop visualization. """
+        """Stop visualization."""
         self.state_subscriber.unregister()
         self.frame_publisher.unregister()
         self.view_cone_publisher.unregister()
         super().stop()
 
     def state_cb(self, msg: CarStateMsg):
-        """ Called when car state is published
+        """Call when car state is published.
 
         Arguments:
             msg (CarStateMsg): Msg published by car state node
-
         """
         frame_marker = visualization.get_marker_for_points(
             (Point(p) for p in msg.frame.points), frame_id="simulation", rgba=[0, 0, 1, 0.7]
