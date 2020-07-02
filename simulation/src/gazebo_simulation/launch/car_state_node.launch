@@ -17,5 +17,6 @@
   <node if="$(arg rviz)" name="car_state_visualization_node" ns="gazebo_simulation" pkg="gazebo_simulation" type="car_state_visualization_node" output="screen">
     <rosparam file="$(find gazebo_simulation)/param/car_state/default.yaml" command="load" />
     <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics" />
+    <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/default.yaml" command="load" ns="vehicle_simulation_link" />
   </node>
 </launch>
