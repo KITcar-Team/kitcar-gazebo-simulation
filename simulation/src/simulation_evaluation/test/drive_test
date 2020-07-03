@@ -1,0 +1,31 @@
+#! /usr/bin/env python3
+import sys
+import unittest
+
+import rostest
+import rospy
+
+from simulation_evaluation.msg import Referee as RefereeMsg
+
+from drive_test.node import DriveTestNode
+
+
+class DriveTest(unittest.TestCase):
+    """Use the DriveTestNode to package a drive as a unittest."""
+
+    def test_drive(self):
+        # Run the test and then compare result
+        try:
+            node = DriveTestNode(run=False)
+            node.run()
+        except rospy.exceptions.ROSInterruptException:
+            pass
+        self.assertEqual(
+            node.state,
+            RefereeMsg.COMPLETED,
+            f"Drive finished in state: {node.state}, but should be {RefereeMsg.COMPLETED}",
+        )
+
+
+if __name__ == "__main__":
+    rostest.rosrun("simulation_evaluation", "drive_test_node", DriveTest, sys.argv)
