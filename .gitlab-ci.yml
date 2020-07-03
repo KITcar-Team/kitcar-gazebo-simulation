@@ -1,4 +1,4 @@
-image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation:focal
+image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:focal
 
 variables:
   GIT_STRATEGY: clone
@@ -54,12 +54,15 @@ build-ci-image:
     - docker --version
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    # Link necessary files into scope of the Dockerfile
-    - cd simulation/docker/ci_image
-    - mkdir init
-    - ln ../../../init/* init/
-    # Build & deploy docker image:
-    - docker build -t $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:focal .
+    # Test building the ci image
+    - cd simulation/docker/ci
+    - /bin/sh build.sh $CI_REGISTRY
+    # Test building the default image
+    - cd ../default
+    - /bin/sh build.sh $CI_REGISTRY ci $KITCAR_REPO_PATH
+    # Test building the kitcar_ros_ci image
+    - cd ../kitcar_ros_ci
+    - /bin/sh build.sh $CI_REGISTRY
 
 ######## TEST STAGE #########
 
@@ -129,11 +132,17 @@ deploy-ci-image:
     - docker --version
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    # Link necessary files into scope of the Dockerfile
-    - cd simulation/docker/ci_image
-    - mkdir init
-    - ln ../../../init/* init/
-    # Build & deploy docker image:
-    - docker build -t $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:focal .
+    # Test building the ci image
+    - cd simulation/docker/ci
+    - /bin/sh build.sh $CI_REGISTRY
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:focal
+    # Test building the default image
+    - cd ../default
+    - /bin/sh build.sh $CI_REGISTRY ci $KITCAR_REPO_PATH
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:ci
+    - /bin/sh build.sh $CI_REGISTRY focal /home/kitcar/
     - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:focal
-
+    # Test building the kitcar_ros_ci image
+    - cd ../kitcar_ros_ci
+    - /bin/sh build.sh $CI_REGISTRY ci
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/kitcar_ros_ci:focal
