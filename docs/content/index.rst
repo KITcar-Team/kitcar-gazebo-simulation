@@ -77,6 +77,12 @@ to share knowledge and ensure common standards within the code.
    _source_files/simulation.utils.road
    _source_files/simulation.utils.urdf
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Docker Images
+
+   docker/index
+
 
 .. toctree::
    :maxdepth: 1

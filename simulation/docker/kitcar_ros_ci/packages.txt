@@ -1,0 +1,25 @@
+git
+wget
+libzbar-dev
+clang-10 clang-tidy-10 llvm-10
+ros-noetic-desktop
+ros-noetic-realtime-tools
+ros-noetic-tf2
+libomp-dev
+ros-noetic-tf2-eigen
+ros-noetic-tf2-geometry-msgs
+ros-noetic-ackermann-msgs
+ros-noetic-camera-calibration-parsers
+ros-noetic-camera-info-manager
+ros-noetic-pcl-ros
+libatlas-base-dev
+protobuf-compiler
+libprotobuf-dev
+ros-noetic-control-toolbox
+unzip
+python-tk
+qtbase5-dev
+doxygen
+lcov
+ccache
+rsync
