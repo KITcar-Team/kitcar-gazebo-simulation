@@ -194,8 +194,11 @@ See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.
       roslaunch simulation_evaluation state_machine_node.launch
 
 
+.. _referee_node:
+
 RefereeNode
 -----------
+
 
 The :mod:`simulation.src.simulation_evaluation.src.referee.node` is used to evaluate \
 the output of the state machines and calculate a score.
@@ -209,6 +212,36 @@ and more information about the current drive.
    .. code-block::
 
       roslaunch simulation_evaluation referee_node.launch
+
+DriveTestNode
+-------------
+
+On start, the :mod:`simulation.src.simulation_evaluation.src.drive_test.node` runs through
+a series of steps to setup the simulation's evaluation pipeline and subsequently start
+*KITcar_brain*.
+It then monitors the car's progress and shuts down once the car has completed or failed the drive
+based on the `referee_node`_ 's output.
+
+.. admonition:: Launch
+
+   Start the DriveTestNode and the complete simulation with
+
+   .. prompt:: bash
+
+      roslaunch simulation_evaluation drive_test.launch
+
+However, the **drive.test** yields a much more interesting usage.
+It is a ROS test, that can be used to retrieve a binary evaluation if the car broke any
+rules while driving on a given road in a given mission mode.
+
+.. admonition:: ROS Test
+
+   Test the car's behavior using the DriveTestNode with:
+
+   .. prompt:: bash
+
+      rostest simulation_evaluation drive.test
+
 
 
 EvaluationTestNode
