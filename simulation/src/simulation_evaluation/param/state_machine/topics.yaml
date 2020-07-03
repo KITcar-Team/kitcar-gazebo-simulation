@@ -1,3 +1,5 @@
+info: '/simulation/state_machine/info'
+
 progress:
   get: '/simulation/state_machine/progress/get/'
   set: '/simulation/state_machine/progress/set/'
