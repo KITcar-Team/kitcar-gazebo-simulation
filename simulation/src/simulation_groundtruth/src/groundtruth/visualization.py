@@ -98,7 +98,7 @@ class GroundtruthVisualizationNode(NodeBase):
         """
         marker = visualization.get_marker_for_points(
             (Point(p) for p in points),
-            frame_id="simulation",
+            frame_id=self.param.vehicle_simulation_link.frame.simulation,
             rgba=rgba,
             id=id,
             ns=ns,
