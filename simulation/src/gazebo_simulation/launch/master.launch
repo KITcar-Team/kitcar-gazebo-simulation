@@ -103,6 +103,7 @@ Use this launch file to start the complete simulation.-->
   and provide services makeing road lines and other information is easily accessible. -->
   <include file="$(find simulation_groundtruth)/launch/groundtruth_node.launch">
     <arg name="road" value="$(arg road)"/>
+    <arg name="seed" value="$(arg seed)"/>
     <arg name="rviz" value="$(arg rviz)"/>
     <arg name="start_groundtruth" default="$(arg include_groundtruth)" />
     <arg name="start_renderer" default="$(arg include_renderer)" />
