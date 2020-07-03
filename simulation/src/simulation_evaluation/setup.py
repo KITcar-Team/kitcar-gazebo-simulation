@@ -12,6 +12,7 @@ setup_args = generate_distutils_setup(
             "evaluation_test",
             "state_machine",
             "referee",
+            "drive_test",
         ]
     ),
     package_dir={"": "src"},

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="road" default="default_road"/>
+  <arg name="seed" default="KITCAR"/>
+  <arg name="gui" default="false"/>
+  <arg name="mission_mode" default="1"/>
+  <arg name="time_limit" default="120"/>
+  <arg name="automatic_drive" default="false"/>
+
+  <include file="$(find gazebo_simulation)/launch/master.launch">
+    <arg name="road" value="$(arg road)"/>
+    <arg name="seed" value="$(arg seed)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="evaluate" value="true"/>
+    <arg name="control_sim_rate" value="true"/>
+    <arg name="force_reload_road" value="true"/>
+  </include>
+
+  <node name="drive_test_node" ns="simulation_evaluation" pkg="simulation_evaluation" type="drive_test_node" output="screen">
+    <param name="mission_mode" value="$(arg mission_mode)"/>
+    <rosparam file="$(find simulation_evaluation)/param/drive/default.yaml" command="load" />
+    <rosparam file="$(find simulation_evaluation)/param/drive/topics.yaml" command="load" ns="topics" />
+    <rosparam file="$(find simulation_evaluation)/param/referee/topics.yaml" command="load" ns="topics/referee" />
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state" />
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics/groundtruth" />
+    <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/default.yaml" command="load" ns="vehicle_simulation_link" />
+  </node>
+</launch>
