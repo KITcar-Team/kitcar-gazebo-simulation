@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Track the state of a simulated drive."""
 
 from typing import Callable
 
 import rospy
+from std_msgs.msg import String as StringMsg
+
 from simulation.utils.ros_base.node_base import NodeBase
 
 # Messages
@@ -59,6 +59,7 @@ class StateMachineNode(NodeBase):
     """ROS node which tracks the state of a simulated drive.
 
     Attributes:
+        info_publisher (rospy.Publisher): Publish human readable states on change
         zone_subscriber (rospy.Subscriber): Subscribes to zone of speaker
         location_subscriber (rospy.Subscriber): Subscribes to location of speaker
         events_subscriber (rospy.Subscriber): Subscribes to events of speaker
@@ -75,6 +76,11 @@ class StateMachineNode(NodeBase):
 
     def start(self):
         """Start node."""
+
+        self.info_publisher = rospy.Publisher(
+            self.param.topics.info, StringMsg, queue_size=10
+        )
+
         self.initalize_state_machines()
 
         # Subscribe to speaker
@@ -137,6 +143,7 @@ class StateMachineNode(NodeBase):
         self.location_subscriber.unregister()
         self.events_subscriber.unregister()
         self.speed_subscriber.unregister()
+        self.info_publisher.unregister()
 
         super().stop()
 
@@ -145,6 +152,10 @@ class StateMachineNode(NodeBase):
         """Update each state machine."""
         for i, publisher in enumerate(self.sm_publishers):
             publisher.publish(self.state_machines[i].msg())
+
+        # Create a string containing the info of all state machines.
+        for sm in self.state_machines:
+            self.info_publisher.publish(StringMsg(f"{sm.__class__.__name__}: {sm.info()}"))
 
     @log(rospy.logdebug)
     def on_msg(self, msg: SpeakerMsg):
