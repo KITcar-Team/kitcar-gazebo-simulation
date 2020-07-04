@@ -159,7 +159,14 @@ templates_path = ["templates"]
 # source_suffix = ['.rst', '.md']
 source_suffix = ".rst"
 
-html_extra_path = ["content/tutorials/resources/rviz_master_launch.mp4"]
+html_extra_path = [
+    "content/tutorials/resources/rviz_master_launch.mp4",
+    "content/talks/ci_tests/resources/state_machine_output.mp4",
+    "content/talks/ci_tests/resources/drive_test_obstacles.mp4",
+    "content/talks/ci_tests/resources/drive_test_referee.mp4",
+    "content/talks/ci_tests/resources/drive_test_failure.mp4",
+    "content/talks/ci_tests/resources/speaker_output.mp4",
+]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
