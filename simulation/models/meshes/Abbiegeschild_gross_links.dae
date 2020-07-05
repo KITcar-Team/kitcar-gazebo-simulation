@@ -11,8 +11,8 @@
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_images>
-    <image id="Balsa_Wood_Texture_jpg_001" name="Balsa_Wood_Texture_jpg_001">
-      <init_from>Balsa_Wood_Texture.jpg.001.jpg</init_from>
+    <image id="Balsa_Wood_Texture_jpg" name="Balsa_Wood_Texture_jpg">
+      <init_from>Balsa_Wood_Texture.jpg</init_from>
     </image>
     <image id="Abbiegeschild_gross_links_png" name="Abbiegeschild_gross_links_png">
       <init_from>Abbiegeschild_gross_links.png</init_from>
@@ -43,22 +43,22 @@
         </technique>
       </profile_COMMON>
     </effect>
-    <effect id="Balsa_Wood_Texture_jpg_001-effect">
+    <effect id="Balsa_Wood_Texture_jpg-effect">
       <profile_COMMON>
-        <newparam sid="Balsa_Wood_Texture_jpg_001-surface">
+        <newparam sid="Balsa_Wood_Texture_jpg-surface">
           <surface type="2D">
-            <init_from>Balsa_Wood_Texture_jpg_001</init_from>
+            <init_from>Balsa_Wood_Texture_jpg</init_from>
           </surface>
         </newparam>
-        <newparam sid="Balsa_Wood_Texture_jpg_001-sampler">
+        <newparam sid="Balsa_Wood_Texture_jpg-sampler">
           <sampler2D>
-            <source>Balsa_Wood_Texture_jpg_001-surface</source>
+            <source>Balsa_Wood_Texture_jpg-surface</source>
           </sampler2D>
         </newparam>
         <technique sid="common">
           <phong>
             <diffuse>
-              <texture texture="Balsa_Wood_Texture_jpg_001-sampler" texcoord="Balsa_Wood_Texture_jpg_001"/>
+              <texture texture="Balsa_Wood_Texture_jpg-sampler" texcoord="Balsa_Wood_Texture_jpg"/>
             </diffuse>
             <specular>
               <color sid="specular">0 0 0 1</color>
@@ -72,8 +72,8 @@
     <material id="Abbiegeschild_gross_links_png-material" name="Abbiegeschild_gross_links_png">
       <instance_effect url="#Abbiegeschild_gross_links_png-effect"/>
     </material>
-    <material id="Balsa_Wood_Texture_jpg_001-material" name="Balsa_Wood_Texture_jpg_001">
-      <instance_effect url="#Balsa_Wood_Texture_jpg_001-effect"/>
+    <material id="Balsa_Wood_Texture_jpg-material" name="Balsa_Wood_Texture_jpg">
+      <instance_effect url="#Balsa_Wood_Texture_jpg-effect"/>
     </material>
   </library_materials>
   <library_geometries>
@@ -111,7 +111,7 @@
         <vertices id="Body1_001-mesh-vertices">
           <input semantic="POSITION" source="#Body1_001-mesh-positions"/>
         </vertices>
-        <triangles material="Balsa_Wood_Texture_jpg_001-material" count="156">
+        <triangles material="Balsa_Wood_Texture_jpg-material" count="156">
           <input semantic="VERTEX" source="#Body1_001-mesh-vertices" offset="0"/>
           <input semantic="NORMAL" source="#Body1_001-mesh-normals" offset="1"/>
           <input semantic="TEXCOORD" source="#Body1_001-mesh-map-0" offset="2" set="0"/>
@@ -170,7 +170,7 @@
         <instance_geometry url="#Body1_001-mesh" name="Body1_001">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Balsa_Wood_Texture_jpg_001-material" target="#Balsa_Wood_Texture_jpg_001-material">
+              <instance_material symbol="Balsa_Wood_Texture_jpg-material" target="#Balsa_Wood_Texture_jpg-material">
                 <bind_vertex_input semantic="Body1_001-mesh-map-0" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
