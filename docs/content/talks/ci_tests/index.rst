@@ -3,6 +3,11 @@
 Continuous Integration using the Simulation
 ===========================================
 
+.. tip::
+
+   A recording of this talk can be found under the following link:
+   https://webdav.kitcar-team.de/Workshops/2020-07-Workshop-Samstag/Workshop_Simulation_in_der_CI/Workshop_simulation_ci.mp4
+
 .. raw:: html
 
    <video width="100%" class="video-background" autoplay loop muted playsinline>
