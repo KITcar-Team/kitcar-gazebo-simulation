@@ -13,15 +13,23 @@ from simulation.utils.road.sections import Intersection
 from simulation.utils.road.sections import ZebraCrossing
 from simulation.utils.road.sections import LeftCircularArc
 from simulation.utils.road.sections import StraightRoad
+from simulation.utils.road.sections import StaticObstacle
+from simulation.utils.geometry import Point
 
 # - Beginning sphinx straight_road -
 straight_road = StraightRoad(length=2)
 # - Ending sphinx straight_road -
 
+# - Beginning sphinx straight_road_obs -
+straight_road_obs = StraightRoad(
+    length=2, obstacles=[StaticObstacle(center=Point(1, 0), width=0.2, depth=0.1)]
+)
+# - Ending sphinx straight_road_obs -
 
 # - Beginning sphinx parking_area -
 parking_area = ParkingArea(
     length=4,
+    start_line=True,
     left_lots=[
         ParkingLot(
             spots=[
@@ -67,6 +75,8 @@ left_arc = LeftCircularArc(radius=2, angle=math.radians(90))
 # - Ending sphinx left_arc -
 
 road = Road()
+road.append(straight_road)
+road.append(straight_road_obs)
 road.append(parking_area)
 road.append(intersection)
 road.append(zebra_crossing)

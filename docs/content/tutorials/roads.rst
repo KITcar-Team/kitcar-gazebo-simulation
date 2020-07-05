@@ -56,4 +56,7 @@ the *default_road* is used.
 It consists of multiple :py:mod:`simulation.utils.road.generator.road_sections` \
 concatenated using a :py:class:`simulation.utils.road.road.Road`:
 
+.. figure:: resources/default_road.jpg
+  :alt: default_road
+
 .. literalinclude:: ../../..//simulation/models/env_db/default_road.py
