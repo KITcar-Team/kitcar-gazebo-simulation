@@ -1,3 +1,5 @@
+.. _simulation_evaluation:
+
 simulation_evaluation
 =====================
 
@@ -28,6 +30,8 @@ The goal is to evaluate the car's behavior in the same way a real referee would 
 The evaluation pipeline consists of three main components:
 The Speaker Node, the State Machine Node, and the
 Referee Node; there's more about these nodes in the following.
+
+.. evaluation_pipeline_graph_start
 
 .. graphviz::
    :align: center
@@ -69,6 +73,8 @@ Referee Node; there's more about these nodes in the following.
      }
    }
 |
+
+.. evaluation_pipeline_graph_end
 
 SpeakerNode
 -----------
@@ -212,6 +218,8 @@ and more information about the current drive.
    .. code-block::
 
       roslaunch simulation_evaluation referee_node.launch
+
+.. _drive_test:
 
 DriveTestNode
 -------------

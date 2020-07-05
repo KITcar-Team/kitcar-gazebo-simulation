@@ -90,6 +90,7 @@ to share knowledge and ensure common standards within the code.
 
    talks/names_and_values/index.rst
    talks/inheritance/index.rst
+   talks/ci_tests/index.rst
 
 
 Onboarding
