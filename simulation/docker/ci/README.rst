@@ -9,6 +9,6 @@ The image can be built by running the **build.sh** script:
 
 .. prompt:: bash
 
-  ./build.sh
+  ./build.sh ${CI_REGISTRY} ${IMAGE_TAG}
 
 from ``simulation/docker/ci``.
