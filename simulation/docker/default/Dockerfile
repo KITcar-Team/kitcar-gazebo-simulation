@@ -1,4 +1,5 @@
-FROM git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:focal
+ARG PARENT_TAG=focal
+FROM git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${PARENT_TAG}
 ARG KITCAR_REPO_PATH=/home/kitcar/
 
 # Update bashrc

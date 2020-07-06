@@ -4,9 +4,7 @@ variables:
   GIT_STRATEGY: clone
   GIT_LFS_SKIP_SMUDGE: "1"  #  Don't pull Git LFS
   CAR_NAME: dr_drift
-  KITCAR_REPO_PATH: /builds/kitcar
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
+  KITCAR_REPO_PATH: /builds/kitcar/
 
 before_script:
   # Run the container start script to enable the pulseaudio & xserver
@@ -38,31 +36,6 @@ build-code:
       - simulation/devel
       - simulation/build
     expire_in: 2 day
-
-# Allow to manually build the ci image
-# E.g. to test if the Dockerfile is still working
-build-ci-image:
-  stage: build
-  image: docker:19.03.11
-  when: manual
-  tags:
-    - docker
-  services:
-    - docker:19.03.11-dind
-  before_script: []
-  script:
-    - docker --version
-    - docker info
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    # Test building the ci image
-    - cd simulation/docker/ci
-    - /bin/sh build.sh $CI_REGISTRY
-    # Test building the default image
-    - cd ../default
-    - /bin/sh build.sh $CI_REGISTRY ci $KITCAR_REPO_PATH
-    # Test building the kitcar_ros_ci image
-    - cd ../kitcar_ros_ci
-    - /bin/sh build.sh $CI_REGISTRY
 
 ######## TEST STAGE #########
 
@@ -118,31 +91,52 @@ build-documentation:
 
 # Build and deploy the CI docker image to the gitlab registry
 # This is done everytime the master branch is updated
-deploy-ci-image:
+deploy-docker-images:
   stage: deploy
   image: docker:19.03.11
-  only:
-    - master
+  # Always run on master
+  # Allow to manually build the ci image
+  # E.g. to test if the Dockerfile is still working
+  rules:
+  - if: '$CI_COMMIT_REF_NAME == "master"'
+  - when: manual
   tags:
     - docker
   services:
     - docker:19.03.11-dind
-  before_script: []
+  variables:
+    # Ensure that lfs files are available in resulting images!
+    GIT_LFS_SKIP_SMUDGE: "0"  #  Pull Git LFS
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+   - |
+      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+        export TAG_CI_IMAGE=focal
+        export TAG_DEFAULT_IMAGE=focal
+        export TAG_DEFAULT_IMAGE_CI=ci
+        export TAG_KITCAR_ROS_IMAGE=focal
+      else
+        export TAG_CI_IMAGE=focal_${CI_COMMIT_REF_NAME}
+        export TAG_DEFAULT_IMAGE=focal_${CI_COMMIT_REF_NAME}
+        export TAG_DEFAULT_IMAGE_CI=ci_${CI_COMMIT_REF_NAME}
+        export TAG_KITCAR_ROS_IMAGE=focal_${CI_COMMIT_REF_NAME}
+      fi
   script:
     - docker --version
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     # Test building the ci image
     - cd simulation/docker/ci
-    - /bin/sh build.sh $CI_REGISTRY
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:focal
+    - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE
     # Test building the default image
     - cd ../default
-    - /bin/sh build.sh $CI_REGISTRY ci $KITCAR_REPO_PATH
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:ci
-    - /bin/sh build.sh $CI_REGISTRY focal /home/kitcar/
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:focal
+    - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE_CI $KITCAR_REPO_PATH
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:$TAG_DEFAULT_IMAGE_CI
+    - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE /home/kitcar/
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:$TAG_DEFAULT_IMAGE
     # Test building the kitcar_ros_ci image
     - cd ../kitcar_ros_ci
-    - /bin/sh build.sh $CI_REGISTRY ci
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/kitcar_ros_ci:focal
+    - /bin/sh build.sh $CI_REGISTRY $TAG_DEFAULT_IMAGE_CI $TAG_KITCAR_ROS_IMAGE
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/kitcar_ros_ci:$TAG_KITCAR_ROS_IMAGE
