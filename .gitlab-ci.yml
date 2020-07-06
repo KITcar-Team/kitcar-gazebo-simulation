@@ -105,6 +105,8 @@ deploy-docker-images:
   services:
     - docker:19.03.11-dind
   variables:
+    # Ensure that lfs files are available in resulting images!
+    GIT_LFS_SKIP_SMUDGE: "0"  #  Pull Git LFS
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
   before_script:
