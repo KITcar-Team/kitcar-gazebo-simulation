@@ -5,7 +5,10 @@
   <arg name="gui" default="false"/>
   <arg name="mission_mode" default="1"/>
   <arg name="time_limit" default="120"/>
-  <arg name="automatic_drive" default="false"/>
+
+  <!-- Whether a rosbag of the drive should be recorded and where it's stored. -->
+  <arg name="record_rosbag" default="false"/>
+  <arg name="rosbag_path" default="/rosbags/drive_test"/>
 
   <include file="$(find gazebo_simulation)/launch/master.launch">
     <arg name="road" value="$(arg road)"/>
@@ -15,6 +18,10 @@
     <arg name="control_sim_rate" value="true"/>
     <arg name="force_reload_road" value="true"/>
   </include>
+
+  <!-- Record a rosbag of the drive.
+       All topics are recorded, but compressed images left out as they create errors. -->
+  <node if="$(arg record_rosbag)" name="rosbag_record" type="rosbag_record.sh" pkg="kitcar" args='-o $(arg rosbag_path) -a -x "(.*)/compressed(.*)"' />
 
 
   <!-- The expected argument allows for generic tests. Possible values are positive, negative -->
