@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+import sys
+import unittest
+import rospy
+
+from gazebo_simulation.msg import CarState as CarStateMsg
+
+from simulation.utils.geometry import Pose, Line
+from simulation.utils.ros_base.node_base import NodeBase
+
+PKG = "gazebo_simulation"
+
+
+class AutomaticDriveNodeTest(unittest.TestCase, NodeBase):
+    """Evaluate if the AutomaticDriveNode works as it is supposed to."""
+
+    def setUp(self):
+        NodeBase.__init__(self, name="test_automatic_drive_node")
+
+        self.car_state_listener = rospy.Subscriber(
+            self.param.topics.car_state, CarStateMsg, self.receive_car_state
+        )
+        rospy.wait_for_message(self.param.topics.car_state, CarStateMsg)
+
+    def receive_car_state(self, msg):
+        self.last_received_pose = Pose(msg.pose)
+
+    def test_automatic_drive(self):
+        """Test if the automatic_drive node correctly places the car.
+
+        Requirements:
+            * The ci_roads/straight.py road is used.
+            * The path variable correctly specifies the vehicles path.
+        """
+        rate = rospy.Rate(60)
+        line = Line([[0, 0], [1, 0], [1, -1], [2, -1], [2, 1], [5, 1]])
+        while True:
+            self.assertLess(self.last_received_pose.distance(line), 0.01)
+
+            # Stop the test if the car gets close to the end of the road.
+            if line.project(self.last_received_pose) - line.length < 0.1:
+                break
+
+            rate.sleep()
+
+
+if __name__ == "__main__":
+    import rostest
+
+    rostest.rosrun(PKG, "test_automatic_drive_node", AutomaticDriveNodeTest, sys.argv)
