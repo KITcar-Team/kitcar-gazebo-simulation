@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 import functools
 from dataclasses import dataclass
 
@@ -48,8 +48,6 @@ class AutomaticDriveNode(NodeBase):
             name="automatic_drive_node", log_level=rospy.INFO
         )  # Name can be overwritten in launch file
 
-        self._driving_state = DrivingState(0, rospy.Time.now().to_sec())
-
         self.run(function=self.update, rate=float(self.param.rate))
 
     def start(self):
@@ -72,6 +70,9 @@ class AutomaticDriveNode(NodeBase):
         self.section_proxy = rospy.ServiceProxy(groundtruth_topics.section, SectionSrv)
         self.lane_proxy = rospy.ServiceProxy(groundtruth_topics.lane, LaneSrv)
 
+        # Calculate the driving line once, so that it is cached!!
+        self.driving_line
+
         # Read initial position from vehicle simulation link parameters
         try:
             initial = self.param.vehicle_simulation_link.initial_pose
@@ -84,6 +85,8 @@ class AutomaticDriveNode(NodeBase):
             self.initial_tf = Transform(pos, angle)
         except KeyError:
             self.initial_tf = None
+
+        self._driving_state = DrivingState(0, rospy.Time.now().to_sec())
 
         super().start()
 
@@ -107,9 +110,42 @@ class AutomaticDriveNode(NodeBase):
         middle_line = sum(
             (Line(self.lane_proxy(sec.id).lane_msg.middle_line) for sec in sections), Line()
         )
-        # Shift to the right to get the middle of the right lane
-        driving_line = middle_line.parallel_offset(self.param.road_width / 2, "right")
-        return driving_line
+
+        path = Line()
+
+        def append(offset, segment):
+            nonlocal path
+
+            if offset > 0:
+                segment = segment.parallel_offset(offset, "left")
+            elif offset < 0:
+                segment = segment.parallel_offset(-offset, "right")
+
+            path += segment
+
+        param_path: List[Dict[str, float]] = self.param.path
+
+        current_start = param_path[0]["start"]
+        current_offset = param_path[0]["offset"]
+
+        param_path.remove(param_path[0])
+
+        # Read the path from the parameters
+        for obj in param_path:
+            end_arc_length = obj["start"]
+            before_end_line = Line.cut(middle_line, end_arc_length)[0]
+            current_segment = Line.cut(before_end_line, current_start)[1]
+
+            append(current_offset, current_segment)
+
+            current_offset = obj["offset"]
+            current_start = obj["start"]
+
+        current_segment = Line.cut(middle_line, current_start)[1]
+
+        append(current_offset, current_segment)
+
+        return path
 
     def update(self):
         """Calculate and publish new car state information."""
