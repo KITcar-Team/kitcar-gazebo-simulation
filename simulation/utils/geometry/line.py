@@ -1,7 +1,8 @@
 """Line."""
 
-__copyright__ = "KITcar"
+from contextlib import suppress
 
+from typing import List, Callable, Tuple
 
 import shapely.geometry  # Base class
 import shapely.affinity as affinity
@@ -14,11 +15,7 @@ from simulation.utils.geometry.vector import Vector
 from simulation.utils.geometry.transform import Transform
 from simulation.utils.geometry.pose import Pose
 
-from contextlib import suppress
 
-from typing import List, Callable
-
-#
 APPROXIMATION_DISTANCE = 0.00005
 CURVATURE_APPROX_DISTANCE = 0.04
 SIMPLIFICATION_TOLERANCE = 0.001
@@ -76,6 +73,35 @@ class Line(shapely.geometry.linestring.LineString):
         2 ([]): Empty list creates an empty line.
 
     """
+
+    @classmethod
+    def cut(cls, line: "Line", arc_length: float) -> Tuple["Line", "Line"]:
+        """Cuts a line in two at a arc_length from its starting point.
+
+        See:
+        https://shapely.readthedocs.io/en/latest/manual.html?highlight=cut#linear-referencing-methods
+        """
+        coords = list(line.coords)
+
+        if arc_length == 0:
+            return Line(), Line(coords)
+        elif arc_length == line.length:
+            return Line(coords), Line()
+        else:
+            assert (
+                arc_length > 0.0 and arc_length < line.length
+            ), "Invalid arc length given."
+
+        for i, p in enumerate(coords):
+            pd = line.project(Point(p))
+            if pd == arc_length:
+                return (Line(coords[: i + 1]), Line(coords[i:]))
+            if pd > arc_length:
+                cp = line.interpolate(arc_length)
+                return (
+                    Line(coords[:i] + [(cp.x, cp.y)]),
+                    Line([(cp.x, cp.y)] + coords[i:]),
+                )
 
     def __init__(self, *args):
         """Line initialization."""

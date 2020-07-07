@@ -2,15 +2,18 @@ import unittest
 import random
 import math
 
+import geometry_msgs.msg as g_msgs
+import numpy as np
+
+from hypothesis import given
+import hypothesis.strategies as st
+
 from simulation.utils.geometry.point import Point
 from simulation.utils.geometry.pose import Pose
 from simulation.utils.geometry.vector import Vector
 from simulation.utils.geometry.line import Line
 from simulation.utils.geometry.polygon import Polygon
 from simulation.utils.geometry.transform import Transform
-
-import geometry_msgs.msg as g_msgs
-import numpy as np
 
 
 TOLERANCE = 0.007
@@ -163,6 +166,49 @@ class ModuleTest(unittest.TestCase):
         tf = Transform(Point(1, 0, 2), math.pi / 2)
 
         self.assertEqual(tf * line, Line([1 - x, x, 2] for x in range(10)))
+
+    @given(
+        point_count=st.integers(min_value=0, max_value=200),
+        cut_length=st.floats(min_value=0, max_value=100000),
+    )
+    def test_line_cut(self, point_count: int, cut_length: float):
+        """Test the line's class cut function.
+
+        The test creates a line, cuts it into two and adjoins the two lines again.
+        The resulting line must be the same as the initial line.
+        Additionally, some sanity checks are performed.
+        """
+        if point_count == 0 and cut_length > 0 or point_count == 1:
+            return
+        initial_line = Line(self.create_points(point_count))
+
+        if initial_line.length > 0:
+            cut_length %= initial_line.length
+
+        line1, line2 = Line.cut(initial_line, arc_length=cut_length)
+
+        # Assert start and end points:
+        if point_count > 0:
+            self.assertEqual(
+                (line1 if cut_length > 0 else line2).get_points()[0],
+                initial_line.get_points()[0],
+            )
+            self.assertEqual(
+                (line2 if cut_length < initial_line.length else line1).get_points()[-1],
+                initial_line.get_points()[-1],
+            )
+
+        # assert line lengths
+        self.assertAlmostEqual(initial_line.length, line1.length + line2.length)
+        self.assertAlmostEqual(line1.length, cut_length)
+        self.assertAlmostEqual(line2.length, initial_line.length - cut_length)
+
+        # assert composition
+        stitched = line1 + line2
+        for p in initial_line.get_points():
+            self.assertLess(stitched.distance(p), 0.0001)
+        for p in stitched.get_points():
+            self.assertLess(initial_line.distance(p), 0.0001)
 
     def test_polygon_init(self):
         points = self.create_points()
