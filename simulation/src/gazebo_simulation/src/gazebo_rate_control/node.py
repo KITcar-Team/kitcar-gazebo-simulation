@@ -10,6 +10,7 @@ from gazebo_msgs.srv import (
     SetPhysicsProperties,
     GetPhysicsProperties,
 )
+import time
 
 import rostopic
 
@@ -27,7 +28,13 @@ class GazeboRateControlNode(NodeBase):
 
         self._last_target_frequencies = {}
 
-        self.run(function=self.update, rate=self.param.update_rate.control.rate)
+        self.start()
+
+        while not rospy.is_shutdown():
+            time.sleep(1 / self.param.update_rate.control.rate)
+            self.update()
+
+        self.stop()
 
     def start(self):
 
@@ -41,12 +48,17 @@ class GazeboRateControlNode(NodeBase):
 
         self.rater = rostopic.ROSTopicHz(5)
 
+        # Start in very slow mode to ensure that everything is started before speeding up
+        self._update_properties(update_rate=self.param.update_rate.min)
+
         self.subscribers = {}
         for target in self.param.targets:
             topic = target["topic"]
             self.subscribers[topic] = rospy.Subscriber(
                 topic, rospy.AnyMsg, self.rater.callback_hz, callback_args=topic,
             )
+            # Wait for atleast one message on every target topic
+            rospy.wait_for_message(topic, rospy.AnyMsg)
 
         super().start()
 
@@ -94,16 +106,20 @@ class GazeboRateControlNode(NodeBase):
                 self.param.update_rate.max,
             )
 
-    def update(self):
-        """Adjust Gazebos update rate to meet desired output frequency of the target topic.
-        """
-
+    def _update_properties(self, update_rate):
         current_properties = self.get_physics(GetPhysicsPropertiesRequest())
 
         new_properties = SetPhysicsPropertiesRequest()
         new_properties.gravity = current_properties.gravity
         new_properties.ode_config = current_properties.ode_config
         new_properties.time_step = current_properties.time_step
+        new_properties.max_update_rate = update_rate
+
+        self.set_physics(new_properties)
+
+    def update(self):
+        """Adjust Gazebos update rate to meet desired output frequency of the target topic."""
+        old_update_rate = self.get_physics(GetPhysicsPropertiesRequest()).max_update_rate
 
         # Calculate new update rate considering all targets
         update_rates = []
@@ -118,9 +134,7 @@ class GazeboRateControlNode(NodeBase):
             self._last_target_frequencies[topic] = frequency
 
             rate = self._calculate_update_rate(
-                current_properties.max_update_rate,
-                frequency=frequency,
-                desired_frequency=desired_frequency,
+                old_update_rate, frequency=frequency, desired_frequency=desired_frequency,
             )
             if rate is not None:
                 rospy.logdebug(
@@ -130,18 +144,14 @@ class GazeboRateControlNode(NodeBase):
                 update_rates.append(rate)
 
         if len(update_rates) > 0:
-            new_properties.max_update_rate = min(update_rates)
+            new_update_rate = min(update_rates)
         else:
             return
 
         rospy.logdebug(
-            (
-                "Lowering"
-                if new_properties.max_update_rate < current_properties.max_update_rate
-                else "Increasing"
-            )
-            + f" Gazebo's update rate: {current_properties.max_update_rate}"
-            f" -> {new_properties.max_update_rate}"
+            ("Lowering" if new_update_rate < old_update_rate else "Increasing")
+            + f" Gazebo's update rate: {old_update_rate}"
+            f" -> {new_update_rate}"
         )
 
-        self.set_physics(new_properties)
+        self._update_properties(new_update_rate)
