@@ -6,5 +6,5 @@
 # If multiple entries are within the list, the car will drive with the specified offset
 # starting at the first arclength until the next the next entry changes the offset.
 path:
-  - start: 0
+  - start: 0.4
     offset: -0.2
