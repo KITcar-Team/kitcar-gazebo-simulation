@@ -2,7 +2,10 @@
 <launch>
   <arg name="car_name" default="dr_drift" />
   <arg name="model" default="$(find gazebo_simulation)/param/car_specs/$(arg car_name)/model.urdf"/>
+  <arg name="x" value="0.4"/>
+  <arg name="y" value="-0.2"/>
+  <arg name="z" value="0"/>
   <param name="robot_description" textfile="$(arg model)"/>
 
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model $(arg car_name)"/>
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model $(arg car_name) -x $(arg x) -y $(arg y) -z $(arg z)"/>
 </launch>
