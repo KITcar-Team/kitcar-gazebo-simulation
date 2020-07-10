@@ -1,4 +1,3 @@
-rate: 60
 # Special path designed for the automatic drive ROS test
 path:
   - start: 0

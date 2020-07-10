@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <arg name="speed" default="3" />
+  <arg name="speed" default="1" />
+  <arg name="rate" default="120" />
+  <!-- Tolerance equals to the distance that the car drives within one update cycle -->
+  <!-- *2 As a margin of error -->
+  <arg name="tolerance" default="0.24" />
   <arg name="road" value="ci_roads/straight" />
   <arg name="time_limit" value="30" />
 
@@ -12,16 +16,14 @@
     <arg name="include_mission_mode_plugin" value="false" />
   </include>
 
-  <!-- Launch car_state_node -->
-  <node name="automatic_drive" ns="simulation" pkg="gazebo_simulation" type="automatic_drive_node" output="screen">
-    <param name="speed" value="$(arg speed)" />
-    <rosparam file="$(find gazebo_simulation)/param/automatic_drive/test/default.yaml" command="load" />
-    <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/default.yaml" command="load" ns="vehicle_simulation_link" />
-    <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/topics.yaml" command="load" ns="topics/vehicle_simulation_link" />
-    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics/groundtruth" />
-  </node>
+  <include file="$(find gazebo_simulation)/launch/automatic_drive.launch">
+    <arg name="speed" value="$(arg speed)" />
+    <arg name="path_file" value="$(find gazebo_simulation)/param/automatic_drive/test/path.yaml"/>
+  </include>
 
   <test test-name="test_automatic_drive" pkg="gazebo_simulation" time-limit="$(arg time_limit)" type="test_automatic_drive">
+    <param name="rate" value="$(arg rate)" />
+    <param name="tolerance" value="$(arg tolerance)" />
     <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics" />
   </test>
 
