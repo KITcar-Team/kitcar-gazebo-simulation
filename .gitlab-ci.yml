@@ -70,17 +70,27 @@ test-drive-evaluation:
     - workstation
   variables:
     DISPLAY: ":1.0"
+    PATH_FILES: "$KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/src/simulation_evaluation/param/drive/paths"
   script:
     # The drive.test is used to evaluate how the car drives.
     # With automatic_drive:=true the path of the car is predetermined and thus the correctness
     # of the evaluation can be tested.
 
-    # Road with a simple left and right curve
+    # #### Road: ci_roads/curves.py ####
+    # Simple left and right curve
+    # Success: Drive on right lane
     - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true
+    # Failure: driving onto the left lane
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true path_file:=$PATH_FILES/left_lane.yaml expected_result_state:=3 
+    # Failure: by driving off road
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true path_file:=$PATH_FILES/off_road.yaml expected_result_state:=3 
 
+    # #### Road: ci_roads/obstacles.py ####
     # Road with multiple obstacles
-    # Expect the evaluation to fail, as the car will hit the obstacles
+    # Failure: Car will hit the obstacles
     - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/obstacles expected_result_state:=3 automatic_drive:=true
+    # Success: Car evades the obstacles
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/obstacles automatic_drive:=true path_file:=$PATH_FILES/obstacles.yaml
 
 
 test-documentation:
