@@ -62,6 +62,27 @@ test-ros-packages:
     - catkin_make run_tests -j1
     - catkin_test_results  # Ensure that pipeline fails when test fails
 
+# Run tests to ensure that the evaluation pipeline is working
+test-drive-evaluation:
+  stage: test
+  tags:
+    # Always require to use the workstation to ensure enough computational power
+    - workstation
+  variables:
+    DISPLAY: ":1.0"
+  script:
+    # The drive.test is used to evaluate how the car drives.
+    # With automatic_drive:=true the path of the car is predetermined and thus the correctness
+    # of the evaluation can be tested.
+
+    # Road with a simple left and right curve
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true
+
+    # Road with multiple obstacles
+    # Expect the evaluation to fail, as the car will hit the obstacles
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/obstacles expected_result_state:=3 automatic_drive:=true
+
+
 test-documentation:
   stage: test
   variables:
