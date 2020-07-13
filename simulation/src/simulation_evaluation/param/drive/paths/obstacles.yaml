@@ -2,11 +2,11 @@
 path:
   - start: 0.4
     offset: -0.2
-  - start: 4
+  - start: 3.5
     offset: 0.2
   - start: 5
     offset: -0.2
-  - start: 6
+  - start: 6.5
     offset: 0.2
-  - start: 8
+  - start: 10.5
     offset: -0.2
