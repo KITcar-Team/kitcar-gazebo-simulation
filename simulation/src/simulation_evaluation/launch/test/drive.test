@@ -6,6 +6,12 @@
   <arg name="mission_mode" default="1"/>
   <arg name="time_limit" default="120"/>
 
+  <arg name="automatic_drive" default="false"/>
+  <arg name="path_file" default="$(find gazebo_simulation)/param/automatic_drive/path.yaml" />
+
+  <!-- Expect correct behavior (msg/Referee.msg/COMPLETED) by default.-->
+  <arg name="expected_result_state" default="2" />
+
   <!-- Whether a rosbag of the drive should be recorded and where it's stored. -->
   <arg name="record_rosbag" default="false"/>
   <arg name="rosbag_path" default="/rosbags/drive_test"/>
@@ -17,16 +23,25 @@
     <arg name="evaluate" value="true"/>
     <arg name="control_sim_rate" value="true"/>
     <arg name="force_reload_road" value="true"/>
+
+    <arg if="$(arg automatic_drive)" name="include_brain" value="false" />
+    <arg if="$(arg automatic_drive)" name="include_vehicle_simulation" value="false" />
+    <arg if="$(arg automatic_drive)" name="include_mission_mode_plugin" value="false" />
   </include>
 
   <!-- Record a rosbag of the drive.
        All topics are recorded, but compressed images left out as they create errors. -->
   <node if="$(arg record_rosbag)" name="rosbag_record" type="rosbag_record.sh" pkg="kitcar" args='-o $(arg rosbag_path) -a -x "(.*)/compressed(.*)"' />
 
+  <include if="$(arg automatic_drive)" file="$(find gazebo_simulation)/launch/automatic_drive.launch">
+    <arg name="path_file" value="$(arg path_file)"/>
+  </include>
+
 
   <!-- The expected argument allows for generic tests. Possible values are positive, negative -->
   <test test-name="drive_test" pkg="simulation_evaluation" time-limit="$(arg time_limit)" type="drive_test">
     <param name="mission_mode" value="$(arg mission_mode)"/>
+    <param name="expected_result_state" value="$(arg expected_result_state)"/>
     <rosparam file="$(find simulation_evaluation)/param/drive/topics.yaml" command="load" ns="topics" />
     <rosparam file="$(find simulation_evaluation)/param/referee/topics.yaml" command="load" ns="topics/referee" />
     <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state" />

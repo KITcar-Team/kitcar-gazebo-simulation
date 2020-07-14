@@ -5,25 +5,38 @@ import unittest
 import rostest
 import rospy
 
-from simulation_evaluation.msg import Referee as RefereeMsg
-
 from drive_test.node import DriveTestNode
 
 
 class DriveTest(unittest.TestCase):
-    """Use the DriveTestNode to package a drive as a unittest."""
+    """Use the DriveTestNode to package a drive as a unittest.
+
+    It will start the car and the evaluation pipeline and then check if
+    the referee signals that the car has finished driving
+
+
+    Modify the Expected Result:
+       The parameter :param:`expected_result_state` determines which outcome of the
+       drive is expected, i.e. if the car behaves right or wrong. It is equal to
+       Referee.COMPLETED by default. Therefore, the test will be successful
+       if the car drives correctly.
+       For testing the test ( :D ) it may be useful to check negative scenarios,
+       i.e. to check if wrong behavior of the car leads to a failure state.
+       Then the parameter expected_result_state has to be set to Referee.FAILED.
+    """
 
     def test_drive(self):
-        # Run the test and then compare result
+        """Run the test and then compare result."""
         try:
             node = DriveTestNode(run=False)
             node.run()
         except rospy.exceptions.ROSInterruptException:
             pass
+
         self.assertEqual(
             node.state,
-            RefereeMsg.COMPLETED,
-            f"Drive finished in state: {node.state}, but should be {RefereeMsg.COMPLETED}",
+            node.param.expected_result_state,
+            f"Drive finished in state: {node.state}, but should be {node.param.expected_result_state}",
         )
 
 

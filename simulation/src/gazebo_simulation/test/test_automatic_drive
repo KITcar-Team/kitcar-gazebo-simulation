@@ -32,13 +32,16 @@ class AutomaticDriveNodeTest(unittest.TestCase, NodeBase):
             * The ci_roads/straight.py road is used.
             * The path variable correctly specifies the vehicles path.
         """
-        rate = rospy.Rate(60)
-        line = Line([[0, 0], [1, 0], [1, -1], [2, -1], [2, 1], [5, 1]])
+        rate = rospy.Rate(self.param.rate)
+        line = Line([[0, -0.2], [1, -0.2], [1, -1], [2, -1], [2, 1], [5, 1]])
         while True:
-            self.assertLess(self.last_received_pose.distance(line), 0.01)
+            self.assertLess(self.last_received_pose.distance(line), self.param.tolerance)
 
             # Stop the test if the car gets close to the end of the road.
-            if line.project(self.last_received_pose) - line.length < 0.1:
+            if (
+                abs(line.project(self.last_received_pose) - line.length)
+                < self.param.tolerance
+            ):
                 break
 
             rate.sleep()

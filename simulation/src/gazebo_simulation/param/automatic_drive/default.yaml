@@ -1,12 +1,1 @@
-rate: 60
-
-# Determine where the car will be driving
-# The path must be a list of dictionaries which all have a start and an offset.
-# The start defines at which arclength along the road the car starts to drive.
-# The offset specifies at which y distance relative to the middle line the car will drive.
-#
-# If multiple entries are within the list, the car will drive with the specified offset
-# starting at the first arclength until the next the next entry changes the offset.
-path:
-  - start: 0
-    offset: -0.2
+rate: 120
