@@ -8,7 +8,7 @@ import geometry_msgs.msg
 from tf2_msgs.msg import TFMessage
 
 from simulation.utils.ros_base.node_base import NodeBase
-from simulation.utils.geometry import Vector, Transform, Line
+from simulation.utils.geometry import Vector, Transform, Line, Pose
 
 from simulation_brain_link.msg import State as StateEstimationMsg
 from simulation_groundtruth.srv import (
@@ -96,8 +96,8 @@ class AutomaticDriveNode(NodeBase):
         super().stop()
 
     @functools.cached_property
-    def driving_line(self) -> Line:
-        """Line: Line in the middle of the right lane (where car drives)."""
+    def middle_line(self) -> Line:
+        """Line: Line in the middle of the road."""
         # Get all sections
         sections: List[int] = self.section_proxy().sections
 
@@ -107,9 +107,13 @@ class AutomaticDriveNode(NodeBase):
         )
 
         # Concatenate the middle line of all sections
-        middle_line = sum(
+        return sum(
             (Line(self.lane_proxy(sec.id).lane_msg.middle_line) for sec in sections), Line()
         )
+
+    @functools.cached_property
+    def driving_line(self) -> Line:
+        """Line: Line where car drives."""
 
         path = Line()
 
@@ -133,7 +137,7 @@ class AutomaticDriveNode(NodeBase):
         # Read the path from the parameters
         for obj in param_path:
             end_arc_length = obj["start"]
-            before_end_line = Line.cut(middle_line, end_arc_length)[0]
+            before_end_line = Line.cut(self.middle_line, end_arc_length)[0]
             current_segment = Line.cut(before_end_line, current_start)[1]
 
             append(current_offset, current_segment)
@@ -141,7 +145,7 @@ class AutomaticDriveNode(NodeBase):
             current_offset = obj["offset"]
             current_start = obj["start"]
 
-        current_segment = Line.cut(middle_line, current_start)[1]
+        current_segment = Line.cut(self.middle_line, current_start)[1]
 
         append(current_offset, current_segment)
 
@@ -160,7 +164,14 @@ class AutomaticDriveNode(NodeBase):
         rospy.logdebug(f"Current driving state: {self._driving_state}")
 
         # Calculate position, speed, and yaw
-        pose = self.driving_line.interpolate_pose(self._driving_state.distance_driven)
+        position = self.driving_line.interpolate(self._driving_state.distance_driven)
+
+        # Always let the car face into the direction of the middle line.
+        pose = Pose(
+            position,
+            self.middle_line.interpolate_direction(self.middle_line.project(position)),
+        )
+
         speed = Vector(self.param.speed, 0)  # Ignore y component of speed
         # Yaw rate = curvature * speed
         yaw_rate = (
