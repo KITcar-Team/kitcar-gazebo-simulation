@@ -17,3 +17,5 @@ INTERSECTION = 7
 """"""
 BLOCKED_AREA = 8
 """"""
+TRAFFIC_ISLAND = 9
+""""""

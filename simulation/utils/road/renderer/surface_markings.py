@@ -67,6 +67,10 @@ def draw(ctx, surface_marking: SurfaceMarking):
         draw_parking_spot_x(ctx, surface_marking.frame)
     if surface_marking.kind == SurfaceMarking.BLOCKED_AREA:
         draw_blocked_area(ctx, surface_marking.frame)
+    if surface_marking.kind == SurfaceMarking.ZEBRA_LINES:
+        draw_crossing_lines(ctx, surface_marking.frame)
+    if surface_marking.kind == SurfaceMarking.TRAFFIC_ISLAND_BLOCKED:
+        draw_traffic_island_blocked(ctx, surface_marking.frame)
 
     ctx.restore()
 
@@ -131,6 +135,31 @@ def draw_zebra_crossing(
             flag = True
 
         x += stripe_width
+
+
+def draw_crossing_lines(ctx, frame: Polygon):
+    points = frame.get_points()
+    dash_length = 0.04
+    utils.draw_line(
+        ctx,
+        MarkedLine([points[0], points[3]], style=RoadSection.DASHED_LINE_MARKING,),
+        dash_length=dash_length,
+    )
+    utils.draw_line(
+        ctx,
+        MarkedLine([points[1], points[2]], style=RoadSection.DASHED_LINE_MARKING,),
+        dash_length=dash_length,
+    )
+
+
+def draw_traffic_island_blocked(ctx, frame: Polygon):
+    points = frame.get_points()
+    left = Line(points[: len(points) // 2])
+    v = Vector(Vector(points[-2]) - Vector(points[0]))
+    start = Vector(points[0])
+    STRIPES_ANGLE = math.radians(90 - 27)
+    STRIPES_GAP = 0.1
+    draw_blocked_stripes(ctx, v, start, left, points, STRIPES_ANGLE, STRIPES_GAP)
 
 
 def draw_parking_spot_x(ctx, frame: Polygon):

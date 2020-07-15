@@ -15,6 +15,7 @@ from simulation.utils.road.sections import LeftCircularArc
 from simulation.utils.road.sections import StraightRoad
 from simulation.utils.road.sections import StaticObstacle
 from simulation.utils.road.sections import BlockedArea
+from simulation.utils.road.sections import TrafficIsland
 from simulation.utils.geometry import Point
 
 # - Beginning sphinx straight_road -
@@ -78,6 +79,17 @@ left_arc = LeftCircularArc(radius=2, angle=math.radians(90))
 # - Beginning sphinx blocked_area -
 blocked_area = BlockedArea(length=1, width=0.2)
 # - Ending sphinx blocked_area -
+
+# - Beginning sphinx traffic_island -
+traffic_island = TrafficIsland(
+    island_width=0.3,
+    zebra_length=0.45,
+    curve_area_length=0.8,
+    curvature=0.4,
+    zebra_marking_type=TrafficIsland.ZEBRA,
+)
+# - Ending sphinx traffic_island -
+
 road = Road()
 road.append(straight_road)
 road.append(straight_road_obs)
@@ -86,3 +98,4 @@ road.append(intersection)
 road.append(zebra_crossing)
 road.append(left_arc)
 road.append(blocked_area)
+road.append(traffic_island)
