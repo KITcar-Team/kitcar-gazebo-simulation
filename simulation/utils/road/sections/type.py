@@ -15,3 +15,5 @@ ZEBRA_CROSSING = 6
 """"""
 INTERSECTION = 7
 """"""
+BLOCKED_AREA = 8
+""""""

@@ -129,4 +129,21 @@ The two **required** parametes for an arc are :py:attr:`radius` and :py:attr:`an
 
 This example creates a circular arc to the left resulting in a 90-degree turn.
 
+BlockedArea
+------------
+
+.. figure:: ../tutorials/resources/example_blocked_area.jpg
+
+The :py:class:`simulation.utils.road.sections.blocked_area.BlockedArea` is a straight road,
+but the car is not allowed to drive on the blocked area which is marked by parallel white lines.
+By default the section is 1 m in length and the blocked area is 0.2 m wide, starting on the right line.
+This is an example on how to create a *BlockedArea* with a length of 1 m and a blocked area which is 0.2 m in width:
+
+.. literalinclude::
+   ../tutorials/road_examples/example.py
+   :language: python
+   :linenos:
+   :start-after: # - Beginning sphinx blocked_area -
+   :end-before: # - Ending sphinx blocked_area -
+
 .. onboarding_end

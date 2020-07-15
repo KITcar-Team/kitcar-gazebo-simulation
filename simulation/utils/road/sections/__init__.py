@@ -24,6 +24,7 @@ from simulation.utils.road.sections.parking_area import (
     ParkingSpot,
 )  # noqa: 402
 from simulation.utils.road.sections.zebra_crossing import ZebraCrossing  # noqa: 402
+from simulation.utils.road.sections.blocked_area import BlockedArea  # noqa: 402
 
 __all__ = [
     "QuadBezier",
@@ -43,4 +44,5 @@ __all__ = [
     "StraightRoad",
     "ZebraCrossing",
     "RoadSection",
+    "BlockedArea",
 ]

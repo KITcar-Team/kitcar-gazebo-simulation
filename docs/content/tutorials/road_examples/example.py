@@ -14,6 +14,7 @@ from simulation.utils.road.sections import ZebraCrossing
 from simulation.utils.road.sections import LeftCircularArc
 from simulation.utils.road.sections import StraightRoad
 from simulation.utils.road.sections import StaticObstacle
+from simulation.utils.road.sections import BlockedArea
 from simulation.utils.geometry import Point
 
 # - Beginning sphinx straight_road -
@@ -74,6 +75,9 @@ zebra_crossing = ZebraCrossing(length=0.5)
 left_arc = LeftCircularArc(radius=2, angle=math.radians(90))
 # - Ending sphinx left_arc -
 
+# - Beginning sphinx blocked_area -
+blocked_area = BlockedArea(length=1, width=0.2)
+# - Ending sphinx blocked_area -
 road = Road()
 road.append(straight_road)
 road.append(straight_road_obs)
@@ -81,3 +85,4 @@ road.append(parking_area)
 road.append(intersection)
 road.append(zebra_crossing)
 road.append(left_arc)
+road.append(blocked_area)
