@@ -1,5 +1,7 @@
 import rospy
 
+from std_msgs.msg import String as StringMsg
+
 from simulation_brain_link.msg import MissionMode
 from simulation_evaluation.msg import Referee as RefereeMsg
 from simulation_groundtruth.msg import GroundtruthStatus
@@ -23,6 +25,9 @@ class DriveTestNode(NodeBase):
         super().__init__(name="drive_test_node", log_level=rospy.DEBUG)
 
         self._groundtruth_status = GroundtruthStatus.READY
+        self._previous_state_machine_msg = None
+        self._state_machine_msg = None
+        self.state = -1
 
         if run:
             self.run()
@@ -55,6 +60,13 @@ class DriveTestNode(NodeBase):
             queue_size=1,
         )  # Subscribe to referee
 
+        self.sm_info_subscriber = rospy.Subscriber(
+            self.param.topics.state_machine.info,
+            StringMsg,
+            callback=self.receive_state_machine_info,
+            queue_size=1,
+        )  # Subscribe to sm updates
+
         rospy.wait_for_message(self.param.topics.referee.info, RefereeMsg)
 
         # Goooo
@@ -62,6 +74,7 @@ class DriveTestNode(NodeBase):
 
     def stop(self):
         self.referee_subscriber.unregister()
+        self.sm_info_subscriber.unregister()
         self.groundtruth_status_subscriber.unregister()
         self.mission_mode_publisher.unregister()
         self.renderer_reload_publisher.unregister()
@@ -73,6 +86,18 @@ class DriveTestNode(NodeBase):
             msg: New GroundtruthStatus message
         """
         self._groundtruth_status = msg.status
+
+    def receive_state_machine_info(self, msg: StringMsg):
+        """Receive info message when state machines change.
+
+        Args:
+            msg: New string message
+        """
+        if msg.data == self._state_machine_msg:
+            return
+        if self._state_machine_msg is not None:
+            self._previous_state_machine_msg = self._state_machine_msg
+        self._state_machine_msg = msg.data
 
     def update_mission_mode(self, mission_mode: int):
         """Change the car's mission mode.
@@ -94,6 +119,10 @@ class DriveTestNode(NodeBase):
             # Drive is over: save result and shutdown!
 
             self.state = msg.state
+            self.last_state_machine_transition = (
+                self._previous_state_machine_msg,
+                self._state_machine_msg,
+            )
 
             # Shutdown node...
             rospy.signal_shutdown("Drive is finished...")

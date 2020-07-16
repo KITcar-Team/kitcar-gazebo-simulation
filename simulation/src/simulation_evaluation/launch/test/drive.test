@@ -44,6 +44,7 @@
     <param name="expected_result_state" value="$(arg expected_result_state)"/>
     <rosparam file="$(find simulation_evaluation)/param/drive/topics.yaml" command="load" ns="topics" />
     <rosparam file="$(find simulation_evaluation)/param/referee/topics.yaml" command="load" ns="topics/referee" />
+    <rosparam file="$(find simulation_evaluation)/param/state_machine/topics.yaml" command="load" ns="topics/state_machine" />
     <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state" />
     <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics/groundtruth" />
     <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/default.yaml" command="load" ns="vehicle_simulation_link" />
