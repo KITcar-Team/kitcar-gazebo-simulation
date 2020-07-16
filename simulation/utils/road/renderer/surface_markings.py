@@ -76,6 +76,15 @@ def draw(ctx, surface_marking: SurfaceMarking):
 
 
 def draw_start_lane(ctx, frame: Polygon):
+    """Draw the checkerboard pattern to mark the beginning of a parking area in the given frame.
+
+    Args:
+        frame: Frame of the start lane. **Points of the frame must be given in the right order!**
+            first point : start on left line
+            second point: end on left line
+            third point : end on right line
+            fourth point: start on right line
+    """
     TILE_LENGTH = 0.02
 
     points = frame.get_points()
@@ -101,6 +110,12 @@ def draw_blocked_area(ctx, frame: Polygon):
 
     Args:
         frame: Frame of the blocked area. **Points of the frame must be given in the right order!**
+            first point : start on right line
+            second point: left of first point, towards middle line
+            third point : left of fourth point, towards middle line
+            fourth point: end on right line
+
+            Line between second and third point has to be parallel to middle/right line.
     """
 
     points = frame.get_points()
@@ -115,6 +130,15 @@ def draw_blocked_area(ctx, frame: Polygon):
 def draw_zebra_crossing(
     ctx, frame: Polygon, stripe_width: float = 0.04, offset: float = 0.02
 ):
+    """Draw a zebra crossing in the given frame.
+
+    Args:
+        frame: Frame of the zebra crossing. **Points of the frame must be given in the right order!**
+            first point : start on left line
+            second point: end on left line
+            third point : end on right line
+            fourth point: start on right line
+    """
     points = frame.get_points()
     left = Line([points[0], points[3]])
     right = Line([points[1], points[2]])
@@ -138,6 +162,17 @@ def draw_zebra_crossing(
 
 
 def draw_crossing_lines(ctx, frame: Polygon):
+    """Draw a crossing area for pedestrian, which is only marked by dashed lines, in the given frame.
+
+    The dashed lines are perpendicular to the road.
+
+    Args:
+        frame: Frame of the crossing area. **Points of the frame must be given in the right order!**
+            first point : start on left line
+            second point: end on left line
+            third point : end on right line
+            fourth point: start on right line
+    """
     points = frame.get_points()
     dash_length = 0.04
     utils.draw_line(
@@ -153,6 +188,13 @@ def draw_crossing_lines(ctx, frame: Polygon):
 
 
 def draw_traffic_island_blocked(ctx, frame: Polygon):
+    """Draw a blocked area, which splits the two lanes of the traffic island, in the given frame.
+
+    Args:
+        frame: Frame of the blocked area. **Points of the frame must be given in the right order!**
+            first half of points: left border
+            second half: right border
+    """
     points = frame.get_points()
     left = Line(points[: len(points) // 2])
     v = Vector(Vector(points[-2]) - Vector(points[0]))
@@ -163,6 +205,15 @@ def draw_traffic_island_blocked(ctx, frame: Polygon):
 
 
 def draw_parking_spot_x(ctx, frame: Polygon):
+    """Draw two crossing lines (X) in the given frame to represent a blocked spot.
+
+    Args:
+        frame: Frame of the parking spot. **Points of the frame must be given in the right order!**
+            first point : left lower corner of parking spot
+            second point: left upper corner
+            third point : right upper corner
+            fourth point: right lower corner
+    """
     points = frame.get_points()
     utils.draw_line(
         ctx, MarkedLine([points[0], points[2]], style=RoadSection.SOLID_LINE_MARKING)
@@ -179,6 +230,14 @@ def draw_blocked_stripes(
 
     White stripes are e.g. used by to signal areas on the ground
     where the car is not allowed to drive.
+
+    Args:
+        v: Vector along the line where the stripes start points are located.
+        start: Start point on the line where the stripes start points are located.
+        line: End points of the stripes are on this line.
+        points: List of points of the polygon frame.
+        angle: Angle of the stripes.
+        gap: Gap between the stripes.
     """
     ctx.save()
 
