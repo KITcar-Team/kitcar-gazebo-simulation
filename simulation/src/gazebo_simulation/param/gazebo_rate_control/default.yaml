@@ -10,7 +10,7 @@ targets:
 # Restrictions on how much the gazebo update rate can be changed
 # Prevent stopping the simulation
 update_rate:
-  min: 10
+  min: 50
   max: 1500
 
   # Parameters for adjusting the gazebo update rate
