@@ -34,6 +34,9 @@ class RefereeNode(NodeBase):
         )
 
         # State machine subscribers
+        self.lane_handler = self._connect_state_machine(
+            self.param.topics.state_machine.lane
+        )
         self.progress_handler = self._connect_state_machine(
             self.param.topics.state_machine.progress
         )
@@ -48,6 +51,7 @@ class RefereeNode(NodeBase):
         )
 
         self.referee = Referee(
+            lane=self.lane_handler[2],
             progress=self.progress_handler[2],
             overtaking=self.overtaking_handler[2],
             parking=self.parking_handler[2],
