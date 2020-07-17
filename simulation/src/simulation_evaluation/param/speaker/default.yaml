@@ -1,8 +1,8 @@
 queue_size: 10
 
 area:
-  min_wheels: 4  # How many wheels have to be inside an area that the speaker thinks the car is in that area
-  buffer: 0.01  # [m] All areas are buffered by this amount
+  min_wheels: 3  # How many wheels have to be inside an area that the speaker thinks the car is in that area
+  buffer: 0.02  # [m] All areas are buffered by this amount
 
 zone:
   overtaking_buffer: 2  # [m] Length before and behind an obstacle in which the car is allowed to overtake
