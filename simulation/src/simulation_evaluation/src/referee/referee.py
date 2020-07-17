@@ -82,6 +82,7 @@ class Referee:
     """Class to evaluate a drive by keeping track of the state_machines.
 
     Args:
+        lane: Connector to lane state machine.
         progress: Connector to progress state machine.
         overtaking: Connector to overtaking state machine.
         parking: Connector to parking state machine.
@@ -92,12 +93,14 @@ class Referee:
 
     def __init__(
         self,
+        lane: StateMachineConnector,
         progress: StateMachineConnector,
         overtaking: StateMachineConnector,
         parking: StateMachineConnector,
         priority: StateMachineConnector,
         initial_observation: Observation = None,
     ):
+        self.lane = lane
         self.progress = progress
         self.overtaking = overtaking
         self.parking = parking
@@ -145,20 +148,19 @@ class Referee:
         self.observation.current_time = time  # Get time in seconds
 
         if (
-            self.overtaking.state < 0 and self.parking.state < 0 and self.priority.state < 0
-        ) or self.priority.state == StateMsg.PRIORITY_FORBIDDEN_IN_STOP_ZONE:
+            # Check for failures in one of the state machines
+            self.lane.state < 0
+            or self.parking.state < 0
+            or self.overtaking.state < 0
+            or self.priority.state < 0
+            # If the car is not in the right lane, it must be overtaking or parking!
+            or (
+                self.lane.state != StateMsg.RIGHT_LANE
+                and self.overtaking.state == StateMsg.OVERTAKING_BEFORE_START
+                and self.parking.state == StateMsg.PARKING_BEFORE_START
+            )
+        ):
             self.state = RefereeMsg.FAILED
-            # return f"Referee going into failing state with overtaking state \
-            #        {self.overtaking.state} and parking state {self.parking.state}"
-            return
-            # TODO Reset car to beginning of next section!
-
-        if self.overtaking.state < 0:
-            self.overtaking.set_state(StateMsg.OVERTAKING_BEFORE_START)
-        if self.parking.state < 0:
-            self.parking.set_state(StateMsg.PARKING_BEFORE_START)
-        if self.priority.state < 0:
-            self.priority.set_state(StateMsg.PRIORITY_BEFORE_START)
 
     def reset(self, initial_observation: Observation = None):
         """Reset referee observations, state and state machines."""
@@ -171,6 +173,7 @@ class Referee:
             con.set_state(state)
             con.state = state
 
+        reset_connector(self.lane, StateMsg.RIGHT_LANE)
         reset_connector(self.overtaking, StateMsg.OVERTAKING_BEFORE_START)
         reset_connector(self.parking, StateMsg.PARKING_BEFORE_START)
         reset_connector(self.priority, StateMsg.PRIORITY_BEFORE_START)
