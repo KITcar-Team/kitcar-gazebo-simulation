@@ -28,8 +28,6 @@ from simulation.src.simulation_evaluation.src.state_machine.state_machines.state
     StateMachine,
 )
 
-__copyright__ = "KITcar"
-
 
 def log(logger: Callable[[str], None] = rospy.loginfo):
     """Log the state of each state machine.
@@ -76,6 +74,7 @@ class StateMachineNode(NodeBase):
 
     def start(self):
         """Start node."""
+        self._sm_updated = False
 
         self.info_publisher = rospy.Publisher(
             self.param.topics.info, StringMsg, queue_size=10
@@ -147,15 +146,23 @@ class StateMachineNode(NodeBase):
 
         super().stop()
 
-    @log(rospy.loginfo)
     def on_state_machine_update(self):
+        self._sm_updated = True
+
+    @log(rospy.loginfo)
+    def publish_updates(self):
         """Update each state machine."""
         for i, publisher in enumerate(self.sm_publishers):
             publisher.publish(self.state_machines[i].msg())
 
         # Create a string containing the info of all state machines.
-        for sm in self.state_machines:
-            self.info_publisher.publish(StringMsg(f"{sm.__class__.__name__}: {sm.info()}"))
+        self.info_publisher.publish(
+            StringMsg(
+                "\n".join(
+                    f"{sm.__class__.__name__}: {sm.info()}" for sm in self.state_machines
+                )
+            )
+        )
 
     @log(rospy.logdebug)
     def on_msg(self, msg: SpeakerMsg):
@@ -167,6 +174,10 @@ class StateMachineNode(NodeBase):
         for sm in self.state_machines:
             sm.run(msg.type)
 
+        if self._sm_updated:
+            self.publish_updates()
+            self._sm_updated = False
+
     def set_state_machine(self, new_msg: StateMsg, state_machine: StateMachine):
         """Update state machine manually.
 
@@ -176,3 +187,5 @@ class StateMachineNode(NodeBase):
         """
         if not state_machine.set(new_msg):
             rospy.logwarn(f"Can't find {new_msg} in {state_machine.__class__.__name__}.")
+
+        self.publish_updates()
