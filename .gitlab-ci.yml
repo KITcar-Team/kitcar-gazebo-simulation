@@ -92,6 +92,28 @@ test-drive-evaluation:
     # Success: Car evades the obstacles
     - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/obstacles automatic_drive:=true path_file:=$PATH_FILES/obstacles.yaml
 
+    # #### Road: ci_roads/intersection.py ####
+    # Road with an intersection
+    - export INTERSECTION_TURN=0 # Don't turn
+    - export INTERSECTION_RULE=0 # Equal priority
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
+    # Turn left
+    - export INTERSECTION_TURN=1
+    - export INTERSECTION_RULE=0 # Equal priority
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
+    # Turn right
+    - export INTERSECTION_TURN=2
+    - export INTERSECTION_RULE=0 # Equal priority
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
+    # Supposed to yield (failure)
+    - export INTERSECTION_TURN=0
+    - export INTERSECTION_RULE=1
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true expected_result_state:=3
+    # Supposed to stop (failure)
+    - export INTERSECTION_TURN=0
+    - export INTERSECTION_RULE=2
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true expected_result_state:=3
+
 
 test-documentation:
   stage: test
