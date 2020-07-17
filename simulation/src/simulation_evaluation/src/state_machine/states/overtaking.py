@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """States used in the OvertakingStateMachine."""
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
@@ -6,17 +5,25 @@ from simulation_evaluation.msg import State as StateMsg
 from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
     StateMachine,
 )
-from simulation.src.simulation_evaluation.src.state_machine.states.active import ActiveState
 
-__copyright__ = "KITcar"
+from .state import State
 
 
-class Off(ActiveState):
+class OvertakingState(State):
+    def next(self, state_machine, input_msg: int):
+        """Return updated state."""
+        if input_msg == SpeakerMsg.NO_OVERTAKING_ZONE:
+            return state_machine.off
+
+        return super().next(state_machine, input_msg)
+
+
+class Off(OvertakingState):
     """This state is the default state.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from State gives this class the ability to hand down description and value to State. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -47,12 +54,12 @@ class Off(ActiveState):
         return super().next(state_machine, input_msg)
 
 
-class Right(ActiveState):
+class Right(OvertakingState):
     """This state occurs when the car drives into the overtaking zone and is on the right line.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from State gives this class the ability to hand down description and value to State. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -79,18 +86,16 @@ class Right(ActiveState):
         """
         if input_msg == SpeakerMsg.LEFT_LANE:
             return state_machine.left
-        if input_msg == SpeakerMsg.NO_OVERTAKING_ZONE:
-            return state_machine.off
 
         return super().next(state_machine, input_msg)
 
 
-class Left(ActiveState):
+class Left(OvertakingState):
     """This state occurs when the car is in the overtaking zone and in the left line.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from State gives this class the ability to hand down description and value to State. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -115,11 +120,7 @@ class Left(ActiveState):
             Class object of next state. If no state change was detected here, check for failure state before
             returning this state.
         """
-        if input_msg == SpeakerMsg.NO_OVERTAKING_ZONE:
-            return state_machine.failure_left
         if input_msg == SpeakerMsg.RIGHT_LANE:
             return state_machine.right
-        if input_msg == SpeakerMsg.LEFT_LANE:
-            return state_machine.left
 
         return super().next(state_machine, input_msg)

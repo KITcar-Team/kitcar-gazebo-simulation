@@ -38,6 +38,7 @@ class StateMachineNodeTest(unittest.TestCase, NodeBase):
 
         # Subscribe and publish to StateMachineNode.
         self.definitions = []
+        self.definitions.append((topics.lane.get, topics.lane.set))
         self.definitions.append((topics.progress.get, topics.progress.set))
         self.definitions.append((topics.overtaking.get, topics.overtaking.set))
         self.definitions.append((topics.parking.get, topics.parking.set))
@@ -129,7 +130,7 @@ class StateMachineNodeTest(unittest.TestCase, NodeBase):
 
         rospy.logdebug("TEST location SUBSCRIBER")
         self.assert_receive_msgs(
-            self.param.topics.parking.get,
+            self.param.topics.lane.get,
             self.location_publisher,
             SpeakerMsg.OFF_ROAD,
             StateMsg.OFF_ROAD,
@@ -138,6 +139,7 @@ class StateMachineNodeTest(unittest.TestCase, NodeBase):
 
         rospy.logdebug("TEST ALL set SUBSCRIBERS")
         publish_msgs = [
+            StateMsg.RIGHT_LANE,
             StateMsg.PROGRESS_RUNNING,
             StateMsg.OVERTAKING_BEFORE_START,
             StateMsg.PARKING_BEFORE_START,

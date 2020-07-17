@@ -27,6 +27,9 @@ from simulation.src.simulation_evaluation.src.state_machine.state_machines.progr
 from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
     StateMachine,
 )
+from simulation.src.simulation_evaluation.src.state_machine.state_machines.lane import (
+    LaneStateMachine,
+)
 
 
 def log(logger: Callable[[str], None] = rospy.loginfo):
@@ -109,6 +112,7 @@ class StateMachineNode(NodeBase):
         definitions = []
         # Add new StateMachine here
         # Usage: (StateMachineObject, Topic path for publisher, Topic path for manually setting the state machine)
+        definitions.append((LaneStateMachine, t.lane.get, t.lane.set))
         definitions.append((ProgressStateMachine, t.progress.get, t.progress.set))
         definitions.append((OvertakingStateMachine, t.overtaking.get, t.overtaking.set))
         definitions.append((ParkingStateMachine, t.parking.get, t.parking.set))

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """States used in the PriorityStateMachine."""
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
@@ -6,18 +5,15 @@ from simulation_evaluation.msg import State as StateMsg
 from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
     StateMachine,
 )
-from simulation.src.simulation_evaluation.src.state_machine.states.active import ActiveState
 from simulation.src.simulation_evaluation.src.state_machine.states.state import State
 
-__copyright__ = "KITcar"
 
-
-class Off(ActiveState):
+class Off(State):
     """This state is the default state.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from State gives this class the ability to hand down description and value to State. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -50,12 +46,12 @@ class Off(ActiveState):
         return super().next(state_machine, input_msg)
 
 
-class InHaltZone(ActiveState):
+class InHaltZone(State):
     """This state occurs when the car drives inside a halt zone.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from State gives this class the ability to hand down description and value to State. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -88,12 +84,12 @@ class InHaltZone(ActiveState):
         return super().next(state_machine, input_msg)
 
 
-class InStopZone(ActiveState):
+class InStopZone(State):
     """This state occurs when the car drives into a stop zone.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from State gives this class the ability to hand down description and value to State. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -125,12 +121,12 @@ class InStopZone(ActiveState):
         return super().next(state_machine, input_msg)
 
 
-class SuccessfullyStopped(ActiveState):
+class SuccessfullyStopped(State):
     """This state occurs when the car stops in the stop zone.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from State gives this class the ability to hand down description and value to State. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 

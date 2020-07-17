@@ -3,6 +3,7 @@
 Whenever this module is executed, all of the tests included below are run.
 """
 
+import simulation.src.simulation_evaluation.src.state_machine.test.test_lane_state_machine as lane
 import simulation.src.simulation_evaluation.src.state_machine.test.test_overtaking_state_machine as overtaking
 import simulation.src.simulation_evaluation.src.state_machine.test.test_parking_state_machine as parking
 import simulation.src.simulation_evaluation.src.state_machine.test.test_priority_state_machine as priority
@@ -18,6 +19,7 @@ def append_test_cases(module):
     suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(module.ModuleTest))
 
 
+append_test_cases(lane)
 append_test_cases(overtaking)
 append_test_cases(parking)
 append_test_cases(priority)
