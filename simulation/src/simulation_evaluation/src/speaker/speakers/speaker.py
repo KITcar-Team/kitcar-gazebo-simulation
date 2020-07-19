@@ -42,6 +42,7 @@ class Speaker:
         section_proxy: Callable[[], List[SectionMsg]],
         lane_proxy: Callable[[int], LaneMsg],
         obstacle_proxy: Callable[[int], List[LabeledPolygonMsg]] = None,
+        surface_marking_proxy: Callable[[int], List[LabeledPolygonMsg]] = None,
         intersection_proxy: Callable[[int], Any] = None
     ):
         """Initialize speaker with funtions that can be queried for groundtruth information.
@@ -50,12 +51,14 @@ class Speaker:
             section_proxy: Returns all sections when called.
             lane_proxy: Returns a LaneMsg for each section.
             obstacle_proxy: Optional function which returns obstacles in a section.
+            surface_marking_proxy: Optional function which returns surface_markings in a section.
             intersection_proxy: Optional function which returns an IntersectionMsg \
                 for a section. (Only makes sense if the section is an intersection.)
         """
         self.sections = section_proxy().sections
         self.get_lanes = lane_proxy
         self.get_obstacles = obstacle_proxy
+        self.get_surface_markings = surface_marking_proxy
         self.get_intersection = intersection_proxy
 
     def listen(self, msg: CarStateMsg):
@@ -153,6 +156,22 @@ class Speaker:
         obstacle_msgs = self.get_obstacles(section_id).polygons
 
         return [Polygon(o.frame) for o in obstacle_msgs]
+
+    def get_surface_markings_in_section(self, section_id: int) -> List[Tuple[int, Polygon]]:
+        """Get all surface_markings inside as polygons.
+
+        Args:
+            section_id: id of the section
+
+        Returns:
+            List of tuples with type and polygons describing
+            the frames of the surface_markings.
+        """
+        surface_marking_msgs: List[LabeledPolygonMsg] = self.get_surface_markings(
+            section_id
+        ).polygons
+
+        return [(o.type, Polygon(o.frame)) for o in surface_marking_msgs]
 
     def get_interval_for_polygon(self, *polygons: Iterable[Polygon]) -> Tuple[float, float]:
         """Get start and end points of the polygons.

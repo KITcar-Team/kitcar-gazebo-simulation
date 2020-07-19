@@ -80,9 +80,9 @@ test-drive-evaluation:
     # Success: Drive on right lane
     - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true
     # Failure: driving onto the left lane
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true path_file:=$PATH_FILES/left_lane.yaml expected_result_state:=3 
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true path_file:=$PATH_FILES/left_lane.yaml expected_result_state:=3
     # Failure: by driving off road
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true path_file:=$PATH_FILES/off_road.yaml expected_result_state:=3 
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true path_file:=$PATH_FILES/off_road.yaml expected_result_state:=3
 
     # #### Road: ci_roads/obstacles.py ####
     # Road with multiple obstacles
@@ -112,6 +112,13 @@ test-drive-evaluation:
     - export INTERSECTION_TURN=0
     - export INTERSECTION_RULE=2
     - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true expected_result_state:=3
+
+    # #### Road: ci_roads/blocked_area.py ####
+    # Drive around the blocked area
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/blocked_area automatic_drive:=true path_file:=$PATH_FILES/blocked_area.yaml
+    # Drive into the blocked area
+    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/blocked_area automatic_drive:=true expected_result_state:=3
+
 
 
 test-documentation:

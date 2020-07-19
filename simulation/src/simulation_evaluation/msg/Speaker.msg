@@ -49,6 +49,7 @@ int8 PARKING_SPOT = 41  # Car is inside a parking spot
 int8 PRIORITY_AREA = 42  # Car intersects with a priority area.
 # A priority area is the area before an obstacle in a situation
 # where the obstacle has the right of way (e.g. crosswalk)
+int8 BLOCKED_AREA = 43  # Car is on a blocked area.
 
 # SPEED
 

@@ -1,0 +1,8 @@
+# Path specification to drive around the blocked area.
+path:
+  - start: 0.4
+    offset: -0.2
+  - start: 2
+    offset: 0.2
+  - start: 5
+    offset: -0.2

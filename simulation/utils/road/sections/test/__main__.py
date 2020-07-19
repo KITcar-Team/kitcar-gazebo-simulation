@@ -10,6 +10,7 @@ import simulation.utils.road.sections.test.bezier_test as bezier
 import simulation.utils.road.sections.test.zebra_crossing_test as zebra_crossing
 import simulation.utils.road.sections.test.intersection_test as intersection
 import simulation.utils.road.sections.test.parking_test as parking
+import simulation.utils.road.sections.test.blocked_area_test as blocked_area
 
 # Create test suite
 import unittest
@@ -29,6 +30,7 @@ append_test_cases(bezier)
 append_test_cases(zebra_crossing)
 append_test_cases(intersection)
 append_test_cases(parking)
+append_test_cases(blocked_area)
 
 runner = unittest.TextTestRunner()
 result = runner.run(suite)
