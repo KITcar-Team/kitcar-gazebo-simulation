@@ -142,9 +142,25 @@ class Groundtruth:
         if obstacles is None:
             return []
         msgs = []
-        for obstacle in self.road.sections[id].obstacles:
+        for obstacle in obstacles:
             msg = LabeledPolygonMsg()
             msg.frame = obstacle.frame.to_geometry_msg()
-            msg.type = LabeledPolygonMsg.OBSTACLE
+            msgs.append(msg)
+        return msgs
+
+    def get_surface_marking_msgs(self, id: int) -> List[LabeledPolygonMsg]:
+        """Labeled polygon msg for each surface marking in the requested road section.
+
+        Args:
+            id: section id
+        """
+        surface_markings = self.road.sections[id].surface_markings
+        if surface_markings is None:
+            return []
+        msgs = []
+        for surface_marking in surface_markings:
+            msg = LabeledPolygonMsg()
+            msg.frame = surface_marking.frame.to_geometry_msg()
+            msg.type = surface_marking.kind
             msgs.append(msg)
         return msgs
