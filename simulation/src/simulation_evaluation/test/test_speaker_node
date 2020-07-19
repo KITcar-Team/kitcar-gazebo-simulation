@@ -58,6 +58,12 @@ class SpeakerNodeTest(unittest.TestCase, NodeBase):
         self.obstacle_proxy = rospy.Service(
             groundtruth_topics.obstacle, LabeledPolygonSrv, fake_msgs.obstacle_srv()
         )
+
+        self.surface_marking_proxy = rospy.Service(
+            groundtruth_topics.surface_marking,
+            LabeledPolygonSrv,
+            fake_msgs.surface_marking_srv(),
+        )
         self.intersection_proxy = rospy.Service(
             groundtruth_topics.intersection,
             IntersectionSrv,

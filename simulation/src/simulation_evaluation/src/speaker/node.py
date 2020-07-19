@@ -64,6 +64,9 @@ class SpeakerNode(NodeBase):
         self.obstacle_proxy = rospy.ServiceProxy(
             groundtruth_topics.obstacle, LabeledPolygonSrv
         )
+        self.surface_marking_proxy = rospy.ServiceProxy(
+            groundtruth_topics.surface_marking, LabeledPolygonSrv
+        )
         self.intersection_proxy = rospy.ServiceProxy(
             groundtruth_topics.intersection, IntersectionSrv
         )
@@ -151,6 +154,13 @@ class SpeakerNode(NodeBase):
 
     def stop(self):
         self.subscriber.unregister()
+
+        self.section_proxy.close()
+        self.lane_proxy.close()
+        self.parking_proxy.close()
+        self.obstacle_proxy.close()
+        self.surface_marking_proxy.close()
+        self.intersection_proxy.close()
 
         # Stop all speaker publisher
         for _, publisher in self.speakers:
