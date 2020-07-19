@@ -6,11 +6,6 @@ from typing import Callable, Dict, Type
 from graphviz import Digraph
 
 from simulation_evaluation.msg import State as StateMsg
-from simulation.src.simulation_evaluation.src.state_machine.states.failure import (
-    FailureCollision,
-    FailureLeft,
-    FailureOffRoad,
-)
 from simulation.src.simulation_evaluation.src.state_machine.states.state import State
 
 __copyright__ = "KITcar"
@@ -28,13 +23,6 @@ class StateMachine:
         state (State): Current state
         callback (method): Function which gets executed when the state changes
     """
-
-    failure_collision: State = FailureCollision()
-    """End state when driving into an obstacle"""
-    failure_off_road: State = FailureOffRoad()
-    """End state when driving of the road"""
-    failure_left: State = FailureLeft()
-    """End state when driving onto the left lane"""
 
     def __init__(
         self,

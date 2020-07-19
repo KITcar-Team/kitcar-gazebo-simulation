@@ -1,5 +1,8 @@
 info: '/simulation/state_machine/info'
 
+lane:
+  get: '/simulation/state_machine/lane/get/'
+  set: '/simulation/state_machine/lane/set/'
 progress:
   get: '/simulation/state_machine/progress/get/'
   set: '/simulation/state_machine/progress/set/'

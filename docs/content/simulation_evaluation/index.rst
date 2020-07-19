@@ -133,7 +133,21 @@ The current state of each state machine is published as a :ref:`State <state_msg
 State Machines
 ^^^^^^^^^^^^^^
 
-There are four state machines which track the state of the drive.
+There are five state machines which track the state of the drive.
+
+LaneStateMachine
+""""""""""""""""""""""
+
+This state machine keeps track of driving on the correct part of the road.
+
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.lane` for implementation details.
+
+.. figure:: graphs/lane.svg
+   :scale: 10 %
+   :align: center
+   :alt: Graph of LaneStateMachine
+
+   Graph of LaneStateMachine
 
 OvertakingStateMachine
 """"""""""""""""""""""
