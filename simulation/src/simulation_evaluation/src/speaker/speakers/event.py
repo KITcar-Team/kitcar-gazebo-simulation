@@ -12,6 +12,7 @@ from simulation_groundtruth.msg import (
 
 from simulation.utils.geometry import Polygon
 import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections import SurfaceMarking
 
 from .speaker import Speaker
 
@@ -28,6 +29,7 @@ class EventSpeaker(Speaker):
         section_proxy: Callable[[], List[SectionMsg]],
         lane_proxy: Callable[[int], LaneMsg],
         obstacle_proxy: Callable[[int], List[LabeledPolygonMsg]],
+        surface_marking_proxy: Callable[[int], List[LabeledPolygonMsg]],
         parking_proxy: Callable[[int], Any],
         parking_spot_buffer: float,
         min_parking_wheels: int
@@ -48,6 +50,7 @@ class EventSpeaker(Speaker):
             section_proxy=section_proxy,
             lane_proxy=lane_proxy,
             obstacle_proxy=obstacle_proxy,
+            surface_marking_proxy=surface_marking_proxy,
         )
 
         self.get_parking_msgs = parking_proxy
@@ -99,6 +102,19 @@ class EventSpeaker(Speaker):
             for o in self.get_obstacles_in_section(sec.id)
         ]
 
+    @functools.cached_property
+    def blocked_areas(self) -> List[Polygon]:
+        """All blocked_areas as a list of polygons."""
+        return [
+            # Buffer the blocked_area that is received from proxy because of some issues
+            # with shapely thinking that the points are not a valid polygon!
+            # And it further simplifies the polygons
+            Polygon(sm[1].buffer(BUFFER).exterior.coords)
+            for sec in self.sections
+            for sm in self.get_surface_markings_in_section(sec.id)
+            if sm[0] == SurfaceMarking.BLOCKED_AREA
+        ]
+
     def speak(self) -> List[SpeakerMsg]:
         """Return a list of SpeakerMsgs.
 
@@ -116,6 +132,9 @@ class EventSpeaker(Speaker):
 
         if self.car_overlaps_with(*self.obstacles):
             append_with_type(SpeakerMsg.COLLISION)
+
+        if self.car_overlaps_with(*self.blocked_areas):
+            append_with_type(SpeakerMsg.BLOCKED_AREA)
 
         if self.wheel_count_inside(*self.parking_spots) >= self.min_parking_wheels:
             append_with_type(SpeakerMsg.PARKING_SPOT)

@@ -51,6 +51,7 @@ class ModuleTest(unittest.TestCase):
         )
         lane_msg_proxy = functools.partial(fake_msgs.lane_msgs, lines)
         parking_msg_proxy = functools.partial(fake_msgs.parking_msgs, [], [], [], [])
+        surface_marking_msg_proxy = fake_msgs.empty_labeled_polygon_response
 
         # Create obstacles
         self.overtaking_intervals = []
@@ -107,6 +108,7 @@ class ModuleTest(unittest.TestCase):
             lane_proxy=lane_msg_proxy,
             parking_proxy=parking_msg_proxy,
             obstacle_proxy=obstacle_proxy,
+            surface_marking_proxy=surface_marking_msg_proxy,
             intersection_proxy=intersection_proxy,
             overtaking_buffer=overtaking_buffer,
             start_zone_buffer=0.5,

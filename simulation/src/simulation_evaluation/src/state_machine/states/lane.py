@@ -25,6 +25,15 @@ class FailureCollision(State):
         super().__init__(description="Car crashed.", value=StateMsg.COLLISION)
 
 
+class FailureBlockedArea(State):
+    """This end state occurs when the car drives onto a blocked area."""
+
+    def __init__(self):
+        super().__init__(
+            description="Car drove onto a blocked area.", value=StateMsg.BLOCKED_AREA
+        )
+
+
 class FailureOffRoad(State):
     """This end state occurs when the car drives of the road.
 
@@ -58,6 +67,8 @@ class LaneState(State):
             return state_machine.off_road
         elif input_msg == SpeakerMsg.COLLISION:
             return state_machine.collision
+        elif input_msg == SpeakerMsg.BLOCKED_AREA:
+            return state_machine.blocked_area
 
         return super().next(state_machine, input_msg)
 

@@ -18,7 +18,6 @@ from simulation.utils.geometry.pose import Pose
 
 APPROXIMATION_DISTANCE = 0.00005
 CURVATURE_APPROX_DISTANCE = 0.04
-SIMPLIFICATION_TOLERANCE = 0.001
 
 
 def ensure_valid_arc_length(*, approx_distance=APPROXIMATION_DISTANCE) -> Callable:
@@ -150,6 +149,10 @@ class Line(shapely.geometry.linestring.LineString):
             coords = reversed(coords)
         return Line(coords)
 
+    def simplify(self, tolerance=0.001):
+        coords = super().simplify(tolerance).coords
+        return self.__class__(coords)
+
     @ensure_valid_arc_length()
     def interpolate_direction(self, *, arc_length: float) -> Vector:
         """Interpolate the direction of the line as a vector.
@@ -275,9 +278,7 @@ class Line(shapely.geometry.linestring.LineString):
             return NotImplemented
 
         # simplify lines (1 mm tolerance) before checking equality
-        return self.simplify(tolerance=SIMPLIFICATION_TOLERANCE).almost_equals(
-            line.simplify(tolerance=SIMPLIFICATION_TOLERANCE)
-        )
+        return self.simplify().almost_equals(line.simplify())
 
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}({self.get_points()})"

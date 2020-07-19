@@ -49,6 +49,7 @@ class GroundtruthNode(NodeBase):
         obstacle_srv (rospy.Service): ROS service to access obstacles in a road section.
         parking_srv (rospy.Service): ROS service to access parking spots \
                 and other parking information.
+        surface_marking_srv (rospy.Service): ROS service to access surface markings in a road section.
         intersection_srv (rospy.Service): ROS service to access information of an intersection.
     """
 
@@ -178,6 +179,9 @@ class GroundtruthNode(NodeBase):
         self.obstacle_srv = rospy.Service(
             self.param.topics.obstacle, LabeledPolygonSrv, self.get_obstacles
         )
+        self.surface_marking_srv = rospy.Service(
+            self.param.topics.surface_marking, LabeledPolygonSrv, self.get_surface_markings
+        )
         self.intersection_srv = rospy.Service(
             self.param.topics.intersection, IntersectionSrv, self.get_intersection
         )
@@ -251,6 +255,13 @@ class GroundtruthNode(NodeBase):
         response = LabeledPolygonSrvResponse()
         response.polygons = self.groundtruth.get_obstacle_msgs(request.id)
         rospy.logdebug(f"Answering obstacle request {response.polygons}")
+        return response
+
+    def get_surface_markings(self, request: LabeledPolygonSrv) -> LabeledPolygonSrvResponse:
+        """Answer surface_marking service request."""
+        response = LabeledPolygonSrvResponse()
+        response.polygons = self.groundtruth.get_surface_marking_msgs(request.id)
+        rospy.logdebug(f"Answering surface_marking request {response.polygons}")
         return response
 
     def get_intersection(self, request: IntersectionSrvRequest) -> IntersectionSrvResponse:

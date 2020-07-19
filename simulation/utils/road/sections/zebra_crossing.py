@@ -11,6 +11,12 @@ import simulation.utils.road.sections.type as road_section_type
 
 @dataclass
 class ZebraCrossing(StraightRoad):
+    """Road section representing a zebra crossing.
+
+    Args:
+        length (float) = 0.45: length of the crossing and thus the section.
+    """
+
     TYPE = road_section_type.ZEBRA_CROSSING
 
     length: float = 0.45
@@ -29,6 +35,7 @@ class ZebraCrossing(StraightRoad):
 
     @property
     def frame(self) -> Polygon:
+        """Polygon : Frame for the zebra crossing surface marking."""
         poly = Polygon(
             [
                 Point(0, -Config.road_width),
