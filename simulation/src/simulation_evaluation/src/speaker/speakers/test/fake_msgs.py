@@ -102,9 +102,7 @@ def obstacle_msgs(
 ) -> groundtruth_srvs.LabeledPolygonSrvResponse:
     response = groundtruth_srvs.LabeledPolygonSrvResponse()
     response.polygons = list(
-        groundtruth_msgs.LabeledPolygon(
-            obtacle.to_geometry_msg(), groundtruth_msgs.LabeledPolygon.OBSTACLE
-        )
+        groundtruth_msgs.LabeledPolygon(obtacle.to_geometry_msg(), 0)  # Dummy type 0
         for obtacle in obstacles
     )
 
@@ -117,6 +115,19 @@ def obstacle_srv(obstacles=None):
 
     def _cal(req: groundtruth_srvs.LabeledPolygonSrvResponse):
         return obstacle_msgs(obstacles, req.id)
+
+    return _cal
+
+
+def empty_labeled_polygon_response(id: int) -> groundtruth_srvs.LabeledPolygonSrvResponse:
+    response = groundtruth_srvs.LabeledPolygonSrvResponse()
+    response.polygons = []
+    return response
+
+
+def surface_marking_srv():
+    def _cal(req: groundtruth_srvs.LabeledPolygonSrvResponse):
+        return empty_labeled_polygon_response(req.id)
 
     return _cal
 

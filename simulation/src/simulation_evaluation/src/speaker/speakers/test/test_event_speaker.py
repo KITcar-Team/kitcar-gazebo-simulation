@@ -46,6 +46,7 @@ class ModuleTest(unittest.TestCase):
         section_msg_proxy = functools.partial(fake_msgs.section_msgs, section_count=1)
         lane_msg_proxy = functools.partial(fake_msgs.lane_msgs, [])
         obstacle_msg_proxy = functools.partial(fake_msgs.obstacle_msgs, obstacles)
+        surface_marking_msg_proxy = fake_msgs.empty_labeled_polygon_response
         parking_msg_proxy = functools.partial(
             fake_msgs.parking_msgs, right_spots, left_spots, Line(), Line()
         )
@@ -54,6 +55,7 @@ class ModuleTest(unittest.TestCase):
             section_proxy=section_msg_proxy,
             lane_proxy=lane_msg_proxy,
             obstacle_proxy=obstacle_msg_proxy,
+            surface_marking_proxy=surface_marking_msg_proxy,
             parking_proxy=parking_msg_proxy,
             parking_spot_buffer=0.0,
             min_parking_wheels=3,
@@ -72,6 +74,7 @@ class ModuleTest(unittest.TestCase):
             section_proxy=section_msg_proxy,
             lane_proxy=lane_msg_proxy,
             obstacle_proxy=obstacle_msg_proxy,
+            surface_marking_proxy=surface_marking_msg_proxy,
             parking_proxy=parking_msg_proxy,
             parking_spot_buffer=0.01,
             min_parking_wheels=3,
