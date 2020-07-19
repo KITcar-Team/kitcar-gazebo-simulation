@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """States used in the ParkingStateMachine."""
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
@@ -6,18 +5,24 @@ from simulation_evaluation.msg import State as StateMsg
 from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
     StateMachine,
 )
-from simulation.src.simulation_evaluation.src.state_machine.states.active import ActiveState
 from simulation.src.simulation_evaluation.src.state_machine.states.state import State
 
-__copyright__ = "KITcar"
+
+class ParkingState(State):
+    def next(self, state_machine, input_msg: int):
+        """Return updated state."""
+        if input_msg == SpeakerMsg.NO_PARKING_ZONE:
+            return state_machine.off
+
+        return super().next(state_machine, input_msg)
 
 
-class Off(ActiveState):
+class Off(ParkingState):
     """This state is the default state.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -48,12 +53,12 @@ class Off(ActiveState):
         return super().next(state_machine, input_msg)
 
 
-class InParkingZone(ActiveState):
+class InParkingZone(ParkingState):
     """This state occurs when the car drives into the parking zone.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -87,12 +92,12 @@ class InParkingZone(ActiveState):
         return super().next(state_machine, input_msg)
 
 
-class ParkingAttempt(ActiveState):
+class ParkingAttempt(ParkingState):
     """This state occurs when the car starts an attempt to park in.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -127,12 +132,12 @@ class ParkingAttempt(ActiveState):
         return super().next(state_machine, input_msg)
 
 
-class Parking(ActiveState):
+class Parking(ParkingState):
     """This state occurs when the car drives a parking space.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -167,12 +172,12 @@ class Parking(ActiveState):
         return super().next(state_machine, input_msg)
 
 
-class SuccessfullyParked(ActiveState):
+class SuccessfullyParked(ParkingState):
     """This state occurs when the car successfully parks inside a parking space.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -204,12 +209,12 @@ class SuccessfullyParked(ActiveState):
         return super().next(state_machine, input_msg)
 
 
-class ParkingOut(ActiveState):
+class ParkingOut(ParkingState):
     """This state occurs when the car drives out of the parking space.
 
     Once the state machine receives this state, the next state will we chage accordingly to its next method.
 
-    Inheriting from ActiveState gives this class the ability to hand down description and value to ActiveState. Same \
+    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
         goes for input_msg which gets parsed to the method next if no state change was detected.
     """
 
@@ -256,7 +261,7 @@ class FailureInRightLane(State):
         Initializing does not need any arguments however description and value have to initialized to super.
         """
         super().__init__(
-            description="Car failed to park in.", value=StateMsg.PARKING_FORBIDDEN_RIGHT
+            description="Car failed to park.", value=StateMsg.PARKING_FORBIDDEN_RIGHT
         )
 
 

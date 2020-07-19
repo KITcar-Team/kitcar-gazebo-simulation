@@ -147,25 +147,6 @@ class ModuleTest(Test):
             ParkingStateMachine(self.callback), inputs, states, 3
         )
 
-    def test_off_road(self):
-        """Test if state machine works as expected if car drives offroad while trying to park in."""
-        inputs = [
-            SpeakerMsg.SPEED_UNLIMITED_ZONE,
-            SpeakerMsg.PARKING_ZONE,
-            SpeakerMsg.LEFT_LANE,
-            SpeakerMsg.OFF_ROAD,
-        ]
-        states = [
-            ParkingStateMachine.off,
-            ParkingStateMachine.in_parking_zone,
-            ParkingStateMachine.parking_attempt,
-            ParkingStateMachine.failure_off_road,
-        ]
-
-        self.state_machine_assert_on_input(
-            ParkingStateMachine(self.callback), inputs, states, 3
-        )
-
     def test_left_lane(self):
         """Test if state machine works as expected if car drives left after parking in."""
         inputs = [

@@ -108,27 +108,11 @@ class ModuleTest(Test):
         states = [
             OvertakingStateMachine.right,
             OvertakingStateMachine.left,
-            OvertakingStateMachine.failure_left,
+            OvertakingStateMachine.off,
         ]
 
         self.state_machine_assert_on_input(
             OvertakingStateMachine(self.callback), inputs, states, 3
-        )
-
-    def test_off_road(self):
-        """Test if state machine reacts as expected if car is driving off road."""
-        inputs = [SpeakerMsg.OFF_ROAD]
-        states = [OvertakingStateMachine.failure_off_road]
-
-        self.state_machine_assert_on_input(
-            OvertakingStateMachine(self.callback), inputs, states, 1
-        )
-
-        inputs = [SpeakerMsg.OVERTAKING_ZONE, SpeakerMsg.OFF_ROAD]
-        states = [OvertakingStateMachine.right, OvertakingStateMachine.failure_off_road]
-
-        self.state_machine_assert_on_input(
-            OvertakingStateMachine(self.callback), inputs, states, 2
         )
 
 
