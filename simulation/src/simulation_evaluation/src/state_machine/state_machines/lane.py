@@ -15,6 +15,7 @@ from simulation.src.simulation_evaluation.src.state_machine.states.lane import (
     ParkingLeft,
     ParkingRight,
     FailureCollision,
+    FailureBlockedArea,
     FailureOffRoad,
 )
 
@@ -28,6 +29,8 @@ class LaneStateMachine(StateMachine):
 
     collision = FailureCollision()
     """End state when driving into an obstacle"""
+    blocked_area = FailureBlockedArea()
+    """End state when driving into a blocked area"""
     off_road = FailureOffRoad()
     """End state when driving of the road"""
     right = Right()  # noqa: F821

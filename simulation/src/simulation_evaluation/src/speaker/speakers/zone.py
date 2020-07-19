@@ -15,6 +15,7 @@ import simulation_groundtruth.srv as groundtruth_srv
 
 from simulation.utils.geometry import Point
 import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.road.sections import SurfaceMarking
 
 from .speaker import Speaker
 
@@ -28,6 +29,7 @@ class ZoneSpeaker(Speaker):
         section_proxy: Callable[[], List[SectionMsg]],
         lane_proxy: Callable[[int], LaneMsg],
         obstacle_proxy: Callable[[int], List[LabeledPolygonMsg]],
+        surface_marking_proxy: Callable[[int], List[LabeledPolygonMsg]],
         parking_proxy: Callable[[int], Any],
         intersection_proxy: Callable[[int], Any],
         overtaking_buffer: float = 2,
@@ -41,6 +43,7 @@ class ZoneSpeaker(Speaker):
             section_proxy: Returns all sections when called.
             lane_proxy: Returns a LaneMsg for each section.
             obstacle_proxy: function which returns obstacles in a section.
+            surface_marking_proxy: function which returns surface_markings in a section.
             parking_proxy: function which returns parking msg in a section.
             intersection_proxy: function which returns intersection msg in a section.
             parking_spot_buffer: buffer around parking spots in which a parking attempt \
@@ -54,6 +57,7 @@ class ZoneSpeaker(Speaker):
             section_proxy=section_proxy,
             lane_proxy=lane_proxy,
             obstacle_proxy=obstacle_proxy,
+            surface_marking_proxy=surface_marking_proxy,
             intersection_proxy=intersection_proxy,
         )
         self.get_parking_msgs = parking_proxy
@@ -79,8 +83,21 @@ class ZoneSpeaker(Speaker):
             for obstacle in self.get_obstacles_in_section(sec.id)
         )
 
+        # Get blocked area polygons because the car is allowed to drive onto the left lane there!
+        surface_markings = list(
+            surface_marking
+            for sec in self.sections
+            for surface_marking in self.get_surface_markings_in_section(sec.id)
+        )
+
+        blocked_areas = [
+            sm[1] for sm in surface_markings if sm[0] == SurfaceMarking.BLOCKED_AREA
+        ]
+
         # Intervals where polygons are along the middle line
-        intervals = list(self.get_interval_for_polygon(obs) for obs in obstacles)
+        intervals = list(
+            self.get_interval_for_polygon(obs) for obs in (obstacles + blocked_areas)
+        )
 
         if len(intervals) == 0:
             return []
