@@ -124,7 +124,7 @@ class StateMachineNodeTest(unittest.TestCase, NodeBase):
             self.param.topics.priority.get,
             self.speed_publisher,
             SpeakerMsg.SPEED_HALTED,
-            StateMsg.PRIORITY_BEFORE_START,
+            StateMsg.PRIORITY_SUCCESS_STOP,
             SpeakerMsg,
         )
 
