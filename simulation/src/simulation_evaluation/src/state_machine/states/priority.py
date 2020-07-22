@@ -76,7 +76,7 @@ class InHaltZone(State):
             returning this state.
         """
         if input_msg == SpeakerMsg.SPEED_HALTED:
-            return state_machine.off
+            return state_machine.successfully_stopped
 
         if input_msg == SpeakerMsg.NO_STOP_ZONE:
             return state_machine.failure_in_stop_zone
