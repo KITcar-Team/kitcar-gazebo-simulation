@@ -14,7 +14,8 @@ before_script:
   - python3 -V
 
   # Install packages and requirements
-  - yes 1 | ./init/init.sh || true
+  # Leave out machine learning packages because they are not used within the CI right now.
+  - printf '1\nyn' | ./init/init.sh || true
 
   - source init/bashrc || true
 

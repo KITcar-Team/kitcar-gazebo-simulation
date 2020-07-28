@@ -12,7 +12,7 @@ COPY kitcar-gazebo-simulation $KITCAR_REPO_PATH/kitcar-gazebo-simulation
 RUN rm -rf ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/simulation/devel ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/simulation/build
 # Run kitcar gazebo's init script
 # This also source gazebo within the bashrc!
-RUN yes 1 | bash ${KITCAR_REPO_PATH}kitcar-gazebo-simulation/init/init.sh || true
+RUN printf '1\nyn' | bash ${KITCAR_REPO_PATH}kitcar-gazebo-simulation/init/init.sh || true
 
 # Build the simulation
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && cd ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/simulation && catkin_make"
