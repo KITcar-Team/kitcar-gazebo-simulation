@@ -69,3 +69,9 @@ datasets
 
 # Hypothesis results
 *.hypothesis
+
+# Machine learning
+simulation/utils/machine_learning/datasets/
+simulation/utils/machine_learning/cycle_gan/checkpoints/
+simulation/utils/machine_learning/cycle_gan/results/
+*.pth
