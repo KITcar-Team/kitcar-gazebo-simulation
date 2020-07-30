@@ -23,6 +23,20 @@ if check_for_ubuntu_version focal;
 fi
 }
 
+pip_install_reqs(){
+    # Install python packages
+    echo -e "\nStart installing python packages from \e[2minit/$1\e[22m"
+    case "$UBUNTU_VERSION" in
+      "focal") # Ubuntu 20.04
+        pip3 install --no-warn-script-location -r $INIT_DIR/$1;;
+      "bionic")
+        pip3 install -r $INIT_DIR/$1;;
+      *)
+        echo -e "\n\e[31mERROR: You are not using the correct version of Ubuntu (bionic or focal)!\e[39m" ;
+        exit;
+    esac
+}
+
 case "$option" in
   1) # do initialize
     # check for dependencies
@@ -48,17 +62,22 @@ case "$option" in
     sudo apt-get update && sudo xargs --arg-file=$INIT_DIR/packages_$UBUNTU_VERSION.txt apt-get install -y
 
     # Install python packages
-    echo -e "\nStart installing python packages from \e[2minit/requirements.txt\e[22m"
-    case "$UBUNTU_VERSION" in
-      "focal") # Ubuntu 20.04
-        pip3 install --no-warn-script-location -r $INIT_DIR/requirements.txt;;
-      "bionic")
-        pip3 install -r $INIT_DIR/requirements.txt;;
-      *)
-        echo -e "\n\e[31mERROR: You are not using the correct version of Ubuntu (bionic or focal)!\e[39m" ;
-        exit;
-    esac
-    
+    pip_install_reqs requirements.txt
+
+    read -p "Do you want to install python packages needed to build the documentation? " -n 1 -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+      pip_install_reqs requirements_documentation.txt
+    fi
+
+    read -p "Do you want to install python packages needed for machine learning? " -n 1 -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+      pip_install_reqs requirements_machine_learning.txt
+    fi
+
     source ~/.profile
 
     # Install pre-commit hook

@@ -100,6 +100,9 @@ Change into `kitcar-gazebo-simulation` folder and run the script::
 
 (*Ubuntu 18.04: Ignore any error thrown by pip when trying to install pygobject, it seems to be irrelevant.*)
 
+If you want to, you can also install packages that are used to run machine learning tasks or compile the documentation.
+But these packages are not needed to run all basic components of the simulation.
+
 Build
 -----
 
