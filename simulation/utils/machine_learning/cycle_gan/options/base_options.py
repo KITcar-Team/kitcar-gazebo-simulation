@@ -143,6 +143,12 @@ class BaseOptions:
             "--crop_size", type=int, default=256, help="then crop to this size"
         )
         parser.add_argument(
+            "--mask",
+            type=str,
+            default=None,
+            help="Path to a mask overlayed over all images",
+        )
+        parser.add_argument(
             "--max_dataset_size",
             type=int,
             default=float("inf"),
