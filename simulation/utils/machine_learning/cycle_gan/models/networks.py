@@ -469,8 +469,6 @@ class ResnetGenerator(nn.Module):
         model += [nn.ReflectionPad2d(3)]
         model += [nn.Conv2d(ngf, output_nc, kernel_size=7, padding=0)]
 
-        model += [Mask(256)]
-
         if activation.lower() == "tanh":
             model += [nn.Tanh()]
         elif activation.lower() == "hardtanh":
@@ -493,16 +491,6 @@ class ResnetGenerator(nn.Module):
     def forward(self, input):
         """Standard forward"""
         return self.model(input)
-
-
-class Mask(nn.Module):
-    def __init__(self, n):
-        super(Mask, self).__init__()
-        self.weights = nn.Parameter(torch.ones(n, n))
-        self.bias = nn.Parameter(torch.zeros(n, n))
-
-    def forward(self, input):
-        return input * self.weights + self.bias
 
 
 class ResnetBlock(nn.Module):
