@@ -9,6 +9,7 @@ import numpy as np
 import torch.utils.data as data
 import torchvision.transforms as transforms
 from PIL import Image
+import PIL.ImageOps
 
 
 class BaseDataset(data.Dataset, ABC):
@@ -80,8 +81,12 @@ def get_params(opt, size):
 
 def get_transform(opt, params=None, grayscale=False, method=Image.BICUBIC, convert=True):
     transform_list = []
+
     if grayscale:
         transform_list.append(transforms.Grayscale(1))
+
+    if opt.mask is not None:
+        transform_list.append(transforms.Lambda(lambda img: __apply_mask(img, opt.mask)))
     if "resize" in opt.preprocess:
         osize = [opt.load_size, opt.load_size]
         transform_list.append(transforms.Resize(osize, method))
@@ -150,6 +155,14 @@ def __crop(img, pos, size):
     tw = th = size
     if ow > tw or oh > th:
         return img.crop((x1, y1, x1 + tw, y1 + th))
+    return img
+
+
+def __apply_mask(img: Image.Image, mask_file: str) -> Image.Image:
+    """Overlay image with the provided mask."""
+    mask = Image.open(mask_file)
+    # Use inverted mask as the intensity of the masking. This means that white parts are see through.
+    img.paste(mask, (0, 0), PIL.ImageOps.invert(mask))
     return img
 
 
