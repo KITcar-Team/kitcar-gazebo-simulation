@@ -97,7 +97,7 @@ class BaseOptions:
         parser.add_argument(
             "--norm",
             type=str,
-            default="instance",
+            default="batch",
             help="instance normalization or batch normalization [instance | batch | none]",
         )
         parser.add_argument(
