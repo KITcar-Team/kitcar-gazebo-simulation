@@ -181,24 +181,15 @@ def define_G(
     """
     norm_layer = get_norm_layer(norm_type=norm)
 
-    if netG == "resnet_9blocks":
+    if "resnet" in netG:
+        blocks = int(netG[7:-6])
         net = ResnetGenerator(
             input_nc,
             output_nc,
             ngf,
             norm_layer=norm_layer,
             use_dropout=use_dropout,
-            n_blocks=9,
-            activation=activation,
-        )
-    elif netG == "resnet_6blocks":
-        net = ResnetGenerator(
-            input_nc,
-            output_nc,
-            ngf,
-            norm_layer=norm_layer,
-            use_dropout=use_dropout,
-            n_blocks=6,
+            n_blocks=blocks,
             activation=activation,
         )
     elif netG == "unet_128":

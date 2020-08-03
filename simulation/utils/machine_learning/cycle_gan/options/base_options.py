@@ -85,7 +85,7 @@ class BaseOptions:
             "--netG",
             type=str,
             default="resnet_9blocks",
-            help="specify generator architecture [resnet_9blocks | resnet_6blocks | unet_256 | "
+            help="specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | "
             "unet_128]",
         )
         parser.add_argument(
