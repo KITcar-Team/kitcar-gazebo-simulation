@@ -128,7 +128,7 @@ class TrainOptions(BaseOptions):
         )
         parser.add_argument(
             "--use_sigmoid",
-            type=bool,
+            action="store_true",
             default=False,
             help="Use sigmoid activation at the end of discriminator network",
         )
