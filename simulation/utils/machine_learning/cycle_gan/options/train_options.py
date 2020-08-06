@@ -132,6 +132,12 @@ class TrainOptions(BaseOptions):
             default=False,
             help="Use sigmoid activation at the end of discriminator network",
         )
+        parser.add_argument(
+            "--cycle_noise_stddev",
+            type=float,
+            default=0,
+            help="Standard deviation of noise added to the cycle input. Mean is 0.",
+        )
 
         self.isTrain = True
         return parser
