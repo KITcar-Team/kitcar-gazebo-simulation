@@ -198,6 +198,19 @@ class BaseOptions:
             type=str,
             help="customized suffix: opt.name = opt.name + suffix: e.g., {model}_{netG}_size{load_size}",
         )
+        parser.add_argument(
+            "--conv_layers_in_block",
+            default=2,
+            type=int,
+            help="specify number of convolution layers per resnet block",
+        )
+        parser.add_argument(
+            "--dilations",
+            default=None,
+            type=int,
+            nargs="+",
+            help="dilation for individual conv layers in every resnet block",
+        )
         self.initialized = True
         return parser
 
