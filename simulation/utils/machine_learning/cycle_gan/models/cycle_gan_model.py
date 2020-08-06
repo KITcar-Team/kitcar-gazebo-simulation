@@ -120,6 +120,8 @@ class CycleGANModel(BaseModel):
             opt.init_gain,
             self.gpu_ids,
             opt.activation,
+            opt.conv_layers_in_block,
+            opt.dilations,
         )
         self.netG_B = networks.define_G(
             opt.output_nc,
@@ -132,6 +134,8 @@ class CycleGANModel(BaseModel):
             opt.init_gain,
             self.gpu_ids,
             opt.activation,
+            opt.conv_layers_in_block,
+            opt.dilations,
         )
 
         if self.isTrain:  # define discriminators

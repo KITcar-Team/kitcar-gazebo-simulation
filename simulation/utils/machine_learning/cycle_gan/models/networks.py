@@ -1,3 +1,4 @@
+from typing import List, Optional
 import functools
 
 import torch
@@ -150,6 +151,8 @@ def define_G(
     init_gain=0.02,
     gpu_ids=[],
     activation="TANH",
+    conv_layers_in_block=2,
+    dilations=None,
 ):
     """Create a generator
 
@@ -164,6 +167,8 @@ def define_G(
         init_gain (float)  -- scaling factor for normal, xavier and orthogonal.
         gpu_ids (int list) -- which GPUs the network runs on: e.g., 0,1,2
         activation (string) -- The activation function used at the end
+        conv_layers_in_block: Number of convolution layers in each block.
+        dilations: List of dilations for each conv layer.
 
     Returns a generator
 
@@ -182,6 +187,7 @@ def define_G(
     norm_layer = get_norm_layer(norm_type=norm)
 
     if "resnet" in netG:
+        # Extract number of resnet blocks from name of netG
         blocks = int(netG[7:-6])
         net = ResnetGenerator(
             input_nc,
@@ -191,6 +197,8 @@ def define_G(
             use_dropout=use_dropout,
             n_blocks=blocks,
             activation=activation,
+            conv_layers_in_block=conv_layers_in_block,
+            dilations=dilations,
         )
     elif netG == "unet_128":
         net = UnetGenerator(
@@ -379,25 +387,29 @@ class ResnetGenerator(nn.Module):
 
     def __init__(
         self,
-        input_nc,
-        output_nc,
-        ngf=64,
+        input_nc: int,
+        output_nc: int,
+        ngf: int = 64,
         norm_layer=nn.BatchNorm2d,
-        use_dropout=False,
-        n_blocks=6,
-        padding_type="reflect",
-        activation="TANH",
+        use_dropout: bool = False,
+        n_blocks: int = 6,
+        padding_type: str = "reflect",
+        activation: str = "TANH",
+        conv_layers_in_block: int = 2,
+        dilations: Optional[List[int]] = None,
     ):
         """Construct a Resnet-based generator
 
         Parameters:
-            input_nc (int)      -- the number of channels in input images
-            output_nc (int)     -- the number of channels in output images
-            ngf (int)           -- the number of filters in the last conv layer
-            norm_layer          -- normalization layer
-            use_dropout (bool)  -- if use dropout layers
-            n_blocks (int)      -- the number of ResNet blocks
-            padding_type (str)  -- the name of padding layer in conv layers: reflect | replicate | zero
+            input_nc: the number of channels in input images
+            output_nc: the number of channels in output images
+            ngf: the number of filters in the last conv layer
+            norm_layer: normalization layer
+            use_dropout: if use dropout layers
+            n_blocks: the number of ResNet blocks
+            padding_type: the name of padding layer in conv layers: reflect | replicate | zero
+            conv_layers_in_block: Number of convolution layers in each block.
+            dilations: List of dilations for each conv layer.
         """
         assert n_blocks >= 0
         super(ResnetGenerator, self).__init__()
@@ -439,6 +451,8 @@ class ResnetGenerator(nn.Module):
                     norm_layer=norm_layer,
                     use_dropout=use_dropout,
                     use_bias=use_bias,
+                    n_conv_layers=conv_layers_in_block,
+                    dilations=dilations,
                 )
             ]
 
@@ -487,7 +501,16 @@ class ResnetGenerator(nn.Module):
 class ResnetBlock(nn.Module):
     """Define a Resnet block"""
 
-    def __init__(self, dim, padding_type, norm_layer, use_dropout, use_bias):
+    def __init__(
+        self,
+        dim,
+        padding_type,
+        norm_layer,
+        use_dropout,
+        use_bias,
+        n_conv_layers: int = 2,
+        dilations: List[int] = None,
+    ):
         """Initialize the Resnet block
 
         A resnet block is a conv block with skip connections
@@ -497,53 +520,67 @@ class ResnetBlock(nn.Module):
         """
         super(ResnetBlock, self).__init__()
         self.conv_block = self.build_conv_block(
-            dim, padding_type, norm_layer, use_dropout, use_bias
+            dim, padding_type, norm_layer, use_dropout, use_bias, n_conv_layers, dilations
         )
 
-    def build_conv_block(self, dim, padding_type, norm_layer, use_dropout, use_bias):
+    def build_conv_block(
+        self,
+        dim: int,
+        padding_type: str,
+        norm_layer,
+        use_dropout: bool,
+        use_bias: bool,
+        n_conv_layers: int = 2,
+        dilations: List[int] = None,
+    ) -> nn.Sequential:
         """Construct a convolutional block.
 
-        Parameters:
-            dim (int)           -- the number of channels in the conv layer.
-            padding_type (str)  -- the name of padding layer: reflect | replicate | zero
-            norm_layer          -- normalization layer
-            use_dropout (bool)  -- if use dropout layers.
-            use_bias (bool)     -- if the conv layer uses bias or not
+        Args:
+            dim: number of channels in the conv layer.
+            padding_type: name of padding layer: reflect | replicate | zero
+            norm_layer: normalization layer
+            use_dropout: if use dropout layers.
+            use_bias: if the conv layer uses bias or not
+            n_conv_layers: Number of convolution layers in this block.
+            dilations: List of dilations for each conv layer.
 
-        Returns a conv block (with a conv layer, a normalization layer, and a non-linearity layer (ReLU))
+        Returns:
+            A conv block (with a conv layer, a normalization layer, and a non-linearity layer (ReLU))
         """
+        if dilations is None:
+            dilations = [1 for _ in range(n_conv_layers)]
+
+        assert n_conv_layers == len(
+            dilations
+        ), "There must be exactly one dilation value for each conv layer."
+
         conv_block = []
-        p = 0
-        if padding_type == "reflect":
-            conv_block += [nn.ReflectionPad2d(1)]
-        elif padding_type == "replicate":
-            conv_block += [nn.ReplicationPad2d(1)]
-        elif padding_type == "zero":
-            p = 1
-        else:
-            raise NotImplementedError("padding [%s] is not implemented" % padding_type)
 
-        conv_block += [
-            nn.Conv2d(dim, dim, kernel_size=3, padding=p, bias=use_bias),
-            norm_layer(dim),
-            nn.ReLU(True),
-        ]
+        for dilation in dilations:
+            p = 0
+            if padding_type == "reflect":
+                conv_block += [nn.ReflectionPad2d(dilation)]
+            elif padding_type == "replicate":
+                conv_block += [nn.ReplicationPad2d(dilation)]
+            elif padding_type == "zero":
+                p = dilation
+            else:
+                raise NotImplementedError("padding [%s] is not implemented" % padding_type)
+
+            conv_block += [
+                nn.Conv2d(
+                    dim, dim, kernel_size=3, padding=p, dilation=dilation, bias=use_bias
+                ),
+                norm_layer(dim),
+                nn.ReLU(True),
+            ]
+
+            if use_dropout:
+                conv_block += [nn.Dropout(0.5)]
+
         if use_dropout:
-            conv_block += [nn.Dropout(0.5)]
-
-        p = 0
-        if padding_type == "reflect":
-            conv_block += [nn.ReflectionPad2d(1)]
-        elif padding_type == "replicate":
-            conv_block += [nn.ReplicationPad2d(1)]
-        elif padding_type == "zero":
-            p = 1
-        else:
-            raise NotImplementedError("padding [%s] is not implemented" % padding_type)
-        conv_block += [
-            nn.Conv2d(dim, dim, kernel_size=3, padding=p, bias=use_bias),
-            norm_layer(dim),
-        ]
+            # The last dropout layer should not be there
+            del conv_block[-1]
 
         return nn.Sequential(*conv_block)
 
