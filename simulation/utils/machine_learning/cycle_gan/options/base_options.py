@@ -85,7 +85,7 @@ class BaseOptions:
             "--netG",
             type=str,
             default="resnet_9blocks",
-            help="specify generator architecture [resnet_9blocks | resnet_6blocks | unet_256 | "
+            help="specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | "
             "unet_128]",
         )
         parser.add_argument(
@@ -143,6 +143,12 @@ class BaseOptions:
             "--crop_size", type=int, default=256, help="then crop to this size"
         )
         parser.add_argument(
+            "--mask",
+            type=str,
+            default=None,
+            help="Path to a mask overlayed over all images",
+        )
+        parser.add_argument(
             "--max_dataset_size",
             type=int,
             default=float("inf"),
@@ -191,6 +197,19 @@ class BaseOptions:
             default="",
             type=str,
             help="customized suffix: opt.name = opt.name + suffix: e.g., {model}_{netG}_size{load_size}",
+        )
+        parser.add_argument(
+            "--conv_layers_in_block",
+            default=2,
+            type=int,
+            help="specify number of convolution layers per resnet block",
+        )
+        parser.add_argument(
+            "--dilations",
+            default=None,
+            type=int,
+            nargs="+",
+            help="dilation for individual conv layers in every resnet block",
         )
         self.initialized = True
         return parser
