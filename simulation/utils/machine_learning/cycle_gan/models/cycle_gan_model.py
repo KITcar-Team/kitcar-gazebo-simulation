@@ -1,12 +1,11 @@
 import itertools
 
 import torch
-
 from torch.autograd import Variable
 
-from simulation.utils.machine_learning.cycle_gan.util.image_pool import ImagePool
 from simulation.utils.machine_learning.cycle_gan.models import networks
 from simulation.utils.machine_learning.cycle_gan.models.base_model import BaseModel
+from simulation.utils.machine_learning.cycle_gan.util.image_pool import ImagePool
 
 
 class CycleGANModel(BaseModel):
@@ -141,23 +140,25 @@ class CycleGANModel(BaseModel):
         if self.isTrain:  # define discriminators
             self.netD_A = networks.define_D(
                 opt.output_nc,
-                opt.ndf,
-                opt.n_layers_D,
-                opt.norm,
-                opt.init_type,
-                opt.init_gain,
-                self.gpu_ids,
-                opt.use_sigmoid,
+                netD=opt.netD,
+                ndf=opt.ndf,
+                n_layers_D=opt.n_layers_D,
+                norm=opt.norm,
+                init_type=opt.init_type,
+                init_gain=opt.init_gain,
+                gpu_ids=self.gpu_ids,
+                use_sigmoid=opt.use_sigmoid,
             )
             self.netD_B = networks.define_D(
                 opt.input_nc,
-                opt.ndf,
-                opt.n_layers_D,
-                opt.norm,
-                opt.init_type,
-                opt.init_gain,
-                self.gpu_ids,
-                opt.use_sigmoid,
+                netD=opt.netD,
+                ndf=opt.ndf,
+                n_layers_D=opt.n_layers_D,
+                norm=opt.norm,
+                init_type=opt.init_type,
+                init_gain=opt.init_gain,
+                gpu_ids=self.gpu_ids,
+                use_sigmoid=opt.use_sigmoid,
             )
 
         if self.isTrain:

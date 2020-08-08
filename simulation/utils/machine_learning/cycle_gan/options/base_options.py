@@ -107,7 +107,14 @@ class BaseOptions:
             type=str,
             default="resnet_9blocks",
             help="specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | "
-            "unet_128]",
+                 "unet_128]",
+        )
+        parser.add_argument(
+            "--netD",
+            type=str,
+            default="basic",
+            help="specify discriminator architecture [basic | n_layers | pixel | no_patch]. The basic model is a "
+                 "70x70 PatchGAN. n_layers allows you to specify the layers in the discriminator",
         )
         parser.add_argument(
             "--n_layers_D",
