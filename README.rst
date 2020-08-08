@@ -112,10 +112,23 @@ of this repository.
 Git Lfs
 -------
 
-Images and other large files are tracked using `Git LFS <https://git-lfs.github.com/>`_, \
+Images and other binary files used within Gazebo are tracked using `Git LFS <https://git-lfs.github.com/>`_, \
 to download them locally, you need to pull them::
 
    git lfs pull
+
+Data Version Control (DVC)
+--------------------------
+
+Datasets, machine learning models and similar are stored within a DVC container.
+DVC is designed to bring version control to the world of machine learning and large datasets.
+It integrates well with git.
+If you have set up your credentials as described in `our WIKI <https://wiki.kitcar-team.de/doku.php?id=externe_tools:dvc>`_ , you can download all our datasets (very large, approx. 10 Gb) just execute::
+
+   dvc pull
+
+This is only necessary if you want to train or test our neural networks.
+
 
 Test
 ----
