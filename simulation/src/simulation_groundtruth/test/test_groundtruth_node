@@ -24,7 +24,6 @@ from simulation_groundtruth.srv import (
 )
 from simulation_groundtruth.msg import (
     Lane as LaneMsg,
-    LabeledPolygon as LabeledPolygonMsg,
     GroundtruthStatus,
 )
 from simulation.utils.road.road import Road
@@ -76,10 +75,9 @@ class GroundtruthTestNode(unittest.TestCase, GroundtruthMockNode):
                 f"MSG: {Polygon(obstacle_msg.frame).get_points()} and {obstacle.get_points()}"
             )
             self.assertEqual(Polygon(obstacle_msg.frame), obstacle.frame)
-            self.assertEqual(obstacle_msg.type, LabeledPolygonMsg.OBSTACLE)
 
     def _assert_intersection(self, intersection_gt, intersection):
-        rospy.logdebug(f"Asserting intersection.")
+        rospy.logdebug("Asserting intersection.")
 
         self._assert_equal_line_tuple(intersection.south, intersection_gt.south)
         self._assert_equal_line_tuple(intersection.west, intersection_gt.west)
@@ -88,15 +86,6 @@ class GroundtruthTestNode(unittest.TestCase, GroundtruthMockNode):
 
         self.assertEqual(intersection_gt.turn, intersection.turn)
         self.assertEqual(intersection_gt.rule, intersection.rule)
-
-        # self.assertEqual(
-        #    len(intersection_gt.surface_markings), len(intersection.surface_markings)
-        # )
-        # for marking_gt, marking in zip(
-        #    intersection_gt.surface_markings, intersection.surface_markings
-        # ):
-        #    self.assertEqual(Polygon(marking_gt.frame), marking[0])
-        #    self.assertEqual(marking_gt.type, marking[1])
 
     def _assert_parking_section(self, parking_gt, parking_section):
         def assert_parking_borders(msg_borders, borders):
