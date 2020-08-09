@@ -2,6 +2,9 @@ FROM ros:noetic-robot-focal
 
 COPY init/* /
 
+# Ensure that ROS packages are up-to-date
+RUN apt-get update && apt-get upgrade -y
+
 # Install packages that are necessary for Gazebo to properly work in a Docker container
 RUN apt-get update && apt-get install -y \
 dbus dbus-x11 libasound2 libasound2-plugins alsa-utils \
