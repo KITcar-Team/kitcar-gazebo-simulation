@@ -20,9 +20,9 @@ if __name__ == "__main__":
         "preprocess": opt["preprocess"],
         "mask": opt["mask"],
     }
-    dataset_A, dataset_B = ml_data.load_unpaired_unlabeled_datasets(
-        opt["dataset_A"],
-        opt["dataset_B"],
+    dataset_a, dataset_b = ml_data.load_unpaired_unlabeled_datasets(
+        opt["dataset_a"],
+        opt["dataset_b"],
         batch_size=opt["batch_size"],
         serial_batches=opt["serial_batches"],
         num_threads=opt["num_threads"],
@@ -32,11 +32,11 @@ if __name__ == "__main__":
     )  # create datasets for each domain (A and B)
 
     dataset_size = min(
-        len(dataset_A), len(dataset_B)
+        len(dataset_a), len(dataset_b)
     )  # get the number of images in the dataset.
     print("The number of training images = %d" % dataset_size)
 
-    model = CycleGANModel.fromOptions(opt)  # create a model given model and other options
+    model = CycleGANModel.from_options(opt)  # create a model given model and other options
     model.setup(
         verbose=opt["verbose"],
         continue_train=opt["continue_train"],
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     )  # regular setup: load and print networks; create schedulers
     visualizer = Visualizer(
         display_id=opt["display_id"],
-        isTrain=True,
+        is_train=True,
         no_html=opt["no_html"],
         display_winsize=opt["display_winsize"],
         name=opt["name"],
@@ -71,11 +71,9 @@ if __name__ == "__main__":
 
         # Get random permutations of items from both datasets
         for (A, A_paths), (B, B_paths) in zip(
-            dataset_A, dataset_B
+            dataset_a, dataset_b
         ):  # inner loop within one epoch
             iter_start_time = time.time()  # timer for computation per iteration
-            if total_iters % opt["print_freq"] == 0:
-                t_data = iter_start_time - iter_data_time
 
             total_iters += opt["batch_size"]
             epoch_iter += opt["batch_size"]
@@ -88,7 +86,6 @@ if __name__ == "__main__":
                 total_iters % opt["display_freq"] == 0
             ):  # display images on visdom and save images to a HTML file
                 save_result = total_iters % opt["update_html_freq"] == 0
-                model.compute_visuals()
                 visualizer.display_current_results(
                     model.get_current_visuals(), epoch, save_result
                 )
@@ -96,6 +93,7 @@ if __name__ == "__main__":
             if (
                 total_iters % opt["print_freq"] == 0
             ):  # print training losses and save logging information to the disk
+                t_data = iter_start_time - iter_data_time
                 losses = model.get_current_losses()
                 t_comp = (time.time() - iter_start_time) / opt["batch_size"]
                 visualizer.print_current_losses(epoch, epoch_iter, losses, t_comp, t_data)

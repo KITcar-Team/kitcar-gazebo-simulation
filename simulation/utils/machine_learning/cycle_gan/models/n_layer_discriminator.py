@@ -27,45 +27,51 @@ class NLayerDiscriminator(nn.Module):
             use_bias = norm_layer == nn.BatchNorm2d
 
         kw = 4
-        padw = 1
+        padding_width = 1
         sequence = [
-            nn.Conv2d(input_nc, ndf, kernel_size=kw, stride=2, padding=padw),
+            nn.Conv2d(input_nc, ndf, kernel_size=kw, stride=2, padding=padding_width),
             nn.LeakyReLU(0.2, True),
         ]
-        nf_mult = 1
+        num_filters_multiplier = 1
         for n in range(1, n_layers):  # gradually increase the number of filters
-            nf_mult_prev = nf_mult
-            nf_mult = min(2 ** n, 8)
+            num_filters_multiplier_prev = num_filters_multiplier
+            num_filters_multiplier = min(2 ** n, 8)
             sequence += [
                 nn.Conv2d(
-                    ndf * nf_mult_prev,
-                    ndf * nf_mult,
+                    ndf * num_filters_multiplier_prev,
+                    ndf * num_filters_multiplier,
                     kernel_size=kw,
                     stride=2,
-                    padding=padw,
+                    padding=padding_width,
                     bias=use_bias,
                 ),
-                norm_layer(ndf * nf_mult),
+                norm_layer(ndf * num_filters_multiplier),
                 nn.LeakyReLU(0.2, True),
             ]
 
-        nf_mult_prev = nf_mult
-        nf_mult = min(2 ** n_layers, 8)
+        num_filters_multiplier_prev = num_filters_multiplier
+        num_filters_multiplier = min(2 ** n_layers, 8)
         sequence += [
             nn.Conv2d(
-                ndf * nf_mult_prev,
-                ndf * nf_mult,
+                ndf * num_filters_multiplier_prev,
+                ndf * num_filters_multiplier,
                 kernel_size=kw,
                 stride=1,
-                padding=padw,
+                padding=padding_width,
                 bias=use_bias,
             ),
-            norm_layer(ndf * nf_mult),
+            norm_layer(ndf * num_filters_multiplier),
             nn.LeakyReLU(0.2, True),
         ]
 
         sequence += [
-            nn.Conv2d(ndf * nf_mult, 1, kernel_size=kw, stride=1, padding=padw)
+            nn.Conv2d(
+                ndf * num_filters_multiplier,
+                1,
+                kernel_size=kw,
+                stride=1,
+                padding=padding_width,
+            )
         ]  # output 1 channel prediction map
 
         if use_sigmoid:

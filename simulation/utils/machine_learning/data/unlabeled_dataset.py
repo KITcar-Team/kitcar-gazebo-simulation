@@ -53,7 +53,7 @@ class UnlabeledDataset(BaseDataset):
         # apply image transformation
         img = self.transform(img)
 
-        return (img, path)
+        return img, path
 
     def __len__(self):
         """Return the total number of images in the dataset."""

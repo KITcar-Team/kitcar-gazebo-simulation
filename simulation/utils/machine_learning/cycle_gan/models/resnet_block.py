@@ -62,19 +62,24 @@ class ResnetBlock(nn.Module):
         conv_block = []
 
         for dilation in dilations:
-            p = 0
+            padding = 0
             if padding_type == "reflect":
                 conv_block += [nn.ReflectionPad2d(dilation)]
             elif padding_type == "replicate":
                 conv_block += [nn.ReplicationPad2d(dilation)]
             elif padding_type == "zero":
-                p = dilation
+                padding = dilation
             else:
                 raise NotImplementedError("padding [%s] is not implemented" % padding_type)
 
             conv_block += [
                 nn.Conv2d(
-                    dim, dim, kernel_size=3, padding=p, dilation=dilation, bias=use_bias
+                    dim,
+                    dim,
+                    kernel_size=3,
+                    padding=padding,
+                    dilation=dilation,
+                    bias=use_bias,
                 ),
                 norm_layer(dim),
                 nn.ReLU(True),

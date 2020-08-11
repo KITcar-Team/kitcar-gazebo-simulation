@@ -18,7 +18,7 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
     """Save images to the disk.
 
     Parameters:
-        webpage (the HTML class) -- the HTML webpage class that stores these imaegs (see html.py for more details)
+        webpage (the HTML class) -- the HTML webpage class that stores these images (see html.py for more details)
         visuals (OrderedDict)    -- an ordered dictionary that stores (name, images (either tensor or numpy) ) pairs
         image_path (str)         -- the string is used to create image paths
         aspect_ratio (float)     -- the aspect ratio of saved images
@@ -54,7 +54,7 @@ class Visualizer:
     def __init__(
         self,
         display_id=1,
-        isTrain=True,
+        is_train=True,
         no_html=False,
         display_winsize=256,
         name="kitcar",
@@ -67,11 +67,11 @@ class Visualizer:
 
         Step 1: Cache the training/test options
         Step 2: connect to a visdom server
-        Step 3: create an HTML object for saveing HTML filters
+        Step 3: create an HTML object for saving HTML filters
         Step 4: create a logging file to store training losses
         """
         self.display_id = display_id
-        self.use_html = isTrain and not no_html
+        self.use_html = is_train and not no_html
         self.win_size = display_winsize
         self.name = name
         self.port = display_port
@@ -122,9 +122,9 @@ class Visualizer:
             save_result (bool) - - if save the current results to an HTML file
         """
         if self.display_id > 0:  # show images in the browser using visdom
-            ncols = 4
-            if ncols > 0:  # show all the images in one visdom panel
-                ncols = min(ncols, len(visuals))
+            num_cols = 4
+            if num_cols > 0:  # show all the images in one visdom panel
+                num_cols = min(num_cols, len(visuals))
                 # create a table of images.
                 title = self.name
                 images = []
@@ -135,14 +135,14 @@ class Visualizer:
                     images.append(image_numpy.transpose([2, 0, 1]))
                     idx += 1
                 white_image = np.ones_like(image_numpy.transpose([2, 0, 1])) * 255
-                while idx % ncols != 0:
+                while idx % num_cols != 0:
                     images.append(white_image)
                     idx += 1
                 try:
                     self.vis.images(
                         images,
-                        nrow=ncols,
-                        win=self.display_id + 1,
+                        nrow=num_cols,
+                        win=str(self.display_id + 1),
                         padding=2,
                         opts=dict(title=title + " images"),
                     )
@@ -157,7 +157,7 @@ class Visualizer:
                         self.vis.image(
                             image_numpy.transpose([2, 0, 1]),
                             opts=dict(title=label),
-                            win=self.display_id + idx,
+                            win=str(self.display_id + idx),
                         )
                         idx += 1
                 except VisdomExceptionBase:
@@ -211,7 +211,7 @@ class Visualizer:
                     "xlabel": "epoch",
                     "ylabel": "loss",
                 },
-                win=self.display_id,
+                win=str(self.display_id),
             )
         except VisdomExceptionBase:
             self.create_visdom_connections()

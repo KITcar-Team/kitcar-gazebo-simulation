@@ -21,9 +21,9 @@ if __name__ == "__main__":
         "preprocess": opt["preprocess"],
         "mask": opt["mask"],
     }
-    dataset_A, dataset_B = ml_data.load_unpaired_unlabeled_datasets(
-        opt["dataset_A"],
-        opt["dataset_B"],
+    dataset_a, dataset_b = ml_data.load_unpaired_unlabeled_datasets(
+        opt["dataset_a"],
+        opt["dataset_b"],
         batch_size=1,
         serial_batches=True,
         num_threads=0,
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         transform_properties=tf_properties,
     )  # create datasets for each domain (A and B)
 
-    model = CycleGANModel.fromOptions(opt)  # create a model given model and other options
+    model = CycleGANModel.from_options(opt)  # create a model given model and other options
     model.setup(
         verbose=opt["verbose"],
         continue_train=opt["continue_train"],
@@ -53,19 +53,18 @@ if __name__ == "__main__":
     webpage = html.HTML(
         web_dir, "Experiment = %s, Epoch = %s" % (opt["name"], opt["epoch"]),
     )
-    for i, ((A, A_paths), (B, B_paths)) in enumerate(zip(dataset_A, dataset_B)):
+    for i, ((A, A_paths), (B, B_paths)) in enumerate(zip(dataset_a, dataset_b)):
         model.set_input(
             {"A": A, "A_paths": A_paths, "B": B, "B_paths": B_paths}
         )  # unpack data from dataset and apply preprocessing
         model.test()  # run inference
         visuals = model.get_current_visuals()  # get image results
-        img_path = model.get_image_paths()  # get image paths
         if i % 5 == 0:
             print("processing (%04d)-th image." % i)
         save_images(
             webpage,
             visuals,
-            img_path,
+            model.image_paths,
             aspect_ratio=opt["aspect_ratio"],
             width=opt["display_winsize"],
         )
