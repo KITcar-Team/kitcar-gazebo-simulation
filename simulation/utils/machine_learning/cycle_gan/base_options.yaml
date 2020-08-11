@@ -1,0 +1,44 @@
+activation: TANH #chooses which activation to use. [TANH | HARDTANH | SELU | CELU | SOFTSHRINK |
+checkpoints_dir: ./checkpoints #models are saved here
+conv_layers_in_block: 2 #specify number of convolution layers per resnet block
+crop_size: 256 #then crop to this size
+dataset_A: ./../data/datasets/real_images #path to images of domain A (real images). Can be a list of folders
+dataset_B: ./../data/datasets/simulated_images #path to images of domain B (simulated images). Can be a list of folders
+dilations: None #dilation for individual conv layers in every resnet block
+display_winsize: 256 #display window size for both visdom and HTML
+epoch: latest #which epoch to load? set to latest to use latest cached model
+gpu_ids: [0] #gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU
+init_gain: 0.02 #scaling factor for normal, xavier and orthogonal.
+init_type: normal #network initialization [normal | xavier | kaiming | orthogonal]
+input_nc: 1 # # of input image channels: 3 for RGB and 1 for grayscale
+lambda_A: 10.0 #weight for loss of domain A
+lambda_B: 10.0 #weight for loss of domain B
+lambda_identity: 0.5 #weight for loss identity
+load_iter: 0 #which iteration to load? if load_iter > 0, the code will load models by iter_[load_iter]; otherwise, the code will load models by [epoch]
+load_size: 256 #scale images to this size
+mask: None #Path to a mask overlayed over all images
+n_layers_D: 3 #number of layers in the discriminator network
+name: kitcar #name of the experiment. It decides where to store samples and models
+ndf: 32 # # of discrim filters in the first conv layer
+netD: basic #specify discriminator architecture [basic | n_layers | pixel | no_patch]. The basic model is a 70x70 PatchGAN. n_layers allows you to specify the layers in the discriminator
+netG: resnet_9blocks #specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]
+ngf: 32 # # of gen filters in the last conv layer
+no_dropout: True #no dropout for the generator
+norm: batch #instance normalization or batch normalization [instance | batch | none]
+output_nc: 1 # # of output image channels: 3 for RGB and 1 for grayscale
+preprocess: resize_and_crop #scaling and cropping of images at load time [resize_and_crop | crop | scale_width | scale_width_and_crop | none]
+serial_batches: False #if true, takes images in order to make batches, otherwise takes them randomly
+suffix: #customized suffix: opt.name = opt.name + suffix: e.g., {model}_{netG}_size{load_size}
+verbose: False #if specified, print more debugging information
+cycle_noise_stddev: 0 #Standard deviation of noise added to the cycle input. Mean is 0.
+use_sigmoid: False #Use sigmoid activation at the end of discriminator network
+pool_size: 50 #the size of image buffer that stores previously generated images
+gan_mode: lsgan #the type of GAN objective. [vanilla| lsgan | wgangp]. vanilla GAN loss is the cross-entropy objective used in the original GAN paper.
+beta1: 0.5 #momentum term of adam
+batch_size: 2 #input batch size
+lr: 0.0002 #initial learning rate for adam
+lr_decay_iters: 50 #multiply by a gamma every lr_decay_iters iterations
+lr_policy: linear #learning rate policy. [linear | step | plateau | cosine]
+continue_train: False #continue training: load the latest model
+n_epochs: 100 #number of epochs with the initial learning rate
+n_epochs_decay: 100 #number of epochs to linearly decay learning rate to zero
