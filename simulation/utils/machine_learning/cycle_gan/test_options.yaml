@@ -1,3 +1,0 @@
-results_dir: ./results/ #saves results here.
-aspect_ratio: 1 #aspect ratio of result images
-isTrain: False # enable or disable training mode
