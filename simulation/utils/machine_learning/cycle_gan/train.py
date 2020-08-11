@@ -6,17 +6,13 @@ import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
 from simulation.utils.machine_learning.cycle_gan.util.visualizer import Visualizer
 
-TRAIN_OPTIONS_YAML = "train_options.yaml"
-BASE_OPTIONS_YAML = "base_options.yaml"
+CONFIG_FILE_PATH = "config.yml"
 
 if __name__ == "__main__":
-    base_options_file = open(BASE_OPTIONS_YAML)
-    train_options_file = open(TRAIN_OPTIONS_YAML)
+    config_file = open(CONFIG_FILE_PATH)
+    configs = yaml.load(config_file, Loader=yaml.FullLoader)
 
-    base_options = yaml.load(base_options_file, Loader=yaml.FullLoader)
-    train_options = yaml.load(train_options_file, Loader=yaml.FullLoader)
-
-    opt = {**base_options, **train_options}
+    opt = {**configs["base"], **configs["train"]}
 
     tf_properties = {
         "load_size": opt["load_size"],

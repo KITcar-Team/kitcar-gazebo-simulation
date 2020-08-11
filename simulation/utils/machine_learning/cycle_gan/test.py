@@ -7,17 +7,13 @@ from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import C
 from simulation.utils.machine_learning.cycle_gan.util import html
 from simulation.utils.machine_learning.cycle_gan.util.visualizer import save_images
 
-TEST_OPTIONS_YAML = "test_options.yaml"
-BASE_OPTIONS_YAML = "base_options.yaml"
+CONFIG_FILE_PATH = "config.yml"
 
 if __name__ == "__main__":
-    base_options_file = open(BASE_OPTIONS_YAML)
-    test_options_file = open(TEST_OPTIONS_YAML)
+    config_file = open(CONFIG_FILE_PATH)
+    configs = yaml.load(config_file, Loader=yaml.FullLoader)
 
-    base_options = yaml.load(base_options_file, Loader=yaml.FullLoader)
-    test_options = yaml.load(test_options_file, Loader=yaml.FullLoader)
-
-    opt = {**base_options, **test_options}
+    opt = {**configs["base"], **configs["test"]}
 
     tf_properties = {
         "load_size": opt["load_size"],
