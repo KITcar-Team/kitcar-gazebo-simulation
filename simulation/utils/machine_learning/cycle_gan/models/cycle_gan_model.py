@@ -211,17 +211,25 @@ class CycleGANModel(BaseModel):
 
         # Calculate cycle. Add gaussian if self.cycle_noise_stddev is not 0
         # See: https://discuss.pytorch.org/t/writing-a-simple-gaussian-noise-layer-in-pytorch/4694
-        noise = (
+        # There are two individual noise terms because fake_A and fake_B may have different dimensions
+        # (At end of dataset were one of them is not a full batch for example)
+        noise_B = (
+            Variable(
+                self.fake_B.data.new(self.fake_B.size()).normal_(0, self.cycle_noise_stddev)
+            )
+            if self.cycle_noise_stddev != 0
+            else 0
+        )
+        self.rec_A = self.netG_B(self.fake_B + noise_B)  # G_B(G_A(A))
+
+        noise_A = (
             Variable(
                 self.fake_A.data.new(self.fake_A.size()).normal_(0, self.cycle_noise_stddev)
             )
             if self.cycle_noise_stddev != 0
             else 0
         )
-        # Adding the same noise to both images should not be a problem because the noise is random
-        # and there is no correlation between fake_B and fake_A
-        self.rec_A = self.netG_B(self.fake_B + noise)  # G_B(G_A(A))
-        self.rec_B = self.netG_A(self.fake_A + noise)  # G_A(G_B(B))
+        self.rec_B = self.netG_A(self.fake_A + noise_A)  # G_A(G_B(B))
 
     def backward_D_basic(self, netD, real, fake):
         """Calculate GAN loss for the discriminator
