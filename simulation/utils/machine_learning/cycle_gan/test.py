@@ -21,11 +21,12 @@ See frequently asked questions at: https://github.com/junyanz/pytorch-CycleGAN-a
 """
 import os
 
-from simulation.utils.machine_learning.cycle_gan.data import create_dataset
 from simulation.utils.machine_learning.cycle_gan.models import create_model
 from simulation.utils.machine_learning.cycle_gan.options.test_options import TestOptions
 from simulation.utils.machine_learning.cycle_gan.util import html
 from simulation.utils.machine_learning.cycle_gan.util.visualizer import save_images
+
+import simulation.utils.machine_learning.data as ml_data
 
 if __name__ == "__main__":
     opt = TestOptions().parse()  # get test options
@@ -40,9 +41,24 @@ if __name__ == "__main__":
     opt.display_id = (
         -1
     )  # no visdom display; the test code saves the results to a HTML file.
-    dataset = create_dataset(
-        opt
-    )  # create a dataset given opt.dataset_mode and other options
+    tf_properties = {
+        "load_size": opt.load_size,
+        "crop_size": opt.crop_size,
+        "preprocess": opt.preprocess,
+        "mask": opt.mask,
+    }
+    dataset_A, dataset_B = ml_data.load_unpaired_unlabeled_datasets(
+        opt.dataset_A,
+        opt.dataset_B,
+        opt.max_dataset_size,
+        batch_size=opt.batch_size,
+        serial_batches=opt.serial_batches,
+        num_threads=opt.num_threads,
+        grayscale_A=(opt.input_nc == 1),
+        grayscale_B=(opt.output_nc == 1),
+        transform_properties=tf_properties,
+    )  # create datasets for each domain (A and B)
+
     model = create_model(opt)  # create a model given opt.model and other options
     model.setup(opt)  # regular setup: load and print networks; create schedulers
     model.eval()
@@ -57,8 +73,10 @@ if __name__ == "__main__":
         web_dir,
         "Experiment = %s, Phase = %s, Epoch = %s" % (opt.name, opt.phase, opt.epoch),
     )
-    for i, data in enumerate(dataset):
-        model.set_input(data)  # unpack data from data loader
+    for i, ((A, A_paths), (B, B_paths)) in enumerate(zip(dataset_A, dataset_B)):
+        model.set_input(
+            {"A": A, "A_paths": A_paths, "B": B, "B_paths": B_paths}
+        )  # unpack data from dataset and apply preprocessing
         model.test()  # run inference
         visuals = model.get_current_visuals()  # get image results
         img_path = model.get_image_paths()  # get image paths

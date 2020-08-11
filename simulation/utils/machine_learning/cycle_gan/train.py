@@ -18,17 +18,37 @@ See frequently asked questions at: https://github.com/junyanz/pytorch-CycleGAN-a
 """
 import time
 
-from simulation.utils.machine_learning.cycle_gan.data import create_dataset
 from simulation.utils.machine_learning.cycle_gan.models import create_model
 from simulation.utils.machine_learning.cycle_gan.options.train_options import TrainOptions
 from simulation.utils.machine_learning.cycle_gan.util.visualizer import Visualizer
 
+import simulation.utils.machine_learning.data as ml_data
+
+
 if __name__ == "__main__":
     opt = TrainOptions().parse()  # get training options
-    dataset = create_dataset(
-        opt
-    )  # create a dataset given opt.dataset_mode and other options
-    dataset_size = len(dataset)  # get the number of images in the dataset.
+
+    tf_properties = {
+        "load_size": opt.load_size,
+        "crop_size": opt.crop_size,
+        "preprocess": opt.preprocess,
+        "mask": opt.mask,
+    }
+    dataset_A, dataset_B = ml_data.load_unpaired_unlabeled_datasets(
+        opt.dataset_A,
+        opt.dataset_B,
+        opt.max_dataset_size,
+        batch_size=opt.batch_size,
+        serial_batches=opt.serial_batches,
+        num_threads=opt.num_threads,
+        grayscale_A=(opt.input_nc == 1),
+        grayscale_B=(opt.output_nc == 1),
+        transform_properties=tf_properties,
+    )  # create datasets for each domain (A and B)
+
+    dataset_size = min(
+        len(dataset_A), len(dataset_B)
+    )  # get the number of images in the dataset.
     print("The number of training images = %d" % dataset_size)
 
     model = create_model(opt)  # create a model given opt.model and other options
@@ -45,14 +65,20 @@ if __name__ == "__main__":
             0  # the number of training iterations in current epoch, reset to 0 every epoch
         )
         visualizer.reset()  # reset the visualizer: make sure it saves the results to HTML at least once every epoch
-        for i, data in enumerate(dataset):  # inner loop within one epoch
+
+        # Get random permutations of items from both datasets
+        for (A, A_paths), (B, B_paths) in zip(
+            dataset_A, dataset_B
+        ):  # inner loop within one epoch
             iter_start_time = time.time()  # timer for computation per iteration
             if total_iters % opt.print_freq == 0:
                 t_data = iter_start_time - iter_data_time
 
             total_iters += opt.batch_size
             epoch_iter += opt.batch_size
-            model.set_input(data)  # unpack data from dataset and apply preprocessing
+            model.set_input(
+                {"A": A, "A_paths": A_paths, "B": B, "B_paths": B_paths}
+            )  # unpack data from dataset and apply preprocessing
             model.optimize_parameters()  # calculate loss functions, get gradients, update network weights
 
             if (
