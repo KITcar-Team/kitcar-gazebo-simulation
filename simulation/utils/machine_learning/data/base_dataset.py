@@ -3,7 +3,7 @@
 It also includes common transformation functions (e.g., get_transform, __scale_width), which can be later used in
 subclasses. """
 import random
-from abc import ABC, abstractmethod
+from typing import Tuple, Dict, Any
 
 import numpy as np
 import torch.utils.data as data
@@ -12,43 +12,19 @@ from PIL import Image
 import PIL.ImageOps
 
 
-class BaseDataset(data.Dataset, ABC):
-    """This class is an abstract base class (ABC) for datasets.
+class BaseDataset(data.Dataset):
+    """This is the base class for other datasets.
 
     To create a subclass, you need to implement the following four functions:
     -- <__init__>:                      initialize the class, first call BaseDataset.__init__(self, opt).
     -- <__len__>:                       return the size of dataset.
     -- <__getitem__>:                   get a data point.
-    -- <modify_commandline_options>:    (optionally) add dataset-specific options and set default options.
     """
 
-    def __init__(self, opt):
-        """Initialize the class; save the options in the class
-
-        Parameters:
-            opt (Option class)-- stores all the experiment flags; needs to be a subclass of BaseOptions
-        """
-        self.opt = opt
-        self.root = opt.dataroot
-
-    @staticmethod
-    def modify_commandline_options(parser, is_train):
-        """Add new dataset-specific options, and rewrite default values for existing options.
-
-        Parameters: parser          -- original option parser is_train (bool) -- whether training phase or test
-        phase. You can use this flag to add training-specific or test-specific options.
-
-        Returns:
-            the modified parser.
-        """
-        return parser
-
-    @abstractmethod
     def __len__(self):
         """Return the total number of images in the dataset."""
-        return 0
+        return -1
 
-    @abstractmethod
     def __getitem__(self, index):
         """Return a data point and its metadata information.
 
@@ -61,58 +37,67 @@ class BaseDataset(data.Dataset, ABC):
         pass
 
 
-def get_params(opt, size):
+def get_params(
+    preprocess: str, load_size: int, crop_size: int, size: Tuple[int, int]
+) -> Dict[str, Any]:
     w, h = size
     new_h = h
     new_w = w
-    if opt.preprocess == "resize_and_crop":
-        new_h = new_w = opt.load_size
-    elif opt.preprocess == "scale_width_and_crop":
-        new_w = opt.load_size
-        new_h = opt.load_size * h // w
+    if preprocess == "resize_and_crop":
+        new_h = new_w = load_size
+    elif preprocess == "scale_width_and_crop":
+        new_w = load_size
+        new_h = load_size * h // w
 
-    x = random.randint(0, np.maximum(0, new_w - opt.crop_size))
-    y = random.randint(0, np.maximum(0, new_h - opt.crop_size))
+    x = random.randint(0, np.maximum(0, new_w - crop_size))
+    y = random.randint(0, np.maximum(0, new_h - crop_size))
 
     flip = random.random() > 0.5
 
     return {"crop_pos": (x, y), "flip": flip}
 
 
-def get_transform(opt, params=None, grayscale=False, method=Image.BICUBIC, convert=True):
+def get_transform(
+    load_size: int,
+    crop_size: int,
+    mask: str = None,
+    preprocess: str = "none",
+    no_flip: bool = True,
+    params=None,
+    grayscale=False,
+    method=Image.BICUBIC,
+    convert=True,
+) -> transforms.Compose:
+    """Create transformation from arguments."""
     transform_list = []
 
     if grayscale:
         transform_list.append(transforms.Grayscale(1))
 
-    if opt.mask is not None:
-        transform_list.append(transforms.Lambda(lambda img: __apply_mask(img, opt.mask)))
-    if "resize" in opt.preprocess:
-        osize = [opt.load_size, opt.load_size]
+    if mask is not None:
+        transform_list.append(transforms.Lambda(lambda img: __apply_mask(img, mask)))
+    if "resize" in preprocess:
+        osize = [load_size, load_size]
         transform_list.append(transforms.Resize(osize, method))
-    elif "scale_width" in opt.preprocess:
+    elif "scale_width" in preprocess:
         transform_list.append(
-            transforms.Lambda(
-                lambda img: __scale_width(img, opt.load_size, opt.crop_size, method)
-            )
+            transforms.Lambda(lambda img: __scale_width(img, load_size, crop_size, method))
         )
 
-    if "crop" in opt.preprocess:
+    if "crop" in preprocess:
         if params is None:
-            transform_list.append(transforms.RandomCrop(opt.crop_size))
+            transform_list.append(transforms.RandomCrop(crop_size))
         else:
             transform_list.append(
-                transforms.Lambda(
-                    lambda img: __crop(img, params["crop_pos"], opt.crop_size)
-                )
+                transforms.Lambda(lambda img: __crop(img, params["crop_pos"], crop_size))
             )
 
-    if opt.preprocess == "none":
+    if preprocess == "none":
         transform_list.append(
             transforms.Lambda(lambda img: __make_power_2(img, base=4, method=method))
         )
 
-    if not opt.no_flip:
+    if not no_flip:
         if params is None:
             transform_list.append(transforms.RandomHorizontalFlip())
         elif params["flip"]:
