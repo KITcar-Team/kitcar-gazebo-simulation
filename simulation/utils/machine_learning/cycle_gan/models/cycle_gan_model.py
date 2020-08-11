@@ -5,7 +5,8 @@ from collections import OrderedDict
 import torch
 from torch.autograd import Variable
 
-from simulation.utils.machine_learning.cycle_gan.models import networks
+import simulation.utils.machine_learning.cycle_gan.models.gan_loss
+from simulation.utils.machine_learning.cycle_gan.models import helper
 from simulation.utils.machine_learning.cycle_gan.util.image_pool import ImagePool
 
 
@@ -114,7 +115,7 @@ class CycleGANModel:
         # define networks (both Generators and discriminators)
         # The naming is different from those used in the paper.
         # Code (vs. paper): G_A (G), G_B (F), D_A (D_Y), D_B (D_X)
-        self.netG_A = networks.define_G(
+        self.netG_A = helper.create_generator(
             input_nc,
             output_nc,
             ngf,
@@ -128,7 +129,7 @@ class CycleGANModel:
             conv_layers_in_block,
             dilations,
         )
-        self.netG_B = networks.define_G(
+        self.netG_B = helper.create_generator(
             output_nc,
             input_nc,
             ngf,
@@ -144,7 +145,7 @@ class CycleGANModel:
         )
 
         if self.isTrain:  # define discriminators
-            self.netD_A = networks.define_D(
+            self.netD_A = helper.create_discriminator(
                 output_nc,
                 netD=netD,
                 ndf=ndf,
@@ -155,7 +156,7 @@ class CycleGANModel:
                 gpu_ids=self.gpu_ids,
                 use_sigmoid=use_sigmoid,
             )
-            self.netD_B = networks.define_D(
+            self.netD_B = helper.create_discriminator(
                 input_nc,
                 netD=netD,
                 ndf=ndf,
@@ -179,7 +180,9 @@ class CycleGANModel:
                 pool_size
             )  # create image buffer to store previously generated images
             # define loss functions
-            self.criterionGAN = networks.GANLoss(gan_mode).to(
+            self.criterionGAN = simulation.utils.machine_learning.cycle_gan.models.gan_loss.GANLoss(
+                gan_mode
+            ).to(
                 self.device
             )  # define GAN loss.
             self.criterionCycle = torch.nn.L1Loss()
@@ -249,7 +252,7 @@ class CycleGANModel:
         """Load and print networks; create schedulers"""
         if self.isTrain:
             self.schedulers = [
-                networks.get_scheduler(optimizer, lr_policy, lr_decay_iters, n_epochs)
+                helper.get_scheduler(optimizer, lr_policy, lr_decay_iters, n_epochs)
                 for optimizer in self.optimizers
             ]
         if not self.isTrain or continue_train:
