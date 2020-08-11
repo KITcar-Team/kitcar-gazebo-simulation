@@ -52,9 +52,7 @@ def get_params(
     x = random.randint(0, np.maximum(0, new_w - crop_size))
     y = random.randint(0, np.maximum(0, new_h - crop_size))
 
-    flip = random.random() > 0.5
-
-    return {"crop_pos": (x, y), "flip": flip}
+    return {"crop_pos": (x, y)}
 
 
 def get_transform(
@@ -62,7 +60,6 @@ def get_transform(
     crop_size: int,
     mask: str = None,
     preprocess: str = "none",
-    no_flip: bool = True,
     params=None,
     grayscale=False,
     method=Image.BICUBIC,
@@ -96,14 +93,6 @@ def get_transform(
         transform_list.append(
             transforms.Lambda(lambda img: __make_power_2(img, base=4, method=method))
         )
-
-    if not no_flip:
-        if params is None:
-            transform_list.append(transforms.RandomHorizontalFlip())
-        elif params["flip"]:
-            transform_list.append(
-                transforms.Lambda(lambda img: __flip(img, params["flip"]))
-            )
 
     if convert:
         transform_list += [transforms.ToTensor()]
@@ -148,12 +137,6 @@ def __apply_mask(img: Image.Image, mask_file: str) -> Image.Image:
     mask = Image.open(mask_file)
     # Use inverted mask as the intensity of the masking. This means that white parts are see through.
     img.paste(mask, (0, 0), PIL.ImageOps.invert(mask))
-    return img
-
-
-def __flip(img, flip):
-    if flip:
-        return img.transpose(Image.FLIP_LEFT_RIGHT)
     return img
 
 

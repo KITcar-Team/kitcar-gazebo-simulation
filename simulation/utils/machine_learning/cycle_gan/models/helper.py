@@ -1,23 +1,14 @@
 import functools
 
 import torch
-import torch.nn as nn
+from torch import nn
 from torch.nn import init
 from torch.optim import lr_scheduler
+
 
 ###############################################################################
 # Helper Functions
 ###############################################################################
-from simulation.utils.machine_learning.cycle_gan.models.n_layer_discriminator import (
-    NLayerDiscriminator,
-)
-from simulation.utils.machine_learning.cycle_gan.models.no_patch_discriminator import (
-    NoPatchDiscriminator,
-)
-from simulation.utils.machine_learning.cycle_gan.models.resnet_generator import (
-    ResnetGenerator,
-)
-from simulation.utils.machine_learning.cycle_gan.models.unet_generator import UnetGenerator
 
 
 def get_norm_layer(norm_type="instance"):
@@ -139,128 +130,69 @@ def init_net(net, init_type="normal", init_gain=0.02, gpu_ids=[0]):
     return net
 
 
-def create_generator(
-    input_nc,
-    output_nc,
-    ngf,
-    netG,
-    norm="batch",
-    use_dropout=False,
-    init_type="normal",
-    init_gain=0.02,
-    gpu_ids=[0],
-    activation="TANH",
-    conv_layers_in_block=2,
-    dilations=None,
-):
-    """Create a generator
-
-    Parameters:
-        input_nc (int) -- the number of channels in input images
-        output_nc (int) -- the number of channels in output images
-        ngf (int) -- the number of filters in the last conv layer
-        netG (str) -- the architecture's name: resnet_9blocks | resnet_6blocks | unet_256 | unet_128
-        norm (str) -- the name of normalization layers used in the network: batch | instance | none
-        use_dropout (bool) -- if use dropout layers.
-        init_type (str)    -- the name of our initialization method.
-        init_gain (float)  -- scaling factor for normal, xavier and orthogonal.
-        gpu_ids (int list) -- which GPUs the network runs on: e.g., 0,1,2
-        activation (string) -- The activation function used at the end
-        conv_layers_in_block: Number of convolution layers in each block.
-        dilations: List of dilations for each conv layer.
-
-    Returns a generator
-
-    Our current implementation provides two types of generators:
-        U-Net: [unet_128] (for 128x128 input images) and [unet_256] (for 256x256 input images)
-        The original U-Net paper: https://arxiv.org/abs/1505.04597
-
-        Resnet-based generator: [resnet_6blocks] (with 6 Resnet blocks) and [resnet_9blocks] (with 9 Resnet blocks)
-        Resnet-based generator consists of several Resnet blocks between a few downsampling/upsampling operations. We
-        adapt Torch code from Justin Johnson's neural style transfer project (
-        https://github.com/jcjohnson/fast-neural-style).
-
-
-    The generator has been initialized by <init_net>. It uses RELU for non-linearity.
-    """
-    norm_layer = get_norm_layer(norm_type=norm)
-
-    if "resnet" in netG:
-        # Extract number of resnet blocks from name of netG
-        blocks = int(netG[7:-6])
-        net = ResnetGenerator(
-            input_nc,
-            output_nc,
-            ngf,
-            norm_layer=norm_layer,
-            use_dropout=use_dropout,
-            n_blocks=blocks,
-            activation=activation,
-            conv_layers_in_block=conv_layers_in_block,
-            dilations=dilations,
-        )
-    elif netG == "unet_128":
-        net = UnetGenerator(
-            input_nc, output_nc, 7, ngf, norm_layer=norm_layer, use_dropout=use_dropout
-        )
-    elif netG == "unet_256":
-        net = UnetGenerator(
-            input_nc, output_nc, 8, ngf, norm_layer=norm_layer, use_dropout=use_dropout
-        )
+def get_activation_layer(activation):
+    if activation.lower() == "tanh":
+        return nn.Tanh()
+    elif activation.lower() == "hardtanh":
+        return nn.Hardtanh()
+    elif activation == "selu":
+        return nn.SELU()
+    elif activation == "celu":
+        return nn.CELU()
+    elif activation == "softshrink":
+        return nn.Softshrink()
+    elif activation == "softsign":
+        return nn.Softsign()
     else:
-        raise NotImplementedError("Generator model name [%s] is not recognized" % netG)
-    return init_net(net, init_type, init_gain, gpu_ids)
+        raise NotImplementedError(
+            "Activation function %s is not implemented yet." % activation
+        )
 
 
-def create_discriminator(
-    input_nc,
-    ndf,
-    netD,
-    n_layers_D=3,
-    norm="batch",
-    init_type="normal",
-    init_gain=0.02,
-    gpu_ids=[],
-    use_sigmoid=False,
+def cal_gradient_penalty(
+    netd, real_data, fake_data, device, type="mixed", constant=1.0, lambda_gp=10.0
 ):
-    """Create a discriminator
+    """Calculate the gradient penalty loss, used in WGAN-GP paper https://arxiv.org/abs/1704.00028
 
-    Parameters:
-        input_nc (int)     -- the number of channels in input images
-        ndf (int)          -- the number of filters in the first conv layer
-        netD (str)         -- the architecture's name: basic | n_layers | no_patch
-        n_layers_D (int)   -- the number of conv layers in the discriminator; effective when netD=='n_layers'
-        norm (str)         -- the type of normalization layers used in the network.
-        init_type (str)    -- the name of the initialization method.
-        init_gain (float)  -- scaling factor for normal, xavier and orthogonal.
-        gpu_ids (int list) -- which GPUs the network runs on: e.g., 0,1,2
+    Arguments: netd (network)              -- discriminator network real_data (tensor array)    -- real images
+    fake_data (tensor array)    -- generated images from the generator device (str)                -- GPU / CPU: from
+    torch.device('cuda:{}'.format(self.gpu_ids[0])) if self.gpu_ids else torch.device('cpu') type (str)
+       -- if we mix real and fake data or not [real | fake | mixed]. constant (float)            -- the constant used
+       in formula ( ||gradient||_2 - constant)^2 lambda_gp (float)           -- weight for this loss
 
-    Returns a discriminator
-
-    Our current implementation provides three types of discriminators:
-        [basic]: 'PatchGAN' classifier described in the original pix2pix paper.
-        It can classify whether 70×70 overlapping patches are real or fake.
-        Such a patch-level discriminator architecture has fewer parameters
-        than a full-image discriminator and can work on arbitrarily-sized images
-        in a fully convolutional fashion.
-
-        [n_layers]: With this mode, you can specify the number of conv layers in the discriminator
-        with the parameter <n_layers_D> (default=3 as used in [basic] (PatchGAN).)
-
-    The discriminator has been initialized by <init_net>. It uses Leakly RELU for non-linearity.
+    Returns the gradient penalty loss
     """
-    norm_layer = get_norm_layer(norm_type=norm)
-
-    if netD == "basic":  # default PatchGAN classifier
-        net = NLayerDiscriminator(
-            input_nc, ndf, n_layers=3, norm_layer=norm_layer, use_sigmoid=use_sigmoid
+    if lambda_gp > 0.0:
+        if (
+            type == "real"
+        ):  # either use real images, fake images, or a linear interpolation of two.
+            interpolates = real_data
+        elif type == "fake":
+            interpolates = fake_data
+        elif type == "mixed":
+            alpha = torch.rand(real_data.shape[0], 1, device=device)
+            alpha = (
+                alpha.expand(real_data.shape[0], real_data.nelement() // real_data.shape[0])
+                .contiguous()
+                .view(*real_data.shape)
+            )
+            interpolates = alpha * real_data + ((1 - alpha) * fake_data)
+        else:
+            raise NotImplementedError("{} not implemented".format(type))
+        interpolates.requires_grad_(True)
+        disc_interpolates = netd(interpolates)
+        gradients = torch.autograd.grad(
+            outputs=disc_interpolates,
+            inputs=interpolates,
+            grad_outputs=torch.ones(disc_interpolates.size()).to(device),
+            create_graph=True,
+            retain_graph=True,
+            only_inputs=True,
         )
-    elif netD == "n_layers":  # more options
-        net = NLayerDiscriminator(
-            input_nc, ndf, n_layers_D, norm_layer=norm_layer, use_sigmoid=use_sigmoid
-        )
-    elif netD == "no_patch":  # without any patch gan
-        net = NoPatchDiscriminator(input_nc, norm_layer=norm_layer)
+        gradients = gradients[0].view(real_data.size(0), -1)  # flat the data
+        gradient_penalty = (
+            ((gradients + 1e-16).norm(2, dim=1) - constant) ** 2
+        ).mean() * lambda_gp  # added eps
+        return gradient_penalty, gradients
     else:
-        raise NotImplementedError("Discriminator model name [%s] is not recognized" % netD)
-    return init_net(net, init_type, init_gain, gpu_ids)
+        return 0.0, None

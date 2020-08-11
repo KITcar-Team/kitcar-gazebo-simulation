@@ -3,6 +3,7 @@ from typing import Optional, List
 
 from torch import nn as nn
 
+from simulation.utils.machine_learning.cycle_gan.models.helper import get_activation_layer
 from simulation.utils.machine_learning.cycle_gan.models.resnet_block import ResnetBlock
 
 
@@ -55,26 +56,26 @@ class ResnetGenerator(nn.Module):
 
         n_downsampling = 2
         for i in range(n_downsampling):  # add downsampling layers
-            mult = 2 ** i
+            multiplier = 2 ** i
             model += [
                 nn.Conv2d(
-                    ngf * mult,
-                    ngf * mult * 2,
+                    ngf * multiplier,
+                    ngf * multiplier * 2,
                     kernel_size=3,
                     stride=2,
                     padding=1,
                     bias=use_bias,
                 ),
-                norm_layer(ngf * mult * 2),
+                norm_layer(ngf * multiplier * 2),
                 nn.ReLU(True),
             ]
 
-        mult = 2 ** n_downsampling
+        multiplier = 2 ** n_downsampling
         for i in range(n_blocks):  # add ResNet blocks
 
             model += [
                 ResnetBlock(
-                    ngf * mult,
+                    ngf * multiplier,
                     padding_type=padding_type,
                     norm_layer=norm_layer,
                     use_dropout=use_dropout,
@@ -85,39 +86,23 @@ class ResnetGenerator(nn.Module):
             ]
 
         for i in range(n_downsampling):  # add upsampling layers
-            mult = 2 ** (n_downsampling - i)
+            multiplier = 2 ** (n_downsampling - i)
             model += [
                 nn.ConvTranspose2d(
-                    ngf * mult,
-                    int(ngf * mult / 2),
+                    ngf * multiplier,
+                    int(ngf * multiplier / 2),
                     kernel_size=3,
                     stride=2,
                     padding=1,
                     output_padding=1,
                     bias=use_bias,
                 ),
-                norm_layer(int(ngf * mult / 2)),
+                norm_layer(int(ngf * multiplier / 2)),
                 nn.ReLU(True),
             ]
         model += [nn.ReflectionPad2d(3)]
         model += [nn.Conv2d(ngf, output_nc, kernel_size=7, padding=0)]
-
-        if activation.lower() == "tanh":
-            model += [nn.Tanh()]
-        elif activation.lower() == "hardtanh":
-            model += [nn.Hardtanh()]
-        elif activation == "selu":
-            model += [nn.SELU()]
-        elif activation == "celu":
-            model += [nn.CELU()]
-        elif activation == "softshrink":
-            model += [nn.Softshrink()]
-        elif activation == "softsign":
-            model += [nn.Softsign()]
-        else:
-            raise NotImplementedError(
-                "Activation function %s is not implemented yet." % activation
-            )
+        model += [get_activation_layer(activation)]
 
         self.model = nn.Sequential(*model)
 
