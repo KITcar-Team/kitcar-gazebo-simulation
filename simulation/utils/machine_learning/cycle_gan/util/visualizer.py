@@ -114,8 +114,6 @@ class Visualizer:
         Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
 
     def display_current_results(self, visuals, epoch, save_result):
-        del visuals["idt_A"]
-        del visuals["idt_B"]
         """Display current results on visdom; save current results to an HTML file.
 
         Parameters:
@@ -124,7 +122,7 @@ class Visualizer:
             save_result (bool) - - if save the current results to an HTML file
         """
         if self.display_id > 0:  # show images in the browser using visdom
-            ncols = 3
+            ncols = 4
             if ncols > 0:  # show all the images in one visdom panel
                 ncols = min(ncols, len(visuals))
                 # create a table of images.
@@ -190,8 +188,6 @@ class Visualizer:
             webpage.save()
 
     def plot_current_losses(self, epoch, counter_ratio, losses):
-        del losses["idt_A"]
-        del losses["idt_B"]
         """display the current losses on visdom display: dictionary of error labels and values
 
         Parameters:
