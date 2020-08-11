@@ -1,5 +1,4 @@
 from typing import Union, List, Tuple, Dict, Any
-import functools
 
 import torch
 import torchvision.transforms as transforms
@@ -17,7 +16,7 @@ class UnlabeledDataset(BaseDataset):
 
     folder_path: Union[str, List[str]]
     """Path[s] to folders that contain the data."""
-    max_dataset_size: int
+    max_dataset_size: Union[int, str]
     """Maximum number of data points in the dataset."""
     transform_properties: Dict[str, Any]
     """Properties passed as arguments to transform generation function."""
@@ -26,16 +25,22 @@ class UnlabeledDataset(BaseDataset):
         self.folder_path = folder_path
         self.max_dataset_size = max_dataset_size
         self.transform_properties = transform_properties
+        self.file_paths = self.load_file_paths()
 
-    @functools.cached_property
-    def file_paths(self) -> List[str]:
+    def load_file_paths(self) -> List[str]:
         """List[str]: File paths to all data."""
         if isinstance(self.folder_path, list):
             data = sum((make_dataset(d) for d in self.folder_path), [])
         else:
             data = make_dataset(self.folder_path)
         # Select only first max_dataset_size images
-        return data[: self.max_dataset_size] if len(data) > self.max_dataset_size else data
+
+        if self.max_dataset_size == "inf":
+            return data
+        else:
+            return (
+                data[: self.max_dataset_size] if len(data) > self.max_dataset_size else data
+            )
 
     @property
     def transform(self) -> transforms.Compose:
@@ -71,7 +76,7 @@ class UnlabeledDataLoader:
     def __init__(
         self,
         dataset: UnlabeledDataset,
-        max_dataset_size: int,
+        max_dataset_size: Union[int, str],
         batch_size: int = 1,
         serial_batches: bool = False,
         num_threads: int = 1,
@@ -97,11 +102,17 @@ class UnlabeledDataLoader:
 
     def __len__(self):
         """Return the number of data in the dataset"""
-        return min(len(self.dataset), self.max_dataset_size)
+        if self.max_dataset_size == "inf":
+            return len(self.dataset)
+        else:
+            return min(len(self.dataset), self.max_dataset_size)
 
     def __iter__(self):
         """Return a batch of data"""
         for i, data in enumerate(self.dataloader):
-            if i * self.batch_size >= self.max_dataset_size:
+            if (
+                self.max_dataset_size != "inf"
+                and i * self.batch_size >= self.max_dataset_size
+            ):
                 break
             yield data
