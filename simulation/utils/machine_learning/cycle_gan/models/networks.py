@@ -214,15 +214,15 @@ def define_G(
 
 
 def define_D(
-        input_nc,
-        ndf,
-        netD,
-        n_layers_D=3,
-        norm="batch",
-        init_type="normal",
-        init_gain=0.02,
-        gpu_ids=[],
-        use_sigmoid=False,
+    input_nc,
+    ndf,
+    netD,
+    n_layers_D=3,
+    norm="batch",
+    init_type="normal",
+    init_gain=0.02,
+    gpu_ids=[],
+    use_sigmoid=False,
 ):
     """Create a discriminator
 
@@ -255,16 +255,22 @@ def define_D(
     """
     norm_layer = get_norm_layer(norm_type=norm)
 
-    if netD == 'basic':  # default PatchGAN classifier
-        net = NLayerDiscriminator(input_nc, ndf, n_layers=3, norm_layer=norm_layer, use_sigmoid=use_sigmoid)
-    elif netD == 'n_layers':  # more options
-        net = NLayerDiscriminator(input_nc, ndf, n_layers_D, norm_layer=norm_layer, use_sigmoid=use_sigmoid)
-    elif netD == 'pixel':  # classify if each pixel is real or fake
-        net = PixelDiscriminator(input_nc, ndf, norm_layer=norm_layer, use_sigmoid=use_sigmoid)
-    elif netD == 'no_patch':  # without any patch gan
+    if netD == "basic":  # default PatchGAN classifier
+        net = NLayerDiscriminator(
+            input_nc, ndf, n_layers=3, norm_layer=norm_layer, use_sigmoid=use_sigmoid
+        )
+    elif netD == "n_layers":  # more options
+        net = NLayerDiscriminator(
+            input_nc, ndf, n_layers_D, norm_layer=norm_layer, use_sigmoid=use_sigmoid
+        )
+    elif netD == "pixel":  # classify if each pixel is real or fake
+        net = PixelDiscriminator(
+            input_nc, ndf, norm_layer=norm_layer, use_sigmoid=use_sigmoid
+        )
+    elif netD == "no_patch":  # without any patch gan
         net = NoPatchDiscriminator(input_nc, norm_layer=norm_layer)
     else:
-        raise NotImplementedError('Discriminator model name [%s] is not recognized' % netD)
+        raise NotImplementedError("Discriminator model name [%s] is not recognized" % netD)
     return init_net(net, init_type, init_gain, gpu_ids)
 
 
@@ -828,22 +834,29 @@ class NoPatchDiscriminator(nn.Module):
         super(NoPatchDiscriminator, self).__init__()
 
         # A bunch of convolutions one after another
-        model = [nn.Conv2d(input_nc, 64, 4, stride=2, padding=1),
-                 nn.LeakyReLU(0.2, inplace=True)]
+        model = [
+            nn.Conv2d(input_nc, 64, 4, stride=2, padding=1),
+            nn.LeakyReLU(0.2, inplace=True),
+        ]
 
-        model += [nn.Conv2d(64, 128, 4, stride=2, padding=1),
-                  norm_layer(128),
-                  nn.LeakyReLU(0.2, inplace=True)]
+        model += [
+            nn.Conv2d(64, 128, 4, stride=2, padding=1),
+            norm_layer(128),
+            nn.LeakyReLU(0.2, inplace=True),
+        ]
 
-        model += [nn.Conv2d(128, 256, 4, stride=2, padding=1),
-                  norm_layer(256),
-                  nn.LeakyReLU(0.2, inplace=True)]
+        model += [
+            nn.Conv2d(128, 256, 4, stride=2, padding=1),
+            norm_layer(256),
+            nn.LeakyReLU(0.2, inplace=True),
+        ]
 
-        model += [nn.Conv2d(256, 512, 4, padding=1),
-                  norm_layer(512),
-                  nn.LeakyReLU(0.2, inplace=True)]
+        model += [
+            nn.Conv2d(256, 512, 4, padding=1),
+            norm_layer(512),
+            nn.LeakyReLU(0.2, inplace=True),
+        ]
 
-        # FCN classification layer
         model += [nn.Conv2d(512, 1, 4, padding=1)]
 
         self.model = nn.Sequential(*model)
@@ -866,7 +879,9 @@ class PixelDiscriminator(nn.Module):
             use_sigmoid     -- sigmoid activation at the end
         """
         super(PixelDiscriminator, self).__init__()
-        if type(norm_layer) == functools.partial:  # no need to use bias as BatchNorm2d has affine parameters
+        if (
+            type(norm_layer) == functools.partial
+        ):  # no need to use bias as BatchNorm2d has affine parameters
             use_bias = norm_layer.func == nn.InstanceNorm2d
         else:
             use_bias = norm_layer == nn.InstanceNorm2d
@@ -877,7 +892,7 @@ class PixelDiscriminator(nn.Module):
             nn.Conv2d(ndf, ndf * 2, kernel_size=1, stride=1, padding=0, bias=use_bias),
             norm_layer(ndf * 2),
             nn.LeakyReLU(0.2, True),
-            nn.Conv2d(ndf * 2, 1, kernel_size=1, stride=1, padding=0, bias=use_bias)
+            nn.Conv2d(ndf * 2, 1, kernel_size=1, stride=1, padding=0, bias=use_bias),
         ]
 
         if use_sigmoid:

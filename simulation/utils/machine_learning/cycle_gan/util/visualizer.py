@@ -51,22 +51,30 @@ class Visualizer:
     (wrapped in 'HTML') for creating HTML files with images.
     """
 
-    def __init__(self, opt):
+    def __init__(
+        self,
+        display_id=1,
+        isTrain=True,
+        no_html=False,
+        display_winsize=256,
+        name="kitcar",
+        display_port=8097,
+        display_server="http://localhost",
+        display_env="main",
+        checkpoints_dir="./checkpoints",
+    ):
         """Initialize the Visualizer class
 
-        Parameters:
-            opt -- stores all the experiment flags; needs to be a subclass of BaseOptions
         Step 1: Cache the training/test options
         Step 2: connect to a visdom server
         Step 3: create an HTML object for saveing HTML filters
         Step 4: create a logging file to store training losses
         """
-        self.opt = opt  # cache the option
-        self.display_id = opt.display_id
-        self.use_html = opt.isTrain and not opt.no_html
-        self.win_size = opt.display_winsize
-        self.name = opt.name
-        self.port = opt.display_port
+        self.display_id = display_id
+        self.use_html = isTrain and not no_html
+        self.win_size = display_winsize
+        self.name = name
+        self.port = display_port
         self.saved = False
         if (
             self.display_id > 0
@@ -74,7 +82,7 @@ class Visualizer:
             import visdom
 
             self.vis = visdom.Visdom(
-                server=opt.display_server, port=opt.display_port, env=opt.display_env
+                server=display_server, port=display_port, env=display_env
             )
             if not self.vis.check_connection():
                 self.create_visdom_connections()
@@ -83,12 +91,12 @@ class Visualizer:
             self.use_html
         ):  # create an HTML object at <checkpoints_dir>/web/; images will be saved under
             # <checkpoints_dir>/web/images/
-            self.web_dir = os.path.join(opt.checkpoints_dir, opt.name, "web")
+            self.web_dir = os.path.join(checkpoints_dir, name, "web")
             self.img_dir = os.path.join(self.web_dir, "images")
             print("create web directory %s..." % self.web_dir)
             util.mk_dirs([self.web_dir, self.img_dir])
         # create a logging file to store training losses
-        self.log_name = os.path.join(opt.checkpoints_dir, opt.name, "loss_log.txt")
+        self.log_name = os.path.join(checkpoints_dir, name, "loss_log.txt")
         with open(self.log_name, "a") as log_file:
             now = time.strftime("%c")
             log_file.write("================ Training Loss (%s) ================\n" % now)
