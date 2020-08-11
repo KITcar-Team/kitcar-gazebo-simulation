@@ -1,77 +1,61 @@
-"""General-purpose test script for image-to-image translation.
-
-Once you have trained your model with train.py, you can use this script to test the model.
-It will load a saved model from '--checkpoints_dir' and save the results to '--results_dir'.
-
-It first creates model and dataset given the option. It will hard-code some parameters.
-
-Example (You need to train models first):
-    Test a CycleGAN model (both sides):
-        python test.py --dataroot ./datasets/kitcar --name maps_cyclegan --model cycle_gan
-
-    The option '--model test' is used for generating CycleGAN results only for one side.
-    This option will automatically set '--dataset_mode single', which only loads the images from one set.
-    On the contrary, using '--model cycle_gan' requires loading and generating results in both directions,
-    which is sometimes unnecessary. The results will be saved at ./results/.
-    Use '--results_dir <directory_path_to_save_result>' to specify the results directory.
-
-See options/base_options.py and options/test_options.py for more test options.
-See training and test tips at: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/docs/tips.md
-See frequently asked questions at: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/docs/qa.md
-"""
 import os
 
-from simulation.utils.machine_learning.cycle_gan.models import create_model
-from simulation.utils.machine_learning.cycle_gan.options.test_options import TestOptions
+import yaml
+
+import simulation.utils.machine_learning.data as ml_data
+from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
 from simulation.utils.machine_learning.cycle_gan.util import html
 from simulation.utils.machine_learning.cycle_gan.util.visualizer import save_images
 
-import simulation.utils.machine_learning.data as ml_data
+TEST_OPTIONS_YAML = "test_options.yaml"
+BASE_OPTIONS_YAML = "base_options.yaml"
 
 if __name__ == "__main__":
-    opt = TestOptions().parse()  # get test options
-    # hard-code some parameters for test
-    opt.num_threads = 0  # test code only supports num_threads = 1
-    opt.batch_size = 1  # test code only supports batch_size = 1
-    opt.serial_batches = True  # disable data shuffling; comment this line if results on randomly chosen images are
-    # needed.
-    opt.no_flip = (
-        True  # no flip; comment this line if results on flipped images are needed.
-    )
-    opt.display_id = (
-        -1
-    )  # no visdom display; the test code saves the results to a HTML file.
+    base_options_file = open(BASE_OPTIONS_YAML)
+    test_options_file = open(TEST_OPTIONS_YAML)
+
+    base_options = yaml.load(base_options_file, Loader=yaml.FullLoader)
+    test_options = yaml.load(test_options_file, Loader=yaml.FullLoader)
+
+    opt = {**base_options, **test_options}
+
     tf_properties = {
-        "load_size": opt.load_size,
-        "crop_size": opt.crop_size,
-        "preprocess": opt.preprocess,
-        "mask": opt.mask,
+        "load_size": opt["load_size"],
+        "crop_size": opt["crop_size"],
+        "preprocess": opt["preprocess"],
+        "mask": opt["mask"],
     }
     dataset_A, dataset_B = ml_data.load_unpaired_unlabeled_datasets(
-        opt.dataset_A,
-        opt.dataset_B,
-        opt.max_dataset_size,
-        batch_size=opt.batch_size,
-        serial_batches=opt.serial_batches,
-        num_threads=opt.num_threads,
-        grayscale_A=(opt.input_nc == 1),
-        grayscale_B=(opt.output_nc == 1),
+        opt["dataset_A"],
+        opt["dataset_B"],
+        batch_size=1,
+        serial_batches=True,
+        num_threads=0,
+        grayscale_A=(opt["input_nc"] == 1),
+        grayscale_B=(opt["output_nc"] == 1),
         transform_properties=tf_properties,
     )  # create datasets for each domain (A and B)
 
-    model = create_model(opt)  # create a model given opt.model and other options
-    model.setup(opt)  # regular setup: load and print networks; create schedulers
+    model = CycleGANModel.fromOptions(opt)  # create a model given model and other options
+    model.setup(
+        verbose=opt["verbose"],
+        continue_train=opt["continue_train"],
+        load_iter=opt["load_iter"],
+        epoch=opt["epoch"],
+        lr_policy=opt["lr_policy"],
+        lr_decay_iters=opt["lr_decay_iters"],
+        n_epochs=opt["n_epochs"],
+    )
     model.eval()
     # create a website
     web_dir = os.path.join(
-        opt.results_dir, opt.name, "{}_{}".format(opt.phase, opt.epoch)
+        opt["results_dir"], opt["name"], str(opt["epoch"])
     )  # define the website directory
-    if opt.load_iter > 0:  # load_iter is 0 by default
-        web_dir = "{:s}_iter{:d}".format(web_dir, opt.load_iter)
+    if opt["load_iter"] > 0:  # load_iter is 0 by default
+        web_dir = "{:s}_iter{:d}".format(web_dir, opt["load_iter"])
     print("creating web directory", web_dir)
     webpage = html.HTML(
-        web_dir,
-        "Experiment = %s, Phase = %s, Epoch = %s" % (opt.name, opt.phase, opt.epoch),
+        web_dir, "Experiment = %s, Epoch = %s" % (opt["name"], opt["epoch"]),
     )
     for i, ((A, A_paths), (B, B_paths)) in enumerate(zip(dataset_A, dataset_B)):
         model.set_input(
@@ -86,7 +70,7 @@ if __name__ == "__main__":
             webpage,
             visuals,
             img_path,
-            aspect_ratio=opt.aspect_ratio,
-            width=opt.display_winsize,
+            aspect_ratio=opt["aspect_ratio"],
+            width=opt["display_winsize"],
         )
     webpage.save()  # save the HTML

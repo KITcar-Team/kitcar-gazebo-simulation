@@ -5,11 +5,11 @@ subclasses. """
 import random
 from typing import Tuple, Dict, Any
 
+import PIL.ImageOps
 import numpy as np
 import torch.utils.data as data
 import torchvision.transforms as transforms
 from PIL import Image
-import PIL.ImageOps
 
 
 class BaseDataset(data.Dataset):
@@ -74,7 +74,7 @@ def get_transform(
     if grayscale:
         transform_list.append(transforms.Grayscale(1))
 
-    if mask is not None:
+    if mask != "None":
         transform_list.append(transforms.Lambda(lambda img: __apply_mask(img, mask)))
     if "resize" in preprocess:
         osize = [load_size, load_size]
