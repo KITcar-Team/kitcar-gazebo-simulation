@@ -30,6 +30,8 @@ sys.path.insert(0, os.path.abspath(".."))
 MOCK_MODULES = [
     "yaml",
     "PIL",
+    "PIL.ImageOps",
+    "PIL.Image",
     "pyxb",
     "pyxb.binding",
     "pyxb.binding.saxer",
@@ -39,6 +41,14 @@ MOCK_MODULES = [
     "pyxb.utils.six",
     "pyxb.binding",
     "pyxb.binding.datatypes",
+    "torch",
+    "torch.nn",
+    "torch.utils",
+    "torch.utils.data",
+    "torch.optim",
+    "torch.autograd",
+    "torchvision",
+    "torchvision.transforms",
 ]
 
 for mod_name in MOCK_MODULES:
@@ -85,7 +95,6 @@ run_apidoc = create_run_apidoc(
         "../*setup*",
         "../*gazebo-renderer*",
         "../*schema*",
-        "../*machine_learning*",
         # fmt: on
     ],
 )

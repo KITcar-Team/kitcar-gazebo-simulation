@@ -3,7 +3,7 @@ import os
 
 import torch
 
-from simulation.utils.machine_learning.cycle_gan import models, data
+from simulation.utils.machine_learning.cycle_gan import models
 from simulation.utils.machine_learning.cycle_gan.util import util
 
 
@@ -24,9 +24,30 @@ class BaseOptions:
         """Define the common options that are used in both training and test."""
         # basic parameters
         parser.add_argument(
-            "--dataroot",
-            default="./../datasets/",
-            help="path to images (should have subfolders trainA, trainB, valA, valB, etc)",
+            "--dataset_A",
+            default=os.path.join(
+                os.environ["KITCAR_REPO_PATH"],
+                "kitcar-gazebo-simulation",
+                "data",
+                "real_images",
+                "maschinen_halle",
+            ),
+            type=str,
+            nargs="+",
+            help="path to images of domain A (real images). Can be a list of folders",
+        )
+        parser.add_argument(
+            "--dataset_B",
+            default=os.path.join(
+                os.environ["KITCAR_REPO_PATH"],
+                "kitcar-gazebo-simulation",
+                "data",
+                "simulated_images",
+                "random_roads",
+            ),
+            type=str,
+            nargs="+",
+            help="path to images of domain B (simulated images). Can be a list of folders",
         )
         parser.add_argument(
             "--name",
@@ -117,13 +138,6 @@ class BaseOptions:
             action="store_true",
             default=False,
             help="no dropout for the generator",
-        )
-        # dataset parameters
-        parser.add_argument(
-            "--dataset_mode",
-            type=str,
-            default="unaligned",
-            help="chooses how datasets are loaded. [unaligned | aligned | single | colorization]",
         )
         parser.add_argument("--direction", type=str, default="BtoA", help="AtoB or BtoA")
         parser.add_argument(
@@ -232,11 +246,6 @@ class BaseOptions:
         model_option_setter = models.get_option_setter(model_name)
         parser = model_option_setter(parser, self.isTrain)
         opt, _ = parser.parse_known_args()  # parse again with new defaults
-
-        # modify dataset-related parser options
-        dataset_name = opt.dataset_mode
-        dataset_option_setter = data.get_option_setter(dataset_name)
-        parser = dataset_option_setter(parser, self.isTrain)
 
         # save and return the parser
         self.parser = parser
