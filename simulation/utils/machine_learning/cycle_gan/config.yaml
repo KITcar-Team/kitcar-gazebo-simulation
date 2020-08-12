@@ -1,5 +1,5 @@
 base:
-  activation: TANH  # Choose which activation to use. [TANH | HARDTANH | SELU | CELU | SOFTSHRINK |
+  activation: TANH # Choose which activation to use. [TANH | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
   checkpoints_dir: ./checkpoints #models are saved here
   conv_layers_in_block: 2 #specify number of convolution layers per resnet block
   crop_size: 256 #then crop to this size
@@ -35,15 +35,7 @@ base:
   use_sigmoid: False #Use sigmoid activation at the end of discriminator network
   pool_size: 50 #the size of image buffer that stores previously generated images
   gan_mode: lsgan #the type of GAN objective. [vanilla| lsgan | wgangp]. vanilla GAN loss is the cross-entropy objective used in the original GAN paper.
-  beta1: 0.5 #momentum term of adam
-  batch_size: 1 #input batch size
-  lr: 0.0002 #initial learning rate for adam
-  lr_decay_iters: 50 #multiply by a gamma every lr_decay_iters iterations
-  lr_policy: linear #learning rate policy. [linear | step | plateau | cosine]
-  continue_train: False #continue training: load the latest model
-  n_epochs: 100 #number of epochs with the initial learning rate
-  max_dataset_size: None #maximum amount of images to load
-  n_epochs_decay: 100 #number of epochs to linearly decay learning rate to zero
+  max_dataset_size: -1 #maximum amount of images to load; -1 means infinity
 train:
   display_env: main #visdom display environment name (default is "main")
   display_freq: 5 #frequency of showing training results on screen
@@ -52,7 +44,6 @@ train:
   display_server: http://localhost #visdom server of the web display
   epoch_count: 1 #the starting epoch count, we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>, ...
   is_train: True # enable or disable training mode
-  no_dropout: True #no dropout for the generator
   no_html: False #do not save intermediate training results to [opt.checkpoints_dir]/[opt.name]/web/
   num_threads: 8 # # threads for loading data
   print_freq: 100 #frequency of showing training results on console
@@ -60,6 +51,14 @@ train:
   save_epoch_freq: 1 #frequency of saving checkpoints at the end of epochs
   save_latest_freq: 1000 #frequency of saving the latest results
   update_html_freq: 100 #frequency of saving training results to html
+  beta1: 0.5 #momentum term of adam
+  batch_size: 1 #input batch size
+  lr: 0.0002 #initial learning rate for adam
+  lr_decay_iters: 50 #multiply by a gamma every lr_decay_iters iterations
+  lr_policy: linear #learning rate policy. [linear | step | plateau | cosine]
+  continue_train: False #continue training: load the latest model
+  n_epochs: 100 #number of epochs with the initial learning rate
+  n_epochs_decay: 100 #number of epochs to linearly decay learning rate to zero
 test:
   results_dir: ./results/ #saves results here.
   aspect_ratio: 1 #aspect ratio of result images

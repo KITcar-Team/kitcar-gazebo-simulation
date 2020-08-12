@@ -56,7 +56,6 @@ class CycleGANModel:
         lambda_b=10,
     ):
         """Initialize the CycleGAN class."""
-        """
         self.gpu_ids = gpu_ids
         self.is_train = is_train
         self.lr_policy = lr_policy
@@ -496,36 +495,10 @@ class CycleGANModel:
         self.backward_d_b()  # calculate gradients for D_B
         self.optimizer_d.step()  # update D_A and D_B's weights
 
-    @staticmethod
-    def from_options(opt):
-        return CycleGANModel(
-            gpu_ids=opt["gpu_ids"],
-            is_train=opt["is_train"],
-            cycle_noise_stddev=opt["cycle_noise_stddev"],
-            checkpoints_dir=opt["checkpoints_dir"],
-            name=opt["name"],
-            preprocess=opt["preprocess"],
-            input_nc=opt["input_nc"],
-            lambda_identity=opt["lambda_identity"],
-            output_nc=opt["output_nc"],
-            ngf=opt["ngf"],
-            netg=opt["netg"],
-            norm=opt["norm"],
-            no_dropout=opt["no_dropout"],
-            init_type=opt["init_type"],
-            init_gain=opt["init_gain"],
-            activation=opt["activation"],
-            conv_layers_in_block=opt["conv_layers_in_block"],
-            dilations=opt["dilations"],
-            netd=opt["netd"],
-            n_layers_d=opt["n_layers_d"],
-            use_sigmoid=opt["use_sigmoid"],
-            pool_size=opt["pool_size"],
-            ndf=opt["ndf"],
-            gan_mode=opt["gan_mode"],
-            beta1=opt["beta1"],
-            lr=opt["lr"],
-            lr_policy=opt["lr_policy"],
-            lambda_a=opt["lambda_a"],
-            lambda_b=opt["lambda_b"],
-        )
+    @classmethod
+    def from_options(cls, **kwargs):
+        init_keys = cls.__init__.__code__.co_varnames  # Access the init functions arguments
+        kwargs = {
+            key: kwargs[key] for key in init_keys if key in kwargs
+        }  # Select all elements in kwargs, that are also arguments of the init function
+        return cls(**kwargs)

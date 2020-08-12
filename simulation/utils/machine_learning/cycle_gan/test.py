@@ -13,13 +13,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--config",
         type=str,
-        default="config.yml",
+        default="config.yaml",
         help="path to config file where all parameters are stored",
     )
     config_file_path = parser.parse_args().config
 
-    config_file = open(config_file_path)
-    configs = yaml.load(config_file, Loader=yaml.FullLoader)
+    with open(config_file_path) as config_file:
+        configs = yaml.load(config_file, Loader=yaml.FullLoader)
 
     opt = {**configs["base"], **configs["test"]}
 
@@ -41,15 +41,14 @@ if __name__ == "__main__":
         transform_properties=tf_properties,
     )  # create datasets for each domain (A and B)
 
-    model = CycleGANModel.from_options(opt)  # create a model given model and other options
+    model = CycleGANModel.from_options(
+        **opt
+    )  # create a model given model and other options
     model.setup(
         verbose=opt["verbose"],
-        continue_train=opt["continue_train"],
+        continue_train=False,
         load_iter=opt["load_iter"],
         epoch=opt["epoch"],
-        lr_policy=opt["lr_policy"],
-        lr_decay_iters=opt["lr_decay_iters"],
-        n_epochs=opt["n_epochs"],
     )
     model.eval()
     # create a website
