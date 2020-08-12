@@ -55,7 +55,7 @@ class CycleGANModel:
         lambda_a=10,
         lambda_b=10,
     ):
-        """Initialize the CycleGAN class.
+        """Initialize the CycleGAN class."""
         """
         self.gpu_ids = gpu_ids
         self.is_train = is_train
@@ -293,7 +293,7 @@ class CycleGANModel:
 
     def get_current_visuals(self):
         """Return visualization images. train.py will display these images with visdom, and save the images to a HTML"""
-        visual_ret = OrderedDict()
+        visual_ret = dict()
         for name in self.visual_names:
             if isinstance(name, str):
                 visual_ret[name] = getattr(self, name)

@@ -9,11 +9,11 @@ class GANLoss(nn.Module):
     that has the same size as the input.
     """
 
-    def __init__(self, gan_mode, target_real_label=1.0, target_fake_label=0.0):
-        """ Initialize the GANLoss class.
+    def __init__(self, gan_mode: str, target_real_label=1.0, target_fake_label=0.0):
+        """Initialize GANLoss.
 
         Parameters:
-            gan_mode (str) - - the type of GAN objective. It currently supports vanilla, lsgan, and wgangp.
+            gan_mode: The type of GAN objective. It currently supports vanilla, lsgan, and wgangp.
             target_real_label (bool) - - label for a real image
             target_fake_label (bool) - - label of a fake image
 
