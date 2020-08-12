@@ -1,3 +1,4 @@
+import argparse
 import os
 
 import yaml
@@ -7,10 +8,17 @@ from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import C
 from simulation.utils.machine_learning.cycle_gan.util import html
 from simulation.utils.machine_learning.cycle_gan.util.visualizer import save_images
 
-CONFIG_FILE_PATH = "config.yml"
-
 if __name__ == "__main__":
-    config_file = open(CONFIG_FILE_PATH)
+    parser = argparse.ArgumentParser(description="Read config file.")
+    parser.add_argument(
+        "--config",
+        type=str,
+        default="config.yml",
+        help="path to config file where all parameters are stored",
+    )
+    config_file_path = parser.parse_args().config
+
+    config_file = open(config_file_path)
     configs = yaml.load(config_file, Loader=yaml.FullLoader)
 
     opt = {**configs["base"], **configs["test"]}
@@ -29,6 +37,7 @@ if __name__ == "__main__":
         num_threads=0,
         grayscale_A=(opt["input_nc"] == 1),
         grayscale_B=(opt["output_nc"] == 1),
+        max_dataset_size=opt["max_dataset_size"],
         transform_properties=tf_properties,
     )  # create datasets for each domain (A and B)
 
