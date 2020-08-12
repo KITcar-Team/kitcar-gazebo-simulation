@@ -3,8 +3,8 @@ base:
   checkpoints_dir: ./checkpoints #models are saved here
   conv_layers_in_block: 2 #specify number of convolution layers per resnet block
   crop_size: 256 #then crop to this size
-  dataset_a: ./../data/datasets/real_images #path to images of domain A (real images). Can be a list of folders
-  dataset_b: ./../data/datasets/simulated_images #path to images of domain B (simulated images). Can be a list of folders
+  dataset_a: ./../../../../data/real_images/maschinen_halle #path to images of domain A (real images). Can be a list of folders
+  dataset_b: ./../../../../data/simulated_images/random_roads #path to images of domain B (simulated images). Can be a list of folders
   dilations: None #dilation for individual conv layers in every resnet block
   display_winsize: 256 #display window size for both visdom and HTML
   epoch: latest #which epoch to load? set to latest to use latest cached model
