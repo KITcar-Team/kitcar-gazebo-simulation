@@ -1,5 +1,5 @@
 base:
-  activation: TANH #chooses which activation to use. [TANH | HARDTANH | SELU | CELU | SOFTSHRINK |
+  activation: TANH  # Choose which activation to use. [TANH | HARDTANH | SELU | CELU | SOFTSHRINK |
   checkpoints_dir: ./checkpoints #models are saved here
   conv_layers_in_block: 2 #specify number of convolution layers per resnet block
   crop_size: 256 #then crop to this size
