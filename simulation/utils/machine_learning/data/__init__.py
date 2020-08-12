@@ -12,15 +12,16 @@ def load_unpaired_unlabeled_datasets(
     grayscale_A: bool,
     grayscale_B: bool,
     transform_properties: Dict[str, Any],
+    max_dataset_size=Union[int, None],
 ) -> Tuple[UnlabeledDataLoader, UnlabeledDataLoader]:
     """Create dataloader for two unpaired and unlabeled datasets.
 
     E.g. used by cycle gan with data from two domains.
     """
     transform_properties["grayscale"] = grayscale_A
-    A = UnlabeledDataset(dir_A, transform_properties)
+    A = UnlabeledDataset(dir_A, max_dataset_size, transform_properties)
     transform_properties["grayscale"] = grayscale_B
-    B = UnlabeledDataset(dir_B, transform_properties)
+    B = UnlabeledDataset(dir_B, max_dataset_size, transform_properties)
 
     # Transform datasets into dataloaders.
     A = UnlabeledDataLoader(

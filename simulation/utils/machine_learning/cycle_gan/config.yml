@@ -42,6 +42,7 @@ base:
   lr_policy: linear #learning rate policy. [linear | step | plateau | cosine]
   continue_train: False #continue training: load the latest model
   n_epochs: 100 #number of epochs with the initial learning rate
+  max_dataset_size: None #maximum amount of images to load
   n_epochs_decay: 100 #number of epochs to linearly decay learning rate to zero
 train:
   display_env: main #visdom display environment name (default is "main")
