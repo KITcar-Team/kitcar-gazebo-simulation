@@ -12,13 +12,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--config",
         type=str,
-        default="config.yml",
+        default="config.yaml",
         help="path to config file where all parameters are stored",
     )
     config_file_path = parser.parse_args().config
 
-    config_file = open(config_file_path)
-    configs = yaml.load(config_file, Loader=yaml.FullLoader)
+    with open(config_file_path) as config_file:
+        configs = yaml.load(config_file, Loader=yaml.FullLoader)
 
     opt = {**configs["base"], **configs["train"]}
 
@@ -45,7 +45,9 @@ if __name__ == "__main__":
     )  # get the number of images in the dataset.
     print("The number of training images = %d" % dataset_size)
 
-    model = CycleGANModel.from_options(opt)  # create a model given model and other options
+    model = CycleGANModel.from_options(
+        **opt
+    )  # create a model given model and other options
     model.setup(
         verbose=opt["verbose"],
         continue_train=opt["continue_train"],
