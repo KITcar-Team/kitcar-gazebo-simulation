@@ -1,22 +1,27 @@
 import functools
 
-from torch import nn as nn
+from torch import nn as nn, Tensor
 
 
 class NLayerDiscriminator(nn.Module):
     """Defines a PatchGAN discriminator"""
 
     def __init__(
-        self, input_nc, ndf=64, n_layers=3, norm_layer=nn.BatchNorm2d, use_sigmoid=False
+        self,
+        input_nc: int,
+        ndf: int = 64,
+        n_layers: int = 3,
+        norm_layer: nn.Module = nn.BatchNorm2d,
+        use_sigmoid: bool = False,
     ):
         """Construct a PatchGAN discriminator
 
-        Parameters:
-            input_nc (int)  -- the number of channels in input images
-            ndf (int)       -- the number of filters in the last conv layer
-            n_layers (int)  -- the number of conv layers in the discriminator
-            norm_layer      -- normalization layer
-            use_sigmoid     -- sigmoid activation at the end
+        Args:
+            input_nc (int): the number of channels in input images
+            ndf (int): the number of filters in the last conv layer
+            n_layers (int): the number of conv layers in the discriminator
+            norm_layer (nn.Module): normalization layer
+            use_sigmoid (bool): sigmoid activation at the end
         """
         super(NLayerDiscriminator, self).__init__()
         if (
@@ -79,6 +84,10 @@ class NLayerDiscriminator(nn.Module):
 
         self.model = nn.Sequential(*sequence)
 
-    def forward(self, input):
-        """Standard forward."""
+    def forward(self, input: Tensor) -> Tensor:
+        """Standard forward.
+
+        Args:
+            input (Tensor): the input tensor
+        """
         return self.model(input)

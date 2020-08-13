@@ -1,9 +1,12 @@
 import functools
+from typing import Union, List, Tuple
 
 import torch
 from torch import nn
 from torch.nn import init
 from torch.optim import lr_scheduler
+from torch.optim.lr_scheduler import LambdaLR, StepLR, ReduceLROnPlateau
+from torch.optim.optimizer import Optimizer
 
 
 ###############################################################################
@@ -11,14 +14,16 @@ from torch.optim import lr_scheduler
 ###############################################################################
 
 
-def get_norm_layer(norm_type="instance"):
+def get_norm_layer(norm_type: str = "instance") -> nn.Module:
     """Return a normalization layer
 
-    Parameters:
-        norm_type (str) -- the name of the normalization layer: batch | instance | none
+    For BatchNorm, we use learnable affine parameters and track running
+    statistics (mean/stddev). For InstanceNorm, we do not use learnable affine
+    parameters. We do not track running statistics.
 
-    For BatchNorm, we use learnable affine parameters and track running statistics (mean/stddev).
-    For InstanceNorm, we do not use learnable affine parameters. We do not track running statistics.
+    Args:
+        norm_type (str): the name of the normalization layer: batch | instance |
+            none
     """
     if norm_type == "batch":
         norm_layer = functools.partial(
@@ -38,20 +43,30 @@ def get_norm_layer(norm_type="instance"):
     return norm_layer
 
 
-def get_scheduler(optimizer, lr_policy, lr_decay_iters, n_epochs):
+def get_scheduler(
+    optimizer: Optimizer, lr_policy: str, lr_decay_iters: int, n_epochs: int
+) -> Union[LambdaLR, StepLR, ReduceLROnPlateau]:
     """Return a learning rate scheduler
 
-    Parameters:
-        optimizer          -- the optimizer of the network
+    For 'linear', we keep the same learning rate for the first <n_epochs>
+    epochs and linearly decay the rate to zero over the next <n_epochs_decay>
+    epochs. For other schedulers (step, plateau, and cosine), we use the default
+    PyTorch schedulers. See https://pytorch.org/docs/stable/optim.html for more
+    details.
 
-    For 'linear', we keep the same learning rate for the first <n_epochs> epochs
-    and linearly decay the rate to zero over the next <n_epochs_decay> epochs.
-    For other schedulers (step, plateau, and cosine), we use the default PyTorch schedulers.
-    See https://pytorch.org/docs/stable/optim.html for more details.
+    Args:
+        optimizer (Optimizer): the optimizer of the network
+        lr_policy (str): learning rate policy. [linear | step | plateau |
+            cosine]
+        lr_decay_iters (int): multiply by a gamma every lr_decay_iters
+            iterations
+        n_epochs (int): number of epochs with the initial learning rate
     """
     if lr_policy == "linear":
 
-        def lambda_rule(epoch, epoch_count=1, n_epochs=100, n_epochs_decay=100):
+        def lambda_rule(
+            epoch: int, epoch_count: int = 1, n_epochs: int = 100, n_epochs_decay: int = 100
+        ) -> float:
             lr_l = 1.0 - max(0, epoch + epoch_count - n_epochs) / float(n_epochs_decay + 1)
             return lr_l
 
@@ -65,25 +80,27 @@ def get_scheduler(optimizer, lr_policy, lr_decay_iters, n_epochs):
     elif lr_policy == "cosine":
         scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=n_epochs, eta_min=0)
     else:
-        return NotImplementedError(
-            "learning rate policy [%s] is not implemented", lr_policy
-        )
+        raise NotImplementedError("learning rate policy [%s] is not implemented", lr_policy)
     return scheduler
 
 
-def init_weights(net, init_type="normal", init_gain=0.02):
+def init_weights(
+    net: nn.Module, init_type: str = "normal", init_gain: float = 0.02
+) -> None:
     """Initialize network weights.
 
-    Parameters:
-        net (network)   -- network to be initialized
-        init_type (str) -- the name of an initialization method: normal | xavier | kaiming | orthogonal
-        init_gain (float)    -- scaling factor for normal, xavier and orthogonal.
+    We use 'normal' in the original pix2pix and CycleGAN paper. But xavier
+    and kaiming might work better for some applications. Feel free to try
+    yourself.
 
-    We use 'normal' in the original pix2pix and CycleGAN paper. But xavier and kaiming might
-    work better for some applications. Feel free to try yourself.
+    Args:
+        net (nn.Module): network to be initialized
+        init_type (str): the name of an initialization method: normal | xavier |
+            kaiming | orthogonal
+        init_gain (float): scaling factor for normal, xavier and orthogonal.
     """
 
-    def init_func(m):  # define the initialization function
+    def init_func(m: nn.Module) -> None:  # define the initialization function
         classname = m.__class__.__name__
         if hasattr(m, "weight") and (
             classname.find("Conv") != -1 or classname.find("Linear") != -1
@@ -112,15 +129,26 @@ def init_weights(net, init_type="normal", init_gain=0.02):
     net.apply(init_func)  # apply the initialization function <init_func>
 
 
-def init_net(net, init_type="normal", init_gain=0.02, gpu_ids=[0]):
-    """Initialize a network: 1. register CPU/GPU device (with multi-GPU support); 2. initialize the network weights
-    Parameters:
-        net (network)      -- the network to be initialized
-        init_type (str)    -- the name of an initialization method: normal | xavier | kaiming | orthogonal
-        init_gain (float)  -- scaling factor for normal, xavier and orthogonal.
-        gpu_ids (int list) -- which GPUs the network runs on: e.g., 0,1,2
+def init_net(
+    net: nn.Module,
+    init_type: str = "normal",
+    init_gain: float = 0.02,
+    gpu_ids: List[int] = [0],
+) -> nn.Module:
+    """Initialize a network: 1. register CPU/GPU device (with multi-GPU
+    support); 2. initialize the network weights :param net: :type net: network
+    :param init_type: normal | xavier | kaiming | orthogonal :type init_type:
+    str :param init_gain: :type init_gain: float :param gpu_ids: e.g., 0,1,2
+    :type gpu_ids: int list
 
     Return an initialized network.
+
+    Args:
+        net (nn.Module): the network to be initialized
+        init_type (str): the name of an initialization method: normal | xavier |
+            kaiming | orthogonal
+        init_gain (float): scaling factor for normal, xavier and orthogonal.
+        gpu_ids: which GPUs the network runs on: e.g., 0,1,2
     """
     if len(gpu_ids) > 0:
         assert torch.cuda.is_available()
@@ -130,7 +158,13 @@ def init_net(net, init_type="normal", init_gain=0.02, gpu_ids=[0]):
     return net
 
 
-def get_activation_layer(activation):
+def get_activation_layer(activation: str) -> nn.Module:
+    """Returns the matching activation layer :param activation:
+
+    Args:
+        activation (str): a string representation of the activation layer [TANH
+            | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
+    """
     if activation.lower() == "tanh":
         return nn.Tanh()
     elif activation.lower() == "hardtanh":
@@ -150,17 +184,30 @@ def get_activation_layer(activation):
 
 
 def cal_gradient_penalty(
-    netd, real_data, fake_data, device, type="mixed", constant=1.0, lambda_gp=10.0
-):
-    """Calculate the gradient penalty loss, used in WGAN-GP paper https://arxiv.org/abs/1704.00028
-
-    Arguments: netd (network)              -- discriminator network real_data (tensor array)    -- real images
-    fake_data (tensor array)    -- generated images from the generator device (str)                -- GPU / CPU: from
-    torch.device('cuda:{}'.format(self.gpu_ids[0])) if self.gpu_ids else torch.device('cpu') type (str)
-       -- if we mix real and fake data or not [real | fake | mixed]. constant (float)            -- the constant used
-       in formula ( ||gradient||_2 - constant)^2 lambda_gp (float)           -- weight for this loss
+    netd: nn.Module,
+    real_data: torch.Tensor,
+    fake_data: torch.Tensor,
+    device: str,
+    type: str = "mixed",
+    constant: float = 1.0,
+    lambda_gp: float = 10.0,
+) -> Tuple[float, Union[None, torch.Tensor]]:
+    """Calculate the gradient penalty loss, used in WGAN-GP paper
+    https://arxiv.org/abs/1704.00028
 
     Returns the gradient penalty loss
+
+    Args:
+        netd (nn.Module): discriminator network
+        real_data (torch.Tensor): real images
+        fake_data (torch.Tensor): generated images from the generator
+        device (str): GPU / CPU: from
+            torch.device('cuda:{}'.format(self.gpu_ids[0])) if self.gpu_ids else
+            torch.device('cpu')
+        type (str): if we mix real and fake data or not [real | fake | mixed].
+        constant (float): the constant used in formula ( ||gradient||_2 -
+            constant)^2
+        lambda_gp (float): weight for this loss
     """
     if lambda_gp > 0.0:
         if (

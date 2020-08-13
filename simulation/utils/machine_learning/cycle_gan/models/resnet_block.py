@@ -1,6 +1,6 @@
 from typing import List
 
-from torch import nn as nn
+from torch import nn as nn, Tensor
 
 
 class ResnetBlock(nn.Module):
@@ -8,20 +8,30 @@ class ResnetBlock(nn.Module):
 
     def __init__(
         self,
-        dim,
-        padding_type,
-        norm_layer,
-        use_dropout,
-        use_bias,
+        dim: int,
+        padding_type: str,
+        norm_layer: nn.Module,
+        use_dropout: bool,
+        use_bias: bool,
         n_conv_layers: int = 2,
         dilations: List[int] = None,
     ):
         """Initialize the Resnet block
 
-        A resnet block is a conv block with skip connections
-        We construct a conv block with build_conv_block function,
-        and implement skip connections in <forward> function.
-        Original Resnet paper: https://arxiv.org/pdf/1512.03385.pdf
+        A resnet block is a conv block with skip connections We construct a
+        conv block with build_conv_block function, and implement skip
+        connections in <forward> function. Original Resnet paper:
+        https://arxiv.org/pdf/1512.03385.pdf
+
+        Args:
+            dim (int): number of channels in the conv layer.
+            padding_type (str): name of padding layer: reflect | replicate |
+                zero
+            norm_layer (nn.Module): normalization layer
+            use_dropout (bool): if use dropout layers.
+            use_bias (bool): if the conv layer uses bias or not
+            n_conv_layers (int): Number of convolution layers in this block.
+            dilations: List of dilations for each conv layer.
         """
         super(ResnetBlock, self).__init__()
         self.conv_block = self.build_conv_block(
@@ -41,16 +51,18 @@ class ResnetBlock(nn.Module):
         """Construct a convolutional block.
 
         Args:
-            dim: number of channels in the conv layer.
-            padding_type: name of padding layer: reflect | replicate | zero
+            dim (int): number of channels in the conv layer.
+            padding_type (str): name of padding layer: reflect | replicate |
+                zero
             norm_layer: normalization layer
-            use_dropout: if use dropout layers.
-            use_bias: if the conv layer uses bias or not
-            n_conv_layers: Number of convolution layers in this block.
+            use_dropout (bool): if use dropout layers.
+            use_bias (bool): if the conv layer uses bias or not
+            n_conv_layers (int): Number of convolution layers in this block.
             dilations: List of dilations for each conv layer.
 
         Returns:
-            A conv block (with a conv layer, a normalization layer, and a non-linearity layer (ReLU))
+            A conv block (with a conv layer, a normalization layer, and a
+            non-linearity layer (ReLU))
         """
         if dilations == "None":
             dilations = [1 for _ in range(n_conv_layers)]
@@ -94,7 +106,11 @@ class ResnetBlock(nn.Module):
 
         return nn.Sequential(*conv_block)
 
-    def forward(self, x):
-        """Forward function (with skip connections)"""
+    def forward(self, x: Tensor) -> Tensor:
+        """Standard forward with skip connection
+
+        Args:
+            x (Tensor): the input tensor
+        """
         out = x + self.conv_block(x)  # add skip connections
         return out

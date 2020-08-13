@@ -22,6 +22,13 @@ class UnlabeledDataset(BaseDataset):
     """Properties passed as arguments to transform generation function."""
 
     def __init__(self, folder_path, max_dataset_size, transform_properties):
+        """
+        Args:
+            folder_path: path to the dataset
+            max_dataset_size: maximum amount of images to load
+            transform_properties: dict containing properties for transforming
+                images
+        """
         self.folder_path = folder_path
         self.max_dataset_size = max_dataset_size
         self.transform_properties = transform_properties
@@ -65,7 +72,9 @@ class UnlabeledDataset(BaseDataset):
 
 
 class UnlabeledDataLoader:
-    """Wrapper class of Dataset class that performs multi-threaded data loading"""
+    """Wrapper class of Dataset class that performs multi-threaded data
+    loading
+    """
 
     def __init__(
         self,
@@ -77,8 +86,16 @@ class UnlabeledDataLoader:
     ):
         """Initialize this class
 
-        Step 1: create a dataset instance given the name
-        Step 2: create a multi-threaded data loader.
+        Step 1: create a dataset instance given the name Step 2: create a
+        multi-threaded data loader.
+
+        Args:
+            dataset (UnlabeledDataset): the dataset to load
+            max_dataset_size (int): the maximum amount of images to load
+            batch_size (int): the input batch size
+            serial_batches (bool): if true, takes images in order to make
+                batches,
+            num_threads (int): threads for loading data
         """
         self.dataset = dataset
         print("dataset [%s] was created" % type(self.dataset).__name__)

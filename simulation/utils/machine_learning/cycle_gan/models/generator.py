@@ -1,3 +1,7 @@
+from typing import List
+
+from torch import nn
+
 from simulation.utils.machine_learning.cycle_gan.models.helper import (
     get_norm_layer,
     init_net,
@@ -9,48 +13,55 @@ from simulation.utils.machine_learning.cycle_gan.models.unet_generator import Un
 
 
 def create_generator(
-    input_nc,
-    output_nc,
-    ngf,
-    netg,
-    norm="batch",
-    use_dropout=False,
-    init_type="normal",
-    init_gain=0.02,
-    gpu_ids=[0],
-    activation="TANH",
-    conv_layers_in_block=2,
-    dilations=None,
-):
+    input_nc: int,
+    output_nc: int,
+    ngf: int,
+    netg: str,
+    norm: str = "batch",
+    use_dropout: bool = False,
+    init_type: str = "normal",
+    init_gain: float = 0.02,
+    gpu_ids: List[int] = [0],
+    activation: str = "TANH",
+    conv_layers_in_block: int = 2,
+    dilations: List[int] = None,
+) -> nn.Module:
     """Create a generator
-
-    Parameters:
-        input_nc (int) -- the number of channels in input images
-        output_nc (int) -- the number of channels in output images
-        ngf (int) -- the number of filters in the last conv layer
-        netg (str) -- the architecture's name: resnet_9blocks | resnet_6blocks | unet_256 | unet_128
-        norm (str) -- the name of normalization layers used in the network: batch | instance | none
-        use_dropout (bool) -- if use dropout layers.
-        init_type (str)    -- the name of our initialization method.
-        init_gain (float)  -- scaling factor for normal, xavier and orthogonal.
-        gpu_ids (int list) -- which GPUs the network runs on: e.g., 0,1,2
-        activation (string) -- The activation function used at the end
-        conv_layers_in_block: Number of convolution layers in each block.
-        dilations: List of dilations for each conv layer.
 
     Returns a generator
 
     Our current implementation provides two types of generators:
-        U-Net: [unet_128] (for 128x128 input images) and [unet_256] (for 256x256 input images)
-        The original U-Net paper: https://arxiv.org/abs/1505.04597
+        U-Net: [unet_128] (for 128x128 input images) and [unet_256] (for 256x256
+        input images) The original U-Net paper: https://arxiv.org/abs/1505.04597
 
-        Resnet-based generator: [resnet_6blocks] (with 6 Resnet blocks) and [resnet_9blocks] (with 9 Resnet blocks)
-        Resnet-based generator consists of several Resnet blocks between a few downsampling/upsampling operations. We
-        adapt Torch code from Justin Johnson's neural style transfer project (
-        https://github.com/jcjohnson/fast-neural-style).
+        Resnet-based generator: [resnet_6blocks] (with 6 Resnet blocks) and
+        [resnet_9blocks] (with 9 Resnet blocks) Resnet-based generator consists
+        of several Resnet blocks between a few downsampling/upsampling
+        operations. We adapt Torch code from Justin Johnson's neural style
+        transfer project (https://github.com/jcjohnson/fast-neural-style).
 
+    The generator has been initialized by <init_net>. It uses RELU for
+    non-linearity.
 
-    The generator has been initialized by <init_net>. It uses RELU for non-linearity.
+    Args:
+        input_nc (int): # of input image channels: 3 for RGB and 1 for grayscale
+        output_nc (int): # of output image channels: 3 for RGB and 1 for
+            grayscale
+        ngf (int): # of gen filters in the last conv layer
+        netg (str): specify generator architecture [resnet_<ANY_INTEGER>blocks |
+            unet_256 | unet_128]
+        norm (str): instance normalization or batch normalization [instance |
+            batch | none]
+        use_dropout (bool): enable or disable dropout
+        init_type (str): network initialization [normal | xavier | kaiming |
+            orthogonal]
+        init_gain (float): scaling factor for normal, xavier and orthogonal.
+        gpu_ids: e.g. 0 0,1,2, 0,2. use -1 for CPU
+        activation (str): Choose which activation to use. [TANH | HARDTANH |
+            SELU | CELU | SOFTSHRINK | SOFTSIGN]
+        conv_layers_in_block (int): specify number of convolution layers per
+            resnet block
+        dilations: dilation for individual conv layers in every resnet block
     """
     norm_layer = get_norm_layer(norm_type=norm)
 

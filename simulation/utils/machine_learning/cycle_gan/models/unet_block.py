@@ -5,33 +5,33 @@ from torch import nn as nn
 
 
 class UnetSkipConnectionBlock(nn.Module):
-    """Defines the Unet submodule with skip connection.
-        X -------------------identity----------------------
-        |-- downsampling -- |submodule| -- upsampling --|
+    """Defines the Unet submodule with skip connection. X
+    -------------------identity----------------------
+    |-- downsampling -- |submodule| -- upsampling --|
     """
 
     def __init__(
         self,
-        outer_nc,
-        inner_nc,
-        input_nc=None,
-        submodule=None,
-        outermost=False,
-        innermost=False,
-        norm_layer=nn.BatchNorm2d,
-        use_dropout=False,
+        outer_nc: int,
+        inner_nc: int,
+        input_nc: int = None,
+        submodule: nn.Module = None,
+        outermost: bool = False,
+        innermost: bool = False,
+        norm_layer: nn.Module = nn.BatchNorm2d,
+        use_dropout: bool = False,
     ):
         """Construct a Unet submodule with skip connections.
 
-        Parameters:
-            outer_nc (int) -- the number of filters in the outer conv layer
-            inner_nc (int) -- the number of filters in the inner conv layer
-            input_nc (int) -- the number of channels in input images/features
-            submodule (UnetSkipConnectionBlock) -- previously defined submodules
-            outermost (bool)    -- if this module is the outermost module
-            innermost (bool)    -- if this module is the innermost module
-            norm_layer          -- normalization layer
-            use_dropout (bool)  -- if use dropout layers.
+        Args:
+            outer_nc (int): the number of filters in the outer conv layer
+            inner_nc (int): the number of filters in the inner conv layer
+            input_nc (int): the number of channels in input images/features
+            submodule (nn.Module): previously defined submodules
+            outermost (bool): if this module is the outermost module
+            innermost (bool): if this module is the innermost module
+            norm_layer (nn.Module): normalization layer
+            use_dropout (bool): if use dropout layers.
         """
         super(UnetSkipConnectionBlock, self).__init__()
         self.outermost = outermost
@@ -77,7 +77,12 @@ class UnetSkipConnectionBlock(nn.Module):
 
         self.model = nn.Sequential(*model)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward with skip connection, if this is not the outermost
+
+        Args:
+            x (torch.Tensor): the input tensor
+        """
         if self.outermost:
             return self.model(x)
         else:  # add skip connections

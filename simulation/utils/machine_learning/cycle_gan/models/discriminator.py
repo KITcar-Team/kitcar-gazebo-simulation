@@ -1,3 +1,7 @@
+from typing import List
+
+from torch import nn
+
 from simulation.utils.machine_learning.cycle_gan.models.helper import (
     get_norm_layer,
     init_net,
@@ -11,41 +15,49 @@ from simulation.utils.machine_learning.cycle_gan.models.no_patch_discriminator i
 
 
 def create_discriminator(
-    input_nc,
-    ndf,
-    netd,
-    n_layers_d=3,
-    norm="batch",
-    init_type="normal",
-    init_gain=0.02,
-    gpu_ids=[0],
-    use_sigmoid=False,
-):
+    input_nc: int,
+    ndf: int,
+    netd: str,
+    n_layers_d: int = 3,
+    norm: str = "batch",
+    init_type: str = "normal",
+    init_gain: float = 0.02,
+    gpu_ids: List[int] = [0],
+    use_sigmoid: bool = False,
+) -> nn.Module:
     """Create a discriminator
-
-    Parameters:
-        input_nc (int)     -- the number of channels in input images
-        ndf (int)          -- the number of filters in the first conv layer
-        netd (str)         -- the architecture's name: basic | n_layers | no_patch
-        n_layers_d (int)   -- the number of conv layers in the discriminator; effective when netd=='n_layers'
-        norm (str)         -- the type of normalization layers used in the network.
-        init_type (str)    -- the name of the initialization method.
-        init_gain (float)  -- scaling factor for normal, xavier and orthogonal.
-        gpu_ids (int list) -- which GPUs the network runs on: e.g., 0,1,2
 
     Returns a discriminator
 
     Our current implementation provides three types of discriminators:
         [basic]: 'PatchGAN' classifier described in the original pix2pix paper.
-        It can classify whether 70×70 overlapping patches are real or fake.
-        Such a patch-level discriminator architecture has fewer parameters
-        than a full-image discriminator and can work on arbitrarily-sized images
-        in a fully convolutional fashion.
+        It can classify whether 70Ãƒâ€”70 overlapping patches are real or fake.
+        Such a patch-level discriminator architecture has fewer parameters than
+        a full-image discriminator and can work on arbitrarily-sized images in a
+        fully convolutional fashion.
 
-        [n_layers]: With this mode, you can specify the number of conv layers in the discriminator
-        with the parameter <n_layers_d> (default=3 as used in [basic] (PatchGAN).)
+        [n_layers]: With this mode, you can specify the number of conv layers in
+        the discriminator with the parameter <n_layers_d> (default=3 as used in
+        [basic] (PatchGAN).)
 
-    The discriminator has been initialized by <init_net>. It uses Leaky RELU for non-linearity.
+    The discriminator has been initialized by <init_net>. It uses Leaky RELU
+    for non-linearity.
+
+    Args:
+        input_nc (int): # of input image channels: 3 for RGB and 1 for grayscale
+        ndf (int): # of discriminator filters in the first conv layer
+        netd (str): specify discriminator architecture [basic | n_layers |
+            no_patch]. The basic model is a 70x70 PatchGAN. n_layers allows you
+            to specify the layers in the discriminator
+        n_layers_d (int): number of layers in the discriminator network
+        norm (str): instance normalization or batch normalization [instance |
+            batch | none]
+        init_type (str): network initialization [normal | xavier | kaiming |
+            orthogonal]
+        init_gain (float): scaling factor for normal, xavier and orthogonal.
+        gpu_ids (List[int]): gpu ids: e.g. 0 0,1,2, 0,2. use -1 for CPU
+        use_sigmoid (bool): Use sigmoid activation at the end of discriminator
+            network
     """
     norm_layer = get_norm_layer(norm_type=norm)
 
