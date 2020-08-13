@@ -1,8 +1,10 @@
 import itertools
 import os
 from collections import OrderedDict
+from typing import List
 
 import torch
+from torch import nn
 from torch.autograd import Variable
 
 import simulation.utils.machine_learning.cycle_gan.models.discriminator
@@ -13,49 +15,99 @@ from simulation.utils.machine_learning.cycle_gan.util.image_pool import ImagePoo
 
 
 class CycleGANModel:
-    """
-    This class implements the CycleGAN model, for learning image-to-image translation without paired data.
+    """This class implements the CycleGAN model, for learning image-to-image
+    translation without paired data.
 
-    By default, it uses a '--netg resnet_9blocks' ResNet generator,
-    a '--netd basic' discriminator (PatchGAN introduced by pix2pix),
-    and a least-square GANs objective ('--gan_mode lsgan').
+    By default, it uses a '--netg resnet_9blocks' ResNet generator, a '--netd
+    basic' discriminator (PatchGAN introduced by pix2pix), and a least-square
+    GANs objective ('--gan_mode lsgan').
 
     CycleGAN paper: https://arxiv.org/pdf/1703.10593.pdf
     """
 
     def __init__(
         self,
-        gpu_ids=[0],
-        is_train=True,
-        cycle_noise_stddev=0,
-        checkpoints_dir="./checkpoints",
-        name="kitcar",
-        preprocess="resize_and_crop",
-        input_nc=1,
-        lambda_identity=0.5,
-        output_nc=1,
-        ngf=32,
-        netg="resnet_9blocks",
-        norm="batch",
-        no_dropout=False,
-        init_type="normal",
-        init_gain=0.02,
-        activation="TANH",
-        conv_layers_in_block=2,
-        dilations=None,
-        netd="basic",
-        n_layers_d=3,
-        use_sigmoid=False,
-        pool_size=50,
-        ndf=32,
-        gan_mode="lsgan",
-        beta1=0.5,
-        lr=0.0002,
-        lr_policy="linear",
-        lambda_a=10,
-        lambda_b=10,
+        input_nc: int = 1,
+        output_nc: int = 1,
+        gpu_ids: List[int] = [0],
+        is_train: bool = True,
+        preprocess: str = "resize_and_crop",
+        gan_mode: str = "lsgan",
+        netg: str = "resnet_9blocks",
+        netd: str = "basic",
+        ndf: int = 32,
+        ngf: int = 32,
+        n_layers_d: int = 3,
+        norm: str = "batch",
+        activation: str = "TANH",
+        use_sigmoid: bool = False,
+        conv_layers_in_block: int = 2,
+        cycle_noise_stddev: int = 0,
+        dilations: List[int] = None,
+        no_dropout: bool = False,
+        init_type: str = "normal",
+        init_gain: float = 0.02,
+        pool_size: int = 50,
+        beta1: float = 0.5,
+        lr: float = 0.0002,
+        lr_policy: str = "linear",
+        lambda_a: int = 10,
+        lambda_b: int = 10,
+        lambda_identity: float = 0.5,
+        checkpoints_dir: str = "./checkpoints",
+        name: str = "kitcar",
     ):
-        """Initialize the CycleGAN class."""
+        """Initialize the CycleGAN class.
+
+        Args:
+            input_nc (int): # of input image channels: 3 for RGB and 1 for
+                grayscale
+            output_nc (int): # of output image channels: 3 for RGB and 1 for
+                grayscale
+            gpu_ids: e.g. 0 0,1,2, 0,2. use -1 for CPU
+            is_train (bool): enable or disable training mode
+            preprocess (str): scaling and cropping of images at load time
+                [resize_and_crop | crop | scale_width | scale_width_and_crop |
+                none]
+            gan_mode (str): the type of GAN objective. [vanilla| lsgan |
+                wgangp]. vanilla GAN loss is the cross-entropy objective used in
+                the original GAN paper.
+            netg (str): specify generator architecture
+                [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]
+            netd (str): specify discriminator architecture [basic | n_layers |
+                no_patch]. The basic model is a 70x70 PatchGAN. n_layers allows
+                you to specify the layers in the discriminator
+            ndf (int): # of discriminator filters in the first conv layer
+            ngf (int): # of gen filters in the last conv layer
+            n_layers_d (int): number of layers in the discriminator network
+            norm (str): instance normalization or batch normalization [instance
+                | batch | none]
+            activation (str): Choose which activation to use. [TANH | HARDTANH |
+                SELU | CELU | SOFTSHRINK | SOFTSIGN]
+            use_sigmoid (bool): Use sigmoid activation at the end of
+                discriminator network
+            conv_layers_in_block (int): specify number of convolution layers per
+                resnet block
+            cycle_noise_stddev (int): Standard deviation of noise added to the
+                cycle input. Mean is 0.
+            dilations: dilation for individual conv layers in every resnet block
+            no_dropout (bool): no dropout for the generator
+            init_type (str): network initialization [normal | xavier | kaiming |
+                orthogonal]
+            init_gain (float): scaling factor for normal, xavier and orthogonal.
+            pool_size (int): the size of image buffer that stores previously
+                generated images
+            beta1 (float): momentum term of adam
+            lr (float): initial learning rate for adam
+            lr_policy (str): linear #learning rate policy. [linear | step |
+                plateau | cosine]
+            lambda_a (int): weight for loss of domain A
+            lambda_b (int): weight for loss of domain B
+            lambda_identity (float): weight for loss identity
+            checkpoints_dir (str): models are saved here
+            name (str): name of the experiment. It decides where to store
+                samples and models
+        """
         self.gpu_ids = gpu_ids
         self.is_train = is_train
         self.lr_policy = lr_policy
@@ -202,10 +254,11 @@ class CycleGANModel:
             self.optimizers.append(self.optimizer_g)
             self.optimizers.append(self.optimizer_d)
 
-    def set_input(self, input):
-        """Unpack input data from the dataloader and perform necessary pre-processing steps.
+    def set_input(self, input: dict) -> None:
+        """Unpack input data from the dataloader and perform necessary
+        pre-processing steps.
 
-        Parameters:
+        Args:
             input (dict): include the data itself and its metadata information.
         """
         # BtoA
@@ -213,8 +266,10 @@ class CycleGANModel:
         self.real_b = input["A"].to(self.device)
         self.image_paths = input["B_paths"]
 
-    def forward(self):
-        """Run forward pass; called by both functions <optimize_parameters> and <test>."""
+    def forward(self) -> None:
+        """Run forward pass; called by both functions <optimize_parameters> and
+        <test>.
+        """
         self.fake_b = self.netg_a(self.real_a)  # G_A(A)
         self.fake_a = self.netg_b(self.real_b)  # G_B(B)
 
@@ -243,15 +298,30 @@ class CycleGANModel:
 
     def setup(
         self,
-        verbose=False,
-        continue_train=False,
-        load_iter=0,
-        epoch="latest",
-        lr_policy="linear",
-        lr_decay_iters=50,
-        n_epochs=100,
-    ):
-        """Load and print networks; create schedulers"""
+        verbose: bool = False,
+        continue_train: bool = False,
+        load_iter: int = 0,
+        epoch: str = "latest",
+        lr_policy: str = "linear",
+        lr_decay_iters: int = 50,
+        n_epochs: int = 100,
+    ) -> None:
+        """Load and print networks; create schedulers
+
+        Args:
+            verbose (bool): if specified, print more debugging information
+            continue_train (bool): continue training: load the latest model
+            load_iter (int): which iteration to load? if load_iter > 0, the code
+                will load models by iter_[load_iter]; otherwise, the code will
+                load models by [epoch]
+            epoch (str): which epoch to load? set to latest to use latest cached
+                model
+            lr_policy (str): learning rate policy. [linear | step | plateau |
+                cosine]
+            lr_decay_iters (int): multiply by a gamma every lr_decay_iters
+                iterations
+            n_epochs (int): number of epochs with the initial learning rate
+        """
         if self.is_train:
             self.schedulers = [
                 helper.get_scheduler(optimizer, lr_policy, lr_decay_iters, n_epochs)
@@ -262,24 +332,27 @@ class CycleGANModel:
             self.load_networks(load_suffix)
         self.print_networks(verbose)
 
-    def eval(self):
+    def eval(self) -> None:
         """Make models eval mode during test time"""
         for name in self.model_names:
             if isinstance(name, str):
                 net = getattr(self, "net" + name)
                 net.eval()
 
-    def test(self):
+    def test(self) -> None:
         """Forward function used in test time.
 
-        This function wraps <forward> function in no_grad() so we don't save intermediate steps for backpropagation
-        It also calls <compute_visuals> to produce additional visualization results
+        This function wraps <forward> function in no_grad() so we don't save
+        intermediate steps for backpropagation It also calls <compute_visuals>
+        to produce additional visualization results
         """
         with torch.no_grad():
             self.forward()
 
-    def update_learning_rate(self):
-        """Update learning rates for all the networks; called at the end of every epoch"""
+    def update_learning_rate(self) -> None:
+        """Update learning rates for all the networks; called at the end of
+        every epoch
+        """
         old_lr = self.optimizers[0].param_groups[0]["lr"]
         for scheduler in self.schedulers:
             if self.lr_policy == "plateau":
@@ -290,16 +363,20 @@ class CycleGANModel:
         lr = self.optimizers[0].param_groups[0]["lr"]
         print("learning rate %.7f -> %.7f" % (old_lr, lr))
 
-    def get_current_visuals(self):
-        """Return visualization images. train.py will display these images with visdom, and save the images to a HTML"""
+    def get_current_visuals(self) -> dict:
+        """Return visualization images. train.py will display these images with
+        visdom, and save the images to a HTML
+        """
         visual_ret = dict()
         for name in self.visual_names:
             if isinstance(name, str):
                 visual_ret[name] = getattr(self, name)
         return visual_ret
 
-    def get_current_losses(self):
-        """Return training losses / errors. train.py will print out these errors on console, and save them to a file"""
+    def get_current_losses(self) -> OrderedDict:
+        """Return training losses / errors. train.py will print out these errors
+        on console, and save them to a file
+        """
         errors_ret = OrderedDict()
         for name in self.loss_names:
             if isinstance(name, str):
@@ -308,11 +385,12 @@ class CycleGANModel:
                 )  # float(...) works for both scalar tensor and float number
         return errors_ret
 
-    def save_networks(self, epoch):
+    def save_networks(self, epoch: int) -> None:
         """Save all the networks to the disk.
 
-        Parameters:
-            epoch (int) -- current epoch; used in the file name '%s_net_%s.pth' % (epoch, name)
+        Args:
+            epoch (int): current epoch; used in the file name '%s_net_%s.pth' %
+                (epoch, name):
         """
         for name in self.model_names:
             if isinstance(name, str):
@@ -326,8 +404,18 @@ class CycleGANModel:
                 else:
                     torch.save(net.cpu().state_dict(), save_path)
 
-    def __patch_instance_norm_state_dict(self, state_dict, module, keys, i=0):
-        """Fix InstanceNorm checkpoints incompatibility (prior to 0.4)"""
+    def __patch_instance_norm_state_dict(
+        self, state_dict: dict, module: nn.Module, keys: List[str], i: int = 0
+    ) -> None:
+        """Fix InstanceNorm checkpoints incompatibility (prior to 0.4)
+
+        Args:
+            state_dict (dict): a dict containing parameters from the saved model
+                files
+            module (nn.Module): the network loaded from a file
+            keys (List[int]): the keys inside the save file
+            i (int): current index in network structure
+        """
         key = keys[i]
         if i + 1 == len(keys):  # at the end, pointing to a parameter/buffer
             if module.__class__.__name__.startswith("InstanceNorm") and (
@@ -344,11 +432,12 @@ class CycleGANModel:
                 state_dict, getattr(module, key), keys, i + 1
             )
 
-    def load_networks(self, epoch):
+    def load_networks(self, epoch: int) -> None:
         """Load all the networks from the disk.
 
-        Parameters:
-            epoch (int) -- current epoch; used in the file name '%s_net_%s.pth' % (epoch, name)
+        Args:
+            epoch (int): current epoch; used in the file name '%s_net_%s.pth' %
+                (epoch, name):
         """
         for name in self.model_names:
             if isinstance(name, str):
@@ -371,11 +460,12 @@ class CycleGANModel:
                     self.__patch_instance_norm_state_dict(state_dict, net, key.split("."))
                 net.load_state_dict(state_dict)
 
-    def print_networks(self, verbose):
-        """Print the total number of parameters in the network and (if verbose) network architecture
+    def print_networks(self, verbose: bool) -> None:
+        """Print the total number of parameters in the network and (if verbose)
+        network architecture
 
-        Parameters:
-            verbose (bool) -- if verbose: print the network architecture
+        Args:
+            verbose (bool): print the network architecture
         """
         print("---------- Networks initialized -------------")
         for name in self.model_names:
@@ -392,11 +482,14 @@ class CycleGANModel:
                 )
         print("-----------------------------------------------")
 
-    def set_requires_grad(self, nets, requires_grad=False):
-        """Set requires_grad=False for all the networks to avoid unnecessary computations
-        Parameters:
-            nets (network list)   -- a list of networks
-            requires_grad (bool)  -- whether the networks require gradients or not
+    def set_requires_grad(self, nets: List[nn.Module], requires_grad: bool = False) -> None:
+        """Set requires_grad=False for all the networks to avoid unnecessary
+        computations :param nets: :type nets: network list :param requires_grad:
+        :type requires_grad: bool
+
+        Args:
+            nets: set require grads for this list of networks
+            requires_grad (bool): enable or disable grads
         """
         if not isinstance(nets, list):
             nets = [nets]
@@ -405,16 +498,18 @@ class CycleGANModel:
                 for param in net.parameters():
                     param.requires_grad = requires_grad
 
-    def backward_d_basic(self, netd, real, fake):
+    def backward_d_basic(
+        self, netd: nn.Module, real: torch.Tensor, fake: torch.Tensor
+    ) -> float:
         """Calculate GAN loss for the discriminator
 
-        Parameters:
-            netd (network)      -- the discriminator D
-            real (tensor array) -- real images
-            fake (tensor array) -- images generated by a generator
+        Return the discriminator loss. We also call loss_d.backward() to
+        calculate the gradients.
 
-        Return the discriminator loss.
-        We also call loss_d.backward() to calculate the gradients.
+        Args:
+            netd (nn.Module): the discriminator network
+            real (torch.Tensor): the real image
+            fake (torch.Tensor): the fake image
         """
         # Real
         pred_real = netd(real)
@@ -427,17 +522,17 @@ class CycleGANModel:
         loss_d.backward()
         return loss_d
 
-    def backward_d_a(self):
+    def backward_d_a(self) -> None:
         """Calculate GAN loss for discriminator D_A"""
         fake_b = self.fake_b_pool.query(self.fake_b)
         self.loss_d_a = self.backward_d_basic(self.netd_a, self.real_b, fake_b)
 
-    def backward_d_b(self):
+    def backward_d_b(self) -> None:
         """Calculate GAN loss for discriminator D_B"""
         fake_a = self.fake_a_pool.query(self.fake_a)
         self.loss_d_b = self.backward_d_basic(self.netd_b, self.real_a, fake_a)
 
-    def backward_g(self):
+    def backward_g(self) -> None:
         """Calculate the loss for generators G_A and G_B"""
         lambda_idt = self.lambda_identity
         lambda_a = self.lambda_a
@@ -477,8 +572,10 @@ class CycleGANModel:
         )
         self.loss_g.backward()
 
-    def optimize_parameters(self):
-        """Calculate losses, gradients, and update network weights; called in every training iteration"""
+    def optimize_parameters(self) -> None:
+        """Calculate losses, gradients, and update network weights; called in
+        every training iteration
+        """
         # forward
         self.forward()  # compute fake images and reconstruction images.
         # G_A and G_B
@@ -496,7 +593,14 @@ class CycleGANModel:
         self.optimizer_d.step()  # update D_A and D_B's weights
 
     @classmethod
-    def from_options(cls, **kwargs):
+    def from_options(cls, **kwargs: dict):
+        """This method applies all parameters from a dict to constructor of
+        CycleGanModel and returns the object
+
+        Args:
+            **kwargs (dict): the dict with keys matching the constructor
+                variables
+        """
         init_keys = cls.__init__.__code__.co_varnames  # Access the init functions arguments
         kwargs = {
             key: kwargs[key] for key in init_keys if key in kwargs

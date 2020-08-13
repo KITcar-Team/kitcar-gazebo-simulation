@@ -17,6 +17,19 @@ def load_unpaired_unlabeled_datasets(
     """Create dataloader for two unpaired and unlabeled datasets.
 
     E.g. used by cycle gan with data from two domains.
+
+    Args:
+        dir_A: path to images of domain A
+        dir_B: path to images of domain B
+        max_dataset_size (int): maximum amount of images to load; -1 means
+            infinity
+        batch_size (int): input batch size
+        serial_batches (bool): if true, takes images in order to make batches,
+            otherwise takes them randomly
+        num_threads (int): threads for loading data
+        grayscale_A (bool): transform domain A to gray images
+        grayscale_B (bool): transform domain B to gray images
+        transform_properties: dict containing properties for transforming images
     """
     max_dataset_size = float("inf") if max_dataset_size == -1 else max_dataset_size
 

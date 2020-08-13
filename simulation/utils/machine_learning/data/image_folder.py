@@ -27,10 +27,20 @@ IMG_EXTENSIONS = [
 
 
 def is_image_file(filename):
+    """Checks if a file is an image :param filename: the file name to check
+
+    Args:
+        filename:
+    """
     return any(filename.endswith(extension) for extension in IMG_EXTENSIONS)
 
 
 def make_dataset(dir, max_dataset_size=float("inf")):
+    """
+    Args:
+        dir: the directory of the dataset
+        max_dataset_size: the maximum amount of images to load
+    """
     images = []
     assert os.path.isdir(dir), "%s is not a valid directory" % dir
 

@@ -7,6 +7,7 @@ from subprocess import Popen, PIPE
 import numpy as np
 
 from . import util, html
+from .html import HTML
 
 if sys.version_info[0] == 2:
     VisdomExceptionBase = Exception
@@ -14,17 +15,26 @@ else:
     VisdomExceptionBase = ConnectionError
 
 
-def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
+def save_images(
+    webpage: HTML,
+    visuals: dict,
+    image_path: str,
+    aspect_ratio: float = 1.0,
+    width: int = 256,
+) -> None:
     """Save images to the disk.
 
-    Parameters:
-        webpage (the HTML class) -- the HTML webpage class that stores these images (see html.py for more details)
-        visuals (OrderedDict)    -- an ordered dictionary that stores (name, images (either tensor or numpy) ) pairs
-        image_path (str)         -- the string is used to create image paths
-        aspect_ratio (float)     -- the aspect ratio of saved images
-        width (int)              -- the images will be resized to width x width
+    This function will save images stored in 'visuals' to the HTML file
+    specified by 'webpage'.
 
-    This function will save images stored in 'visuals' to the HTML file specified by 'webpage'.
+    Args:
+        webpage (HTML): the HTML webpage class that stores these images (see
+            html.py for more details)
+        visuals (dict): an ordered dictionary that stores (name, images (either
+            tensor or numpy) ) pairs
+        image_path (str): the string is used to create image paths
+        aspect_ratio (float): the aspect ratio of saved images
+        width (int): the images will be resized to width x width
     """
     image_dir = webpage.get_image_dir()
     short_path = ntpath.basename(image_path[0])
@@ -45,30 +55,44 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
 
 
 class Visualizer:
-    """This class includes several functions that can display/save images and print/save logging information.
+    """This class includes several functions that can display/save images and
+    print/save logging information.
 
-    It uses a Python library 'visdom' for display, and a Python library 'dominate'
-    (wrapped in 'HTML') for creating HTML files with images.
+    It uses a Python library 'visdom' for display, and a Python library
+    'dominate' (wrapped in 'HTML') for creating HTML files with images.
     """
 
     def __init__(
         self,
-        display_id=1,
-        is_train=True,
-        no_html=False,
-        display_winsize=256,
-        name="kitcar",
-        display_port=8097,
-        display_server="http://localhost",
-        display_env="main",
-        checkpoints_dir="./checkpoints",
+        display_id: int = 1,
+        is_train: bool = True,
+        no_html: bool = False,
+        display_winsize: int = 256,
+        name: str = "kitcar",
+        display_port: int = 8097,
+        display_server: str = "http://localhost",
+        display_env: str = "main",
+        checkpoints_dir: str = "./checkpoints",
     ):
         """Initialize the Visualizer class
 
-        Step 1: Cache the training/test options
-        Step 2: connect to a visdom server
-        Step 3: create an HTML object for saving HTML filters
-        Step 4: create a logging file to store training losses
+        Step 1: Cache the training/test options Step 2: connect to a visdom
+        server Step 3: create an HTML object for saving HTML filters Step 4:
+        create a logging file to store training losses
+
+        Args:
+            display_id (int): window id of the web display
+            is_train (bool): enable or disable training mode
+            no_html (bool): do not save intermediate training results to
+                [opt.checkpoints_dir]/[opt.name]/web/
+            display_winsize (int): display window size for both visdom and HTML
+            name (str): name of the experiment. It decides where to store
+                samples and models
+            display_port (int): visdom port of the web display
+            display_server (str): visdom server of the web display
+            display_env (str): visdom display environment name (default is
+                "main")
+            checkpoints_dir (str): models are saved here
         """
         self.display_id = display_id
         self.use_html = is_train and not no_html
@@ -101,25 +125,27 @@ class Visualizer:
             now = time.strftime("%c")
             log_file.write("================ Training Loss (%s) ================\n" % now)
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset the self.saved status"""
         self.saved = False
 
-    def create_visdom_connections(self):
-        """If the program could not connect to Visdom server, this function will start a new server at port <
-        self.port > """
+    def create_visdom_connections(self) -> None:
+        """If the program could not connect to Visdom server, this function will
+        start a new server at port < self.port >
+        """
         cmd = sys.executable + " -m visdom.server -p %d &>/dev/null &" % self.port
         print("\n\nCould not connect to Visdom server. \n Trying to start a server....")
         print("Command: %s" % cmd)
         Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
 
-    def display_current_results(self, visuals, epoch, save_result):
-        """Display current results on visdom; save current results to an HTML file.
+    def display_current_results(self, visuals: dict, epoch: int, save_result: bool) -> None:
+        """Display current results on visdom; save current results to an HTML
+        file.
 
-        Parameters:
-            visuals (OrderedDict) - - dictionary of images to display or save
-            epoch (int) - - the current epoch
-            save_result (bool) - - if save the current results to an HTML file
+        Args:
+            visuals (dict): dictionary of images to display or save
+            epoch (int): the current epoch
+            save_result (bool): if save the current results to an HTML file
         """
         if self.display_id > 0:  # show images in the browser using visdom
             num_cols = 4
@@ -187,13 +213,16 @@ class Visualizer:
                 webpage.add_images(ims, txts, links, width=self.win_size)
             webpage.save()
 
-    def plot_current_losses(self, epoch, counter_ratio, losses):
-        """display the current losses on visdom display: dictionary of error labels and values
+    def plot_current_losses(self, epoch: int, counter_ratio: float, losses: dict) -> None:
+        """display the current losses on visdom display: dictionary of error
+        labels and values
 
-        Parameters:
-            epoch (int)           -- current epoch
-            counter_ratio (float) -- progress (percentage) in the current epoch, between 0 to 1
-            losses (OrderedDict)  -- training losses stored in the format of (name, float) pairs
+        Args:
+            epoch (int): current epoch
+            counter_ratio (float): progress (percentage) in the current epoch,
+                between 0 to 1
+            losses (dict): training losses stored in the format of (name, float)
+                pairs
         """
         if not hasattr(self, "plot_data"):
             self.plot_data = {"X": [], "Y": [], "legend": list(losses.keys())}
@@ -217,15 +246,21 @@ class Visualizer:
             self.create_visdom_connections()
 
     # losses: same format as |losses| of plot_current_losses
-    def print_current_losses(self, epoch, iters, losses, t_comp, t_data):
+    def print_current_losses(
+        self, epoch: int, iters: int, losses: dict, t_comp: float, t_data: float
+    ) -> None:
         """print current losses on console; also save the losses to the disk
 
-        Parameters:
-            epoch (int) -- current epoch
-            iters (int) -- current training iteration during this epoch (reset to 0 at the end of every epoch)
-            losses (OrderedDict) -- training losses stored in the format of (name, float) pairs
-            t_comp (float) -- computational time per data point (normalized by batch_size)
-            t_data (float) -- data loading time per data point (normalized by batch_size)
+        Args:
+            epoch (int): current epoch
+            iters (int): current training iteration during this epoch (reset to
+                0 at the end of every epoch)
+            losses (dict): training losses stored in the format of (name, float)
+                pairs
+            t_comp (float): computational time per data point (normalized by
+                batch_size)
+            t_data (float): data loading time per data point (normalized by
+                batch_size)
         """
         message = "(epoch: %d, iters: %d, time: %.3f, data: %.3f) " % (
             epoch,

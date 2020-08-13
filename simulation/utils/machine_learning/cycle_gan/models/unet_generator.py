@@ -1,4 +1,4 @@
-from torch import nn as nn
+from torch import nn as nn, Tensor
 
 from simulation.utils.machine_learning.cycle_gan.models.unet_block import (
     UnetSkipConnectionBlock,
@@ -10,24 +10,30 @@ class UnetGenerator(nn.Module):
 
     def __init__(
         self,
-        input_nc,
-        output_nc,
-        num_downs,
-        ngf=64,
-        norm_layer=nn.BatchNorm2d,
-        use_dropout=False,
+        input_nc: int,
+        output_nc: int,
+        num_downs: int,
+        ngf: int = 64,
+        norm_layer: nn.Module = nn.BatchNorm2d,
+        use_dropout: bool = False,
     ):
-        """Construct a Unet generator
-        Parameters:
-            input_nc (int)  -- the number of channels in input images
-            output_nc (int) -- the number of channels in output images
-            num_downs (int) -- the number of downsampling layers in UNet. For example, # if |num_downs| == 7,
-                                image of size 128x128 will become of size 1x1 # at the bottleneck
-            ngf (int)       -- the number of filters in the last conv layer
-            norm_layer      -- normalization layer
+        """Construct a Unet generator :param input_nc: :type input_nc: int
+        :param output_nc: :type output_nc: int :param num_downs: image of size
+        128x128 will become of size 1x1 # at the bottleneck :type num_downs: int
+        :param ngf: :type ngf: int :param norm_layer -- normalization layer:
 
-        We construct the U-Net from the innermost layer to the outermost layer.
-        It is a recursive process.
+        We construct the U-Net from the innermost layer to the outermost
+        layer. It is a recursive process.
+
+        Args:
+            input_nc (int): the number of channels in input images
+            output_nc (int): the number of channels in output images
+            num_downs (int): the number of downsampling layers in UNet. For
+                example, # if |num_downs| == 7, image of size 128x128 will
+                become of size 1x1 # at the bottleneck
+            ngf (int): the number of filters in the last conv layer
+            norm_layer (nn.Module): normalization layer
+            use_dropout (bool):
         """
         super(UnetGenerator, self).__init__()
         # construct unet structure
@@ -67,6 +73,10 @@ class UnetGenerator(nn.Module):
             norm_layer=norm_layer,
         )  # add the outermost layer
 
-    def forward(self, input):
-        """Standard forward"""
+    def forward(self, input: Tensor) -> Tensor:
+        """Standard forward.
+
+        Args:
+            input (Tensor): the input tensor
+        """
         return self.model(input)

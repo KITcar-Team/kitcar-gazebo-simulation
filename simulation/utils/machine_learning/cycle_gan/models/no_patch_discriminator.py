@@ -3,7 +3,15 @@ from torch import nn as nn
 
 
 class NoPatchDiscriminator(nn.Module):
-    def __init__(self, input_nc, norm_layer=nn.BatchNorm2d):
+    def __init__(self, input_nc: int, norm_layer: nn.Module = nn.BatchNorm2d):
+        """Construct a no patch gan discriminator :param input_nc: the number of
+        channels in input images :type input_nc: int :param norm_layer:
+        normalization layer
+
+        Args:
+            input_nc (int): the number of channels in input images
+            norm_layer (nn.Module): normalization layer
+        """
         super(NoPatchDiscriminator, self).__init__()
 
         # A bunch of convolutions one after another
@@ -34,7 +42,12 @@ class NoPatchDiscriminator(nn.Module):
 
         self.model = nn.Sequential(*model)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forwarding through network and avg pooling
+
+        Args:
+            x (torch.Tensor): the input tensor
+        """
         x = self.model(x)
         # Average pooling and flatten
         return torch.nn.functional.avg_pool2d(x, x.size()[2:]).view(x.size()[0], -1)

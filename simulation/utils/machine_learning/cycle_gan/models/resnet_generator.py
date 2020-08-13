@@ -1,17 +1,18 @@
 import functools
 from typing import Optional, List
 
-from torch import nn as nn
+from torch import nn as nn, Tensor
 
 from simulation.utils.machine_learning.cycle_gan.models.helper import get_activation_layer
 from simulation.utils.machine_learning.cycle_gan.models.resnet_block import ResnetBlock
 
 
 class ResnetGenerator(nn.Module):
-    """Resnet-based generator that consists of Resnet blocks between a few downsampling/upsampling operations.
+    """Resnet-based generator that consists of Resnet blocks between a few
+    downsampling/upsampling operations.
 
-    We adapt Torch code and idea from Justin Johnson's neural style transfer project(
-    https://github.com/jcjohnson/fast-neural-style)
+    We adapt Torch code and idea from Justin Johnson's neural style transfer
+    project(https://github.com/jcjohnson/fast-neural-style)
     """
 
     def __init__(
@@ -19,7 +20,7 @@ class ResnetGenerator(nn.Module):
         input_nc: int,
         output_nc: int,
         ngf: int = 64,
-        norm_layer=nn.BatchNorm2d,
+        norm_layer: nn.Module = nn.BatchNorm2d,
         use_dropout: bool = False,
         n_blocks: int = 6,
         padding_type: str = "reflect",
@@ -29,15 +30,18 @@ class ResnetGenerator(nn.Module):
     ):
         """Construct a Resnet-based generator
 
-        Parameters:
-            input_nc: the number of channels in input images
-            output_nc: the number of channels in output images
-            ngf: the number of filters in the last conv layer
-            norm_layer: normalization layer
-            use_dropout: if use dropout layers
-            n_blocks: the number of ResNet blocks
-            padding_type: the name of padding layer in conv layers: reflect | replicate | zero
-            conv_layers_in_block: Number of convolution layers in each block.
+        Args:
+            input_nc (int): the number of channels in input images
+            output_nc (int): the number of channels in output images
+            ngf (int): the number of filters in the last conv layer
+            norm_layer (nn.Module): normalization layer
+            use_dropout (bool): if use dropout layers
+            n_blocks (int): the number of ResNet blocks
+            padding_type (str): the name of padding layer in conv layers:
+                reflect | replicate | zero
+            activation (str):
+            conv_layers_in_block (int): Number of convolution layers in each
+                block.
             dilations: List of dilations for each conv layer.
         """
         assert n_blocks >= 0
@@ -106,6 +110,10 @@ class ResnetGenerator(nn.Module):
 
         self.model = nn.Sequential(*model)
 
-    def forward(self, input):
-        """Standard forward"""
+    def forward(self, input: Tensor) -> Tensor:
+        """Standard forward.
+
+        Args:
+            input (Tensor): the input tensor
+        """
         return self.model(input)
