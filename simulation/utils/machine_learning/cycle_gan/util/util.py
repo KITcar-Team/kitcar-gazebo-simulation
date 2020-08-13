@@ -2,18 +2,20 @@
 from __future__ import print_function
 
 import os
+from typing import List, Union
 
 import numpy as np
 import torch
 from PIL import Image
+from torch import nn
 
 
-def tensor2im(input_image, img_type=np.uint8):
-    """"Converts a Tensor array into a numpy image array.
+def tensor2im(input_image: np.ndarray, img_type: np.integer = np.uint8) -> np.ndarray:
+    """Converts a Tensor array into a numpy image array.
 
-    Parameters:
-        input_image (tensor) --  the input image tensor array
-        img_type (type)        --  the desired type of the converted numpy array
+    Args:
+        input_image (np.ndarray): the input image tensor array
+        img_type (np.integer): the desired type of the converted numpy array
     """
     if not isinstance(input_image, np.ndarray):
         if isinstance(input_image, torch.Tensor):  # get the data from a variable
@@ -25,18 +27,18 @@ def tensor2im(input_image, img_type=np.uint8):
             image_numpy = np.tile(image_numpy, (3, 1, 1))
         image_numpy = (
             (np.transpose(image_numpy, (1, 2, 0)) + 1) / 2.0 * 255.0
-        )  # post-processing: tranpose and scaling
+        )  # post-processing: transpose and scaling
     else:  # if it is a numpy array, do nothing
         image_numpy = input_image
     return image_numpy.astype(img_type)
 
 
-def diagnose_network(net, name="network"):
+def diagnose_network(net: nn.Module, name: str = "network") -> None:
     """Calculate and print the mean of average absolute(gradients)
 
-    Parameters:
-        net (torch network) -- Torch network
-        name (str) -- the name of the network
+    Args:
+        net (nn.Module): Torch network
+        name (str): the name of the network
     """
     mean = 0.0
     count = 0
@@ -50,13 +52,13 @@ def diagnose_network(net, name="network"):
     print(mean)
 
 
-def save_image(image_numpy, image_path, aspect_ratio=1.0):
+def save_image(image_numpy: np.ndarray, image_path: str, aspect_ratio: float = 1.0) -> None:
     """Save a numpy image to the disk
 
-    Parameters:
-        image_numpy (numpy array) -- input numpy array
-        image_path (str)          -- the path of the image
-        aspect_ratio (float)      -- the aspect ratio of the resulting image
+    Args:
+        image_numpy (np.ndarray): input numpy array
+        image_path (str): the path of the image
+        aspect_ratio (float): the aspect ratio of the resulting image
     """
 
     image_pil = Image.fromarray(image_numpy)
@@ -69,11 +71,11 @@ def save_image(image_numpy, image_path, aspect_ratio=1.0):
     image_pil.save(image_path)
 
 
-def mk_dirs(paths):
+def mk_dirs(paths: Union[str, List[str]]) -> None:
     """create empty directories if they don't exist
 
-    Parameters:
-        paths (str list) -- a list of directory paths
+    Args:
+        paths: a list of directory paths
     """
     if isinstance(paths, list) and not isinstance(paths, str):
         for path in paths:
@@ -82,11 +84,11 @@ def mk_dirs(paths):
         mkdir(paths)
 
 
-def mkdir(path):
+def mkdir(path: str) -> None:
     """create a single empty directory if it didn't exist
 
-    Parameters:
-        path (str) -- a single directory path
+    Args:
+        path (str): a single directory path
     """
     if not os.path.exists(path):
         os.makedirs(path)

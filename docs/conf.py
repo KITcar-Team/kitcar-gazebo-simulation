@@ -46,9 +46,13 @@ MOCK_MODULES = [
     "torch.utils",
     "torch.utils.data",
     "torch.optim",
+    "torch.optim.lr_scheduler",
+    "torch.optim.optimizer",
     "torch.autograd",
     "torchvision",
     "torchvision.transforms",
+    "dominate",
+    "dominate.tags",
 ]
 
 for mod_name in MOCK_MODULES:

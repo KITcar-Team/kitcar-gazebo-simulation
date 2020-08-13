@@ -10,7 +10,6 @@
 # would be long_name_frame.
 
 IMAGE_FOLDER=results/$1/test_latest/images
-IMG_PREFIX=$2
 FAKE_VIDEO=results/$1/test_latest/fake_B.mp4
 SIM_VIDEO=results/$1/test_latest/real_A.mp4
 STACKED_VIDEO=results/$1/test_latest/combined.mp4
