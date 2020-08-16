@@ -268,9 +268,11 @@ class Line(shapely.geometry.linestring.LineString):
         if not type(tf) is Transform:
             return NotImplemented
 
-        transformed = affinity.rotate(self, tf.get_angle(), use_radians=True, origin=[0, 0])
-        transformed = affinity.translate(transformed, tf.x, tf.y, tf.z)
+        # Get affine matrix, turn into list and restructure how shapely expects the input
+        flat = list(tf.to_affine_matrix().flatten())
+        flat = flat[0:3] + flat[4:7] + flat[8:11] + [flat[3], flat[7], flat[11]]
 
+        transformed = affinity.affine_transform(self, flat)
         return self.__class__(transformed.coords)
 
     def __eq__(self, line: "Line") -> bool:
