@@ -75,12 +75,12 @@ In line 8 a *Road* called road is constructed and in the following lines differe
 A *StraightRoad* with the default length of 1 m can be added by calling:
 
 >>> StraightRoad()
-StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], length=1)
+StraightRoad(id=0, transform=Transform(translation=Vector(0.0, 0.0, 0.0),rotation=Quaternion(1.0, 0.0, 0.0, 0.0)), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], length=1)
 
 If you want to pass a different length add the argument :py:attr:`length` in the constructor. For example a 2 m long *StraightRoad*:
 
 >>> StraightRoad(length=2)
-StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], length=2)
+StraightRoad(id=0, transform=Transform(translation=Vector(0.0, 0.0, 0.0),rotation=Quaternion(1.0, 0.0, 0.0, 0.0)), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], length=2)
 
 
 In the next section you are going to learn how to start the simulation with a custom road.
