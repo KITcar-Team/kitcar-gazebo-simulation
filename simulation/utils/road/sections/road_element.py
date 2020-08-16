@@ -33,7 +33,8 @@ class RoadElement:
             >>> normalized_el = RoadElementRect(center=Point(1, 1))  # normalize_x is True by default
             >>> normalized_el.set_transform(line)
             >>> normalized_el.transform
-            Transform(translation=(0.0, 1.0, 0.0),rotation=90.0 degrees)
+            Transform(translation=Vector(0.0, 1.0, 0.0),\
+rotation=Quaternion(0.7071067811865476, 0.0, 0.0, 0.7071067811865475))
             >>> normalized_el._center
             Point(1.0, 1.0, 0.0)
             >>> normalized_el.center
@@ -42,7 +43,8 @@ class RoadElement:
             ... # normalize_x is True by default
             >>> unnormalized_el.set_transform(line)
             >>> unnormalized_el.transform
-            Transform(translation=(0.0, 0.0, 0.0),rotation=90.0 degrees)
+            Transform(translation=Vector(0.0, 0.0, 0.0),\
+rotation=Quaternion(0.7071067811865476, 0.0, 0.0, 0.7071067811865475))
             >>> normalized_el._center
             Point(1.0, 1.0, 0.0)
             >>> normalized_el.center
