@@ -1,0 +1,16 @@
+dr_drift_256:
+  cmd: python3 train.py
+  deps:
+  - path: ../../../../data
+    md5: 2c2d7f4c171d81a0510d51a37b94ac6d.dir
+  outs:
+  - path: checkpoints/dr_drift_256/latest_net_d_a.pth
+    md5: 4cb82f0b3ee8492403214a2aff7ca809
+  - path: checkpoints/dr_drift_256/latest_net_d_b.pth
+    md5: b966392686c9ccae250768f8eef5e267
+  - path: checkpoints/dr_drift_256/latest_net_g_a.pth
+    md5: ea3ff5b4335f977cf71ff9105e088cf1
+  - path: checkpoints/dr_drift_256/latest_net_g_b.pth
+    md5: ba0de7426668224662e120067d5eee79
+  - path: checkpoints/dr_drift_256/loss_log.txt
+    md5: a28d439fc2328515ed64fcc35fcf5414

@@ -3,9 +3,13 @@ base:
   checkpoints_dir: ./checkpoints #models are saved here
   conv_layers_in_block: 2 #specify number of convolution layers per resnet block
   crop_size: 256 #then crop to this size
-  dataset_a: ./../../../../data/real_images/maschinen_halle #path to images of domain A (real images). Can be a list of folders
-  dataset_b: ./../../../../data/simulated_images/random_roads #path to images of domain B (simulated images). Can be a list of folders
-  dilations: None #dilation for individual conv layers in every resnet block
+  dataset_a:  #path to images of domain A (real images). Can be a list of folders
+    - ./../../../../data/real_images/maschinen_halle
+    # - ./../../../../data/real_images/maschinen_halle_parking
+    - ./../../../../data/real_images/maschinen_halle_no_obstacles
+  dataset_b: #path to images of domain B (simulated images). Can be a list of folders
+    - ./../../../../data/simulated_images/random_roads
+  dilations: [1,2] #dilation for individual conv layers in every resnet block
   display_winsize: 256 #display window size for both visdom and HTML
   epoch: latest #which epoch to load? set to latest to use latest cached model
   gpu_ids: [0] #gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU
@@ -17,15 +21,15 @@ base:
   lambda_identity: 0.5 #weight for loss identity
   load_iter: 0 #which iteration to load? if load_iter > 0, the code will load models by iter_[load_iter]; otherwise, the code will load models by [epoch]
   load_size: 256 #scale images to this size
-  mask: None #Path to a mask overlaid over all images
+  mask: resources/mask.png #Path to a mask overlaid over all images
   n_layers_d: 3 #number of layers in the discriminator network
-  name: kitcar #name of the experiment. It decides where to store samples and models
+  name: dr_drift_256 #name of the experiment. It decides where to store samples and models
   ndf: 32 # # of discriminator filters in the first conv layer
-  netd: basic #specify discriminator architecture [basic | n_layers | no_patch]. The basic model is a 70x70 PatchGAN. n_layers allows you to specify the layers in the discriminator
-  netg: resnet_9blocks #specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]
-  ngf: 32 # # of gen filters in the last conv layer
+  netd: no_patch #specify discriminator architecture [basic | n_layers | no_patch]. The basic model is a 70x70 PatchGAN. n_layers allows you to specify the layers in the discriminator
+  netg: resnet_12blocks #specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]
+  ngf: 16 # # of gen filters in the last conv layer
   no_dropout: True #no dropout for the generator
-  norm: batch #instance normalization or batch normalization [instance | batch | none]
+  norm: instance #instance normalization or batch normalization [instance | batch | none]
   output_nc: 1 # # of output image channels: 3 for RGB and 1 for grayscale
   preprocess: resize_and_crop #scaling and cropping of images at load time [resize_and_crop | crop | scale_width | scale_width_and_crop | none]
   serial_batches: False #if true, takes images in order to make batches, otherwise takes them randomly
@@ -52,13 +56,13 @@ train:
   save_latest_freq: 1000 #frequency of saving the latest results
   update_html_freq: 100 #frequency of saving training results to html
   beta1: 0.5 #momentum term of adam
-  batch_size: 1 #input batch size
+  batch_size: 12 #input batch size
   lr: 0.0002 #initial learning rate for adam
   lr_decay_iters: 50 #multiply by a gamma every lr_decay_iters iterations
   lr_policy: linear #learning rate policy. [linear | step | plateau | cosine]
   continue_train: False #continue training: load the latest model
-  n_epochs: 100 #number of epochs with the initial learning rate
-  n_epochs_decay: 100 #number of epochs to linearly decay learning rate to zero
+  n_epochs: 0 #number of epochs with the initial learning rate
+  n_epochs_decay: 20 #number of epochs to linearly decay learning rate to zero
 test:
   results_dir: ./results/ #saves results here.
   aspect_ratio: 1 #aspect ratio of result images
