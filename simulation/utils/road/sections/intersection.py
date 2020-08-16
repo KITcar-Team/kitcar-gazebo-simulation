@@ -197,15 +197,15 @@ class Intersection(RoadSection):
     def cp_sign_west(self, sign_dist):
         return (
             Vector(self.z - self.x - self.u)
-            - Vector((0.1 + sign_dist) * 1 / self.u.norm * self.u)
-            - Vector(Config.get_sign_road_padding() * 1 / self.v.norm * self.v)
+            - Vector((0.1 + sign_dist) * 1 / abs(self.u) * self.u)
+            - Vector(Config.get_sign_road_padding() * 1 / abs(self.v) * self.v)
         )
 
     def cp_surface_west(self):
         return (
             Vector(self.z - 0.5 * self.x - self.u)
-            - Vector(Config.get_surface_mark_dist() * 1 / self.u.norm * self.u)
-            - Vector(Config.TURN_SF_MARK_WIDTH / 2 * 1 / self.v.norm * self.v)
+            - Vector(Config.get_surface_mark_dist() * 1 / abs(self.u) * self.u)
+            - Vector(Config.TURN_SF_MARK_WIDTH / 2 * 1 / abs(self.v) * self.v)
         )
 
     def cp_sign_north(self, sign_dist):
@@ -216,15 +216,15 @@ class Intersection(RoadSection):
     def cp_sign_east(self, sign_dist):
         return (
             Vector(self.z + self.x + self.u)
-            + Vector((0.1 + sign_dist) * 1 / self.u.norm * self.u)
-            + Vector(Config.get_sign_road_padding() * 1 / self.v.norm * self.v)
+            + Vector((0.1 + sign_dist) * 1 / abs(self.u) * self.u)
+            + Vector(Config.get_sign_road_padding() * 1 / abs(self.v) * self.v)
         )
 
     def cp_surface_east(self):
         return (
             Vector(self.z + 0.5 * self.x + self.u)
-            + Vector(Config.get_surface_mark_dist() * 1 / self.u.norm * self.u)
-            + Vector(Config.TURN_SF_MARK_WIDTH / 2 * 1 / self.v.norm * self.v)
+            + Vector(Config.get_surface_mark_dist() * 1 / abs(self.u) * self.u)
+            + Vector(Config.TURN_SF_MARK_WIDTH / 2 * 1 / abs(self.v) * self.v)
         )
 
     def get_points(self):

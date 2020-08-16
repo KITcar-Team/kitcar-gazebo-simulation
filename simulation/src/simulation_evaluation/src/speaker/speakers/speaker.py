@@ -99,7 +99,7 @@ class Speaker:
     @property
     def arc_length(self):
         """Position of the car projected on the middle line (== Length driven so far)."""
-        return self.middle_line.project(self.car_pose)
+        return self.middle_line.project(self.car_pose.position)
 
     @functools.cached_property
     def section_intervals(self) -> List[Tuple[float, float]]:
