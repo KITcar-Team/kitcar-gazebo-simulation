@@ -1,0 +1,11 @@
+stages:
+  dr_drift_256:
+    cmd: python3 train.py
+    deps:
+    - ../../../../data
+    outs:
+    - checkpoints/dr_drift_256/latest_net_d_a.pth
+    - checkpoints/dr_drift_256/latest_net_d_b.pth
+    - checkpoints/dr_drift_256/latest_net_g_a.pth
+    - checkpoints/dr_drift_256/latest_net_g_b.pth
+    - checkpoints/dr_drift_256/loss_log.txt
