@@ -45,7 +45,7 @@ class CarStateNodeTest(unittest.TestCase, NodeBase):
         )
 
     def assert_approx_equal_pose(self, pose, pose2):
-        self.assertAlmostEqual(Vector(pose), Vector(pose2))
+        self.assertAlmostEqual(Vector(pose.position), Vector(pose2.position))
         self.assertAlmostEqual(
             pose.get_angle(), pose2.get_angle(), delta=math.radians(0.02)
         )
@@ -84,7 +84,7 @@ class CarStateNodeTest(unittest.TestCase, NodeBase):
         rospy.sleep(self.param.sleep_time)
 
         # Get initial z
-        self.init_z = self.last_received_pose.z
+        self.init_z = self.last_received_pose.position.z
 
     def set_twist(self, *args):
         req = SetModelTwist()
@@ -99,9 +99,9 @@ class CarStateNodeTest(unittest.TestCase, NodeBase):
 
     def set_complete_pose(self, pose: Pose):
         self.set_pose(
-            (SetModelPose.POSITION_X, pose.x),
-            (SetModelPose.POSITION_Y, pose.y),
-            (SetModelPose.POSITION_Z, pose.z),
+            (SetModelPose.POSITION_X, pose.position.x),
+            (SetModelPose.POSITION_Y, pose.position.y),
+            (SetModelPose.POSITION_Z, pose.position.z),
             (SetModelPose.ORIENTATION_W, pose.orientation.w),
             (SetModelPose.ORIENTATION_X, pose.orientation.x),
             (SetModelPose.ORIENTATION_Y, pose.orientation.y),
@@ -176,7 +176,9 @@ class CarStateNodeTest(unittest.TestCase, NodeBase):
         frame = Polygon(self.last_frame.points)
         cone = Polygon(self.last_cone.points)
 
-        self.assertTrue(frame.contains(pose))  # Frame should contains the vehicles position
+        self.assertTrue(
+            frame.contains(pose.position)
+        )  # Frame should contains the vehicles position
         self.assertTrue(
             frame.intersects(cone)
         )  # View cone should start inside the cars frame and therefore also intersect

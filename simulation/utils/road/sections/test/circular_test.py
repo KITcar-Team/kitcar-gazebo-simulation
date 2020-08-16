@@ -23,7 +23,7 @@ class ModuleTest(unittest.TestCase):
 
         lca = LeftCircularArc(radius=RADIUS, angle=ANGLE, transform=TF)
         self.assertEqual(lca.__class__.TYPE, road_section_type.LEFT_CIRCULAR_ARC)
-        self.assertAlmostEqual(lca.middle_line.get_points()[0], Point(TF))
+        self.assertAlmostEqual(lca.middle_line.get_points()[0], Point(TF.translation))
         self.assertAlmostEqual(lca.middle_line.get_points()[-1], Point(0, 2))
         self.assert_line_is_arc(lca.middle_line, Point(0, 1), RADIUS, ANGLE)
 
@@ -34,7 +34,7 @@ class ModuleTest(unittest.TestCase):
 
         rca = RightCircularArc(radius=RADIUS, angle=ANGLE, transform=TF)
         self.assertEqual(rca.__class__.TYPE, road_section_type.RIGHT_CIRCULAR_ARC)
-        self.assertAlmostEqual(rca.middle_line.get_points()[0], Point(TF))
+        self.assertAlmostEqual(rca.middle_line.get_points()[0], Point(TF.translation))
         self.assertAlmostEqual(rca.middle_line.get_points()[-1], Point(2, 2))
         self.assert_line_is_arc(rca.middle_line, Point(2, 1), RADIUS, ANGLE)
 

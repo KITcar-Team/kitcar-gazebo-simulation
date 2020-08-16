@@ -68,7 +68,7 @@ class Road:
         if section.id > 0:
             # Pass ending of last section as the transformation to next section
             ending: Tuple[Pose, float] = self.sections[-1].get_ending()
-            section.transform = Transform(ending[0], ending[0].get_angle())
+            section.transform = Transform(ending[0], ending[0].orientation)
             section.prev_length = self.length
         self.length = self.length + section.middle_line.length
         self.sections.append(section)

@@ -198,10 +198,10 @@ class VehicleSimulationLinkNode(NodeBase):
                 tf = self.initial_tf * self.vehicle_world_tf
 
             new_vals = []
-            new_vals.append((SetModelPoseMsg.POSITION_X, tf.x))
-            new_vals.append((SetModelPoseMsg.POSITION_Y, tf.y))
+            new_vals.append((SetModelPoseMsg.POSITION_X, tf.translation.x))
+            new_vals.append((SetModelPoseMsg.POSITION_Y, tf.translation.y))
             if self.param.set_z_pose:
-                new_vals.append((SetModelPoseMsg.POSITION_Z, tf.z))
+                new_vals.append((SetModelPoseMsg.POSITION_Z, tf.translation.z))
             new_vals.append((SetModelPoseMsg.ORIENTATION_W, tf.rotation.w))
             new_vals.append((SetModelPoseMsg.ORIENTATION_X, tf.rotation.x))
             new_vals.append((SetModelPoseMsg.ORIENTATION_Y, tf.rotation.y))

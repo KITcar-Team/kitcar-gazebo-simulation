@@ -68,7 +68,7 @@ class SensorTofNode(NodeBase):
             Vector(p)
             for p in sensor_msgs.point_cloud2.read_points(pc, field_names=("x", "y", "z"))
         )
-        out_msg.range = min(v.norm for v in vecs)
+        out_msg.range = min(abs(v) for v in vecs)
 
         rospy.logdebug(f"Pointcloud received in {rospy.get_name()}:{vecs}")
         rospy.logdebug(f"Publishing range: {out_msg.range}")
