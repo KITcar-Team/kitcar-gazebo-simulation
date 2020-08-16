@@ -14,7 +14,7 @@ import numpy as np
 from contextlib import suppress
 
 
-class Transform(Vector):
+class Transform:
     """Transformation class consisting of a translation and a rotation.
 
     A Transform object can be used to easily interchange between multiple coordinate systems
@@ -48,7 +48,7 @@ class Transform(Vector):
         with suppress(IndexError, NotImplementedError, TypeError):
             if type(args[1]) == Quaternion:
                 self.rotation = args[1]
-                super(Transform, self).__init__(args[0])
+                self.translation = Vector(args[0])
                 return
 
         # Try to initialize geometry pose
@@ -89,21 +89,25 @@ class Transform(Vector):
     def inverse(self) -> "Transform":
         """Inverse transformation."""
         return Transform(
-            -1 * Vector(self).rotated(-self.get_angle()), -1 * self.get_angle()
+            -1 * Vector(self.translation).rotated(self.rotation.inverse),
+            self.rotation.inverse,
         )
 
-    def get_angle(self) -> float:
+    def get_angle(self, axis=Vector(0, 0, 1)) -> float:
         """Angle of rotation.
+
+        Args:
+            axis: Axis the rotation is projected onto.
 
         Returns:
             The angle that a vector is rotated, when this transformation is applied."""
 
-        # Project the rotation axis onto the z axis to get the amount of the rotation \
-        # that is in z direction!
-        # Also the quaternions rotation axis is sometimes (0,0,-1) at which point \
+        # Project the rotation axis onto the rotation axis to get the amount of the rotation \
+        # that is in the axis' direction!
+        # Also the quaternions rotation axis is sometimes flipped at which point \
         # the angles flip their sign,
-        # taking the scalar product of the axis and z fixes that as well
-        return Vector(self.rotation.axis) * Vector(0, 0, 1) * self.rotation.radians
+        # taking the scalar product with the axis fixes that as well
+        return Vector(self.rotation.axis) * axis * self.rotation.radians
 
     def to_geometry_msg(self) -> geometry_msgs.Transform:
         """Convert transform to ROS geometry_msg.
@@ -111,7 +115,7 @@ class Transform(Vector):
         Returns:
             This transformation as a geometry_msgs/Transform.
         """
-        vector = super(Transform, self).to_geometry_msg()
+        vector = self.translation.to_geometry_msg()
         rotation = geometry_msgs.Quaternion(
             self.rotation.x, self.rotation.y, self.rotation.z, self.rotation.w
         )
@@ -121,6 +125,12 @@ class Transform(Vector):
         tf.rotation = rotation
 
         return tf
+
+    def to_affine_matrix(self) -> np.ndarray:
+        """Get transformation as an affine matrix."""
+        return np.column_stack(
+            (self.rotation.rotation_matrix, self.translation.to_numpy(),)
+        )
 
     def __mul__(self, tf: "Transform") -> "Transform":
         """Multiplication of transformations.
@@ -138,8 +148,8 @@ class Transform(Vector):
         """
         if tf.__class__ == self.__class__:
             return self.__class__(
-                Vector(self) + Vector(tf).rotated(self.get_angle()),
-                self.get_angle() + tf.get_angle(),
+                Vector(self.translation) + Vector(tf.translation).rotated(self.rotation),
+                self.rotation * tf.rotation,
             )
 
         return NotImplemented
@@ -148,13 +158,13 @@ class Transform(Vector):
         if self.__class__ != tf.__class__:
             return NotImplemented
         return tf.rotation.normalised == self.rotation.normalised and Vector(
-            self
-        ) == Vector(tf)
+            self.translation
+        ) == Vector(tf.translation)
 
     def __repr__(self) -> str:
         return (
-            f"Transform(translation={self.x, self.y, self.z},"
-            f"rotation={round(math.degrees(self.get_angle()),4)} degrees)"
+            f"Transform(translation={repr(self.translation)},"
+            f"rotation={repr(self.rotation)})"
         )
 
     def __hash__(self):

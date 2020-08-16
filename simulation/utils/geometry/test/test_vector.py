@@ -18,15 +18,15 @@ class ModuleTest(unittest.TestCase):
         self.assertListEqual([p1.x, p1.y, p1.z], [1, 3, 0])
 
         examples = [
-            ([-1, -2], [-1, -2, 0]),
-            (np.array([1, 2, 4]), [1, 2, 4]),
-            (np.array([1, 2]), [1, 2, 0]),
-            (g_msgs.Vector3(1, 3, 4), [1, 3, 4]),
+            (Vector([-1, -2]), [-1, -2, 0]),
+            (Vector(np.array([1, 2, 4])), [1, 2, 4]),
+            (Vector(np.array([1, 2])), [1, 2, 0]),
+            (Vector.from_geometry_msg(g_msgs.Vector3(1, 3, 4)), [1, 3, 4]),
         ]
 
         for example in examples:
             # Point initialization
-            v = Vector(example[0])
+            v = example[0]
             self.assertListEqual([v.x, v.y, v.z], example[1])
 
         # r, phi
