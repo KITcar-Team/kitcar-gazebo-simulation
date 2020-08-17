@@ -63,6 +63,7 @@ train:
   continue_train: False #continue training: load the latest model
   n_epochs: 0 #number of epochs with the initial learning rate
   n_epochs_decay: 20 #number of epochs to linearly decay learning rate to zero
+  no_flip: False  # Flip 50% of all training images vertically
 test:
   results_dir: ./results/ #saves results here.
   aspect_ratio: 1 #aspect ratio of result images

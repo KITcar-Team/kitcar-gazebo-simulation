@@ -27,6 +27,7 @@ if __name__ == "__main__":
         "crop_size": opt["crop_size"],
         "preprocess": opt["preprocess"],
         "mask": opt["mask"],
+        "no_flip": opt["no_flip"],
     }
     dataset_a, dataset_b = ml_data.load_unpaired_unlabeled_datasets(
         opt["dataset_a"],
