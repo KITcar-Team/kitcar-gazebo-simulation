@@ -3,12 +3,6 @@ base:
   checkpoints_dir: ./checkpoints #models are saved here
   conv_layers_in_block: 2 #specify number of convolution layers per resnet block
   crop_size: 256 #then crop to this size
-  dataset_a:  #path to images of domain A (real images). Can be a list of folders
-    - ./../../../../data/real_images/maschinen_halle
-    # - ./../../../../data/real_images/maschinen_halle_parking
-    - ./../../../../data/real_images/maschinen_halle_no_obstacles
-  dataset_b: #path to images of domain B (simulated images). Can be a list of folders
-    - ./../../../../data/simulated_images/random_roads
   dilations: [1,2] #dilation for individual conv layers in every resnet block
   display_winsize: 256 #display window size for both visdom and HTML
   epoch: latest #which epoch to load? set to latest to use latest cached model
@@ -41,6 +35,12 @@ base:
   gan_mode: lsgan #the type of GAN objective. [vanilla| lsgan | wgangp]. vanilla GAN loss is the cross-entropy objective used in the original GAN paper.
   max_dataset_size: -1 #maximum amount of images to load; -1 means infinity
 train:
+  dataset_a:  #path to images of domain A (real images). Can be a list of folders
+    - ./../../../../data/real_images/maschinen_halle
+    # - ./../../../../data/real_images/maschinen_halle_parking
+    - ./../../../../data/real_images/maschinen_halle_no_obstacles
+  dataset_b: #path to images of domain B (simulated images). Can be a list of folders
+    - ./../../../../data/simulated_images/random_roads
   display_env: main #visdom display environment name (default is "main")
   display_freq: 5 #frequency of showing training results on screen
   display_id: 1 #window id of the web display
@@ -65,6 +65,10 @@ train:
   n_epochs_decay: 20 #number of epochs to linearly decay learning rate to zero
   no_flip: False  # Flip 50% of all training images vertically
 test:
+  dataset_a:  #path to images of domain A (real images). Can be a list of folders
+    - ./../../../../data/real_images/maschinen_halle_parking
+  dataset_b: #path to images of domain B (simulated images). Can be a list of folders
+    - ./../../../../data/simulated_images/complex_road
   results_dir: ./results/ #saves results here.
   aspect_ratio: 1 #aspect ratio of result images
   is_train: False # enable or disable training mode
