@@ -3,6 +3,7 @@ stages:
     cmd: python3 train.py
     deps:
     - ../../../../data
+    - config.yaml
     outs:
     - checkpoints/dr_drift_256/latest_net_d_a.pth
     - checkpoints/dr_drift_256/latest_net_d_b.pth
