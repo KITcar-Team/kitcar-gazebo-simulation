@@ -7,6 +7,7 @@ import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
 from simulation.utils.machine_learning.cycle_gan.util.visualizer import Visualizer
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Read config file.")
     parser.add_argument(
@@ -41,7 +42,7 @@ if __name__ == "__main__":
         transform_properties=tf_properties,
     )  # create datasets for each domain (A and B)
 
-    dataset_size = min(
+    dataset_size = max(
         len(dataset_a), len(dataset_b)
     )  # get the number of images in the dataset.
     print("The number of training images = %d" % dataset_size)
@@ -82,13 +83,15 @@ if __name__ == "__main__":
         visualizer.reset()  # reset the visualizer: make sure it saves the results to HTML at least once every epoch
 
         # Get random permutations of items from both datasets
-        for (A, A_paths), (B, B_paths) in zip(
-            dataset_a, dataset_b
+        for (A, A_paths), (B, B_paths) in ml_data.sample_generator(
+            dataset_a, dataset_b, n_samples=dataset_size // opt["batch_size"]
         ):  # inner loop within one epoch
+
             iter_start_time = time.time()  # timer for computation per iteration
 
             total_iters += opt["batch_size"]
             epoch_iter += opt["batch_size"]
+
             model.set_input(
                 {"A": A, "A_paths": A_paths, "B": B, "B_paths": B_paths}
             )  # unpack data from dataset and apply preprocessing
