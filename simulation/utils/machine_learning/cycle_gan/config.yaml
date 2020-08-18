@@ -22,7 +22,7 @@ base:
   netd: basic #specify discriminator architecture [basic | n_layers | no_patch]. The basic model is a 70x70 PatchGAN. n_layers allows you to specify the layers in the discriminator
   netg: resnet_9blocks #specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]
   ngf: 16 # # of gen filters in the last conv layer
-  no_dropout: True #no dropout for the generator
+  no_dropout: False #no dropout for the generator
   norm: instance #instance normalization or batch normalization [instance | batch | none]
   output_nc: 1 # # of output image channels: 3 for RGB and 1 for grayscale
   preprocess: resize_and_crop #scaling and cropping of images at load time [resize_and_crop | crop | scale_width | scale_width_and_crop | none]
@@ -61,7 +61,7 @@ train:
   lr_decay_iters: 2 #multiply by a gamma every lr_decay_iters iterations
   lr_policy: step #learning rate policy. [linear | step | plateau | cosine]
   continue_train: False #continue training: load the latest model
-  n_epochs: 10 # number of epochs with the initial learning rate
+  n_epochs: 5 # number of epochs with the initial learning rate
   n_epochs_decay: 0 #number of epochs to linearly decay learning rate to zero
   no_flip: False  # Flip 50% of all training images vertically
 test:
