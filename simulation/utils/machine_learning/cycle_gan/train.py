@@ -57,6 +57,7 @@ if __name__ == "__main__":
         epoch=opt["epoch"],
         lr_policy=opt["lr_policy"],
         lr_decay_iters=opt["lr_decay_iters"],
+        lr_step_factor=opt["lr_step_factor"],
         n_epochs=opt["n_epochs"],
     )  # regular setup: load and print networks; create schedulers
     visualizer = Visualizer(
