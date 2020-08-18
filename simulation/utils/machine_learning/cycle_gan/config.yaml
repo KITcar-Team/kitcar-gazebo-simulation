@@ -60,6 +60,7 @@ train:
   lr: 0.0005 #initial learning rate for adam
   lr_decay_iters: 2 #multiply by a gamma every lr_decay_iters iterations
   lr_policy: step #learning rate policy. [linear | step | plateau | cosine]
+  lr_step_factor: 0.1  # Multiplication factor at every step in the step scheduler
   continue_train: False #continue training: load the latest model
   n_epochs: 5 # number of epochs with the initial learning rate
   n_epochs_decay: 0 #number of epochs to linearly decay learning rate to zero
