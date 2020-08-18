@@ -4,15 +4,15 @@ dr_drift_256:
   - path: ../../../../data
     md5: b9808048d4c92ca2b25fd3700b1d7516.dir
   - path: config.yaml
-    md5: 998dcab26264cc8b7271658b2b217b72
+    md5: e80e6bd84bdff5439ba1321634677acc
   outs:
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
-    md5: 45038c26845f0791c1d9cc534b0085ab
+    md5: a880ada179e576c23258bcea70c6a2c5
   - path: checkpoints/dr_drift_256/latest_net_d_b.pth
-    md5: d07cc30c7bab17f70a7db752fbd88f73
+    md5: 53d378182d74600b4396314c0057eda3
   - path: checkpoints/dr_drift_256/latest_net_g_a.pth
-    md5: 87c504723434f5a0c74b7308ce6d46de
+    md5: 0b05c3123dae22276a04f21adf3f0694
   - path: checkpoints/dr_drift_256/latest_net_g_b.pth
-    md5: e669d2c2394394ab5457424749823b2f
+    md5: 19141e67c941c83bdbf1e7a1a37378ad
   - path: checkpoints/dr_drift_256/loss_log.txt
-    md5: ddbcbbb7f4f2d719ac0727a8e097da49
+    md5: 269efbd4682db2cdbd0553a07903de8e

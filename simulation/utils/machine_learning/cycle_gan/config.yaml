@@ -21,8 +21,8 @@ base:
   ndf: 32 # # of discriminator filters in the first conv layer
   netd: basic #specify discriminator architecture [basic | n_layers | no_patch]. The basic model is a 70x70 PatchGAN. n_layers allows you to specify the layers in the discriminator
   netg: resnet_9blocks #specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]
-  ngf: 16 # # of gen filters in the last conv layer
-  no_dropout: False #no dropout for the generator
+  ngf: 32 # # of gen filters in the last conv layer
+  no_dropout: True #no dropout for the generator
   norm: instance #instance normalization or batch normalization [instance | batch | none]
   output_nc: 1 # # of output image channels: 3 for RGB and 1 for grayscale
   preprocess: resize_and_crop #scaling and cropping of images at load time [resize_and_crop | crop | scale_width | scale_width_and_crop | none]
@@ -56,7 +56,7 @@ train:
   save_latest_freq: 1000 #frequency of saving the latest results
   update_html_freq: 100 #frequency of saving training results to html
   beta1: 0.5 #momentum term of adam
-  batch_size: 10 #input batch size
+  batch_size: 8 #input batch size
   lr: 0.0005 #initial learning rate for adam
   lr_decay_iters: 2 #multiply by a gamma every lr_decay_iters iterations
   lr_policy: step #learning rate policy. [linear | step | plateau | cosine]
