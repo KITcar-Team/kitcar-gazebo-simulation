@@ -19,8 +19,8 @@ base:
   n_layers_d: 3 #number of layers in the discriminator network
   name: dr_drift_256 #name of the experiment. It decides where to store samples and models
   ndf: 32 # # of discriminator filters in the first conv layer
-  netd: no_patch #specify discriminator architecture [basic | n_layers | no_patch]. The basic model is a 70x70 PatchGAN. n_layers allows you to specify the layers in the discriminator
-  netg: resnet_12blocks #specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]
+  netd: basic #specify discriminator architecture [basic | n_layers | no_patch]. The basic model is a 70x70 PatchGAN. n_layers allows you to specify the layers in the discriminator
+  netg: resnet_9blocks #specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]
   ngf: 16 # # of gen filters in the last conv layer
   no_dropout: True #no dropout for the generator
   norm: instance #instance normalization or batch normalization [instance | batch | none]
@@ -31,7 +31,7 @@ base:
   verbose: False #if specified, print more debugging information
   cycle_noise_stddev: 0 #Standard deviation of noise added to the cycle input. Mean is 0.
   use_sigmoid: False #Use sigmoid activation at the end of discriminator network
-  pool_size: 50 #the size of image buffer that stores previously generated images
+  pool_size: 75 #the size of image buffer that stores previously generated images
   gan_mode: lsgan #the type of GAN objective. [vanilla| lsgan | wgangp]. vanilla GAN loss is the cross-entropy objective used in the original GAN paper.
   max_dataset_size: -1 #maximum amount of images to load; -1 means infinity
 train:
@@ -56,13 +56,13 @@ train:
   save_latest_freq: 1000 #frequency of saving the latest results
   update_html_freq: 100 #frequency of saving training results to html
   beta1: 0.5 #momentum term of adam
-  batch_size: 12 #input batch size
-  lr: 0.0002 #initial learning rate for adam
-  lr_decay_iters: 50 #multiply by a gamma every lr_decay_iters iterations
-  lr_policy: linear #learning rate policy. [linear | step | plateau | cosine]
+  batch_size: 10 #input batch size
+  lr: 0.0005 #initial learning rate for adam
+  lr_decay_iters: 2 #multiply by a gamma every lr_decay_iters iterations
+  lr_policy: step #learning rate policy. [linear | step | plateau | cosine]
   continue_train: False #continue training: load the latest model
-  n_epochs: 0 #number of epochs with the initial learning rate
-  n_epochs_decay: 20 #number of epochs to linearly decay learning rate to zero
+  n_epochs: 10 # number of epochs with the initial learning rate
+  n_epochs_decay: 0 #number of epochs to linearly decay learning rate to zero
   no_flip: False  # Flip 50% of all training images vertically
 test:
   dataset_a:  #path to images of domain A (real images). Can be a list of folders
