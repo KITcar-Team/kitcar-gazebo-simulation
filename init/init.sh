@@ -64,14 +64,14 @@ case "$option" in
     # Install python packages
     pip_install_reqs requirements.txt
 
-    read -p "Do you want to install python packages needed to build the documentation? " -n 1 -r
+    read -p "Do you want to install python packages necessary to build the documentation? [y/n]" -n 1 -r
     echo    # (optional) move to a new line
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
       pip_install_reqs requirements_documentation.txt
     fi
 
-    read -p "Do you want to install python packages needed for machine learning? " -n 1 -r
+    read -p "Do you want to install python packages necessary for machine learning? [y/n]" -n 1 -r
     echo    # (optional) move to a new line
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
