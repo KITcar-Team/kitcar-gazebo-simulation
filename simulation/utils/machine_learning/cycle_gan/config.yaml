@@ -5,7 +5,7 @@ base:
   crop_size: 256 #then crop to this size
   dilations: [1,2] #dilation for individual conv layers in every resnet block
   epoch: latest #which epoch to load? set to latest to use latest cached model
-  gpu_ids: [0] #gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU
+  gpu_ids: [0] #gpu ids: e.g. 0  0,1,2, 0,2. leave blank for CPU
   init_gain: 0.02 #scaling factor for normal, xavier and orthogonal.
   init_type: normal #network initialization [normal | xavier | kaiming | orthogonal]
   input_nc: 1 # # of input image channels: 3 for RGB and 1 for grayscale
