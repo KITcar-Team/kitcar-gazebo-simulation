@@ -90,7 +90,7 @@ and you know that it has travelled 1 meter so far, \
 you can get the approximate position and orientation as a pose:
 
 >>> half_circle.interpolate_pose(arc_length = 1)
-Pose(position=(0.540066444297505, -0.8412872782351057, 0.0),orientation= -147.6563 degrees)
+Pose(position=POINT Z (0.5400664442975051 -0.8412872782351057 0),orientation= 2.5770877236478835)
 
 Transform
 ^^^^^^^^^
@@ -116,9 +116,9 @@ Another great strength of transforms is, that they can be multiplied as well:
 >>> rotate = Transform([0, 0], math.pi / 2)
 >>> translate = Transform([1, 1], 0)
 >>> translate * rotate
-Transform(translation=(1.0, 1.0, 0.0),rotation=90.0 degrees)
+Transform(translation=Vector(1.0, 1.0, 0.0),rotation=Quaternion(0.7071067811865476, 0.0, 0.0, 0.7071067811865475))
 >>> rotate * translate
-Transform(translation=(-0.9999999999999999, 1.0, 0.0),rotation=90.0 degrees)
+Transform(translation=Vector(-1.0, 1.0, 0.0),rotation=Quaternion(0.7071067811865476, 0.0, 0.0, 0.7071067811865475))
 
 When multiplying two transforms, the product is another transform, \
 that is equivalent to the right transform first and then the left one.

@@ -138,7 +138,7 @@ class Tile:
             <enable_wind>0</enable_wind>
             <kinematic>0</kinematic>
           </link>
-          <pose frame=''>{self.transform.x} {self.transform.y} 0 0 -0 0</pose>
+          <pose frame=''>{self.transform.translation.x} {self.transform.translation.y} 0 0 -0 0</pose>
         </model>
         """
 
@@ -169,7 +169,7 @@ class Tile:
         ctx.fill()
 
         # Invert the render transform
-        ctx.translate(-self.transform.x, -self.transform.y)
+        ctx.translate(-self.transform.translation.x, -self.transform.translation.y)
 
         # Draw lines for all sections
         for sec in self.sections.values():

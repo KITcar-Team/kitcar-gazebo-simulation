@@ -15,6 +15,8 @@ from simulation.utils.geometry.vector import Vector
 from simulation.utils.geometry.transform import Transform
 from simulation.utils.geometry.pose import Pose
 
+from .frame import validate_and_maintain_frames
+
 
 APPROXIMATION_DISTANCE = 0.00005
 CURVATURE_APPROX_DISTANCE = 0.04
@@ -98,12 +100,18 @@ class Line(shapely.geometry.linestring.LineString):
             if pd > arc_length:
                 cp = line.interpolate(arc_length)
                 return (
-                    Line(coords[:i] + [(cp.x, cp.y)]),
-                    Line([(cp.x, cp.y)] + coords[i:]),
+                    Line(coords[:i] + [(cp.x, cp.y)], frame=line._frame),
+                    Line([(cp.x, cp.y)] + coords[i:], frame=line._frame),
                 )
 
-    def __init__(self, *args):
+    def __init__(self, *args, frame=None):
         """Line initialization."""
+
+        # Due to recursive calling of the init function, the frame should be set
+        # in the first call within the recursion only.
+        if not hasattr(self, "_frame"):
+            self._frame = frame
+
         if len(args) == 0:
             args = ([], None)
 
@@ -128,8 +136,9 @@ class Line(shapely.geometry.linestring.LineString):
             list of points on the line.
         Rotate the line tf.rotation around (0,0,0) and translate by tf.xyz
         """
-        return [Point(x, y, z) for x, y, z in self.coords]
+        return [Point(x, y, z, frame=self._frame) for x, y, z in self.coords]
 
+    @validate_and_maintain_frames
     def parallel_offset(self, offset: float, side: str) -> "Line":
         """Shift line.
 
@@ -149,11 +158,13 @@ class Line(shapely.geometry.linestring.LineString):
             coords = reversed(coords)
         return Line(coords)
 
+    @validate_and_maintain_frames
     def simplify(self, tolerance=0.001):
         coords = super().simplify(tolerance).coords
         return self.__class__(coords)
 
     @ensure_valid_arc_length()
+    @validate_and_maintain_frames
     def interpolate_direction(self, *, arc_length: float) -> Vector:
         """Interpolate the direction of the line as a vector.
 
@@ -210,6 +221,7 @@ class Line(shapely.geometry.linestring.LineString):
         return sign * 2 * abs(cross) / (abs(p - c) * abs(n - c) * abs(p - n))
 
     @ensure_valid_arc_length(approx_distance=0)
+    @validate_and_maintain_frames
     def interpolate_pose(self, *, arc_length: float) -> Pose:
         """Interpolate the pose a model travelling along this line has.
 
@@ -243,6 +255,7 @@ class Line(shapely.geometry.linestring.LineString):
         """
         return np.array([p.to_numpy() for p in self.get_points()])
 
+    @validate_and_maintain_frames
     def __add__(self, line: "Line"):
         """Concatenate lines.
 
@@ -254,6 +267,7 @@ class Line(shapely.geometry.linestring.LineString):
 
         return self.__class__(coords)
 
+    @validate_and_maintain_frames
     def __rmul__(self, tf: Transform):
         """ Transform this line.
 
@@ -268,11 +282,14 @@ class Line(shapely.geometry.linestring.LineString):
         if not type(tf) is Transform:
             return NotImplemented
 
-        transformed = affinity.rotate(self, tf.get_angle(), use_radians=True, origin=[0, 0])
-        transformed = affinity.translate(transformed, tf.x, tf.y, tf.z)
+        # Get affine matrix, turn into list and restructure how shapely expects the input
+        flat = list(tf.to_affine_matrix().flatten())
+        flat = flat[0:3] + flat[4:7] + flat[8:11] + [flat[3], flat[7], flat[11]]
 
+        transformed = affinity.affine_transform(self, flat)
         return self.__class__(transformed.coords)
 
+    @validate_and_maintain_frames
     def __eq__(self, line: "Line") -> bool:
         if not self.__class__ == line.__class__:
             return NotImplemented
@@ -281,4 +298,6 @@ class Line(shapely.geometry.linestring.LineString):
         return self.simplify().almost_equals(line.simplify())
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}({self.get_points()})"
+        return f"{self.__class__.__qualname__}({self.get_points()})" + (
+            f",frame={self._frame.name}" if self._frame is not None else ""
+        )

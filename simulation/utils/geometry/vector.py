@@ -1,15 +1,17 @@
 """Vector"""
 
-__copyright__ = "KITcar"
-
 import numbers
 import math
 from warnings import warn
 from contextlib import suppress
+from typing import Union
 
 import shapely.geometry  # Base class
+from pyquaternion import Quaternion
 import numpy as np
 import geometry_msgs.msg as geometry_msgs
+
+from .frame import validate_and_maintain_frames
 
 
 class Vector(shapely.geometry.point.Point):
@@ -36,6 +38,12 @@ class Vector(shapely.geometry.point.Point):
 
     def __init__(self, *args, **kwargs):
         """Vector initialization."""
+
+        # Due to recursive calling of the init function, the frame should be set
+        # in the first call within the recursion only.
+        if not hasattr(self, "_frame"):
+            self._frame = kwargs.get("frame", None)
+
         if "r" in kwargs and "phi" in kwargs:
             # construct Vector from r, phi
             r = kwargs["r"]
@@ -55,6 +63,13 @@ class Vector(shapely.geometry.point.Point):
             super(Vector, self).__init__(*args)
             return
 
+        if isinstance(args[0], (geometry_msgs.Vector3, geometry_msgs.Point)):
+            warn(
+                f"Initializing {self.__class__} with {args[0].__class__} directly is deprecated."
+                f"Use {self.__class__.from_geometry_msg} instead.",
+                DeprecationWarning,
+            )
+
         # Try to initialize geometry vector
         with suppress(AttributeError):
             # Call this function with values extracted
@@ -65,6 +80,11 @@ class Vector(shapely.geometry.point.Point):
         raise NotImplementedError(
             f"{type(self).__name__} initialization not implemented for {type(args[0])}"
         )
+
+    @classmethod
+    def from_geometry_msg(cls, geometry_msg: geometry_msgs.Vector3):
+        """Initialize from ROS geometry_msg."""
+        return cls(geometry_msg.x, geometry_msg.y, geometry_msg.z)
 
     def to_geometry_msg(self) -> geometry_msgs.Vector3:
         """To ROS geometry_msg.
@@ -80,35 +100,25 @@ class Vector(shapely.geometry.point.Point):
             Vector as a numpy array. """
         return np.array([self.x, self.y, self.z])
 
-    @property
-    def norm(self) -> float:
-        """Eucledian norm of the vector.
-
-        Returns:
-            The norm as float.
-
-        """
-        warn(
-            "Vector(...).norm is deprecated. Use abs(Vector(...)) instead.",
-            DeprecationWarning,
-        )
-        return abs(self)
-
-    def rotated(self, angle: float):
-        """This vector rotated around [0,0,0] in the x-y-plane.
+    @validate_and_maintain_frames
+    def rotated(self, arg: Union[float, Quaternion]):
+        """This vector rotated around [0,0,0].
 
         Args:
-            angle (float): Rotation angle in radian.
+            arg: Rotation angle in radian or quaternion to rotate by.
 
         Returns:
             Rotated vector.
-
         """
-        c = math.cos(angle)
-        s = math.sin(angle)
-        # Matrix multiplication
-        return self.__class__(c * self.x - s * self.y, s * self.x + c * self.y, self.z)
+        if isinstance(arg, Quaternion):
+            return self.__class__(arg.rotate(self.to_numpy()))
+        else:
+            c = math.cos(arg)
+            s = math.sin(arg)
+            # Matrix multiplication
+            return self.__class__(c * self.x - s * self.y, s * self.x + c * self.y, self.z)
 
+    @validate_and_maintain_frames
     def cross(self, vec: "Vector") -> "Vector":
         """Cross product with other vector.
 
@@ -125,6 +135,7 @@ class Vector(shapely.geometry.point.Point):
 
         return Vector(x, y, z)
 
+    @validate_and_maintain_frames
     def __sub__(self, vec):
         return self.__class__(self.x - vec.x, self.y - vec.y, self.z - vec.z)
 
@@ -132,9 +143,11 @@ class Vector(shapely.geometry.point.Point):
         """Eucledian norm of the vector."""
         return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
+    @validate_and_maintain_frames
     def __add__(self, vec):
         return self.__class__(self.x + vec.x, self.y + vec.y, self.z + vec.z)
 
+    @validate_and_maintain_frames
     def __mul__(self, vec: "Vector") -> float:
         """Scalar product.
 
@@ -146,11 +159,12 @@ class Vector(shapely.geometry.point.Point):
 
         return NotImplemented
 
+    @validate_and_maintain_frames
     def __rmul__(self, c):
-        """Scale vector by number c.
+        """Scale or transform vector by c.
 
         Args:
-            c (float, Transform): Scalar or Transform
+            c: Scalar or Transform
 
         Returns:
             :math:`c \\cdot \\vec{v}`
@@ -158,20 +172,24 @@ class Vector(shapely.geometry.point.Point):
 
         # If c is a transform
         with suppress(AttributeError):
-            return self.rotated(c.get_angle()) + self.__class__(c)
+            return self.rotated(c.rotation) + self.__class__(c.translation)
 
         if isinstance(c, numbers.Number):
             return self.__class__(c * self.x, c * self.y, c * self.z)
 
         return NotImplemented
 
+    @validate_and_maintain_frames
     def __eq__(self, vec) -> bool:
         if not self.__class__ == vec.__class__:
             return NotImplemented
         return self.almost_equals(vec)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}{tuple(round(val,8) for val in [self.x,self.y,self.z])}"
+        return (
+            f"{self.__class__.__qualname__}{tuple(round(val,8) for val in [self.x,self.y,self.z])}"
+            + (f"(frame: {self._frame.name})" if self._frame is not None else "")
+        )
 
     def __hash__(self) -> int:
-        return int(self.x * 1e6 + self.y * 1e4 + self.z * 1e2)
+        return hash((self.x, self.y, self.z, self._frame))

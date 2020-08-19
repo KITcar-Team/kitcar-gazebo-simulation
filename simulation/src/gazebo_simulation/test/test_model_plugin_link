@@ -109,8 +109,8 @@ class ModelPluginNodeTest(unittest.TestCase, NodeBase):
         )
 
         while (
-            abs(self.last_received_pose.x - 1)
-            + abs(self.last_received_pose.y - 1)
+            abs(self.last_received_pose.position.x - 1)
+            + abs(self.last_received_pose.position.y - 1)
             + abs(self.last_received_pose.get_angle())
             + abs(Vector(self.last_received_twist.linear))
             + abs(Vector(self.last_received_twist.angular))
@@ -142,9 +142,9 @@ class ModelPluginNodeTest(unittest.TestCase, NodeBase):
 
     def set_complete_pose(self, pose: Pose):
         self.set_pose(
-            (SetModelPose.POSITION_X, pose.x),
-            (SetModelPose.POSITION_Y, pose.y),
-            (SetModelPose.POSITION_Z, pose.z),
+            (SetModelPose.POSITION_X, pose.position.x),
+            (SetModelPose.POSITION_Y, pose.position.y),
+            (SetModelPose.POSITION_Z, pose.position.z),
             (SetModelPose.ORIENTATION_W, pose.orientation.w),
             (SetModelPose.ORIENTATION_X, pose.orientation.x),
             (SetModelPose.ORIENTATION_Y, pose.orientation.y),
@@ -155,7 +155,7 @@ class ModelPluginNodeTest(unittest.TestCase, NodeBase):
         """Set a number of random poses and check if the model is always moved correctly."""
 
         # Get initial z
-        z = self.last_received_pose.z
+        z = self.last_received_pose.position.z
 
         for i in range(0, 1000):
             pose = Pose([random.random(), random.random(), z], random.random())
@@ -165,9 +165,13 @@ class ModelPluginNodeTest(unittest.TestCase, NodeBase):
             # The correct pose must be set in at most 500 iterations (= 0.5 seconds)
             for _ in range(600):
                 rospy.wait_for_message(self.pose_topic, geometry_msgs.msg.Pose)
-                if abs(Vector(pose) - Vector(self.last_received_pose)) < 0.01 and abs(
+                if abs(
+                    Vector(pose.position) - Vector(self.last_received_pose.position)
+                ) < 0.01 and abs(
                     pose.get_angle() - self.last_received_pose.get_angle()
-                ) < math.radians(0.02):
+                ) < math.radians(
+                    0.02
+                ):
                     break
             else:
                 self.assertTrue(

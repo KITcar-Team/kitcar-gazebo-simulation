@@ -2,6 +2,7 @@
 
 __copyright__ = "KITcar"
 
+
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
 from simulation.utils.geometry.vector import Vector
@@ -13,8 +14,10 @@ import numpy as np
 
 from contextlib import suppress
 
+from .frame import validate_and_maintain_frames
 
-class Transform(Vector):
+
+class Transform:
     """Transformation class consisting of a translation and a rotation.
 
     A Transform object can be used to easily interchange between multiple coordinate systems
@@ -29,11 +32,17 @@ class Transform(Vector):
 
 
     Attributes:
+        tranlation (Vector)
         rotation (pyquaternion.Quaternion)
     """
 
-    def __init__(self, *args):
+    def __init__(self, *args, frame=None):
         """Transform initialization."""
+
+        # Due to recursive calling of the init function, the frame should be set
+        # in the first call within the recursion only.
+        if not hasattr(self, "_frame"):
+            self._frame = frame
 
         # Attempt initialization from Vector like and Quaternion like objects
         with suppress(Exception):
@@ -48,7 +57,7 @@ class Transform(Vector):
         with suppress(IndexError, NotImplementedError, TypeError):
             if type(args[1]) == Quaternion:
                 self.rotation = args[1]
-                super(Transform, self).__init__(args[0])
+                self.translation = Vector(args[0])
                 return
 
         # Try to initialize geometry pose
@@ -86,24 +95,29 @@ class Transform(Vector):
         )
 
     @property
+    @validate_and_maintain_frames
     def inverse(self) -> "Transform":
         """Inverse transformation."""
         return Transform(
-            -1 * Vector(self).rotated(-self.get_angle()), -1 * self.get_angle()
+            -1 * Vector(self.translation).rotated(self.rotation.inverse),
+            self.rotation.inverse,
         )
 
-    def get_angle(self) -> float:
+    def get_angle(self, axis=Vector(0, 0, 1)) -> float:
         """Angle of rotation.
+
+        Args:
+            axis: Axis the rotation is projected onto.
 
         Returns:
             The angle that a vector is rotated, when this transformation is applied."""
 
-        # Project the rotation axis onto the z axis to get the amount of the rotation \
-        # that is in z direction!
-        # Also the quaternions rotation axis is sometimes (0,0,-1) at which point \
+        # Project the rotation axis onto the rotation axis to get the amount of the rotation \
+        # that is in the axis' direction!
+        # Also the quaternions rotation axis is sometimes flipped at which point \
         # the angles flip their sign,
-        # taking the scalar product of the axis and z fixes that as well
-        return Vector(self.rotation.axis) * Vector(0, 0, 1) * self.rotation.radians
+        # taking the scalar product with the axis fixes that as well
+        return Vector(self.rotation.axis) * axis * self.rotation.radians
 
     def to_geometry_msg(self) -> geometry_msgs.Transform:
         """Convert transform to ROS geometry_msg.
@@ -111,7 +125,7 @@ class Transform(Vector):
         Returns:
             This transformation as a geometry_msgs/Transform.
         """
-        vector = super(Transform, self).to_geometry_msg()
+        vector = self.translation.to_geometry_msg()
         rotation = geometry_msgs.Quaternion(
             self.rotation.x, self.rotation.y, self.rotation.z, self.rotation.w
         )
@@ -122,6 +136,13 @@ class Transform(Vector):
 
         return tf
 
+    def to_affine_matrix(self) -> np.ndarray:
+        """Get transformation as an affine matrix."""
+        return np.column_stack(
+            (self.rotation.rotation_matrix, self.translation.to_numpy(),)
+        )
+
+    @validate_and_maintain_frames
     def __mul__(self, tf: "Transform") -> "Transform":
         """Multiplication of transformations.
 
@@ -138,23 +159,27 @@ class Transform(Vector):
         """
         if tf.__class__ == self.__class__:
             return self.__class__(
-                Vector(self) + Vector(tf).rotated(self.get_angle()),
-                self.get_angle() + tf.get_angle(),
+                Vector(self.translation) + Vector(tf.translation).rotated(self.rotation),
+                self.rotation * tf.rotation,
+                frame=self._frame,
             )
 
         return NotImplemented
 
+    @validate_and_maintain_frames
     def __eq__(self, tf) -> bool:
         if self.__class__ != tf.__class__:
             return NotImplemented
         return tf.rotation.normalised == self.rotation.normalised and Vector(
-            self
-        ) == Vector(tf)
+            self.translation
+        ) == Vector(tf.translation)
 
     def __repr__(self) -> str:
         return (
-            f"Transform(translation={self.x, self.y, self.z},"
-            f"rotation={round(math.degrees(self.get_angle()),4)} degrees)"
+            f"Transform(translation={repr(self.translation)},"
+            + f"rotation={repr(self.rotation)}"
+            + (f",frame={self._frame.name}" if self._frame is not None else "")
+            + ")"
         )
 
     def __hash__(self):

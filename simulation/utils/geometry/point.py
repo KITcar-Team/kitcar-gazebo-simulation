@@ -10,6 +10,8 @@ import geometry_msgs.msg as geometry_msgs
 from simulation.utils.geometry.transform import Transform
 from simulation.utils.geometry.vector import Vector  # Base class
 
+from .frame import validate_and_maintain_frames
+
 
 class InvalidPointOperationError(Exception):
     pass
@@ -35,16 +37,19 @@ class Point(Vector):
     def rotated(self, *args, **kwargs):
         raise InvalidPointOperationError("A point cannot be rotated.")
 
+    @validate_and_maintain_frames
     def __sub__(self, p):
         if not type(p) is Vector:
             raise InvalidPointOperationError("A point can only be modified by a vector.")
         return super(Point, self).__sub__(p)
 
+    @validate_and_maintain_frames
     def __add__(self, p):
         if not type(p) is Vector:
             raise InvalidPointOperationError("A point can only be modified by a vector.")
         return super(Point, self).__add__(p)
 
+    @validate_and_maintain_frames
     def __rmul__(self, obj: Transform):
         """Right multiplication of a point. Only defined for transformations."""
         if type(obj) == Transform:

@@ -37,15 +37,11 @@ class StraightRoad(_StraightRoad):
         >>> road.append(StraightRoad(length=2))
         >>> road
         Road(_name=None, _seed=None, use_seed=True, \
-sections=[StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), \
-is_start=False, left_line_marking='solid', middle_line_marking='dashed', \
-right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], length=2)], \
-length=2.0)
-
-        Road(use_seed=True, sections=[\
-StraightRoad(id=0, transform=Transform(translation=(0.0, 0.0, 0.0),rotation=0.0 degrees), is_start=False, \
-left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], length=2)])
-
+sections=[StraightRoad(id=0, \
+transform=Transform(translation=Vector(0.0, 0.0, 0.0),\
+rotation=Quaternion(1.0, 0.0, 0.0, 0.0)), is_start=False, left_line_marking='solid', \
+middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], \
+surface_markings=[], length=2)], length=2.0)
     """
 
     @property

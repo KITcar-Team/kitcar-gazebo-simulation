@@ -90,7 +90,7 @@ class ModuleTest(unittest.TestCase):
         # Extensively test the inverse function:
         for _ in range(0, 100):
             tf = Transform(
-                [random.random(), random.random(), random.random()], random.random()
+                [random.random(), random.random(), random.random()], Quaternion.random()
             )
             self.assertEqual(tf * tf.inverse, Transform([0, 0, 0], 0))
             self.assertEqual(tf.inverse * tf, Transform([0, 0, 0], 0))
@@ -101,6 +101,10 @@ class ModuleTest(unittest.TestCase):
 
         self.assertEqual(Vector(1, 3), tf * Vector(1, 1))
         self.assertEqual(Point(1, 3), tf * Point(1, 1))
+
+        # Rotation around x-axis by 90 degrees
+        tf2 = Transform(Vector(0, 0), Quaternion(axis=(1.0, 0.0, 0.0), radians=math.pi / 2))
+        self.assertEqual(Vector(1, 2, 3), tf2 * Vector(1, 3, -2))
 
         # Check if line and polygon are transformed correctly
         points = self.create_points()
