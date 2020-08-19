@@ -304,6 +304,7 @@ class CycleGANModel:
         epoch: str = "latest",
         lr_policy: str = "linear",
         lr_decay_iters: int = 50,
+        lr_step_factor: float = 0.1,
         n_epochs: int = 100,
     ) -> None:
         """Load and print networks; create schedulers
@@ -324,7 +325,9 @@ class CycleGANModel:
         """
         if self.is_train:
             self.schedulers = [
-                helper.get_scheduler(optimizer, lr_policy, lr_decay_iters, n_epochs)
+                helper.get_scheduler(
+                    optimizer, lr_policy, lr_decay_iters, n_epochs, lr_step_factor
+                )
                 for optimizer in self.optimizers
             ]
         if not self.is_train or continue_train:
