@@ -368,7 +368,7 @@ class CycleGANModel:
 
     def get_current_visuals(self) -> dict:
         """Return visualization images. train.py will display these images with
-        visdom, and save the images to a HTML
+        visdom.
         """
         visual_ret = dict()
         for name in self.visual_names:

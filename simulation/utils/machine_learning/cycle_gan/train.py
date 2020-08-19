@@ -62,13 +62,8 @@ if __name__ == "__main__":
     )  # regular setup: load and print networks; create schedulers
     visualizer = Visualizer(
         display_id=opt["display_id"],
-        is_train=True,
-        no_html=opt["no_html"],
-        display_winsize=opt["display_winsize"],
         name=opt["name"],
         display_port=opt["display_port"],
-        display_server=opt["display_server"],
-        display_env=opt["display_env"],
         checkpoints_dir=opt["checkpoints_dir"],
     )  # create a visualizer that display/save images and plots
     total_iters = 0  # the total number of training iterations
@@ -77,11 +72,10 @@ if __name__ == "__main__":
         opt["epoch_count"], opt["n_epochs"] + opt["n_epochs_decay"] + 1
     ):  # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
         epoch_start_time = time.time()  # timer for entire epoch
-        iter_data_time = time.time()  # timer for data loading per iteration
         epoch_iter = (
             0  # the number of training iterations in current epoch, reset to 0 every epoch
         )
-        visualizer.reset()  # reset the visualizer: make sure it saves the results to HTML at least once every epoch
+        visualizer.reset()  # reset the visualizer
 
         # Get random permutations of items from both datasets
         for (A, A_paths), (B, B_paths) in ml_data.sample_generator(
@@ -99,24 +93,17 @@ if __name__ == "__main__":
             model.optimize_parameters()  # calculate loss functions, get gradients, update network weights
 
             if (
-                total_iters % opt["display_freq"] == 0
-            ):  # display images on visdom and save images to a HTML file
-                save_result = total_iters % opt["update_html_freq"] == 0
-                visualizer.display_current_results(
-                    model.get_current_visuals(), epoch, save_result
-                )
-
-            if (
                 total_iters % opt["print_freq"] == 0
             ):  # print training losses and save logging information to the disk
-                t_data = iter_start_time - iter_data_time
                 losses = model.get_current_losses()
                 t_comp = (time.time() - iter_start_time) / opt["batch_size"]
-                visualizer.print_current_losses(epoch, epoch_iter, losses, t_comp, t_data)
+                visualizer.print_current_losses(epoch, epoch_iter, losses, t_comp)
                 if opt["display_id"] > 0:
                     visualizer.plot_current_losses(
                         epoch, float(epoch_iter) / dataset_size, losses
                     )
+
+                visualizer.display_current_results(model.get_current_visuals())
 
             if (
                 total_iters % opt["save_latest_freq"] == 0
@@ -128,7 +115,6 @@ if __name__ == "__main__":
                 save_suffix = "iter_%d" % total_iters if opt["save_by_iter"] else "latest"
                 model.save_networks(save_suffix)
 
-            iter_data_time = time.time()
         model.update_learning_rate()  # update learning rates in the beginning of every epoch.
         if (
             epoch % opt["save_epoch_freq"] == 0

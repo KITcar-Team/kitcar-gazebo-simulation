@@ -5,7 +5,6 @@ import yaml
 
 import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
-from simulation.utils.machine_learning.cycle_gan.util import html
 from simulation.utils.machine_learning.cycle_gan.util.visualizer import save_images
 
 if __name__ == "__main__":
@@ -51,16 +50,6 @@ if __name__ == "__main__":
         epoch=opt["epoch"],
     )
     model.eval()
-    # create a website
-    web_dir = os.path.join(
-        opt["results_dir"], opt["name"], str(opt["epoch"])
-    )  # define the website directory
-    if opt["load_iter"] > 0:  # load_iter is 0 by default
-        web_dir = "{:s}_iter{:d}".format(web_dir, opt["load_iter"])
-    print("creating web directory", web_dir)
-    webpage = html.HTML(
-        web_dir, "Experiment = %s, Epoch = %s" % (opt["name"], opt["epoch"]),
-    )
     for i, ((A, A_paths), (B, B_paths)) in enumerate(zip(dataset_a, dataset_b)):
         model.set_input(
             {"A": A, "A_paths": A_paths, "B": B, "B_paths": B_paths}
@@ -70,10 +59,8 @@ if __name__ == "__main__":
         if i % 5 == 0:
             print("processing (%04d)-th image." % i)
         save_images(
-            webpage,
-            visuals,
-            model.image_paths,
+            visuals=visuals,
+            destination=os.path.join(opt["results_dir"], opt["name"]),
             aspect_ratio=opt["aspect_ratio"],
-            width=opt["display_winsize"],
+            iteration_count=i,
         )
-    webpage.save()  # save the HTML
