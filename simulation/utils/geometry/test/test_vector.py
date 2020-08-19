@@ -1,12 +1,12 @@
 import unittest
 import math
+import random
 
-from simulation.utils.geometry.vector import Vector
 
 import geometry_msgs.msg as g_msgs
 import numpy as np
 
-import random
+from simulation.utils.geometry.vector import Vector
 
 
 class ModuleTest(unittest.TestCase):
