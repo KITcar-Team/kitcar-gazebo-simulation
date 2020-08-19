@@ -24,7 +24,7 @@ Shapely==1.6.4.post2
 shiboken2==5.13.1
 six==1.12.0
 subprocess32==3.5.4
-tqdm==4.36.1
+tqdm
 PyGObject==3.34.0
 testresources
 hypothesis==5.12.0
