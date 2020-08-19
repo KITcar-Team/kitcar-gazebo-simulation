@@ -55,3 +55,31 @@ def load_unpaired_unlabeled_datasets(
     )
 
     return A, B
+
+
+def sample_generator(
+    dataloader_a: UnlabeledDataLoader,
+    dataloader_b: UnlabeledDataLoader,
+    n_samples: int = float("inf"),
+):
+    """Generator that samples pairwise from both dataloaders.
+
+    Args:
+        dataloader_a: Domain a dataloader.
+        dataloader_b: Domain b dataloader.
+        n_samples: Number of batches of samples.
+    """
+    iter_A = iter(dataloader_a)
+    iter_B = iter(dataloader_b)
+    for _ in range(n_samples):
+        try:
+            next_A = next(iter_A)
+        except StopIteration:
+            iter_A = iter(dataloader_a)
+            next_A = next(iter_A)
+        try:
+            next_B = next(iter_B)
+        except StopIteration:
+            iter_B = iter(dataloader_b)
+            next_B = next(iter_B)
+        yield (next_A, next_B)
