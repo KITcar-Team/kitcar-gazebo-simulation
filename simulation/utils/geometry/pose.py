@@ -14,6 +14,8 @@ import math
 
 from contextlib import suppress
 
+from .frame import validate_and_maintain_frames
+
 
 class Pose:
     """Pose class consisting of a position and an orientation.
@@ -27,13 +29,19 @@ class Pose:
         2 (Point, float): Second argument is the poses's orientation angle in radians.
         3 (Point, pyquaternion.Quaternion): Point and quaternion.
 
-
     Attributes:
+        position (Point)
         orientation (pyquaternion.Quaternion)
     """
 
-    def __init__(self, *args):
+    def __init__(self, *args, frame=None):
         """Pose initialization."""
+
+        # Due to recursive calling of the init function, the frame should be set
+        # in the first call within the recursion only.
+        if not hasattr(self, "_frame"):
+            self._frame = frame
+
         with suppress(Exception):
             args = (args[0], Quaternion(*args[1]))
 
@@ -112,6 +120,7 @@ class Pose:
 
         return pose
 
+    @validate_and_maintain_frames
     def __rmul__(self, tf: "Transform"):
         """Apply transformation.
 
@@ -123,11 +132,14 @@ class Pose:
         """
         with suppress(NotImplementedError, AttributeError):
             return self.__class__(
-                tf * Vector(self.position), tf.rotation * self.orientation
+                tf * Vector(self.position),
+                tf.rotation * self.orientation,
+                frame=self._frame,
             )
 
         return NotImplemented
 
+    @validate_and_maintain_frames
     def __eq__(self, pose) -> bool:
         TOLERANCE = 1e-8  # Radian!
         if self.__class__ != pose.__class__:
@@ -139,7 +151,9 @@ class Pose:
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(position={self.position},"
-            f"orientation= {self.orientation.angle}"
+            + f"orientation= {self.orientation.angle}"
+            + (f",frame={self._frame.name}" if self._frame is not None else "")
+            + ")"
         )
 
     def __hash__(self):

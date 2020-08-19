@@ -1,7 +1,5 @@
 """Vector"""
 
-__copyright__ = "KITcar"
-
 import numbers
 import math
 from warnings import warn
@@ -12,6 +10,8 @@ import shapely.geometry  # Base class
 from pyquaternion import Quaternion
 import numpy as np
 import geometry_msgs.msg as geometry_msgs
+
+from .frame import validate_and_maintain_frames
 
 
 class Vector(shapely.geometry.point.Point):
@@ -38,6 +38,12 @@ class Vector(shapely.geometry.point.Point):
 
     def __init__(self, *args, **kwargs):
         """Vector initialization."""
+
+        # Due to recursive calling of the init function, the frame should be set
+        # in the first call within the recursion only.
+        if not hasattr(self, "_frame"):
+            self._frame = kwargs.get("frame", None)
+
         if "r" in kwargs and "phi" in kwargs:
             # construct Vector from r, phi
             r = kwargs["r"]
@@ -94,6 +100,7 @@ class Vector(shapely.geometry.point.Point):
             Vector as a numpy array. """
         return np.array([self.x, self.y, self.z])
 
+    @validate_and_maintain_frames
     def rotated(self, arg: Union[float, Quaternion]):
         """This vector rotated around [0,0,0].
 
@@ -111,6 +118,7 @@ class Vector(shapely.geometry.point.Point):
             # Matrix multiplication
             return self.__class__(c * self.x - s * self.y, s * self.x + c * self.y, self.z)
 
+    @validate_and_maintain_frames
     def cross(self, vec: "Vector") -> "Vector":
         """Cross product with other vector.
 
@@ -127,6 +135,7 @@ class Vector(shapely.geometry.point.Point):
 
         return Vector(x, y, z)
 
+    @validate_and_maintain_frames
     def __sub__(self, vec):
         return self.__class__(self.x - vec.x, self.y - vec.y, self.z - vec.z)
 
@@ -134,9 +143,11 @@ class Vector(shapely.geometry.point.Point):
         """Eucledian norm of the vector."""
         return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
+    @validate_and_maintain_frames
     def __add__(self, vec):
         return self.__class__(self.x + vec.x, self.y + vec.y, self.z + vec.z)
 
+    @validate_and_maintain_frames
     def __mul__(self, vec: "Vector") -> float:
         """Scalar product.
 
@@ -148,6 +159,7 @@ class Vector(shapely.geometry.point.Point):
 
         return NotImplemented
 
+    @validate_and_maintain_frames
     def __rmul__(self, c):
         """Scale or transform vector by c.
 
@@ -167,13 +179,17 @@ class Vector(shapely.geometry.point.Point):
 
         return NotImplemented
 
+    @validate_and_maintain_frames
     def __eq__(self, vec) -> bool:
         if not self.__class__ == vec.__class__:
             return NotImplemented
         return self.almost_equals(vec)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}{tuple(round(val,8) for val in [self.x,self.y,self.z])}"
+        return (
+            f"{self.__class__.__qualname__}{tuple(round(val,8) for val in [self.x,self.y,self.z])}"
+            + (f"(frame: {self._frame.name})" if self._frame is not None else "")
+        )
 
     def __hash__(self) -> int:
-        return hash((self.x, self.y, self.z))
+        return hash((self.x, self.y, self.z, self._frame))

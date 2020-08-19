@@ -2,6 +2,7 @@
 
 __copyright__ = "KITcar"
 
+
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
 from simulation.utils.geometry.vector import Vector
@@ -12,6 +13,8 @@ import math
 import numpy as np
 
 from contextlib import suppress
+
+from .frame import validate_and_maintain_frames
 
 
 class Transform:
@@ -29,11 +32,17 @@ class Transform:
 
 
     Attributes:
+        tranlation (Vector)
         rotation (pyquaternion.Quaternion)
     """
 
-    def __init__(self, *args):
+    def __init__(self, *args, frame=None):
         """Transform initialization."""
+
+        # Due to recursive calling of the init function, the frame should be set
+        # in the first call within the recursion only.
+        if not hasattr(self, "_frame"):
+            self._frame = frame
 
         # Attempt initialization from Vector like and Quaternion like objects
         with suppress(Exception):
@@ -86,6 +95,7 @@ class Transform:
         )
 
     @property
+    @validate_and_maintain_frames
     def inverse(self) -> "Transform":
         """Inverse transformation."""
         return Transform(
@@ -132,6 +142,7 @@ class Transform:
             (self.rotation.rotation_matrix, self.translation.to_numpy(),)
         )
 
+    @validate_and_maintain_frames
     def __mul__(self, tf: "Transform") -> "Transform":
         """Multiplication of transformations.
 
@@ -150,10 +161,12 @@ class Transform:
             return self.__class__(
                 Vector(self.translation) + Vector(tf.translation).rotated(self.rotation),
                 self.rotation * tf.rotation,
+                frame=self._frame,
             )
 
         return NotImplemented
 
+    @validate_and_maintain_frames
     def __eq__(self, tf) -> bool:
         if self.__class__ != tf.__class__:
             return NotImplemented
@@ -164,7 +177,9 @@ class Transform:
     def __repr__(self) -> str:
         return (
             f"Transform(translation={repr(self.translation)},"
-            f"rotation={repr(self.rotation)})"
+            + f"rotation={repr(self.rotation)}"
+            + (f",frame={self._frame.name}" if self._frame is not None else "")
+            + ")"
         )
 
     def __hash__(self):
