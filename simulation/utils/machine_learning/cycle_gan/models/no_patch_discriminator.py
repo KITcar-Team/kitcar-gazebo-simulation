@@ -3,7 +3,9 @@ from torch import nn as nn
 
 
 class NoPatchDiscriminator(nn.Module):
-    def __init__(self, input_nc: int, norm_layer: nn.Module = nn.BatchNorm2d):
+    def __init__(
+        self, input_nc: int, norm_layer: nn.Module = nn.BatchNorm2d, n_layers_d: int = 4
+    ):
         """Construct a no patch gan discriminator :param input_nc: the number of
         channels in input images :type input_nc: int :param norm_layer:
         normalization layer
@@ -11,6 +13,7 @@ class NoPatchDiscriminator(nn.Module):
         Args:
             input_nc (int): the number of channels in input images
             norm_layer (nn.Module): normalization layer
+            n_layers_d (int): the number of convolution blocks
         """
         super(NoPatchDiscriminator, self).__init__()
 
@@ -25,31 +28,16 @@ class NoPatchDiscriminator(nn.Module):
             nn.LeakyReLU(0.2, inplace=True),
         ]
 
-        model += [
-            nn.Conv2d(64, 64, 3, stride=2, padding=1),
-            norm_layer(64),
-            nn.LeakyReLU(0.2, inplace=True),
-        ]
+        input_nc = 64
+        for i in range(n_layers_d):
+            model += [
+                nn.Conv2d(input_nc, input_nc * 2, 4, stride=2, padding=1),
+                norm_layer(input_nc * 2),
+                nn.LeakyReLU(0.2, inplace=True),
+            ]
+            input_nc *= 2
 
-        model += [
-            nn.Conv2d(64, 128, 3, stride=2, padding=1),
-            norm_layer(128),
-            nn.LeakyReLU(0.2, inplace=True),
-        ]
-
-        model += [
-            nn.Conv2d(128, 256, 3, stride=2, padding=1),
-            norm_layer(256),
-            nn.LeakyReLU(0.2, inplace=True),
-        ]
-
-        model += [
-            nn.Conv2d(256, 512, 3, padding=1),
-            norm_layer(512),
-            nn.LeakyReLU(0.2, inplace=True),
-        ]
-
-        model += [nn.Conv2d(512, 1, 3, padding=1)]
+        model += [nn.Conv2d(1024, 1, 4, stride=2, padding=1)]
 
         self.model = nn.Sequential(*model)
 
