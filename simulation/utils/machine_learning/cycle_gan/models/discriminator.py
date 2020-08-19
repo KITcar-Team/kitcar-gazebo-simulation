@@ -70,7 +70,7 @@ def create_discriminator(
             input_nc, ndf, n_layers_d, norm_layer=norm_layer, use_sigmoid=use_sigmoid
         )
     elif netd == "no_patch":  # without any patch gan
-        net = NoPatchDiscriminator(input_nc, norm_layer=norm_layer)
+        net = NoPatchDiscriminator(input_nc, norm_layer=norm_layer, n_layers_d=n_layers_d)
     else:
         raise NotImplementedError("Discriminator model name [%s] is not recognized" % netd)
     return init_net(net, init_type, init_gain, gpu_ids)
