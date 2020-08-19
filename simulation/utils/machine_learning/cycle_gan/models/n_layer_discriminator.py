@@ -13,6 +13,7 @@ class NLayerDiscriminator(nn.Module):
         n_layers: int = 3,
         norm_layer: nn.Module = nn.BatchNorm2d,
         use_sigmoid: bool = False,
+        is_quadratic: bool = True,
     ):
         """Construct a PatchGAN discriminator
 
@@ -33,8 +34,19 @@ class NLayerDiscriminator(nn.Module):
 
         kw = 4
         padding_width = 1
+        padding_first_layer = (
+            padding_width if is_quadratic else (2 * padding_width, padding_width)
+        )
+        stride_first_layer = 2 if is_quadratic else (1, 2)
+
         sequence = [
-            nn.Conv2d(input_nc, ndf, kernel_size=kw, stride=2, padding=padding_width),
+            nn.Conv2d(
+                input_nc,
+                ndf,
+                kernel_size=kw,
+                stride=stride_first_layer,
+                padding=padding_first_layer,
+            ),
             nn.LeakyReLU(0.2, True),
         ]
         num_filters_multiplier = 1

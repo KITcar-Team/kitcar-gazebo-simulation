@@ -2,16 +2,14 @@
 from __future__ import print_function
 
 import os
-from typing import List, Union
 
 import numpy as np
 import torch
 from PIL import Image
-from torch import nn
 
 
-def tensor2im(input_image: np.ndarray, img_type: np.integer = np.uint8) -> np.ndarray:
-    """Converts a Tensor array into a numpy image array.
+def tensor2im(input_image, img_type=np.uint8, to_rgb: bool = True):
+    """"Converts a Tensor array into a numpy image array.
 
     Args:
         input_image (np.ndarray): the input image tensor array
@@ -23,7 +21,7 @@ def tensor2im(input_image: np.ndarray, img_type: np.integer = np.uint8) -> np.nd
         else:
             return input_image
         image_numpy = image_tensor[0].cpu().float().numpy()  # convert it into a numpy array
-        if image_numpy.shape[0] == 1:  # grayscale to RGB
+        if image_numpy.shape[0] == 1 and to_rgb:  # grayscale to RGB
             image_numpy = np.tile(image_numpy, (3, 1, 1))
         image_numpy = (
             (np.transpose(image_numpy, (1, 2, 0)) + 1) / 2.0 * 255.0
@@ -31,25 +29,6 @@ def tensor2im(input_image: np.ndarray, img_type: np.integer = np.uint8) -> np.nd
     else:  # if it is a numpy array, do nothing
         image_numpy = input_image
     return image_numpy.astype(img_type)
-
-
-def diagnose_network(net: nn.Module, name: str = "network") -> None:
-    """Calculate and print the mean of average absolute(gradients)
-
-    Args:
-        net (nn.Module): Torch network
-        name (str): the name of the network
-    """
-    mean = 0.0
-    count = 0
-    for param in net.parameters():
-        if param.grad is not None:
-            mean += torch.mean(torch.abs(param.grad.data))
-            count += 1
-    if count > 0:
-        mean = mean / count
-    print(name)
-    print(mean)
 
 
 def save_image(image_numpy: np.ndarray, image_path: str, aspect_ratio: float = 1.0) -> None:
@@ -69,19 +48,6 @@ def save_image(image_numpy: np.ndarray, image_path: str, aspect_ratio: float = 1
     if aspect_ratio < 1.0:
         image_pil = image_pil.resize((int(h / aspect_ratio), w), Image.BICUBIC)
     image_pil.save(image_path)
-
-
-def mk_dirs(paths: Union[str, List[str]]) -> None:
-    """create empty directories if they don't exist
-
-    Args:
-        paths: a list of directory paths
-    """
-    if isinstance(paths, list) and not isinstance(paths, str):
-        for path in paths:
-            mkdir(path)
-    else:
-        mkdir(paths)
 
 
 def mkdir(path: str) -> None:
