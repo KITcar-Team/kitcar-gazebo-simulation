@@ -6,6 +6,7 @@
   <arg name="car_name" default="dr_drift" />
 
   <arg name="apply_gan" default="false" />
+  <arg name="use_deprecated_camera" default="false" />
 
   <arg name="set_twist" default="true" />
   <arg name="set_pose" default="true" />
@@ -37,7 +38,9 @@
     <arg name="set_pose" value="$(arg set_pose)"/>
   </include>
 
-  <include file="$(find simulation_brain_link)/launch/sensor_camera_node.launch">
+  <include if="$(arg use_deprecated_camera)" file="$(find simulation_brain_link)/launch/sensor_camera_node_deprecated.launch"/>
+
+  <include if="$(eval arg('use_deprecated_camera') == 0)" file="$(find simulation_brain_link)/launch/sensor_camera_node.launch">
     <arg name="apply_gan" value="$(arg apply_gan)"/>
   </include>
 
