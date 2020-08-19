@@ -4,7 +4,6 @@ base:
   conv_layers_in_block: 2 #specify number of convolution layers per resnet block
   crop_size: 256 #then crop to this size
   dilations: [1,2] #dilation for individual conv layers in every resnet block
-  display_winsize: 256 #display window size for both visdom and HTML
   epoch: latest #which epoch to load? set to latest to use latest cached model
   gpu_ids: [0] #gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU
   init_gain: 0.02 #scaling factor for normal, xavier and orthogonal.
@@ -37,24 +36,21 @@ base:
 train:
   dataset_a:  #path to images of domain A (real images). Can be a list of folders
     - ./../../../../data/real_images/maschinen_halle
-    # - ./../../../../data/real_images/maschinen_halle_parking
     - ./../../../../data/real_images/maschinen_halle_no_obstacles
   dataset_b: #path to images of domain B (simulated images). Can be a list of folders
     - ./../../../../data/simulated_images/random_roads
   display_env: main #visdom display environment name (default is "main")
   display_freq: 5 #frequency of showing training results on screen
+    # - ./../../../../data/real_images/maschinen_halle_parking
   display_id: 1 #window id of the web display
   display_port: 8097 #visdom port of the web display
-  display_server: http://localhost #visdom server of the web display
   epoch_count: 1 #the starting epoch count, we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>, ...
   is_train: True # enable or disable training mode
-  no_html: False #do not save intermediate training results to [opt.checkpoints_dir]/[opt.name]/web/
   num_threads: 8 # # threads for loading data
   print_freq: 100 #frequency of showing training results on console
   save_by_iter: False #whether saves model by iteration
   save_epoch_freq: 1 #frequency of saving checkpoints at the end of epochs
   save_latest_freq: 1000 #frequency of saving the latest results
-  update_html_freq: 100 #frequency of saving training results to html
   beta1: 0.5 #momentum term of adam
   batch_size: 8 #input batch size
   lr: 0.0005 #initial learning rate for adam
