@@ -124,7 +124,8 @@ class ModuleTest(unittest.TestCase):
         )
 
         def assert_approx_equal_pose(pose1, pose2):
-            self.assertAlmostEqual(Vector(pose1), Vector(pose2))
+            """Substitute self.assertAlmostEqual because pose - pose is not implemented."""
+            self.assertAlmostEqual(Vector(pose1.position), Vector(pose2.position))
             self.assertAlmostEqual(
                 pose1.get_angle(), pose2.get_angle(), delta=math.radians(0.02)
             )

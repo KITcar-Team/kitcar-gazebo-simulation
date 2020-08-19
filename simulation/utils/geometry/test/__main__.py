@@ -7,6 +7,7 @@ import simulation.utils.geometry.test.test_point as point
 import simulation.utils.geometry.test.test_pose as pose
 import simulation.utils.geometry.test.test_transform as transform
 import simulation.utils.geometry.test.test_line_and_polygon as line_and_polygon
+import simulation.utils.geometry.test.test_frame as frame
 
 # Create test suite
 import unittest
@@ -24,6 +25,7 @@ append_test_cases(point)
 append_test_cases(pose)
 append_test_cases(transform)
 append_test_cases(line_and_polygon)
+append_test_cases(frame)
 
 runner = unittest.TextTestRunner()
 result = runner.run(suite)

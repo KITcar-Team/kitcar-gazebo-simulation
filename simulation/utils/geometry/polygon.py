@@ -15,6 +15,8 @@ from contextlib import suppress
 
 from typing import List
 
+from .frame import validate_and_maintain_frames
+
 
 class Polygon(shapely.geometry.polygon.Polygon):
     """Polygon class inheriting from shapely's Polygon class.
@@ -33,8 +35,14 @@ class Polygon(shapely.geometry.polygon.Polygon):
                          and right boundary of the polygon, e.g. a road lane
     """
 
-    def __init__(self, *args):
+    def __init__(self, *args, frame=None):
         """Polygon initialization."""
+
+        # Due to recursive calling of the init function, the frame should be set
+        # in the first call within the recursion only.
+        if not hasattr(self, "_frame"):
+            self._frame = frame
+
         # Create points out of arguments:
         with suppress(NotImplementedError, IndexError, TypeError):
             args = ([Point(p) for p in args[0]], 0)  # Make tuple
@@ -74,7 +82,7 @@ class Polygon(shapely.geometry.polygon.Polygon):
         Returns:
             list of points on the polygon.
         """
-        return [Point(x, y, z) for x, y, z in self.exterior.coords]
+        return [Point(x, y, z, frame=self._frame) for x, y, z in self.exterior.coords]
 
     def to_geometry_msg(self):
         """To ROS geometry_msg.
@@ -94,6 +102,7 @@ class Polygon(shapely.geometry.polygon.Polygon):
         """
         return np.array([p.to_numpy() for p in self.get_points()])
 
+    @validate_and_maintain_frames
     def __rmul__(self, tf: Transform):
         """ Transform this polygon.
 
@@ -108,11 +117,15 @@ class Polygon(shapely.geometry.polygon.Polygon):
         if not type(tf) is Transform:
             return NotImplemented
 
-        transformed = affinity.rotate(self, tf.get_angle(), use_radians=True, origin=[0, 0])
-        transformed = affinity.translate(transformed, tf.x, tf.y, tf.z)
+        # Get affine matrix, turn into list and restructure how shapely expects the input
+        flat = list(tf.to_affine_matrix().flatten())
+        flat = flat[0:3] + flat[4:7] + flat[8:11] + [flat[3], flat[7], flat[11]]
+
+        transformed = affinity.affine_transform(self, flat)
 
         return self.__class__(transformed.exterior.coords)
 
+    @validate_and_maintain_frames
     def __eq__(self, polygon: "Polygon"):
         """Compare two polygons using shapely's almost_equals.
 
@@ -123,4 +136,6 @@ class Polygon(shapely.geometry.polygon.Polygon):
         )
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}({self.get_points()})"
+        return f"{self.__class__.__qualname__}({self.get_points()})" + (
+            f",frame={self._frame.name}" if self._frame is not None else ""
+        )

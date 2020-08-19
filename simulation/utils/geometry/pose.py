@@ -14,8 +14,10 @@ import math
 
 from contextlib import suppress
 
+from .frame import validate_and_maintain_frames
 
-class Pose(Point):
+
+class Pose:
     """Pose class consisting of a position and an orientation.
 
     A Pose object can be used to describe the state of an object with a position \
@@ -27,13 +29,19 @@ class Pose(Point):
         2 (Point, float): Second argument is the poses's orientation angle in radians.
         3 (Point, pyquaternion.Quaternion): Point and quaternion.
 
-
     Attributes:
+        position (Point)
         orientation (pyquaternion.Quaternion)
     """
 
-    def __init__(self, *args):
+    def __init__(self, *args, frame=None):
         """Pose initialization."""
+
+        # Due to recursive calling of the init function, the frame should be set
+        # in the first call within the recursion only.
+        if not hasattr(self, "_frame"):
+            self._frame = frame
+
         with suppress(Exception):
             args = (args[0], Quaternion(*args[1]))
 
@@ -44,8 +52,8 @@ class Pose(Point):
         # Attempt default init
         with suppress(IndexError, NotImplementedError, TypeError):
             if type(args[1]) == Quaternion:
+                self.position = Point(args[0])
                 self.orientation = args[1]
-                super(Pose, self).__init__(args[0])
                 return
 
         # Try to initialize geometry pose
@@ -82,7 +90,7 @@ class Pose(Point):
             f"{self.__class__} initialization not implemented for {type(args[0])}"
         )
 
-    def get_angle(self) -> float:
+    def get_angle(self, axis=Vector(0, 0, 1)) -> float:
         """Angle of orientation.
 
         Returns:
@@ -93,7 +101,7 @@ class Pose(Point):
         # Also the quaternions rotation axis is sometimes (0,0,-1) at which point \
         # the angles flip their sign,
         # taking the scalar product of the axis and z fixes that as well
-        return Vector(self.orientation.axis) * Vector(0, 0, 1) * self.orientation.radians
+        return Vector(self.orientation.axis) * axis * self.orientation.radians
 
     def to_geometry_msg(self) -> geometry_msgs.Pose:
         """To ROS geometry_msg.
@@ -101,7 +109,7 @@ class Pose(Point):
         Returns:
             This pose as a geometry_msgs/Pose.
         """
-        point = super(Pose, self).to_geometry_msg()
+        point = self.position.to_geometry_msg()
         orientation = geometry_msgs.Quaternion(
             self.orientation.x, self.orientation.y, self.orientation.z, self.orientation.w
         )
@@ -112,6 +120,7 @@ class Pose(Point):
 
         return pose
 
+    @validate_and_maintain_frames
     def __rmul__(self, tf: "Transform"):
         """Apply transformation.
 
@@ -122,22 +131,29 @@ class Pose(Point):
             Pose transformed by tf.
         """
         with suppress(NotImplementedError, AttributeError):
-            return self.__class__(tf * Vector(self), self.get_angle() + tf.get_angle())
+            return self.__class__(
+                tf * Vector(self.position),
+                tf.rotation * self.orientation,
+                frame=self._frame,
+            )
 
         return NotImplemented
 
+    @validate_and_maintain_frames
     def __eq__(self, pose) -> bool:
         TOLERANCE = 1e-8  # Radian!
         if self.__class__ != pose.__class__:
             return NotImplemented
         return (
-            self.get_angle() - pose.get_angle()
-        ) < TOLERANCE and self.to_numpy().all() == pose.to_numpy().all()
+            (self.orientation * pose.orientation.inverse).angle
+        ) < TOLERANCE and self.position.to_numpy().all() == pose.position.to_numpy().all()
 
     def __repr__(self) -> str:
         return (
-            f"{self.__class__.__qualname__}(position={self.x, self.y, self.z},"
-            f"orientation= {round(math.degrees(self.get_angle()),4)} degrees)"
+            f"{self.__class__.__qualname__}(position={self.position},"
+            + f"orientation= {self.orientation.angle}"
+            + (f",frame={self._frame.name}" if self._frame is not None else "")
+            + ")"
         )
 
     def __hash__(self):
