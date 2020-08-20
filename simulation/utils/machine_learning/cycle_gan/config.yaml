@@ -25,7 +25,6 @@ base:
   norm: instance #instance normalization or batch normalization [instance | batch | none]
   output_nc: 1 # # of output image channels: 3 for RGB and 1 for grayscale
   preprocess: resize_and_crop #scaling and cropping of images at load time [resize_and_crop | crop | scale_width | scale_width_and_crop | none]
-  serial_batches: False #if true, takes images in order to make batches, otherwise takes them randomly
   suffix: #customized suffix: opt.name = opt.name + suffix: e.g., {model}_{netg}_size{load_size}
   verbose: False #if specified, print more debugging information
   cycle_noise_stddev: 0 #Standard deviation of noise added to the cycle input. Mean is 0.

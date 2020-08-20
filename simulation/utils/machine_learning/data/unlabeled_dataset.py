@@ -81,8 +81,8 @@ class UnlabeledDataLoader:
         dataset: UnlabeledDataset,
         max_dataset_size: int,
         batch_size: int = 1,
-        serial_batches: bool = False,
         num_threads: int = 1,
+        sequential: bool = False,
     ):
         """Initialize this class
 
@@ -93,18 +93,24 @@ class UnlabeledDataLoader:
             dataset (UnlabeledDataset): the dataset to load
             max_dataset_size (int): the maximum amount of images to load
             batch_size (int): the input batch size
-            serial_batches (bool): if true, takes images in order to make
-                batches,
             num_threads (int): threads for loading data
+            sequential (bool): if true, takes images in correct order (file path names),
         """
         self.dataset = dataset
         print("dataset [%s] was created" % type(self.dataset).__name__)
+
+        sampler = None
+        if sequential:
+            sampler = torch.utils.data.SequentialSampler(self.dataset)
+
         self.dataloader = torch.utils.data.DataLoader(
             self.dataset,
             batch_size=batch_size,
-            shuffle=not serial_batches,
+            shuffle=not sequential,
             num_workers=num_threads,
+            sampler=sampler,
         )
+
         self.batch_size = batch_size
         self.max_dataset_size = max_dataset_size
 
