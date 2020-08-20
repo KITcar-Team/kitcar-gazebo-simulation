@@ -32,7 +32,7 @@ if __name__ == "__main__":
         opt["dataset_a"],
         opt["dataset_b"],
         batch_size=1,
-        serial_batches=True,
+        sequential=True,
         num_threads=0,
         grayscale_A=(opt["input_nc"] == 1),
         grayscale_B=(opt["output_nc"] == 1),
