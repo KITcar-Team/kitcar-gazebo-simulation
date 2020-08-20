@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="time_limit" value="120"/>
+  <arg name="start_groundtruth" default="true" />
+  <arg name="start_renderer" default="false" />
+  <arg name="start_object_controller" default="false" />
+  <arg name="seed" default="KITCAR" />
+  <arg name="force_reload_road" default="true" />
+  <arg name="road" default="default_road" />
+  <arg name="rate" value="10"/>
+
+  <node name="groundtruth_node" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="groundtruth_node" output="screen">
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics"/>
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state" />
+    <rosparam file="$(find simulation_groundtruth)/param/mock_groundtruth/default.yaml" command="load"/>
+    <param name="start_groundtruth" value="$(arg start_groundtruth)" />
+    <param name="start_renderer" value="$(arg start_renderer)" />
+    <param name="start_object_controller" value="$(arg start_object_controller)" />
+    <param name="seed" value="$(arg seed)" />
+    <param name="road" value="$(arg road)" />
+    <param name="force_reload_road" value="$(arg force_reload_road)" />
+  </node>
+
+  <!-- Only include the visualization node if the rviz parameter is true -->
+  <node name="groundtruth_visualization_node" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="groundtruth_visualization_node" output="screen">
+    <param name="rate" value="$(arg rate)" />
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load" />
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics" />
+    <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/default.yaml" command="load" ns="vehicle_simulation_link" />
+  </node>
+
+  <test test-name="test_groundtruth_visualization_node" pkg="simulation_groundtruth" time-limit="$(arg time_limit)" type="test_groundtruth_visualization_node">
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load" />
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics" />
+    <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/default.yaml" command="load" ns="vehicle_simulation_link" />
+  </test>
+
+</launch>
+

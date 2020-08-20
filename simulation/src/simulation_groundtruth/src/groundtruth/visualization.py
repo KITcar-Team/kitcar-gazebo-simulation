@@ -14,10 +14,7 @@ from simulation_groundtruth.srv import (
     LabeledPolygonSrv,
     IntersectionSrv,
 )
-from simulation_groundtruth.msg import (
-    Parking as ParkingMsg,
-    LabeledPolygon as LabeledPolygonMsg,
-)
+from simulation_groundtruth.msg import Parking as ParkingMsg
 from geometry_msgs.msg import Point32 as GeomPoint
 
 
@@ -191,7 +188,6 @@ class GroundtruthVisualizationNode(NodeBase):
                 [
                     Polygon(msg.frame).to_geometry_msg().points
                     for msg in self.get_obstacles(sec.id).polygons
-                    if msg.type == LabeledPolygonMsg.OBSTACLE
                 ]
                 for sec in self.get_sections().sections
             ),
