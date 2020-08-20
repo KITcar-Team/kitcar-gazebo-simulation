@@ -156,7 +156,7 @@ def init_net(
         init_gain (float): scaling factor for normal, xavier and orthogonal.
         gpu_ids: which GPUs the network runs on: e.g., 0,1,2
     """
-    if len(gpu_ids) > 0:
+    if gpu_ids and len(gpu_ids) > 0:
         assert torch.cuda.is_available()
         net.to(gpu_ids[0])
         net = torch.nn.DataParallel(net, gpu_ids)  # multi-GPUs
