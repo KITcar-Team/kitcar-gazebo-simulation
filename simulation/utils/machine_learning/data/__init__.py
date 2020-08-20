@@ -8,7 +8,7 @@ def load_unpaired_unlabeled_datasets(
     dir_B: Union[str, List[str]],
     max_dataset_size: int,
     batch_size: int,
-    serial_batches: bool,
+    sequential: bool,
     num_threads: int,
     grayscale_A: bool,
     grayscale_B: bool,
@@ -24,7 +24,7 @@ def load_unpaired_unlabeled_datasets(
         max_dataset_size (int): maximum amount of images to load; -1 means
             infinity
         batch_size (int): input batch size
-        serial_batches (bool): if true, takes images in order to make batches,
+        sequential (bool): if true, takes images in order,
             otherwise takes them randomly
         num_threads (int): threads for loading data
         grayscale_A (bool): transform domain A to gray images
@@ -43,15 +43,15 @@ def load_unpaired_unlabeled_datasets(
         dataset=A,
         max_dataset_size=max_dataset_size,
         batch_size=batch_size,
-        serial_batches=serial_batches,
         num_threads=num_threads,
+        sequential=sequential,
     )
     B = UnlabeledDataLoader(
         dataset=B,
         max_dataset_size=max_dataset_size,
         batch_size=batch_size,
-        serial_batches=serial_batches,
         num_threads=num_threads,
+        sequential=sequential,
     )
 
     return A, B

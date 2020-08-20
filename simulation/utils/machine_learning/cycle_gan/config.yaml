@@ -5,7 +5,7 @@ base:
   crop_size: 256 #then crop to this size
   dilations: [1,2] #dilation for individual conv layers in every resnet block
   epoch: latest #which epoch to load? set to latest to use latest cached model
-  gpu_ids: [0] #gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU
+  gpu_ids: [0] #gpu ids: e.g. 0  0,1,2, 0,2. leave blank for CPU
   init_gain: 0.02 #scaling factor for normal, xavier and orthogonal.
   init_type: normal #network initialization [normal | xavier | kaiming | orthogonal]
   input_nc: 1 # # of input image channels: 3 for RGB and 1 for grayscale
@@ -25,7 +25,6 @@ base:
   norm: instance #instance normalization or batch normalization [instance | batch | none]
   output_nc: 1 # # of output image channels: 3 for RGB and 1 for grayscale
   preprocess: resize_and_crop #scaling and cropping of images at load time [resize_and_crop | crop | scale_width | scale_width_and_crop | none]
-  serial_batches: False #if true, takes images in order to make batches, otherwise takes them randomly
   suffix: #customized suffix: opt.name = opt.name + suffix: e.g., {model}_{netg}_size{load_size}
   verbose: False #if specified, print more debugging information
   cycle_noise_stddev: 0 #Standard deviation of noise added to the cycle input. Mean is 0.
