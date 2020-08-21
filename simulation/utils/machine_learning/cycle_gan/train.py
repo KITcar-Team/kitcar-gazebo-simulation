@@ -7,7 +7,6 @@ import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
 from simulation.utils.machine_learning.cycle_gan.util.visualizer import Visualizer
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Read config file.")
     parser.add_argument(
@@ -67,6 +66,7 @@ if __name__ == "__main__":
         checkpoints_dir=opt["checkpoints_dir"],
     )  # create a visualizer that display/save images and plots
     total_iters = 0  # the total number of training iterations
+    visualizer.show_hyperparameters(opt)
 
     for epoch in range(
         opt["epoch_count"], opt["n_epochs"] + opt["n_epochs_decay"] + 1
