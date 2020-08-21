@@ -2,6 +2,7 @@ import os
 import subprocess
 import sys
 import time
+from typing import Any, Dict
 
 import numpy as np
 from visdom import Visdom
@@ -91,6 +92,42 @@ class Visualizer:
             ["visdom", "-p", str(port)], stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         print(f"Launched Visdom server: http://localhost:{port}")
+
+    def show_hyperparameters(self, hyperparameters: Dict[str, Any]):
+        """Create a html table with all parameters from the dict and displays it on visdom.
+
+        Args:
+            hyperparameters: a dict containing all hyperparameters
+        """
+        html = (
+            "<style>"
+            "table"
+            "{ border: 1px solid white; width: 500px; height: 200px; text-align: center; border-collapse: collapse; }"
+            "table td, table th"
+            "{ border: 1px solid #FFFFFF; padding: 3px 2px; }"
+            "table tbody td"
+            "{font-size: 13px;}"
+            "table tr:nth-child(even)"
+            "{ background: #D0E4F5; }"
+            "table thead"
+            "{ background: #0B6FA4; border-bottom: 5px solid #FFFFFF; }"
+            "table thead th {"
+            "font-size: 17px; font-weight: bold; color: white; text-align: center; border-left: 2px solid white;}"
+            "table thead th:first-child"
+            "{ border-left: none; }"
+            "</style> "
+        )
+        html += "<h1>Hyperparameters</h1>"
+        html += "<table>"
+        html += "<thead><tr><th>Key</th><th>Value</th></tr></thead>"
+        html += "<tbody>"
+
+        for key, value in hyperparameters.items():
+            html += f"<tr><td>{key}</td><td>{value}</td></tr>"
+
+        html += "</tbody></table>"
+
+        self.vis.text(html)
 
     def display_current_results(self, visuals: dict) -> None:
         """Display current results on visdom.
