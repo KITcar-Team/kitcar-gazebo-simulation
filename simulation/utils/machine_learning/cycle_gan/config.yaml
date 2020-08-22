@@ -36,6 +36,10 @@ train:
   dataset_a:  #path to images of domain A (real images). Can be a list of folders
     - ./../../../../data/real_images/maschinen_halle
     - ./../../../../data/real_images/maschinen_halle_no_obstacles
+    - ./../../../../data/real_images/beg_2017
+    - ./../../../../data/real_images/beg_2019
+    - ./../../../../data/real_images/cc_2018
+    - ./../../../../data/real_images/cc_2019
   dataset_b: #path to images of domain B (simulated images). Can be a list of folders
     - ./../../../../data/simulated_images/random_roads
   display_env: main #visdom display environment name (default is "main")
