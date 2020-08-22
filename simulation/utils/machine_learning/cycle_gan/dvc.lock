@@ -16,3 +16,24 @@ dr_drift_256:
     md5: fa19ccada3659a17fb3a3398d8eb8525
   - path: checkpoints/dr_drift_256/loss_log.txt
     md5: 3e653da6855cf1c706128ddb5248229b
+test_dr_drift_256:
+  cmd: python3 test.py
+  deps:
+  - path: ../../../../data/simulated_images/complex_road
+    md5: 5df71839e3d678fe27e3211f6d788da4.dir
+  - path: config.yaml
+    md5: baf6f9f16c3fb10445353f1269164c17
+  outs:
+  - path: results/dr_drift_256/images
+    md5: a9c2e8bf9f503e68c6c3600bfd3a1352.dir
+make_video_dr_drift_256:
+  cmd: python3 -m simulation.utils.machine_learning.data.images_to_video  --image_pattern
+    results/dr_drift_256/images/fake_b/%d.png --output_file results/dr_drift_256/out.mp4
+  deps:
+  - path: config.yaml
+    md5: baf6f9f16c3fb10445353f1269164c17
+  - path: results/dr_drift_256/images/fake_b
+    md5: 72a2674f6f3f37cea356b394d46dcf20.dir
+  outs:
+  - path: results/dr_drift_256/out.mp4
+    md5: 9a7b87b77f608baa5392f181f0306251
