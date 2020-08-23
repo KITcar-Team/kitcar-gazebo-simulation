@@ -12,6 +12,7 @@ To cope with these challenges, the **simulation_brain_link** package contains no
    :maxdepth: 1
    :caption: Packages and Modules
 
+   ../_source_files/simulation.src.simulation_brain_link.src.sensor_camera
    ../_source_files/simulation.src.simulation_brain_link.src.sensor_tof
    ../_source_files/simulation.src.simulation_brain_link.src.vehicle_simulation_link
 
@@ -26,7 +27,7 @@ The camera used in Dr.Drift does some internal precropping to enable a higher fr
 
   roslaunch simulation_brain_link sensor_camera_node.launch
 
-See :ref:`sensor_camera_node` for more.
+See :mod:`simulation.src.simulation_brain_link.src.sensor_camera.node` for more.
 
 `Dr. Drift` is also equipped with `time-of-flight` distance-sensors. However, Gazebo does not provide distance sensors out of the box.
 The SensorTofNode converts the output of a depth camera into a distance by publishing the distance to the closest object.
