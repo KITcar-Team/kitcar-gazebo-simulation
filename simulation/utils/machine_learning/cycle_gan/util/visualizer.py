@@ -4,6 +4,7 @@ import sys
 import time
 from typing import Any, Dict
 
+import matplotlib.pyplot as plt
 import numpy as np
 from visdom import Visdom
 
@@ -68,6 +69,7 @@ class Visualizer:
         self.display_id = display_id
         self.name = name
         self.port = display_port
+        self.checkpoints_dir = checkpoints_dir
         self.saved = False
         if (
             self.display_id > 0
@@ -136,40 +138,26 @@ class Visualizer:
             visuals (dict): dictionary of images to display or save
         """
         if self.display_id > 0:  # show images in the browser using visdom
-            num_cols = 4
-            if num_cols > 0:  # show all the images in one visdom panel
-                num_cols = min(num_cols, len(visuals))
-                # create a table of images.
-                title = self.name
-                images = []
-                idx = 0
-                image_numpy = None
-                for label, image in visuals.items():
-                    image_numpy = util.tensor2im(image)
-                    images.append(image_numpy.transpose([2, 0, 1]))
-                    idx += 1
-                white_image = np.ones_like(image_numpy.transpose([2, 0, 1])) * 255
-                while idx % num_cols != 0:
-                    images.append(white_image)
-                    idx += 1
-                self.vis.images(
-                    images,
-                    nrow=num_cols,
-                    win=str(self.display_id + 1),
-                    padding=2,
-                    opts=dict(title=title + " images"),
-                )
-
-            else:  # show each image in a separate visdom panel;
-                idx = 1
-                for label, image in visuals.items():
-                    image_numpy = util.tensor2im(image)
-                    self.vis.image(
-                        image_numpy.transpose([2, 0, 1]),
-                        opts=dict(title=label),
-                        win=str(self.display_id + idx),
-                    )
-                    idx += 1
+            # create a table of images.
+            title = self.name
+            images = []
+            idx = 0
+            image_numpy = None
+            for label, image in visuals.items():
+                image_numpy = util.tensor2im(image)
+                images.append(image_numpy.transpose([2, 0, 1]))
+                idx += 1
+            white_image = np.ones_like(image_numpy.transpose([2, 0, 1])) * 255
+            while idx % 4 != 0:
+                images.append(white_image)
+                idx += 1
+            self.vis.images(
+                images,
+                nrow=4,
+                win=str(self.display_id + 1),
+                padding=2,
+                opts=dict(title=title + " images"),
+            )
 
     def plot_current_losses(self, epoch: int, counter_ratio: float, losses: dict) -> None:
         """display the current losses on visdom display: dictionary of error
@@ -197,6 +185,26 @@ class Visualizer:
             },
             win=str(self.display_id),
         )
+
+    def save_losses_as_image(self) -> None:
+        """This method saves the tracked losses as png file under the checkpoint."""
+        # Create figure
+        fig = plt.figure()
+        # Create sub plot
+        ax = fig.add_subplot(1, 1, 1)
+        # transpose y data, as self.plot_data['Y'] has the wrong format for matplotlib
+        y_data_transposed = [[] for i in range(8)]
+        for entry in self.plot_data["Y"]:
+            for i, item in enumerate(entry):
+                y_data_transposed[i].append(item)
+
+        # Adding all losses to the figure
+        for y_data, label in zip(y_data_transposed, self.plot_data["legend"]):
+            ax.plot(self.plot_data["X"], y_data, label=label)
+            ax.legend()
+
+        # Save plot
+        plt.savefig(os.path.join(self.checkpoints_dir, self.name, "loss.png"))
 
     # losses: same format as |losses| of plot_current_losses
     def print_current_losses(
