@@ -114,6 +114,7 @@ if __name__ == "__main__":
                 )
                 save_suffix = "iter_%d" % total_iters if opt["save_by_iter"] else "latest"
                 model.save_networks(save_suffix)
+                visualizer.save_losses_as_image()
 
         model.update_learning_rate()  # update learning rates in the beginning of every epoch.
         if (
@@ -124,6 +125,7 @@ if __name__ == "__main__":
             )
             model.save_networks("latest")
             model.save_networks(epoch)
+            visualizer.save_losses_as_image()
 
         print(
             "End of epoch %d / %d \t Time Taken: %d sec"

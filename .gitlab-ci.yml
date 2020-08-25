@@ -5,6 +5,7 @@ variables:
   GIT_LFS_SKIP_SMUDGE: "1"  #  Don't pull Git LFS
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar/
+  INIT_INPUT: '1\nyn'
 
 before_script:
   # Run the container start script to enable the pulseaudio & xserver
@@ -15,7 +16,7 @@ before_script:
 
   # Install packages and requirements
   # Leave out machine learning packages because they are not used within the CI right now.
-  - printf '1\nyn' | ./init/init.sh || true
+  - printf $INIT_INPUT | ./init/init.sh || true
 
   - source init/bashrc || true
 
@@ -120,7 +121,33 @@ test-drive-evaluation:
     # Drive into the blocked area
     - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/blocked_area automatic_drive:=true expected_result_state:=3
 
-
+test-cyclegan:
+  stage: test
+  variables:
+    INIT_INPUT: '1\nyy'
+  only:
+    changes:
+      - data/real_images.dvc
+      - data/simulated_images.dvc
+      - simulation/utils/machine_learning/
+  tags:
+    - workstation
+  script:
+    - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
+    - dvc pull data/real_images/maschinen_halle_parking --run-cache
+    - dvc pull data/simulated_images/complex_road --run-cache
+    - cd simulation/utils/machine_learning/cycle_gan
+    # pull cache from server and checkout
+    - dvc pull train_dr_drift_256 --run-cache
+    # Test current model, make videos and gif, and commit to dvc
+    - dvc repro test_dr_drift_256 -s
+    - dvc commit test_dr_drift_256
+    - dvc repro make_video_dr_drift_256 -s
+    - dvc commit make_video_dr_drift_256
+    - dvc repro stacked_gif_dr_drift_256 -s
+    - dvc commit stacked_gif_dr_drift_256
+    # Push to dvc remote
+    - dvc push
 
 test-documentation:
   stage: test
@@ -148,6 +175,44 @@ build-documentation:
     paths:
       - docs/_build/html/*
     expire_in: 2 day
+
+cml-cyclegan:
+  stage: deploy
+  image: dvcorg/cml-py3:latest
+  only:
+    changes:
+      - data/real_images.dvc
+      - data/simulated_images.dvc
+      - simulation/utils/machine_learning/
+  script:
+    # pull cache from server and checkout
+    - cd simulation/utils/machine_learning/cycle_gan
+    - dvc pull train_dr_drift_256 --run-cache # for loss.png
+    - dvc pull make_video_dr_drift_256 --run-cache # for stacked video
+    - dvc pull stacked_gif_dr_drift_256 --run-cache # for stacked gif
+    - cd ../../../../
+    # copy the loss graph to root directory
+    - mkdir cml
+    - cp simulation/utils/machine_learning/cycle_gan/results/dr_drift_256/stacked.mp4 cml/stacked.mp4
+    - cp simulation/utils/machine_learning/cycle_gan/results/dr_drift_256/stacked.gif cml/stacked.gif
+    - cp simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/loss.png cml/loss.png
+    - cp simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/loss.png loss.png
+    # Create content for the report.md
+    - echo "## Dr Drift 256" >> report.md
+    - echo "# Translated video" >> report.md
+    - echo "![Dr Drift 256](https://git.kitcar-team.de/kitcar/kitcar-gazebo-simulation/-/jobs/"$CI_JOB_ID"/artifacts/raw/cml/stacked.gif)" >> report.md
+    - echo "<br>" >> report.md
+    - echo "You can find the full size version [here](https://git.kitcar-team.de/kitcar/kitcar-gazebo-simulation/-/jobs/"$CI_JOB_ID"/artifacts/browse/cml)." >> report.md
+    - echo "# Loss values" >> report.md
+    - cml-publish loss.png --md >> report.md
+    # Send report.md as comment
+    - cml-send-comment report.md
+  artifacts:
+    paths:
+      - cml/stacked.gif
+      - cml/loss.png
+      - cml/stacked.mp4
+    expire_in: 2 weeks
 
 # Build and deploy the CI docker image to the gitlab registry
 # This is done everytime the master branch is updated
