@@ -10,3 +10,17 @@ stages:
     - checkpoints/dr_drift_256/latest_net_g_a.pth
     - checkpoints/dr_drift_256/latest_net_g_b.pth
     - checkpoints/dr_drift_256/loss_log.txt
+  test_dr_drift_256:
+    cmd: python3 test.py
+    deps:
+    - ../../../../data/simulated_images/complex_road
+    - config.yaml
+    outs:
+    - results/dr_drift_256/images
+  make_video_dr_drift_256:
+    cmd: python3 -m simulation.utils.machine_learning.data.images_to_video  --image_pattern results/dr_drift_256/images/fake_b/%d.png --output_file results/dr_drift_256/out.mp4
+    deps:
+    - results/dr_drift_256/images/fake_b
+    - config.yaml
+    outs:
+    - results/dr_drift_256/out.mp4

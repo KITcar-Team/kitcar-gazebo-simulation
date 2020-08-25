@@ -73,3 +73,35 @@ The sensor plugin publishes the camera image on the ROS topic \
    .. prompt:: bash
 
       rosrun simulation_brain_link generate_dr_drift
+
+Camera Image Augmentation
+-------------------------
+
+Additionally to Gazebo's rendering engine there's is a generative neural network,
+trained to translate the simulated camera into a real-looking image.
+The code for the network and surrounding scripts are located in
+:ref:`simulation.utils.machine_learning.cycle_gan`.
+Because training the network(s) is computationally heavy,
+pretrained weights of the network are stored in DVC and can be downloaded with
+
+.. prompt:: bash
+
+   dvc pull simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/latest_net_g_b.pth
+
+. See :ref:`installation` for instructions to set up DVC and make sure that the machine learning pip3 packages
+have been installed by selecting to do so when running the ``init/init.sh`` script.
+If everything is set up correctly, using the generative model is as easy as launching with *apply_gan:=true*:
+
+
+.. note::
+
+   The camera image can be augmented using the cycle gan's generative model by running:
+
+   .. prompt:: bash
+
+      roslaunch gazebo_simulation master.launch apply_gan:=true (control_sim_rate:=true evaluate:=true)
+
+   (The parameters *control_sim_rate and evaluate* are not necessary but ensure the camera image gets
+   processed with 60 Hz.)
+
+
