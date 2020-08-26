@@ -108,7 +108,7 @@ class CycleGANModel:
             name (str): name of the experiment. It decides where to store
                 samples and models
         """
-        self.gpu_ids = gpu_ids
+        self.gpu_ids = gpu_ids if torch.cuda.device_count() >= 1 else None
         self.is_train = is_train
         self.lr_policy = lr_policy
         self.lambda_identity = lambda_identity
