@@ -51,7 +51,6 @@ if __name__ == "__main__":
     )  # create a model given model and other options
     model.setup(
         verbose=opt["verbose"],
-        continue_train=opt["continue_train"],
         load_iter=opt["load_iter"],
         epoch=opt["epoch"],
         lr_policy=opt["lr_policy"],
