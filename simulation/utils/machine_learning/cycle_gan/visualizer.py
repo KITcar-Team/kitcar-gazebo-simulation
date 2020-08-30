@@ -8,35 +8,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from visdom import Visdom
 
-from simulation.utils.machine_learning.cycle_gan.util.util import mkdir
-from . import util
+from simulation.utils.machine_learning.data.image_operations import tensor2im
 
 if sys.version_info[0] == 2:
     VisdomExceptionBase = Exception
 else:
     VisdomExceptionBase = ConnectionError
-
-
-def save_images(
-    visuals: dict, destination: str, aspect_ratio: float = 1.0, iteration_count: int = 1,
-) -> None:
-    """Save images to the disk.
-
-    This function will save images stored in 'visuals'.
-
-    Args:
-        destination: the folder to save the images to
-        visuals (dict): an ordered dictionary that stores (name, images (either
-            tensor or numpy) ) pairs
-        aspect_ratio (float): the aspect ratio of saved images
-    """
-    destination = os.path.join(destination, "images")
-    mkdir(destination)
-    for label, im_data in visuals.items():
-        mkdir(os.path.join(destination, label))
-        im = util.tensor2im(im_data)
-        save_path = os.path.join(destination, label, f"{iteration_count}.png")
-        util.save_image(im, save_path, aspect_ratio=aspect_ratio)
 
 
 class Visualizer:
@@ -76,6 +53,10 @@ class Visualizer:
         ):  # connect to a visdom server given <display_port> and <display_server>
             self.create_visdom_connections(self.port)
             self.vis = Visdom(port=self.port)
+
+        if not os.path.isdir(os.path.join(checkpoints_dir, name)):
+            os.makedirs(checkpoints_dir)
+            os.makedirs(os.path.join(checkpoints_dir, name))
 
         self.log_name = os.path.join(checkpoints_dir, name, "loss_log.txt")
         with open(self.log_name, "a") as log_file:
@@ -144,7 +125,7 @@ class Visualizer:
             idx = 0
             image_numpy = None
             for label, image in visuals.items():
-                image_numpy = util.tensor2im(image)
+                image_numpy = tensor2im(image)
                 images.append(image_numpy.transpose([2, 0, 1]))
                 idx += 1
             white_image = np.ones_like(image_numpy.transpose([2, 0, 1])) * 255
@@ -186,8 +167,8 @@ class Visualizer:
             win=str(self.display_id),
         )
 
-    def save_losses_as_image(self) -> None:
-        """This method saves the tracked losses as png file under the checkpoint."""
+    def save_losses_as_image(self):
+        """Save the tracked losses as png file under the checkpoint."""
         # Create figure
         fig = plt.figure()
         # Create sub plot

@@ -11,7 +11,7 @@ import simulation.utils.machine_learning.cycle_gan.models.discriminator
 import simulation.utils.machine_learning.cycle_gan.models.gan_loss
 import simulation.utils.machine_learning.cycle_gan.models.generator
 from simulation.utils.machine_learning.cycle_gan.models import helper
-from simulation.utils.machine_learning.cycle_gan.util.image_pool import ImagePool
+from simulation.utils.machine_learning.data.image_pool import ImagePool
 
 
 class CycleGANModel:

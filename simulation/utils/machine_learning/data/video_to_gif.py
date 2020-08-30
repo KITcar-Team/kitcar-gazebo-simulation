@@ -5,7 +5,7 @@ import os
 def video_to_gif(
     input_file: str, output_file: str, width: int = None, length: int = None
 ) -> None:
-    """This function converts a video (input_file) to gif(output_file)
+    """Convert video (input_file) to gif (output_file)
     Args:
         input_file: the path of the input video
         output_file: the path of the output gif
