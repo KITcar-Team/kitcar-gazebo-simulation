@@ -1,16 +1,15 @@
 import os
 import pathlib
 
+import cv2
 import numpy as np
 import torch
-import cv2
-import PIL
 import yaml
+from PIL import Image
 
 from simulation.utils.machine_learning.data.base_dataset import get_transform
-
 from .models.cycle_gan_model import CycleGANModel
-from .util import util as cycle_gan_util
+from ..data.image_operations import tensor2im
 
 
 class RosConnector:
@@ -67,7 +66,7 @@ class RosConnector:
         h, w = image.shape
 
         # Convert to PIL
-        image = PIL.Image.fromarray(image)
+        image = Image.fromarray(image)
 
         # Apply transformations
         image: torch.Tensor = self.transform(image)
@@ -80,7 +79,7 @@ class RosConnector:
         result: torch.Tensor = self.model.netg_a.forward(image).detach()
 
         # From [-1,1] to [0,256]
-        result: np.ndarray = cycle_gan_util.tensor2im(result, to_rgb=False)
+        result: np.ndarray = tensor2im(result, to_rgb=False)
 
         # Resize to the size the input image has
         result = cv2.resize(result, dsize=(w, h), interpolation=cv2.INTER_LINEAR)

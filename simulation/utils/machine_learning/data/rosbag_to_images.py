@@ -10,7 +10,7 @@ def rosbag_to_images(bag_path: str, output_dir: str, image_topic: str) -> None:
 
     # Create output_dir if it doesnt exist
     if not os.path.exists(output_dir):
-        os.mkdir(output_dir)
+        os.makedirs(output_dir)
 
     # Find all rosbags recursively
     bag_files = []

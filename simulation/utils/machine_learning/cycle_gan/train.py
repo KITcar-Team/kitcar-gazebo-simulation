@@ -5,7 +5,7 @@ import yaml
 
 import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
-from simulation.utils.machine_learning.cycle_gan.util.visualizer import Visualizer
+from simulation.utils.machine_learning.cycle_gan.visualizer import Visualizer
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Read config file.")
