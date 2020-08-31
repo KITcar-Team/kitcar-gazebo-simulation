@@ -1,10 +1,51 @@
-dr_drift_256:
+test_dr_drift_256:
+  cmd: python3 test.py
+  deps:
+  - path: ./../../../../data/real_images/maschinen_halle_parking
+    md5: 7415bfcca62c3c7e76cfb72eb59f8988.dir
+  - path: ./../../../../data/simulated_images/complex_road
+    md5: 5df71839e3d678fe27e3211f6d788da4.dir
+  - path: checkpoints/dr_drift_256/latest_net_g_a.pth
+    md5: 960192440d7011e941306c290b3bf11f
+  - path: checkpoints/dr_drift_256/latest_net_g_b.pth
+    md5: fa19ccada3659a17fb3a3398d8eb8525
+  - path: config.yaml
+    md5: 096c4961e2d8395d98fbf63c19808bde
+  outs:
+  - path: results/dr_drift_256/images
+    md5: 2863337531f342cb0d09e9703c494ab2.dir
+make_video_dr_drift_256:
+  cmd: python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
+    results/dr_drift_256/images/fake_b/%d.png --output_file results/dr_drift_256/fake_b.mp4
+    && python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
+    results/dr_drift_256/images/real_a/%d.png --output_file results/dr_drift_256/real_a.mp4
+    && ffmpeg -y -i results/dr_drift_256/real_a.mp4 -i results/dr_drift_256/fake_b.mp4
+    -filter_complex vstack=inputs=2 results/dr_drift_256/stacked.mp4
+  deps:
+  - path: results/dr_drift_256/images/fake_b
+    md5: 7f11e6fa9c25fa55f751439938dcc8c3.dir
+  - path: results/dr_drift_256/images/real_a
+    md5: b67c5f4d9cd7f5843c8d3e2bd14a28dd.dir
+  outs:
+  - path: results/dr_drift_256/fake_b.mp4
+    md5: aefa9e090b0943c965481b8e4fe282cf
+  - path: results/dr_drift_256/real_a.mp4
+    md5: ab6ba3f1c2bba75dbe548dc3a49e2398
+  - path: results/dr_drift_256/stacked.mp4
+    md5: 46eedd5eda249fde90c614d00b205001
+train_dr_drift_256:
   cmd: python3 train.py
   deps:
-  - path: ../../../../data
-    md5: b9808048d4c92ca2b25fd3700b1d7516.dir
+  - path: ./../../../../data/real_images/beg_2019
+    md5: 06f320661f9dffefa1cfc99731f84c91.dir
+  - path: ./../../../../data/real_images/maschinen_halle
+    md5: 22104c26ee673a71eefbc3452dc394b4.dir
+  - path: ./../../../../data/real_images/maschinen_halle_no_obstacles
+    md5: 981c3d3a603118ade9afa92b7f60cd00.dir
+  - path: ./../../../../data/simulated_images/random_roads
+    md5: bc533a1005c5c883bdcd29a4eaafd3cf.dir
   - path: config.yaml
-    md5: 481c66bc8fb02b4499809a47dc290ac0
+    md5: 096c4961e2d8395d98fbf63c19808bde
   outs:
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
     md5: 84ef6d1630b9ae7e3d706f9dd6c2e3d0
@@ -14,26 +55,16 @@ dr_drift_256:
     md5: 960192440d7011e941306c290b3bf11f
   - path: checkpoints/dr_drift_256/latest_net_g_b.pth
     md5: fa19ccada3659a17fb3a3398d8eb8525
+  - path: checkpoints/dr_drift_256/loss.png
+    md5: 775e3152d4d818ac581128a91e94f64e
   - path: checkpoints/dr_drift_256/loss_log.txt
     md5: 3e653da6855cf1c706128ddb5248229b
-test_dr_drift_256:
-  cmd: python3 test.py
+stacked_gif_dr_drift_256:
+  cmd: python3 ../data/video_to_gif.py --input_file results/dr_drift_256/stacked.mp4
+    --output_file results/dr_drift_256/stacked.gif --width 400 --length 10
   deps:
-  - path: ../../../../data/simulated_images/complex_road
-    md5: 5df71839e3d678fe27e3211f6d788da4.dir
-  - path: config.yaml
-    md5: baf6f9f16c3fb10445353f1269164c17
+  - path: results/dr_drift_256/stacked.mp4
+    md5: 46eedd5eda249fde90c614d00b205001
   outs:
-  - path: results/dr_drift_256/images
-    md5: a9c2e8bf9f503e68c6c3600bfd3a1352.dir
-make_video_dr_drift_256:
-  cmd: python3 -m simulation.utils.machine_learning.data.images_to_video  --image_pattern
-    results/dr_drift_256/images/fake_b/%d.png --output_file results/dr_drift_256/out.mp4
-  deps:
-  - path: config.yaml
-    md5: baf6f9f16c3fb10445353f1269164c17
-  - path: results/dr_drift_256/images/fake_b
-    md5: 72a2674f6f3f37cea356b394d46dcf20.dir
-  outs:
-  - path: results/dr_drift_256/out.mp4
-    md5: 9a7b87b77f608baa5392f181f0306251
+  - path: results/dr_drift_256/stacked.gif
+    md5: ff3a587a0c2ac73fddea84bb5653c665

@@ -5,7 +5,7 @@ import yaml
 
 import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
-from simulation.utils.machine_learning.cycle_gan.util.visualizer import save_images
+from simulation.utils.machine_learning.data.image_operations import save_images
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Read config file.")
@@ -44,10 +44,7 @@ if __name__ == "__main__":
         **opt
     )  # create a model given model and other options
     model.setup(
-        verbose=opt["verbose"],
-        continue_train=False,
-        load_iter=opt["load_iter"],
-        epoch=opt["epoch"],
+        verbose=opt["verbose"], load_iter=opt["load_iter"], epoch=opt["epoch"],
     )
     model.eval()
     for i, ((A, A_paths), (B, B_paths)) in enumerate(zip(dataset_a, dataset_b)):

@@ -1,26 +1,47 @@
 stages:
-  dr_drift_256:
+  train_dr_drift_256:
     cmd: python3 train.py
     deps:
-    - ../../../../data
-    - config.yaml
+      - ./../../../../data/real_images/beg_2019
+      - ./../../../../data/real_images/maschinen_halle
+      - ./../../../../data/real_images/maschinen_halle_no_obstacles
+      - ./../../../../data/simulated_images/random_roads
+      - config.yaml
     outs:
-    - checkpoints/dr_drift_256/latest_net_d_a.pth
-    - checkpoints/dr_drift_256/latest_net_d_b.pth
-    - checkpoints/dr_drift_256/latest_net_g_a.pth
-    - checkpoints/dr_drift_256/latest_net_g_b.pth
-    - checkpoints/dr_drift_256/loss_log.txt
+      - checkpoints/dr_drift_256/latest_net_d_a.pth
+      - checkpoints/dr_drift_256/latest_net_d_b.pth
+      - checkpoints/dr_drift_256/latest_net_g_a.pth
+      - checkpoints/dr_drift_256/latest_net_g_b.pth
+      - checkpoints/dr_drift_256/loss_log.txt
+      - checkpoints/dr_drift_256/loss.png
   test_dr_drift_256:
     cmd: python3 test.py
     deps:
-    - ../../../../data/simulated_images/complex_road
+    - ./../../../../data/real_images/maschinen_halle_parking
+    - ./../../../../data/simulated_images/complex_road
+    - checkpoints/dr_drift_256/latest_net_g_a.pth
+    - checkpoints/dr_drift_256/latest_net_g_b.pth
     - config.yaml
     outs:
     - results/dr_drift_256/images
   make_video_dr_drift_256:
-    cmd: python3 -m simulation.utils.machine_learning.data.images_to_video  --image_pattern results/dr_drift_256/images/fake_b/%d.png --output_file results/dr_drift_256/out.mp4
+    cmd: python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
+      results/dr_drift_256/images/fake_b/%d.png --output_file results/dr_drift_256/fake_b.mp4
+      && python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
+      results/dr_drift_256/images/real_a/%d.png --output_file results/dr_drift_256/real_a.mp4
+      && ffmpeg -y -i results/dr_drift_256/real_a.mp4 -i results/dr_drift_256/fake_b.mp4
+      -filter_complex vstack=inputs=2 results/dr_drift_256/stacked.mp4
     deps:
     - results/dr_drift_256/images/fake_b
-    - config.yaml
+    - results/dr_drift_256/images/real_a
     outs:
-    - results/dr_drift_256/out.mp4
+    - results/dr_drift_256/fake_b.mp4
+    - results/dr_drift_256/real_a.mp4
+    - results/dr_drift_256/stacked.mp4
+  stacked_gif_dr_drift_256:
+    cmd: python3 ../data/video_to_gif.py --input_file results/dr_drift_256/stacked.mp4
+      --output_file results/dr_drift_256/stacked.gif --width 400 --length 10
+    deps:
+    - results/dr_drift_256/stacked.mp4
+    outs:
+    - results/dr_drift_256/stacked.gif

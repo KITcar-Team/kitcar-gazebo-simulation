@@ -36,10 +36,7 @@ train:
   dataset_a:  #path to images of domain A (real images). Can be a list of folders
     - ./../../../../data/real_images/maschinen_halle
     - ./../../../../data/real_images/maschinen_halle_no_obstacles
-    - ./../../../../data/real_images/beg_2017
     - ./../../../../data/real_images/beg_2019
-    - ./../../../../data/real_images/cc_2018
-    - ./../../../../data/real_images/cc_2019
   dataset_b: #path to images of domain B (simulated images). Can be a list of folders
     - ./../../../../data/simulated_images/random_roads
   display_env: main #visdom display environment name (default is "main")
@@ -60,7 +57,6 @@ train:
   lr_decay_iters: 1 #multiply by a gamma every lr_decay_iters iterations
   lr_policy: step #learning rate policy. [linear | step | plateau | cosine]
   lr_step_factor: 0.5  # Multiplication factor at every step in the step scheduler
-  continue_train: False #continue training: load the latest model
   n_epochs: 10 # number of epochs with the initial learning rate
   n_epochs_decay: 0 #number of epochs to linearly decay learning rate to zero
   no_flip: False  # Flip 50% of all training images vertically
