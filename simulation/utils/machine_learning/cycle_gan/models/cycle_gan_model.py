@@ -11,7 +11,7 @@ import simulation.utils.machine_learning.cycle_gan.models.discriminator
 import simulation.utils.machine_learning.cycle_gan.models.gan_loss
 import simulation.utils.machine_learning.cycle_gan.models.generator
 from simulation.utils.machine_learning.cycle_gan.models import helper
-from simulation.utils.machine_learning.cycle_gan.util.image_pool import ImagePool
+from simulation.utils.machine_learning.data.image_pool import ImagePool
 
 
 class CycleGANModel:
@@ -108,7 +108,7 @@ class CycleGANModel:
             name (str): name of the experiment. It decides where to store
                 samples and models
         """
-        self.gpu_ids = gpu_ids
+        self.gpu_ids = gpu_ids if torch.cuda.device_count() >= 1 else None
         self.is_train = is_train
         self.lr_policy = lr_policy
         self.lambda_identity = lambda_identity
@@ -299,7 +299,6 @@ class CycleGANModel:
     def setup(
         self,
         verbose: bool = False,
-        continue_train: bool = False,
         load_iter: int = 0,
         epoch: str = "latest",
         lr_policy: str = "linear",
@@ -311,7 +310,6 @@ class CycleGANModel:
 
         Args:
             verbose (bool): if specified, print more debugging information
-            continue_train (bool): continue training: load the latest model
             load_iter (int): which iteration to load? if load_iter > 0, the code
                 will load models by iter_[load_iter]; otherwise, the code will
                 load models by [epoch]
@@ -330,9 +328,8 @@ class CycleGANModel:
                 )
                 for optimizer in self.optimizers
             ]
-        if not self.is_train or continue_train:
-            load_suffix = "iter_%d" % load_iter if load_iter > 0 else epoch
-            self.load_networks(load_suffix)
+        load_suffix = "iter_%d" % load_iter if load_iter > 0 else epoch
+        self.load_networks(load_suffix)
         self.print_networks(verbose)
 
     def eval(self) -> None:
@@ -446,13 +443,19 @@ class CycleGANModel:
             if isinstance(name, str):
                 load_filename = "%s_net_%s.pth" % (epoch, name)
                 load_path = os.path.join(self.save_dir, load_filename)
+                if not os.path.isfile(load_path):
+                    if not self.is_train:
+                        raise RuntimeError("You have to provide checkpoints at test time!")
+                    else:
+                        continue
+
                 net = getattr(self, "net" + name)
                 if isinstance(net, torch.nn.DataParallel):
                     net = net.module
-                print("loading the model from %s" % load_path)
                 # if you are using PyTorch newer than 0.4 (e.g., built from
                 # GitHub source), you can remove str() on self.device
                 state_dict = torch.load(load_path, map_location=str(self.device))
+                print(f"Loaded: {load_path}")
                 if hasattr(state_dict, "_metadata"):
                     del state_dict._metadata
 

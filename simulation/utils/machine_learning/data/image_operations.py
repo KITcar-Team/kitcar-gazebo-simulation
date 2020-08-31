@@ -1,6 +1,3 @@
-"""This module contains simple helper functions """
-from __future__ import print_function
-
 import os
 
 import numpy as np
@@ -8,12 +5,15 @@ import torch
 from PIL import Image
 
 
-def tensor2im(input_image, img_type=np.uint8, to_rgb: bool = True):
-    """"Converts a Tensor array into a numpy image array.
+def tensor2im(
+    input_image: np.ndarray, img_type=np.uint8, to_rgb: bool = True
+) -> np.ndarray:
+    """"Convert a Tensor array into a numpy image array.
 
     Args:
         input_image (np.ndarray): the input image tensor array
         img_type (np.integer): the desired type of the converted numpy array
+        to_rgb (bool): translate gray image to rgb image
     """
     if not isinstance(input_image, np.ndarray):
         if isinstance(input_image, torch.Tensor):  # get the data from a variable
@@ -50,11 +50,25 @@ def save_image(image_numpy: np.ndarray, image_path: str, aspect_ratio: float = 1
     image_pil.save(image_path)
 
 
-def mkdir(path: str) -> None:
-    """create a single empty directory if it didn't exist
+def save_images(
+    visuals: dict, destination: str, aspect_ratio: float = 1.0, iteration_count: int = 1,
+) -> None:
+    """Save images to the disk.
+
+    This function will save images stored in 'visuals'.
 
     Args:
-        path (str): a single directory path
+        destination: the folder to save the images to
+        visuals (dict): an ordered dictionary that stores (name, images (either
+            tensor or numpy) ) pairs
+        aspect_ratio (float): the aspect ratio of saved images
     """
-    if not os.path.exists(path):
-        os.makedirs(path)
+    destination = os.path.join(destination, "images")
+    if not os.path.isdir(destination):
+        os.makedirs(destination)
+    for label, im_data in visuals.items():
+        if not os.path.isdir(os.path.join(destination, label)):
+            os.makedirs(os.path.join(destination, label))
+        im = tensor2im(im_data)
+        save_path = os.path.join(destination, label, f"{iteration_count}.png")
+        save_image(im, save_path, aspect_ratio=aspect_ratio)

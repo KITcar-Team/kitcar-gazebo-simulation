@@ -5,7 +5,7 @@ import yaml
 
 import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
-from simulation.utils.machine_learning.cycle_gan.util.visualizer import Visualizer
+from simulation.utils.machine_learning.cycle_gan.visualizer import Visualizer
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Read config file.")
@@ -51,7 +51,6 @@ if __name__ == "__main__":
     )  # create a model given model and other options
     model.setup(
         verbose=opt["verbose"],
-        continue_train=opt["continue_train"],
         load_iter=opt["load_iter"],
         epoch=opt["epoch"],
         lr_policy=opt["lr_policy"],
@@ -114,6 +113,7 @@ if __name__ == "__main__":
                 )
                 save_suffix = "iter_%d" % total_iters if opt["save_by_iter"] else "latest"
                 model.save_networks(save_suffix)
+                visualizer.save_losses_as_image()
 
         model.update_learning_rate()  # update learning rates in the beginning of every epoch.
         if (
@@ -124,6 +124,7 @@ if __name__ == "__main__":
             )
             model.save_networks("latest")
             model.save_networks(epoch)
+            visualizer.save_losses_as_image()
 
         print(
             "End of epoch %d / %d \t Time Taken: %d sec"
