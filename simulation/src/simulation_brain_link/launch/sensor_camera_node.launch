@@ -1,13 +1,11 @@
-<!-- KITcar launch script for pre_cropping -->
+<?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <arg name="start_activated" default="true" />
+  <arg name="apply_gan" default="false" />
 
-  <node name="sensor_camera_node" ns="simulation_brain_link" pkg="simulation_brain_link" type="sensor_camera" output="screen">
-   <rosparam file="$(find simulation_brain_link)/param/sensor_camera/default.yaml" command="load" />
+  <node name="sensor_camera_node" ns="simulation_brain_link" pkg="simulation_brain_link" type="sensor_camera_node" output="screen">
+    <rosparam file="$(find simulation_brain_link)/param/sensor_camera/topics.yaml" command="load" ns="topics" />
+    <rosparam file="$(find simulation_brain_link)/param/sensor_camera/default.yaml" command="load" />
 
-   <param name="sub_topic" value="/simulation/sensors/raw/camera" />
-   <param name="pub_topic" value="/simulation/sensors/prepared/camera" />
-
-   <param name="start_activated" value="$(arg start_activated)" />
+    <param name="apply_gan" value="$(arg apply_gan)" />
   </node>
 </launch>

@@ -1,8 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Start nodes which are used to connect Gazebo and KITcar_brain -->
 <launch>
   <arg name="gui" default="true"/>
   <arg name="rviz" default="false"/>
   <arg name="car_name" default="dr_drift" />
+
+  <arg name="apply_gan" default="false" />
+  <arg name="use_deprecated_camera" default="false" />
 
   <arg name="set_twist" default="true" />
   <arg name="set_pose" default="true" />
@@ -34,25 +38,29 @@
     <arg name="set_pose" value="$(arg set_pose)"/>
   </include>
 
-  <include file="$(find simulation_brain_link)/launch/sensor_camera_node.launch"/>
+  <include if="$(arg use_deprecated_camera)" file="$(find simulation_brain_link)/launch/sensor_camera_node_deprecated.launch"/>
+
+  <include if="$(eval arg('use_deprecated_camera') == 0)" file="$(find simulation_brain_link)/launch/sensor_camera_node.launch">
+    <arg name="apply_gan" value="$(arg apply_gan)"/>
+  </include>
 
   <!-- Simulate all time of flight sensors -->
   <include file="$(find simulation_brain_link)/launch/sensor_tof_node.launch">
-    <arg name="name" value="back"/> 
+    <arg name="name" value="back"/>
     <arg name="topic" value="ultrasonic_sensor_back"/>
   </include>
   <include file="$(find simulation_brain_link)/launch/sensor_tof_node.launch">
-    <arg name="name" value="middle"/> 
+    <arg name="name" value="middle"/>
     <arg name="topic" value="infrared_sensor_back"/>
-  </include> 
+  </include>
   <include file="$(find simulation_brain_link)/launch/sensor_tof_node.launch">
-    <arg name="name" value="front"/> 
+    <arg name="name" value="front"/>
     <arg name="topic" value="infrared_sensor_front"/>
   </include>
   <include file="$(find simulation_brain_link)/launch/sensor_tof_node.launch">
-    <arg name="name" value="ahead"/> 
+    <arg name="name" value="ahead"/>
     <arg name="topic" value="ultrasonic_sensor_front"/>
-  </include> 
+  </include>
 
   <!-- GUI -->
   <!-- Mission Mode GUI -->

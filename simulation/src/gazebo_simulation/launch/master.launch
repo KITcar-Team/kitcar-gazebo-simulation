@@ -21,6 +21,8 @@ Use this launch file to start the complete simulation.-->
   <arg name="gui" default="true" />
   <!-- Indicate whether rviz is launched. -->
   <arg name="rviz" default="false" />
+  <!-- Indicate whether the simulation is used on Ubuntu 18.04 or 20.04 -->
+  <arg name="ubuntu_18_mode" default="$(eval env('ROS_DISTRO')=='melodic')" />
   <!--
        Indicate which processes are launched.
   -->
@@ -58,6 +60,14 @@ Use this launch file to start the complete simulation.-->
   <arg name="link_pose" default="true" />
   <arg name="link_twist" default="true" />
   <!--
+      Camera
+  -->
+  <!--
+      Indicate whether the input image should be transformed using the cycle gan generator.
+      Requires a pre-trained generator model and machine_learning pip packages.
+   -->
+  <arg name="apply_gan" default="false" />
+  <!--
        Gazebo
   -->
   <arg name="gz_paused" default="false" />
@@ -85,6 +95,8 @@ Use this launch file to start the complete simulation.-->
     <arg name="rviz" value="$(arg rviz)" />
     <arg name="set_pose" value="$(arg link_pose)" />
     <arg name="set_twist" value="$(arg link_twist)" />
+    <arg name="apply_gan" value="$(arg apply_gan)" />
+    <arg name="use_deprecated_camera" value="$(arg ubuntu_18_mode)" />
     <arg name="include_vehicle_simulation" value="$(arg include_vehicle_simulation)" />
     <arg name="include_mission_mode_plugin" value="$(arg include_mission_mode_plugin)" />
   </include>
