@@ -130,7 +130,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-INCLUDE(src/sensor_camera/CMakeLists.txt)
+INCLUDE(src/sensor_camera_deprecated/CMakeLists.txt)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
