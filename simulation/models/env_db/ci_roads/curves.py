@@ -10,7 +10,9 @@ from simulation.utils.road.sections import (
 
 
 def angle():
-    return math.radians(random.random() * 180)
+    # Plus 36 degrees to ensure that each section with radius 1 is atleast 10 centimeters long.
+    # Otherwise estimating the curvature becomes tricky.
+    return math.radians(random.random() * 180 + 36)
 
 
 def radius():
