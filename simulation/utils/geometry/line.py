@@ -19,7 +19,7 @@ from .frame import validate_and_maintain_frames
 
 
 APPROXIMATION_DISTANCE = 0.00005
-CURVATURE_APPROX_DISTANCE = 0.04
+CURVATURE_APPROX_DISTANCE = 0.005
 
 
 def ensure_valid_arc_length(*, approx_distance=APPROXIMATION_DISTANCE) -> Callable:
