@@ -177,6 +177,13 @@ class AutomaticDriveNode(NodeBase):
         self._driving_state.distance_driven += (
             current_time - self._driving_state.time
         ) * self.param.speed
+
+        if (
+            not self.param.loop
+            and self._driving_state.distance_driven > self.driving_line.length
+        ):
+            rospy.signal_shutdown("Finished driving along the road.")
+            return
         self._driving_state.distance_driven %= self.driving_line.length
         self._driving_state.time = current_time
 
