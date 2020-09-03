@@ -15,6 +15,7 @@ from simulation.utils.geometry.line import Line
 from simulation.utils.geometry.polygon import Polygon
 from simulation.utils.geometry.transform import Transform
 
+import simulation.utils.geometry.line as line_module
 
 TOLERANCE = 0.007
 
@@ -117,11 +118,36 @@ class ModuleTest(unittest.TestCase):
         )
 
         self.assertAlmostEqual(
+            circle.interpolate_curvature(arc_length=0), 1, delta=TOLERANCE
+        )
+        self.assertAlmostEqual(
+            circle.interpolate_curvature(arc_length=circle.length), 1, delta=TOLERANCE
+        )
+
+        self.assertAlmostEqual(
             circle.interpolate_curvature(arc_length=circle.length / 2), 1, delta=TOLERANCE
         )
         self.assertAlmostEqual(
             circle.interpolate_curvature(arc_length=circle.length / 4), 1, delta=TOLERANCE
         )
+
+        short_line = Line(
+            [
+                [0, 0],
+                [line_module.CURVATURE_APPROX_DISTANCE * 0.5, 0],
+                [
+                    line_module.CURVATURE_APPROX_DISTANCE * 0.5,
+                    line_module.CURVATURE_APPROX_DISTANCE * 0.5,
+                ],
+            ]
+        )
+        with self.assertRaises(ValueError):
+            short_line.interpolate_curvature(0)
+
+        just_long_enough_line = Line(
+            [[0, 0], [2 * line_module.CURVATURE_APPROX_DISTANCE, 0]]
+        )
+        self.assertEqual(just_long_enough_line.interpolate_curvature(0), 0)
 
         def assert_approx_equal_pose(pose1, pose2):
             """Substitute self.assertAlmostEqual because pose - pose is not implemented."""
