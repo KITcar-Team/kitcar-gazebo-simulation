@@ -72,7 +72,7 @@ class Visualizer:
         start a new server at port < self.port >
         """
         subprocess.Popen(
-            ["visdom", "-p", str(port)], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            ["visdom", "-p", str(port)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         print(f"Launched Visdom server: http://localhost:{port}")
 
