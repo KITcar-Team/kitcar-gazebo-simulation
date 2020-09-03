@@ -90,6 +90,8 @@ Use this launch file to start the complete simulation.-->
   <arg name="randomize_path" default="false" />
   <!-- Indicate whether the car should always drive parallel to the middle line. -->
   <arg name="align_with_middle_line" default="true" />
+  <!-- Indicate whether the car should drive endlessly. -->
+  <arg name="automatic_drive_loop" default="true" />
   <!--
        Launch processes
   -->
@@ -115,6 +117,7 @@ Use this launch file to start the complete simulation.-->
   <include if="$(arg include_automatic_drive)" file="$(find gazebo_simulation)/launch/automatic_drive.launch">
     <arg name="randomize_path" value="$(arg randomize_path)" />
     <arg name="align_with_middle_line" value="$(arg align_with_middle_line)" />
+    <arg name="loop" value="$(arg automatic_drive_loop)" />
   </include>
   <!-- Launch car state -->
   <group if="$(arg car_state)">
