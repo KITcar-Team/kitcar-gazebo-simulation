@@ -43,8 +43,11 @@ def ensure_valid_arc_length(*, approx_distance=APPROXIMATION_DISTANCE) -> Callab
                     "The provided arc length is less than 0 \
                             or greater than the line's length."
                 )
-            elif self.length == 0:
-                raise ValueError("The line is too short.")
+            elif self.length < 2 * approx_distance:
+                raise ValueError(
+                    f"The line must be at least {2*approx_distance} long but is only"
+                    f"{self.length} long."
+                )
 
             arc_length = max(arc_length, approx_distance)
             arc_length = min(arc_length, self.length - approx_distance)
