@@ -1,6 +1,8 @@
 from typing import List, Dict
 import functools
 from dataclasses import dataclass
+import random
+import math
 
 import rospy
 import std_msgs
@@ -9,7 +11,6 @@ from tf2_msgs.msg import TFMessage
 
 from simulation.utils.ros_base.node_base import NodeBase
 from simulation.utils.geometry import Vector, Transform, Line, Pose
-
 from simulation_brain_link.msg import State as StateEstimationMsg
 from simulation_groundtruth.srv import (
     SectionSrv,
@@ -127,27 +128,45 @@ class AutomaticDriveNode(NodeBase):
 
             path += segment
 
-        param_path: List[Dict[str, float]] = self.param.path
+        if self.param.randomize_path:
+            # Stitch a line together from varied offsets along the middle line
+            length = self.middle_line.length
+            x = 0
+            offset = 0
+            max_step = 4
+            road_width = 0.4
+            while x < length:
+                offset = max(
+                    min((0.5 - random.random()) * 2 * road_width, road_width), -road_width,
+                )
 
-        current_start = param_path[0]["start"]
-        current_offset = param_path[0]["offset"]
+                p = self.middle_line.interpolate_pose(x)
+                orth = Vector(1, 0, 0).rotated(p.get_angle() + math.pi / 2)
+                path += Line([p.position + offset * orth, p.position + offset * orth])
 
-        param_path.remove(param_path[0])
+                x += max_step * random.random()
+        else:
+            param_path: List[Dict[str, float]] = self.param.path
 
-        # Read the path from the parameters
-        for obj in param_path:
-            end_arc_length = obj["start"]
-            before_end_line = Line.cut(self.middle_line, end_arc_length)[0]
-            current_segment = Line.cut(before_end_line, current_start)[1]
+            current_start = param_path[0]["start"]
+            current_offset = param_path[0]["offset"]
+
+            param_path.remove(param_path[0])
+
+            # Read the path from the parameters
+            for obj in param_path:
+                end_arc_length = obj["start"]
+                before_end_line = Line.cut(self.middle_line, end_arc_length)[0]
+                current_segment = Line.cut(before_end_line, current_start)[1]
+
+                append(current_offset, current_segment)
+
+                current_offset = obj["offset"]
+                current_start = obj["start"]
+
+            current_segment = Line.cut(self.middle_line, current_start)[1]
 
             append(current_offset, current_segment)
-
-            current_offset = obj["offset"]
-            current_start = obj["start"]
-
-        current_segment = Line.cut(self.middle_line, current_start)[1]
-
-        append(current_offset, current_segment)
 
         return path
 
@@ -166,16 +185,24 @@ class AutomaticDriveNode(NodeBase):
         # Calculate position, speed, and yaw
         position = self.driving_line.interpolate(self._driving_state.distance_driven)
 
+        # Depending on the align_with_middle_line parameter, the car is always parallel to the
+        # middle line or to the driving line.
+        alignment_line = (
+            self.middle_line if self.param.align_with_middle_line else self.driving_line
+        )
+
         # Always let the car face into the direction of the middle line.
         pose = Pose(
             position,
-            self.middle_line.interpolate_direction(self.middle_line.project(position)),
+            alignment_line.interpolate_direction(alignment_line.project(position)),
         )
 
         speed = Vector(self.param.speed, 0)  # Ignore y component of speed
         # Yaw rate = curvature * speed
         yaw_rate = (
-            self.driving_line.interpolate_curvature(self._driving_state.distance_driven)
+            alignment_line.interpolate_curvature(
+                min(self._driving_state.distance_driven, alignment_line.length)
+            )
             * self.param.speed
         )
 
