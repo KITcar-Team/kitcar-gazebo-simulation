@@ -71,7 +71,9 @@ def sample_generator(
     """
     iter_A = iter(dataloader_a)
     iter_B = iter(dataloader_b)
-    for _ in range(n_samples):
+    i = 0
+    while i < n_samples:
+        i += 1
         try:
             next_A = next(iter_A)
         except StopIteration:
