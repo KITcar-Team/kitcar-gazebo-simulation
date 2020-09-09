@@ -6,7 +6,7 @@ stages:
       - ./../../../../data/real_images/maschinen_halle
       - ./../../../../data/real_images/maschinen_halle_no_obstacles
       - ./../../../../data/simulated_images/random_roads
-      - config.yaml
+      - configs
     outs:
       - checkpoints/dr_drift_256/latest_net_d_a.pth
       - checkpoints/dr_drift_256/latest_net_d_b.pth
@@ -21,7 +21,7 @@ stages:
     - ./../../../../data/simulated_images/complex_road
     - checkpoints/dr_drift_256/latest_net_g_a.pth
     - checkpoints/dr_drift_256/latest_net_g_b.pth
-    - config.yaml
+    - configs
     outs:
     - results/dr_drift_256/images
   make_video_dr_drift_256:
