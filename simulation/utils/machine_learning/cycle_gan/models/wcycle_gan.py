@@ -73,33 +73,19 @@ class WassersteinCycleGANModel(BaseModel):
         )
 
     def update_critic_a(
-        self,
-        batch_a: Tensor,
-        batch_b: Tensor,
-        clip_bounds: Tuple[float, float] = None,
+        self, batch_a: Tensor, batch_b: Tensor, clip_bounds: Tuple[float, float] = None,
     ):
         set_requires_grad([self.networks.d_a], requires_grad=True)
         return self.networks.d_a.perform_optimization_step(
-            self.networks.g_a,
-            self.optimizer_d,
-            batch_a,
-            batch_b,
-            clip_bounds,
+            self.networks.g_a, self.optimizer_d, batch_a, batch_b, clip_bounds,
         )
 
     def update_critic_b(
-        self,
-        batch_a: Tensor,
-        batch_b: Tensor,
-        clip_bounds: Tuple[float, float] = None,
+        self, batch_a: Tensor, batch_b: Tensor, clip_bounds: Tuple[float, float] = None,
     ):
         set_requires_grad([self.networks.d_b], requires_grad=True)
         return self.networks.d_b.perform_optimization_step(
-            self.networks.g_b,
-            self.optimizer_d,
-            batch_b,
-            batch_a,
-            clip_bounds,
+            self.networks.g_b, self.optimizer_d, batch_b, batch_a, clip_bounds,
         )
 
     def update_generators(self, batch_a: Tensor, batch_b: Tensor):
@@ -151,10 +137,10 @@ class WassersteinCycleGANModel(BaseModel):
             idt_b=idt_b,
             loss_g_a=loss_g_a.item(),
             loss_g_b=loss_g_b.item(),
-            loss_idt_a=loss_idt_a,
-            loss_idt_b=loss_idt_b,
-            loss_cycle_a=loss_cycle_a,
-            loss_cycle_b=loss_cycle_b,
+            loss_idt_a=loss_idt_a.item(),
+            loss_idt_b=loss_idt_b.item(),
+            loss_cycle_a=loss_cycle_a.item(),
+            loss_cycle_b=loss_cycle_b.item(),
         )
         return stats
 
