@@ -4,10 +4,10 @@ import pathlib
 import cv2
 import numpy as np
 import torch
-import yaml
 from PIL import Image
 
 from simulation.utils.machine_learning.data.base_dataset import get_transform
+from .configs.test_options import CycleGANTestOptions, WassersteinCycleGANTestOptions
 from .models.cycle_gan_model import CycleGANModel
 from ..data.image_operations import tensor2im
 
@@ -15,39 +15,31 @@ from ..data.image_operations import tensor2im
 class RosConnector:
     """Implementation of a simple ROS interface to translate simulated to "real" images."""
 
-    def __init__(
-        self,
-        config_file: str = os.path.join(
-            pathlib.Path(__file__).parent.absolute(), "config.yaml"
-        ),
-    ):
+    def __init__(self, use_wasserstein=True):
         """Initialize the RosConnector class
 
         Use default test options but could be via command-line. Load and setup the model
         """
-        with open(config_file) as conf:
-            configs = yaml.load(conf, Loader=yaml.FullLoader)
 
-        opt = {**configs["base"], **configs["test"]}
+        opt = WassersteinCycleGANTestOptions if use_wasserstein else CycleGANTestOptions
 
-        opt["checkpoints_dir"] = os.path.join(
-            pathlib.Path(__file__).parent.absolute(), opt["checkpoints_dir"]
+        opt.checkpoints_dir = os.path.join(
+            pathlib.Path(__file__).parent.absolute(), opt.checkpoints_dir
         )
 
         self.model = CycleGANModel.from_options(
-            **opt
+            **opt.to_dict()
         )  # create a model given model and other options
         self.model.setup(
-            verbose=opt["verbose"],
-            load_iter=opt["load_iter"],
+            verbose=opt.verbose,
+            load_iter=opt.load_iter,
         )
-        # model.eval()
-
+        # self.model.eval()
         tf_properties = {
-            "load_size": opt["load_size"],
-            "crop_size": opt["crop_size"],
-            "preprocess": opt["preprocess"],
-            "mask": os.path.join(pathlib.Path(__file__).parent.absolute(), opt["mask"]),
+            "load_size": opt.load_size,
+            "crop_size": opt.crop_size,
+            "preprocess": opt.preprocess,
+            "mask": os.path.join(pathlib.Path(__file__).parent.absolute(), opt.mask),
             "no_flip": True,
             "grayscale": True,
         }

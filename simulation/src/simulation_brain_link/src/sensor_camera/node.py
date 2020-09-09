@@ -1,8 +1,8 @@
 """Prepare Gazebo’s camera image for kitcar-ros."""
 
 import rospy
-from sensor_msgs.msg import Image as ImageMsg
 from cv_bridge.core import CvBridge
+from sensor_msgs.msg import Image as ImageMsg
 
 from simulation.utils.ros_base.node_base import NodeBase
 
@@ -29,7 +29,7 @@ class SensorCameraNode(NodeBase):
                 RosConnector,
             )
 
-            self.gan_connector = RosConnector()
+            self.gan_connector = RosConnector(self.param.use_wasserstein_gan)
 
         self.run()
 
