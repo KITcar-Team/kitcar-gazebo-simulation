@@ -13,10 +13,13 @@ Use this launch file to start the complete simulation.-->
   <arg name="seed" default="__no_value__"/>
   <arg name="force_reload_road" default="false" />
   <!-- Name of the gazebo world.
-       By default, the empty base_world is used. -->
-  <arg name="world" default="base_world" />
+    By default, the empty base_world is used.
+    The "fast_world" can be used to run the simulation as fast as possible.
+    -->
+  <arg name="world_name" default="base_world" />
   <!-- Indicate whether the simulation should overwrite /clock. -->
   <arg name="use_sim_time" default="true" />
+
   <!-- Indicate whether the graphical interface should launch. -->
   <arg name="gui" default="true" />
   <!-- Indicate whether rviz is launched. -->
@@ -144,7 +147,7 @@ Use this launch file to start the complete simulation.-->
   <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" output="screen" args="-d  $(find gazebo_simulation)/res/simulation.rviz -s $(find gazebo_simulation)/res/kitcar_logo.png" />
   <!-- Launch Gazebo -->
   <include file="$(find gazebo_simulation)/launch/world.launch">
-    <arg name="world_name" value="$(arg world)"/>
+    <arg name="world_name" value="$(arg world_name)"/>
     <arg name="paused" value="$(arg gz_paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gui" value="$(arg gui)"/>
