@@ -123,15 +123,17 @@ if __name__ == "__main__":
         n_epochs=opt["n_epochs"],
     )  # regular setup: load and print networks; create schedulers
 
-    try:
-        model.networks.load(
-            os.path.join(opt["checkpoints_dir"], opt["name"], f"{opt['epoch']}_net_"),
-            device=device,
-        )
-    except FileNotFoundError:
-        print("Could not load model weights. Proceeding with new weights.")
-    except ModuleAttributeError:
-        print("Saved model has different architecture.")
+    if opt["continue_train"]:
+        try:
+            model.networks.load(
+                os.path.join(opt["checkpoints_dir"], opt["name"], f"{opt['epoch']}_net_"),
+                device=device,
+            )
+        except FileNotFoundError:
+            print("Could not load model weights. Proceeding with new weights.")
+        except ModuleAttributeError:
+            print("Saved model has different architecture.")
+
     model.networks.print(opt["verbose"])
 
     visualizer = Visualizer(

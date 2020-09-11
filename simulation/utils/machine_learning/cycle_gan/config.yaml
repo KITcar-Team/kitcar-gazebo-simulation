@@ -31,6 +31,7 @@ base:
   max_dataset_size: -1 #maximum amount of images to load; -1 means infinity
   is_wgan: False #Decide whether to use wasserstein cycle gan or standard cycle gan
   l1_or_l2_loss: l1 # "l1" or "l2"; Decide whether to use l1 or l2 as cycle and identity loss functions
+  use_sigmoid: False #Use sigmoid activation
 train:
   wgan_initial_n_critic: 1
   wgan_clip_upper: 0.001 # The upper bound for weight clipping
@@ -61,6 +62,7 @@ train:
   n_epochs: 10 # number of epochs with the initial learning rate
   n_epochs_decay: 0 #number of epochs to linearly decay learning rate to zero
   no_flip: False  # Flip 50% of all training images vertically
+  continue_train: False #Load checkpoints or start from scratch
 test:
   dataset_a:  #path to images of domain A (real images). Can be a list of folders
     - ./../../../../data/real_images/maschinen_halle_parking
