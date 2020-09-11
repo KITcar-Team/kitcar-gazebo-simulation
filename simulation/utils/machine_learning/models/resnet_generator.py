@@ -6,6 +6,8 @@ from torch import nn as nn, Tensor
 from .helper import get_activation_layer
 from .resnet_block import ResnetBlock
 
+from .init_from_options import InitFromOptions
+
 
 class ResnetGenerator(nn.Module):
     """Resnet-based generator that consists of Resnet blocks between a few
@@ -118,16 +120,6 @@ class ResnetGenerator(nn.Module):
         """
         return self.model(input)
 
-    @classmethod
-    def from_options(cls, **kwargs: dict):
-        """Create instance from relevant keywords in dictionary.
 
-        Args:
-            **kwargs (dict): the dict with keys matching the constructor
-                variables
-        """
-        init_keys = cls.__init__.__code__.co_varnames  # Access the init functions arguments
-        kwargs = {
-            key: kwargs[key] for key in init_keys if key in kwargs
-        }  # Select all elements in kwargs, that are also arguments of the init function
-        return cls(**kwargs)
+# Add this function here because of troubles with the sphinx documentation.
+ResnetGenerator.from_options = InitFromOptions.from_options

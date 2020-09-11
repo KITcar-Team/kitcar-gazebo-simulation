@@ -4,7 +4,11 @@ from torch import nn as nn
 
 class NoPatchDiscriminator(nn.Module):
     def __init__(
-        self, input_nc: int, norm_layer: nn.Module = nn.BatchNorm2d, n_layers_d: int = 4
+        self,
+        input_nc: int,
+        norm_layer: nn.Module = nn.BatchNorm2d,
+        n_layers_d: int = 4,
+        use_sigmoid: bool = True,
     ):
         """Construct a no patch gan discriminator :param input_nc: the number of
         channels in input images :type input_nc: int :param norm_layer:
@@ -14,8 +18,11 @@ class NoPatchDiscriminator(nn.Module):
             input_nc (int): the number of channels in input images
             norm_layer (nn.Module): normalization layer
             n_layers_d (int): the number of convolution blocks
+            use_sigmoid (bool): sigmoid activation at the end
         """
         super(NoPatchDiscriminator, self).__init__()
+
+        self.use_sigmoid = use_sigmoid
 
         # A bunch of convolutions one after another
         model = [
@@ -37,7 +44,7 @@ class NoPatchDiscriminator(nn.Module):
             ]
             input_nc *= 2
 
-        model += [nn.Conv2d(1024, 1, 4, stride=2, padding=1)]
+        model += [nn.Conv2d(512, 1, 8, stride=2, padding=1)]
 
         self.model = nn.Sequential(*model)
 
@@ -49,4 +56,6 @@ class NoPatchDiscriminator(nn.Module):
         """
         x = self.model(x)
         # Average pooling and flatten
-        return torch.nn.functional.avg_pool2d(x, x.size()[2:]).view(x.size()[0], -1)
+
+        output = torch.nn.functional.avg_pool2d(x, x.size()[2:]).view(x.size()[0], -1)
+        return torch.sigmoid(output) if self.use_sigmoid else output

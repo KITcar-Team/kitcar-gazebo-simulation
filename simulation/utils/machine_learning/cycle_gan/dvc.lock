@@ -10,7 +10,7 @@ test_dr_drift_256:
   - path: checkpoints/dr_drift_256/latest_net_g_b.pth
     md5: fa19ccada3659a17fb3a3398d8eb8525
   - path: config.yaml
-    md5: 096c4961e2d8395d98fbf63c19808bde
+    md5: b5877bfa2bda00f6b8e56d405054fa39
   outs:
   - path: results/dr_drift_256/images
     md5: 2863337531f342cb0d09e9703c494ab2.dir
@@ -45,7 +45,7 @@ train_dr_drift_256:
   - path: ./../../../../data/simulated_images/random_roads
     md5: bc533a1005c5c883bdcd29a4eaafd3cf.dir
   - path: config.yaml
-    md5: 096c4961e2d8395d98fbf63c19808bde
+    md5: b5877bfa2bda00f6b8e56d405054fa39
   outs:
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
     md5: 84ef6d1630b9ae7e3d706f9dd6c2e3d0
