@@ -2,14 +2,13 @@ from typing import List
 
 from torch import nn
 
-from simulation.utils.machine_learning.cycle_gan.models.helper import (
+from simulation.utils.machine_learning.models.helper import (
     get_norm_layer,
-    init_net,
 )
-from simulation.utils.machine_learning.cycle_gan.models.resnet_generator import (
+from simulation.utils.machine_learning.models.resnet_generator import (
     ResnetGenerator,
 )
-from simulation.utils.machine_learning.cycle_gan.models.unet_generator import UnetGenerator
+from simulation.utils.machine_learning.models.unet_generator import UnetGenerator
 
 
 def create_generator(
@@ -19,9 +18,6 @@ def create_generator(
     netg: str,
     norm: str = "batch",
     use_dropout: bool = False,
-    init_type: str = "normal",
-    init_gain: float = 0.02,
-    gpu_ids: List[int] = [0],
     activation: str = "TANH",
     conv_layers_in_block: int = 2,
     dilations: List[int] = None,
@@ -40,8 +36,7 @@ def create_generator(
         operations. We adapt Torch code from Justin Johnson's neural style
         transfer project (https://github.com/jcjohnson/fast-neural-style).
 
-    The generator has been initialized by <init_net>. It uses RELU for
-    non-linearity.
+    It uses RELU for non-linearity.
 
     Args:
         input_nc (int): # of input image channels: 3 for RGB and 1 for grayscale
@@ -53,10 +48,6 @@ def create_generator(
         norm (str): instance normalization or batch normalization [instance |
             batch | none]
         use_dropout (bool): enable or disable dropout
-        init_type (str): network initialization [normal | xavier | kaiming |
-            orthogonal]
-        init_gain (float): scaling factor for normal, xavier and orthogonal.
-        gpu_ids: e.g. 0 0,1,2, 0,2. use -1 for CPU
         activation (str): Choose which activation to use. [TANH | HARDTANH |
             SELU | CELU | SOFTSHRINK | SOFTSIGN]
         conv_layers_in_block (int): specify number of convolution layers per
@@ -89,4 +80,4 @@ def create_generator(
         )
     else:
         raise NotImplementedError("Generator model name [%s] is not recognized" % netg)
-    return init_net(net, init_type, init_gain, gpu_ids)
+    return net

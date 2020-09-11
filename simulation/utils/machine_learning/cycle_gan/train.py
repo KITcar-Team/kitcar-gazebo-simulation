@@ -1,11 +1,27 @@
 import argparse
+import os
+import pickle
 import time
+from contextlib import suppress
 
+import torch
 import yaml
+from torch.nn.modules.module import ModuleAttributeError
 
 import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
+from simulation.utils.machine_learning.cycle_gan.models.discriminator import (
+    create_discriminator,
+)
+from simulation.utils.machine_learning.cycle_gan.models.generator import create_generator
+from simulation.utils.machine_learning.models.helper import get_norm_layer, init_net
+from simulation.utils.machine_learning.models.resnet_generator import ResnetGenerator
+from simulation.utils.machine_learning.cycle_gan.models.wcycle_gan import (
+    WassersteinCycleGANModel,
+)
+from simulation.utils.machine_learning.models.wasserstein_critic import WassersteinCritic
 from simulation.utils.machine_learning.cycle_gan.visualizer import Visualizer
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Read config file.")
@@ -35,29 +51,89 @@ if __name__ == "__main__":
         batch_size=opt["batch_size"],
         sequential=False,
         num_threads=opt["num_threads"],
-        grayscale_A=(opt["input_nc"] == 1),
-        grayscale_B=(opt["output_nc"] == 1),
+        grayscale_a=(opt["input_nc"] == 1),
+        grayscale_b=(opt["output_nc"] == 1),
         max_dataset_size=opt["max_dataset_size"],
         transform_properties=tf_properties,
     )  # create datasets for each domain (A and B)
+    del opt["dataset_a"]
+    del opt["dataset_b"]
 
     dataset_size = max(
         len(dataset_a), len(dataset_b)
     )  # get the number of images in the dataset.
     print("The number of training images = %d" % dataset_size)
 
-    model = CycleGANModel.from_options(
-        **opt
-    )  # create a model given model and other options
-    model.setup(
-        verbose=opt["verbose"],
-        load_iter=opt["load_iter"],
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+    if opt["is_wgan"]:
+        netg_a = ResnetGenerator(
+            opt["input_nc"],
+            opt["output_nc"],
+            opt["ngf"],
+            get_norm_layer(opt["norm"]),
+            dilations=opt["dilations"],
+            conv_layers_in_block=opt["conv_layers_in_block"],
+        )
+        netd_a = WassersteinCritic(
+            opt["input_nc"],
+            ndf=opt["ndf"],
+            dilations=opt["dilations"],
+        )
+    else:
+        netg_a = create_generator(
+            opt["input_nc"],
+            opt["output_nc"],
+            opt["ngf"],
+            opt["netg"],
+            opt["norm"],
+            not opt["no_dropout"],
+            opt["activation"],
+            opt["conv_layers_in_block"],
+            opt["dilations"],
+        )
+        netd_a = create_discriminator(
+            opt["input_nc"],
+            opt["ndf"],
+            opt["netd"],
+            opt["n_layers_d"],
+            opt["norm"],
+            opt["use_sigmoid"],
+        )
+
+    netg_b = pickle.loads(pickle.dumps(netg_a))
+    netd_b = pickle.loads(pickle.dumps(netd_a))
+
+    netg_a = init_net(netg_a, opt["init_type"], opt["init_gain"], device)
+    netg_b = init_net(netg_b, opt["init_type"], opt["init_gain"], device)
+    netd_a = init_net(netd_a, opt["init_type"], opt["init_gain"], device)
+    netd_b = init_net(netd_b, opt["init_type"], opt["init_gain"], device)
+
+    ModelClass = CycleGANModel if not opt["is_wgan"] else WassersteinCycleGANModel
+
+    model = ModelClass.from_options(
+        netg_a=netg_a, netg_b=netg_b, netd_a=netd_a, netd_b=netd_b, **opt
+    )
+
+    model.create_schedulers(
         epoch=opt["epoch"],
         lr_policy=opt["lr_policy"],
         lr_decay_iters=opt["lr_decay_iters"],
         lr_step_factor=opt["lr_step_factor"],
         n_epochs=opt["n_epochs"],
     )  # regular setup: load and print networks; create schedulers
+
+    try:
+        model.networks.load(
+            os.path.join(opt["checkpoints_dir"], opt["name"], f"{opt['epoch']}_net_"),
+            device=device,
+        )
+    except FileNotFoundError:
+        print("Could not load model weights. Proceeding with new weights.")
+    except ModuleAttributeError:
+        print("Saved model has different architecture.")
+    model.networks.print(opt["verbose"])
+
     visualizer = Visualizer(
         display_id=opt["display_id"],
         name=opt["name"],
@@ -66,71 +142,96 @@ if __name__ == "__main__":
     )  # create a visualizer that display/save images and plots
     total_iters = 0  # the total number of training iterations
     visualizer.show_hyperparameters(opt)
+    total_epochs = opt["n_epochs"] + opt["n_epochs_decay"]
 
-    for epoch in range(
-        opt["epoch_count"], opt["n_epochs"] + opt["n_epochs_decay"] + 1
-    ):  # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
+    if opt["is_wgan"]:
+        critic_batches = []
+        critic_gen = ml_data.sample_generator(dataset_a, dataset_b)
+        for _ in range(opt["wgan_initial_n_critic"]):
+            (a_critic, _), (b_critic, _) = next(critic_gen)
+            a_critic = a_critic.to(device)
+            b_critic = b_critic.to(device)
+            critic_batches.append((a_critic, b_critic))
+        model.pre_training(critic_batches)
+    else:
+        model.pre_training()
+
+    for epoch in range(total_epochs):  # outer loop for all epochs
         epoch_start_time = time.time()  # timer for entire epoch
-        epoch_iter = (
-            0  # the number of training iterations in current epoch, reset to 0 every epoch
-        )
+        epoch_iter = 0  # the number of training iterations in current epoch
         visualizer.reset()  # reset the visualizer
 
+        # batch generator
+        if opt["is_wgan"]:
+            generator_input_gen = ml_data.sample_generator(
+                dataset_a, dataset_b, n_samples=dataset_size // opt["batch_size"]
+            )
+            critic_gen = ml_data.sample_generator(dataset_a, dataset_b)
+
+            def wgan_generator():
+                with suppress(StopIteration):
+                    while True:
+                        (a, _), (b, _) = next(generator_input_gen)
+                        a = a.to(device)
+                        b = b.to(device)
+                        critic_batches = []
+                        for _ in range(opt["wgan_n_critic"]):
+                            (a_critic, _), (b_critic, _) = next(critic_gen)
+                            a_critic = a_critic.to(device)
+                            b_critic = b_critic.to(device)
+                            critic_batches.append((a_critic, b_critic))
+                        yield a, b, critic_batches
+
+            batch_generator = wgan_generator()
+        else:
+            generator_input_gen = ml_data.sample_generator(
+                dataset_a, dataset_b, n_samples=dataset_size // opt["batch_size"]
+            )
+
+            def gan_generator():
+                with suppress(StopIteration):
+                    while True:
+                        (a, _), (b, _) = next(generator_input_gen)
+                        a = a.to(device)
+                        b = b.to(device)
+                        yield (a, b)
+
+            batch_generator = gan_generator()
+
         # Get random permutations of items from both datasets
-        for (A, A_paths), (B, B_paths) in ml_data.sample_generator(
-            dataset_a, dataset_b, n_samples=dataset_size // opt["batch_size"]
-        ):  # inner loop within one epoch
+        for batch in iter(batch_generator):
 
             iter_start_time = time.time()  # timer for computation per iteration
 
             total_iters += opt["batch_size"]
             epoch_iter += opt["batch_size"]
 
-            model.set_input(
-                {"A": A, "A_paths": A_paths, "B": B, "B_paths": B_paths}
-            )  # unpack data from dataset and apply preprocessing
-            model.optimize_parameters()  # calculate loss functions, get gradients, update network weights
+            stats = model.do_iteration(*batch)
 
-            if (
-                total_iters % opt["print_freq"] == 0
-            ):  # print training losses and save logging information to the disk
-                losses = model.get_current_losses()
-                t_comp = (time.time() - iter_start_time) / opt["batch_size"]
-                visualizer.print_current_losses(epoch, epoch_iter, losses, t_comp)
-                if opt["display_id"] > 0:
-                    visualizer.plot_current_losses(
-                        epoch, float(epoch_iter) / dataset_size, losses
-                    )
-
-                visualizer.display_current_results(model.get_current_visuals())
-
-            if (
-                total_iters % opt["save_latest_freq"] == 0
-            ):  # cache our latest model every <save_latest_freq> iterations
-                print(
-                    "saving the latest model (epoch %d, total_iters %d)"
-                    % (epoch, total_iters)
+            if total_iters % opt["print_freq"] == 0:
+                losses = stats.get_losses()
+                visuals = stats.get_visuals()
+                time_per_iteration = (time.time() - iter_start_time) / opt["batch_size"]
+                estimated_time = (
+                    total_epochs * dataset_size - total_iters
+                ) * time_per_iteration
+                visualizer.print_current_losses(
+                    epoch, epoch_iter, losses, time_per_iteration, estimated_time
                 )
-                save_suffix = "iter_%d" % total_iters if opt["save_by_iter"] else "latest"
-                model.save_networks(save_suffix)
-                visualizer.save_losses_as_image()
+                visualizer.plot_current_losses(
+                    epoch, float(epoch_iter) / dataset_size, losses
+                )
+                visualizer.display_current_results(visuals)
 
         model.update_learning_rate()  # update learning rates in the beginning of every epoch.
-        if (
-            epoch % opt["save_epoch_freq"] == 0
-        ):  # cache our model every <save_epoch_freq> epochs
-            print(
-                "saving the model at the end of epoch %d, iters %d" % (epoch, total_iters)
-            )
-            model.save_networks("latest")
-            model.save_networks(epoch)
-            visualizer.save_losses_as_image()
-
+        print(f"Saving the model at the end of epoch {epoch}")
+        model.networks.save(
+            os.path.join(opt["checkpoints_dir"], opt["name"], "latest_net_")
+        )
+        model.networks.save(
+            os.path.join(opt["checkpoints_dir"], opt["name"], f"{epoch}_net_")
+        )
+        visualizer.save_losses_as_image()
         print(
-            "End of epoch %d / %d \t Time Taken: %d sec"
-            % (
-                epoch,
-                opt["n_epochs"] + opt["n_epochs_decay"],
-                time.time() - epoch_start_time,
-            )
+            f"End of epoch {epoch} / {total_epochs} \t Time Taken: {time.time()-epoch_start_time} sec"
         )

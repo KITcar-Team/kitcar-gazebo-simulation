@@ -5,13 +5,12 @@ base:
   crop_size: 256 #then crop to this size
   dilations: [1,2] #dilation for individual conv layers in every resnet block
   epoch: latest #which epoch to load? set to latest to use latest cached model
-  gpu_ids: [0] #gpu ids: e.g. 0  0,1,2, 0,2. leave blank for CPU
   init_gain: 0.02 #scaling factor for normal, xavier and orthogonal.
   init_type: normal #network initialization [normal | xavier | kaiming | orthogonal]
   input_nc: 1 # # of input image channels: 3 for RGB and 1 for grayscale
-  lambda_a: 10.0 #weight for loss of domain A
-  lambda_b: 10.0 #weight for loss of domain B
-  lambda_identity: 0.5 #weight for loss identity
+  lambda_idt_a: 5 #weight for loss identity of domain A
+  lambda_idt_b: 5 #weight for loss identity of domain B
+  lambda_cycle: 10 #weight for cycle loss
   load_iter: 0 #which iteration to load? if load_iter > 0, the code will load models by iter_[load_iter]; otherwise, the code will load models by [epoch]
   load_size: 256 #scale images to this size
   mask: resources/mask.png #Path to a mask overlaid over all images
@@ -28,11 +27,15 @@ base:
   suffix: #customized suffix: opt.name = opt.name + suffix: e.g., {model}_{netg}_size{load_size}
   verbose: False #if specified, print more debugging information
   cycle_noise_stddev: 0 #Standard deviation of noise added to the cycle input. Mean is 0.
-  use_sigmoid: False #Use sigmoid activation at the end of discriminator network
   pool_size: 75 #the size of image buffer that stores previously generated images
-  gan_mode: lsgan #the type of GAN objective. [vanilla| lsgan | wgangp]. vanilla GAN loss is the cross-entropy objective used in the original GAN paper.
   max_dataset_size: -1 #maximum amount of images to load; -1 means infinity
+  is_wgan: False #Decide whether to use wasserstein cycle gan or standard cycle gan
+  l1_or_l2_loss: l1 # "l1" or "l2"; Decide whether to use l1 or l2 as cycle and identity loss functions
 train:
+  wgan_initial_n_critic: 1
+  wgan_clip_upper: 0.001 # The upper bound for weight clipping
+  wgan_clip_lower: -0.001 # The lower bound for weight clipping
+  wgan_n_critic: 5 #The number of iterations of the critic per generator iteration
   dataset_a:  #path to images of domain A (real images). Can be a list of folders
     - ./../../../../data/real_images/maschinen_halle
     - ./../../../../data/real_images/maschinen_halle_no_obstacles
@@ -41,22 +44,20 @@ train:
     - ./../../../../data/simulated_images/random_roads
   display_env: main #visdom display environment name (default is "main")
   display_freq: 5 #frequency of showing training results on screen
-    # - ./../../../../data/real_images/maschinen_halle_parking
   display_id: 1 #window id of the web display
   display_port: 8097 #visdom port of the web display
-  epoch_count: 1 #the starting epoch count, we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>, ...
   is_train: True # enable or disable training mode
   num_threads: 8 # # threads for loading data
-  print_freq: 100 #frequency of showing training results on console
+  print_freq: 10 #frequency of showing training results on console
   save_by_iter: False #whether saves model by iteration
   save_epoch_freq: 1 #frequency of saving checkpoints at the end of epochs
   save_latest_freq: 1000 #frequency of saving the latest results
   beta1: 0.5 #momentum term of adam
-  batch_size: 8 #input batch size
-  lr: 0.0005 #initial learning rate for adam
+  batch_size: 1 #input batch size
+  lr: 0.000005 #initial learning rate for adam
   lr_decay_iters: 1 #multiply by a gamma every lr_decay_iters iterations
   lr_policy: step #learning rate policy. [linear | step | plateau | cosine]
-  lr_step_factor: 0.5  # Multiplication factor at every step in the step scheduler
+  lr_step_factor: 0.1  # Multiplication factor at every step in the step scheduler
   n_epochs: 10 # number of epochs with the initial learning rate
   n_epochs_decay: 0 #number of epochs to linearly decay learning rate to zero
   no_flip: False  # Flip 50% of all training images vertically

@@ -67,7 +67,8 @@ class Visualizer:
         """Reset the self.saved status"""
         self.saved = False
 
-    def create_visdom_connections(self, port: int) -> None:
+    @staticmethod
+    def create_visdom_connections(port: int) -> None:
         """If the program could not connect to Visdom server, this function will
         start a new server at port < self.port >
         """
@@ -177,7 +178,7 @@ class Visualizer:
         # Create sub plot
         ax = fig.add_subplot(1, 1, 1)
         # transpose y data, as self.plot_data['Y'] has the wrong format for matplotlib
-        y_data_transposed = [[] for i in range(8)]
+        y_data_transposed = [[] for _ in range(8)]
         for entry in self.plot_data["Y"]:
             for i, item in enumerate(entry):
                 y_data_transposed[i].append(item)
