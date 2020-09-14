@@ -128,14 +128,14 @@ test-cyclegan:
   only:
     changes:
       - data/real_images.dvc
-      - data/simulated_images.dvc
-      - simulation/utils/machine_learning/
+      - data/simulated_images/**/*
+      - simulation/utils/machine_learning
   tags:
     - workstation
   script:
     - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
     - dvc pull data/real_images/maschinen_halle_parking --run-cache
-    - dvc pull data/simulated_images/complex_road --run-cache
+    - dvc pull data/simulated_images/complex_road.dvc --run-cache
     - cd simulation/utils/machine_learning/cycle_gan
     # pull cache from server and checkout
     - dvc pull train_dr_drift_256 --run-cache
