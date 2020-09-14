@@ -97,6 +97,7 @@ class ModelPluginNodeTest(unittest.TestCase, NodeBase):
         random.seed(self.param.seed + self._testMethodName)
         # Wait
         rospy.wait_for_message(self.pose_topic, geometry_msgs.msg.Pose)
+        rospy.wait_for_message(self.twist_topic, geometry_msgs.msg.Twist)
 
         # Gazebo takes some time to start up
         # Set a pose and wait until gazebo adjusts to ensure that is has completely started
