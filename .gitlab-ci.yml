@@ -216,7 +216,7 @@ cml-cyclegan:
 
 # Build and deploy the CI docker image to the gitlab registry
 # This is done everytime the master branch is updated
-.docker-images-rule:
+.docker-images-template:
   stage: deploy
   image: docker:19.03.11
   tags:
@@ -261,13 +261,13 @@ cml-cyclegan:
     - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/kitcar_ros_ci:$TAG_KITCAR_ROS_IMAGE
 
 deploy-docker-images-master:
-  extends: .docker-images-rule
+  extends: .docker-images-template
   # Always run on master
   only:
     - master
 
 deploy-docker-images:
-  extends: .docker-images-rule
+  extends: .docker-images-template
   # Allow to manually build the ci image
   # E.g. to test if the Dockerfile is still working
   except:
