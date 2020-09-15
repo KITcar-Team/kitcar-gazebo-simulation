@@ -18,3 +18,4 @@ gir1.2-rsvg-2.0
 tree
 doxygen
 ffmpeg
+fdupes

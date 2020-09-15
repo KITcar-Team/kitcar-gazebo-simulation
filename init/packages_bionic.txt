@@ -17,3 +17,4 @@ gir1.2-gtk-3.0
 tree
 doxygen
 ffmpeg
+fdupes
