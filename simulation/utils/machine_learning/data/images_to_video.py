@@ -25,7 +25,10 @@ def images_to_video(
     os.system(cmd)
 
 
-def make_2x2_video_grid(video_paths: List[str], output_file: str,) -> None:
+def make_2x2_video_grid(
+    video_paths: List[str],
+    output_file: str,
+):
     """This function takes 4 images and puts them into a 2x2 Grid
 
     Args:
@@ -49,10 +52,15 @@ def make_2x2_video_grid(video_paths: List[str], output_file: str,) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Images to Video")
     parser.add_argument(
-        "--image_pattern", type=str, help="pattern for all images you want to include",
+        "--image_pattern",
+        type=str,
+        help="pattern for all images you want to include",
     )
     parser.add_argument(
-        "--output_file", type=str, default="out.mp4", help="the output file for the video",
+        "--output_file",
+        type=str,
+        default="out.mp4",
+        help="the output file for the video",
     )
     args = parser.parse_args()
     images_to_video(args.image_pattern, args.output_file)
