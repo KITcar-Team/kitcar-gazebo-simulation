@@ -13,10 +13,13 @@ Use this launch file to start the complete simulation.-->
   <arg name="seed" default="__no_value__"/>
   <arg name="force_reload_road" default="false" />
   <!-- Name of the gazebo world.
-       By default, the empty base_world is used. -->
-  <arg name="world" default="base_world" />
+    By default, the empty base_world is used.
+    The "fast_world" can be used to run the simulation as fast as possible.
+    -->
+  <arg name="world_name" default="base_world" />
   <!-- Indicate whether the simulation should overwrite /clock. -->
   <arg name="use_sim_time" default="true" />
+
   <!-- Indicate whether the graphical interface should launch. -->
   <arg name="gui" default="true" />
   <!-- Indicate whether rviz is launched. -->
@@ -80,10 +83,23 @@ Use this launch file to start the complete simulation.-->
   <arg name="gz_pub_clock_frequency" default="100" />
   <arg name="gz_extra_args" default="" />
   <!--
+      Automatic Drive
+  -->
+  <!--Indicate whether the car should follow a random path on the road.
+
+      This can be especially useful when generating datasets using the simulation.
+      The random path allows to maximize variance within the generated images.
+  -->
+  <arg name="randomize_path" default="false" />
+  <!-- Indicate whether the car should always drive parallel to the middle line. -->
+  <arg name="align_with_middle_line" default="true" />
+  <!-- Indicate whether the car should drive endlessly. -->
+  <arg name="automatic_drive_loop" default="true" />
+  <!--
        Launch processes
   -->
   <!-- Spawn the car -->
-  <include if="$(arg include_car)" file="$(find gazebo_simulation)/launch/spawn_car.launch" />
+  <include if="$(arg include_car)" file="$(find gazebo_simulation)/launch/spawn_car.launch"/>
   <!-- Launch KITcar_brain -->
   <include if="$(arg include_brain)" file="$(find simulation_brain_link)/launch/brain.launch">
     <arg name="car_name" value="$(arg car_name)" />
@@ -101,7 +117,11 @@ Use this launch file to start the complete simulation.-->
     <arg name="include_mission_mode_plugin" value="$(arg include_mission_mode_plugin)" />
   </include>
   <!-- Launch automatic drive-->
-  <include if="$(arg include_automatic_drive)" file="$(find gazebo_simulation)/launch/automatic_drive.launch" />
+  <include if="$(arg include_automatic_drive)" file="$(find gazebo_simulation)/launch/automatic_drive.launch">
+    <arg name="randomize_path" value="$(arg randomize_path)" />
+    <arg name="align_with_middle_line" value="$(arg align_with_middle_line)" />
+    <arg name="loop" value="$(arg automatic_drive_loop)" />
+  </include>
   <!-- Launch car state -->
   <group if="$(arg car_state)">
     <include file="$(find gazebo_simulation)/launch/car_state_node.launch">
@@ -127,7 +147,7 @@ Use this launch file to start the complete simulation.-->
   <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" output="screen" args="-d  $(find gazebo_simulation)/res/simulation.rviz -s $(find gazebo_simulation)/res/kitcar_logo.png" />
   <!-- Launch Gazebo -->
   <include file="$(find gazebo_simulation)/launch/world.launch">
-    <arg name="world_name" value="$(arg world)"/>
+    <arg name="world_name" value="$(arg world_name)"/>
     <arg name="paused" value="$(arg gz_paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gui" value="$(arg gui)"/>

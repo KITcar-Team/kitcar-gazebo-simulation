@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Launch a random (automatic) drive along provided road and record rosbag.
+
+The launch file is especially useful to automatically record rosbags of the car driving on a road
+and later extract the camera images.
+E.g. to generate a dataset for the cycle gan.
+-->
+<launch>
+  <!-- Name of the recorded rosbag. -->
+  <arg name="rosbag_name"/>
+  <!-- Name of the simulation road and seed used to render the road.-->
+  <arg name="road" default="default_road" />
+  <arg name="seed" default="__no_value__"/>
+
+  <arg name="gui" default="true" />
+
+  <arg name="automatic_drive" default="true" />
+  <arg name="car_state" default="true" />
+  <arg name="evaluate" default="false" />
+  <arg name="control_sim_rate" default="false" />
+
+  <arg name="apply_gan" default="false" />
+  <!--
+      Automatic Drive
+  -->
+  <!--Indicate whether the car should follow a random path on the road.
+
+      This can be especially useful when generating datasets using the simulation.
+      The random path allows to maximize variance within the generated images.
+  -->
+  <arg name="randomize_path" default="true" />
+  <!-- Indicate whether the car should always drive parallel to the middle line. -->
+  <arg name="align_with_middle_line" default="false" />
+  <!-- Indicate whether the car should drive endlessly. -->
+  <arg name="automatic_drive_loop" default="false" />
+
+  <!-- Whether a rosbag of the drive should be recorded and where it's stored. -->
+  <arg name="record_rosbag" default="true"/>
+  <arg name="rosbag_dir" default="$(env KITCAR_REPO_PATH)/kitcar-gazebo-simulation/data/simulated_rosbags"/>
+  <arg name="rosbag_path" default="$(arg rosbag_dir)/$(arg rosbag_name)"/>
+
+  <include file="$(find gazebo_simulation)/launch/master.launch">
+    <arg name="road" value="$(arg road)"/>
+    <arg name="seed" value="$(arg seed)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="control_sim_rate" value="$(arg control_sim_rate)"/>
+    <arg name="evaluate" value="$(arg evaluate)"/>
+    <arg name="apply_gan" value="$(arg apply_gan)"/>
+
+    <arg name="include_automatic_drive" value="$(arg automatic_drive)"/>
+    <arg name="randomize_path" value="$(arg randomize_path)"/>
+    <arg name="align_with_middle_line" value="$(arg align_with_middle_line)"/>
+    <arg name="automatic_drive_loop" value="$(arg automatic_drive_loop)"/>
+
+    <arg if="$(arg automatic_drive)" name="include_brain" value="false" />
+    <arg if="$(arg automatic_drive)" name="include_vehicle_simulation" value="false" />
+    <arg if="$(arg automatic_drive)" name="include_mission_mode_plugin" value="false" />
+  </include>
+
+  <!-- Record a rosbag of the drive.
+       All topics are recorded, but compressed images left out as they create errors. -->
+  <node if="$(arg record_rosbag)" name="rosbag_record" type="rosbag_record.sh" pkg="kitcar" args='-o $(arg rosbag_path) -a -x "(.*)/compressed(.*)"' />
+
+</launch>
+
+
