@@ -55,7 +55,7 @@ class Visualizer:
             self.vis = Visdom(port=self.port)
 
         if not os.path.isdir(os.path.join(checkpoints_dir, name)):
-            os.makedirs(checkpoints_dir)
+            os.makedirs(checkpoints_dir, exist_ok=True)
             os.makedirs(os.path.join(checkpoints_dir, name))
 
         self.log_name = os.path.join(checkpoints_dir, name, "loss_log.txt")
@@ -72,7 +72,10 @@ class Visualizer:
         start a new server at port < self.port >
         """
         subprocess.Popen(
-            ["visdom", "-p", str(port)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            ["visdom", "-p", str(port)],
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
         print(f"Launched Visdom server: http://localhost:{port}")
 
