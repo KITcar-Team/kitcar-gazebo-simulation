@@ -1,8 +1,10 @@
 import argparse
 import os
 import pickle
+from typing import Tuple
 
 import torch
+from torch import nn
 
 import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.configs.test_options import (
@@ -14,9 +16,49 @@ from simulation.utils.machine_learning.cycle_gan.models.generator import create_
 from simulation.utils.machine_learning.cycle_gan.models.wcycle_gan import (
     WassersteinCycleGANModel,
 )
+from simulation.utils.machine_learning.data import UnlabeledDataLoader
 from simulation.utils.machine_learning.data.image_operations import save_images
 from simulation.utils.machine_learning.models.helper import get_norm_layer, init_net
 from simulation.utils.machine_learning.models.resnet_generator import ResnetGenerator
+
+
+def test_on_dataset(
+    dataset: UnlabeledDataLoader,
+    generators: Tuple[nn.Module, nn.Module],
+    class_names: Tuple[str, str],
+    destination: str,
+    aspect_ratio: float = 1,
+    device: torch.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
+):
+    """Test one dataset and save all images.
+
+    Args:
+        dataset: The dataset to test
+        generators: Both generators. Second one is used to generate the fake image.
+        class_names: The class names to save the images correctly.
+        destination: The destination folder
+        aspect_ratio: The aspect ratio of the images
+        device: the device on which the models are located
+    """
+    for i, (real_image, _) in enumerate(dataset):
+        real_image = real_image.to(device)
+        fake_image = generators[0](real_image)
+        idt_image = generators[1](real_image)
+        cycle_image = generators[1](fake_image)
+        visuals = {
+            f"real_{class_names[0]}": real_image,
+            f"fake_{class_names[1]}": fake_image,
+            f"idt_{class_names[0]}": idt_image,
+            f"cycle_{class_names[0]}": cycle_image,
+        }
+        print(f"Processing {i}-th image on dataset {class_names[0]}.")
+        save_images(
+            visuals=visuals,
+            destination=destination,
+            aspect_ratio=aspect_ratio,
+            post_fix=str(i),
+        )
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -88,18 +130,21 @@ if __name__ == "__main__":
         device=device,
     )
     model.networks.print(opt.verbose)
-
     model.eval()
-    for i, ((a, _), (b, _)) in enumerate(zip(dataset_a, dataset_b)):
-        a = a.to(device)
-        b = b.to(device)
-        stats = model.test(a, b)  # run inference
-        visuals = stats.get_visuals()
-        if i % 5 == 0:
-            print("processing (%04d)-th image." % i)
-        save_images(
-            visuals=visuals,
-            destination=os.path.join(opt.results_dir, opt.name),
-            aspect_ratio=opt.aspect_ratio,
-            post_fix=str(i),
-        )
+
+    test_on_dataset(
+        dataset_a,
+        (model.networks.g_a_to_b, model.networks.g_b_to_a),
+        ("a", "b"),
+        destination=os.path.join(opt.results_dir, opt.name),
+        aspect_ratio=opt.aspect_ratio,
+        device=device,
+    )
+    test_on_dataset(
+        dataset_b,
+        (model.networks.g_b_to_a, model.networks.g_a_to_b),
+        ("b", "a"),
+        destination=os.path.join(opt.results_dir, opt.name),
+        aspect_ratio=opt.aspect_ratio,
+        device=device,
+    )
