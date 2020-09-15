@@ -9,7 +9,10 @@ from .resnet_block import ResnetBlock
 from .init_from_options import InitFromOptions
 
 
-class ResnetGenerator(nn.Module):
+from .nn_module import NNModule
+
+
+class ResnetGenerator(NNModule):
     """Resnet-based generator that consists of Resnet blocks between a few
     downsampling/upsampling operations.
 
