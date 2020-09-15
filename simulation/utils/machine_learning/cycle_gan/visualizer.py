@@ -193,7 +193,7 @@ class Visualizer:
 
     # losses: same format as |losses| of plot_current_losses
     def print_current_losses(
-        self, epoch: int, iters: int, losses: dict, t_comp: float
+        self, epoch: int, iters: int, losses: dict, t_comp: float, estimated_time: float
     ) -> None:
         """print current losses on console; also save the losses to the disk
 
@@ -205,8 +205,14 @@ class Visualizer:
                 pairs
             t_comp (float): computational time per data point (normalized by
                 batch_size)
+            estimated_time (float): the estimated time until training finishes
         """
-        message = "(epoch: %d, iters: %d, time: %.3f) " % (epoch, iters, t_comp)
+        hours, remainder = divmod(estimated_time, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        message = (
+            f"(epoch: {epoch}, iters: {iters}, time: {t_comp:.3f}, ETA: {hours:.0f}:{minutes:.0f}:{seconds:.0f} "
+            f"hh:mm:ss) "
+        )
         for k, v in losses.items():
             message += "%s: %.3f " % (k, v)
 
