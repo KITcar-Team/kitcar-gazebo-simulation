@@ -9,12 +9,10 @@ from .cycle_gan_stats import CycleGANStats
 
 
 class WassersteinCycleGANModel(BaseModel):
-    """This class implements the CycleGAN model, for learning image-to-image
-    translation without paired data.
+    """This class implements the CycleGAN model, for learning image-to-image translation without paired data.
 
-    By default, it uses a '--netg resnet_9blocks' ResNet generator, a '--netd
-    basic' discriminator (PatchGAN introduced by pix2pix), and a least-square
-    GANs objective ('--gan_mode lsgan').
+    By default, it uses a '--netg resnet_9blocks' ResNet generator, a '--netd basic' discriminator (PatchGAN
+    introduced by pix2pix), and a least-square GANs objective ('--gan_mode lsgan').
 
     CycleGAN paper: https://arxiv.org/pdf/1703.10593.pdf
     """
@@ -43,13 +41,9 @@ class WassersteinCycleGANModel(BaseModel):
 
         Args:
             is_train (bool): enable or disable training mode
-            init_type (str): network initialization [normal | xavier | kaiming |
-                orthogonal]
-            init_gain (float): scaling factor for normal, xavier and orthogonal.
             beta1 (float): momentum term of adam
             lr (float): initial learning rate for adam
-            lr_policy (str): linear #learning rate policy. [linear | step |
-                plateau | cosine]
+            lr_policy (str): linear #learning rate policy. [linear | step | plateau | cosine]
             lambda_idt_a (int): weight for loss of domain A
             lambda_idt_b (int): weight for loss of domain B
             lambda_cycle (float): weight for loss identity

@@ -9,14 +9,11 @@ from .cycle_gan_stats import CycleGANStats
 
 
 class CycleGANModel(BaseModel):
-    """This class implements the CycleGAN model, for learning image-to-image
-    translation without paired data.
+    """This class implements the CycleGAN model, for learning image-to-image translation without paired data.
 
-    By default, it uses a '--netg resnet_9blocks' ResNet generator, a '--netd
-    basic' discriminator (PatchGAN introduced by pix2pix), and a least-square
-    GANs objective ('--gan_mode lsgan').
-
-    CycleGAN paper: https://arxiv.org/pdf/1703.10593.pdf
+    By default, it uses a '--netg resnet_9blocks' ResNet generator, a '--netd basic' discriminator (PatchGAN
+    introduced by pix2pix), and a least-square GANs objective ('--gan_mode lsgan'). CycleGAN paper:
+    https://arxiv.org/pdf/1703.10593.pdf
     """
 
     def __init__(
@@ -41,14 +38,11 @@ class CycleGANModel(BaseModel):
 
         Args:
             is_train (bool): enable or disable training mode
-            cycle_noise_stddev (int): Standard deviation of noise added to the
-                cycle input. Mean is 0.
-            pool_size (int): the size of image buffer that stores previously
-                generated images
+            cycle_noise_stddev (int): Standard deviation of noise added to the cycle input. Mean is 0.
+            pool_size (int): the size of image buffer that stores previously generated images
             beta1 (float): momentum term of adam
             lr (float): initial learning rate for adam
-            lr_policy (str): linear #learning rate policy. [linear | step |
-                plateau | cosine]
+            lr_policy (str): linear #learning rate policy. [linear | step | plateau | cosine]
             lambda_idt_a (int): weight for loss of domain A
             lambda_idt_b (int): weight for loss of domain B
             lambda_cycle (float): weight for loss identity
@@ -126,9 +120,7 @@ class CycleGANModel(BaseModel):
         return loss_d_b
 
     def do_iteration(self, batch_a: torch.Tensor, batch_b: torch.Tensor):
-        """Calculate losses, gradients, and update network weights; called in
-        every training iteration
-        """
+        """Calculate losses, gradients, and update network weights; called in every training iteration"""
         real_a = batch_a
         real_b = batch_b
         # forward

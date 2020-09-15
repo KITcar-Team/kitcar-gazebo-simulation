@@ -12,9 +12,7 @@ class NoPatchDiscriminator(NNModule):
         n_layers_d: int = 4,
         use_sigmoid: bool = True,
     ):
-        """Construct a no patch gan discriminator :param input_nc: the number of
-        channels in input images :type input_nc: int :param norm_layer:
-        normalization layer
+        """Construct a no patch gan discriminator
 
         Args:
             input_nc (int): the number of channels in input images

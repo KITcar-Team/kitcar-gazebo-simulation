@@ -17,8 +17,7 @@ else:
 
 
 class Visualizer:
-    """This class includes several functions that can display/save images and
-    print/save logging information.
+    """This class includes several functions that can display/save images and print/save logging information.
 
     It uses a Python library 'visdom' for display.
     """
@@ -38,8 +37,7 @@ class Visualizer:
 
         Args:
             display_id (int): window id of the web display
-            name (str): name of the experiment. It decides where to store
-                samples and models
+            name (str): name of the experiment. It decides where to store samples and models
             display_port (int): visdom port of the web display
             checkpoints_dir (str): models are saved here
         """
@@ -69,8 +67,8 @@ class Visualizer:
 
     @staticmethod
     def create_visdom_connections(port: int) -> None:
-        """If the program could not connect to Visdom server, this function will
-        start a new server at port < self.port >
+        """If the program could not connect to Visdom server, this function will start a new server
+        at port <self.port>
         """
         subprocess.Popen(
             ["visdom", "-p", str(port)],
@@ -145,15 +143,12 @@ class Visualizer:
             )
 
     def plot_current_losses(self, epoch: int, counter_ratio: float, losses: dict) -> None:
-        """display the current losses on visdom display: dictionary of error
-        labels and values
+        """display the current losses on visdom display: dictionary of error labels and values
 
         Args:
             epoch (int): current epoch
-            counter_ratio (float): progress (percentage) in the current epoch,
-                between 0 to 1
-            losses (dict): training losses stored in the format of (name, float)
-                pairs
+            counter_ratio (float): progress (percentage) in the current epoch, between 0 to 1
+            losses (dict): training losses stored in the format of (name, float) pairs
         """
         if not hasattr(self, "plot_data"):
             self.plot_data = {"X": [], "Y": [], "legend": list(losses.keys())}
@@ -199,12 +194,9 @@ class Visualizer:
 
         Args:
             epoch (int): current epoch
-            iters (int): current training iteration during this epoch (reset to
-                0 at the end of every epoch)
-            losses (dict): training losses stored in the format of (name, float)
-                pairs
-            t_comp (float): computational time per data point (normalized by
-                batch_size)
+            iters (int): current training iteration during this epoch (reset to 0 at the end of every epoch)
+            losses (dict): training losses stored in the format of (name, float) pairs
+            t_comp (float): computational time per data point (normalized by batch_size)
             estimated_time (float): the estimated time until training finishes
         """
         hours, remainder = divmod(estimated_time, 3600)

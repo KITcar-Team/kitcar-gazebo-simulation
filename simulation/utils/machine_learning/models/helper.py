@@ -17,13 +17,11 @@ from torch.optim.optimizer import Optimizer
 def get_norm_layer(norm_type: str = "instance") -> nn.Module:
     """Return a normalization layer
 
-    For BatchNorm, we use learnable affine parameters and track running
-    statistics (mean/stddev). For InstanceNorm, we do not use learnable affine
-    parameters. We do not track running statistics.
+    For BatchNorm, we use learnable affine parameters and track running statistics (mean/stddev). For InstanceNorm,
+    we do not use learnable affine parameters. We do not track running statistics.
 
     Args:
-        norm_type (str): the name of the normalization layer: batch | instance |
-            none
+        norm_type (str): the name of the normalization layer: batch | instance | none
     """
     if norm_type == "batch":
         norm_layer = functools.partial(
@@ -50,18 +48,14 @@ def get_scheduler(
 ) -> Union[LambdaLR, StepLR, ReduceLROnPlateau]:
     """Return a learning rate scheduler
 
-    For 'linear', we keep the same learning rate for the first <n_epochs>
-    epochs and linearly decay the rate to zero over the next <n_epochs_decay>
-    epochs. For other schedulers (step, plateau, and cosine), we use the default
-    PyTorch schedulers. See https://pytorch.org/docs/stable/optim.html for more
-    details.
+    For 'linear', we keep the same learning rate for the first <n_epochs> epochs and linearly decay the rate to zero
+    over the next <n_epochs_decay> epochs. For other schedulers (step, plateau, and cosine), we use the default
+    PyTorch schedulers. See https://pytorch.org/docs/stable/optim.html for more details.
 
     Args:
         optimizer (Optimizer): the optimizer of the network
-        lr_policy (str): learning rate policy. [linear | step | plateau |
-            cosine]
-        lr_decay_iters (int): multiply by a gamma every lr_decay_iters
-            iterations
+        lr_policy (str): learning rate policy. [linear | step | plateau | cosine]
+        lr_decay_iters (int): multiply by a gamma every lr_decay_iters iterations
         n_epochs (int): number of epochs with the initial learning rate
         lr_step_factor (float): Multiplication factor at every step in the step scheduler
     """
@@ -94,14 +88,12 @@ def init_weights(
 ) -> None:
     """Initialize network weights.
 
-    We use 'normal' in the original pix2pix and CycleGAN paper. But xavier
-    and kaiming might work better for some applications. Feel free to try
-    yourself.
+    We use 'normal' in the original pix2pix and CycleGAN paper. But xavier and kaiming might work better for some
+    applications. Feel free to try yourself.
 
     Args:
         net (nn.Module): network to be initialized
-        init_type (str): the name of an initialization method: normal | xavier |
-            kaiming | orthogonal
+        init_type (str): the name of an initialization method: normal | xavier | kaiming | orthogonal
         init_gain (float): scaling factor for normal, xavier and orthogonal.
     """
 
@@ -140,14 +132,16 @@ def init_net(
     init_gain: float = 0.02,
     device: torch.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
 ) -> nn.Module:
-    """Initialize a network: 1. register CPU/GPU device; 2. initialize the network weights
+    """Initialize a network.
+
+    1. register CPU/GPU device;
+    2. initialize the network weights
 
     Return an initialized network.
 
     Args:
         net (nn.Module): the network to be initialized
-        init_type (str): the name of an initialization method: normal | xavier |
-            kaiming | orthogonal
+        init_type (str): the name of an initialization method: normal | xavier | kaiming | orthogonal
         init_gain (float): scaling factor for normal, xavier and orthogonal.
         device: on which device should the net run
     """
@@ -157,11 +151,10 @@ def init_net(
 
 
 def get_activation_layer(activation: str) -> nn.Module:
-    """Returns the matching activation layer :param activation:
+    """Return the matching activation layer.
 
     Args:
-        activation (str): a string representation of the activation layer [TANH
-            | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
+        activation (str): string for the activation layer [TANH | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
     """
     if activation.lower() == "tanh":
         return nn.Tanh()
@@ -182,8 +175,7 @@ def get_activation_layer(activation: str) -> nn.Module:
 
 
 def set_requires_grad(nets: List[nn.Module], requires_grad: bool = False):
-    """Set requires_grad=False for all the networks to avoid unnecessary
-    computations
+    """Set requires_grad=False for all the networks to avoid unnecessary computations
 
     Args:
         nets (List[nn.Module]): set require grads for this list of networks

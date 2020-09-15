@@ -243,12 +243,8 @@ class BaseModel(ABC, InitFromOptions):
         """Create schedulers
 
         Args:
-            epoch: which epoch to load? set to latest to use latest cached
-                model
-            lr_policy: learning rate policy. [linear | step | plateau |
-                cosine]
-            lr_decay_iters: multiply by a gamma every lr_decay_iters
-                iterations
+            lr_policy: learning rate policy. [linear | step | plateau | cosine]
+            lr_decay_iters: multiply by a gamma every lr_decay_iters iterations
             lr_step_factor: multiply lr with this factor every epoch
             n_epochs: number of epochs with the initial learning rate
         """
