@@ -1,8 +1,6 @@
 from torch import nn as nn, Tensor
 
-from simulation.utils.machine_learning.cycle_gan.models.unet_block import (
-    UnetSkipConnectionBlock,
-)
+from .unet_block import UnetSkipConnectionBlock
 
 
 class UnetGenerator(nn.Module):

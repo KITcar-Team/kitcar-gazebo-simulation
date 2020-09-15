@@ -1,5 +1,5 @@
 import functools
-from typing import Union, List, Tuple
+from typing import Union, List
 
 import torch
 from torch import nn
@@ -34,9 +34,7 @@ def get_norm_layer(norm_type: str = "instance") -> nn.Module:
             nn.InstanceNorm2d, affine=False, track_running_stats=False
         )
     elif norm_type == "none":
-
-        def norm_layer():
-            return nn.Identity()
+        norm_layer = nn.Identity()
 
     else:
         raise NotImplementedError("normalization layer [%s] is not found" % norm_type)
@@ -65,6 +63,7 @@ def get_scheduler(
         lr_decay_iters (int): multiply by a gamma every lr_decay_iters
             iterations
         n_epochs (int): number of epochs with the initial learning rate
+        lr_step_factor (float): Multiplication factor at every step in the step scheduler
     """
     if lr_policy == "linear":
 
@@ -139,13 +138,9 @@ def init_net(
     net: nn.Module,
     init_type: str = "normal",
     init_gain: float = 0.02,
-    gpu_ids: List[int] = [0],
+    device: torch.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
 ) -> nn.Module:
-    """Initialize a network: 1. register CPU/GPU device (with multi-GPU
-    support); 2. initialize the network weights :param net: :type net: network
-    :param init_type: normal | xavier | kaiming | orthogonal :type init_type:
-    str :param init_gain: :type init_gain: float :param gpu_ids: e.g., 0,1,2
-    :type gpu_ids: int list
+    """Initialize a network: 1. register CPU/GPU device; 2. initialize the network weights
 
     Return an initialized network.
 
@@ -154,12 +149,9 @@ def init_net(
         init_type (str): the name of an initialization method: normal | xavier |
             kaiming | orthogonal
         init_gain (float): scaling factor for normal, xavier and orthogonal.
-        gpu_ids: which GPUs the network runs on: e.g., 0,1,2
+        device: on which device should the net run
     """
-    if gpu_ids and len(gpu_ids) > 0:
-        assert torch.cuda.is_available()
-        net.to(gpu_ids[0])
-        net = torch.nn.DataParallel(net, gpu_ids)  # multi-GPUs
+    net.to(device)
     init_weights(net, init_type, init_gain=init_gain)
     return net
 
@@ -189,63 +181,17 @@ def get_activation_layer(activation: str) -> nn.Module:
         )
 
 
-def cal_gradient_penalty(
-    netd: nn.Module,
-    real_data: torch.Tensor,
-    fake_data: torch.Tensor,
-    device: str,
-    type: str = "mixed",
-    constant: float = 1.0,
-    lambda_gp: float = 10.0,
-) -> Tuple[float, Union[None, torch.Tensor]]:
-    """Calculate the gradient penalty loss, used in WGAN-GP paper
-    https://arxiv.org/abs/1704.00028
-
-    Returns the gradient penalty loss
+def set_requires_grad(nets: List[nn.Module], requires_grad: bool = False):
+    """Set requires_grad=False for all the networks to avoid unnecessary
+    computations
 
     Args:
-        netd (nn.Module): discriminator network
-        real_data (torch.Tensor): real images
-        fake_data (torch.Tensor): generated images from the generator
-        device (str): GPU / CPU: from
-            torch.device('cuda:{}'.format(self.gpu_ids[0])) if self.gpu_ids else
-            torch.device('cpu')
-        type (str): if we mix real and fake data or not [real | fake | mixed].
-        constant (float): the constant used in formula ( ||gradient||_2 -
-            constant)^2
-        lambda_gp (float): weight for this loss
+        nets (List[nn.Module]): set require grads for this list of networks
+        requires_grad (bool): enable or disable grads
     """
-    if lambda_gp > 0.0:
-        if (
-            type == "real"
-        ):  # either use real images, fake images, or a linear interpolation of two.
-            interpolates = real_data
-        elif type == "fake":
-            interpolates = fake_data
-        elif type == "mixed":
-            alpha = torch.rand(real_data.shape[0], 1, device=device)
-            alpha = (
-                alpha.expand(real_data.shape[0], real_data.nelement() // real_data.shape[0])
-                .contiguous()
-                .view(*real_data.shape)
-            )
-            interpolates = alpha * real_data + ((1 - alpha) * fake_data)
-        else:
-            raise NotImplementedError("{} not implemented".format(type))
-        interpolates.requires_grad_(True)
-        disc_interpolates = netd(interpolates)
-        gradients = torch.autograd.grad(
-            outputs=disc_interpolates,
-            inputs=interpolates,
-            grad_outputs=torch.ones(disc_interpolates.size()).to(device),
-            create_graph=True,
-            retain_graph=True,
-            only_inputs=True,
-        )
-        gradients = gradients[0].view(real_data.size(0), -1)  # flat the data
-        gradient_penalty = (
-            ((gradients + 1e-16).norm(2, dim=1) - constant) ** 2
-        ).mean() * lambda_gp  # added eps
-        return gradient_penalty, gradients
-    else:
-        return 0.0, None
+    if not isinstance(nets, list):
+        nets = [nets]
+    for net in nets:
+        if isinstance(net, nn.Module):
+            for param in net.parameters():
+                param.requires_grad = requires_grad
