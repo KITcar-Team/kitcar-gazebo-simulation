@@ -5,7 +5,7 @@ variables:
   GIT_LFS_SKIP_SMUDGE: "1"  #  Don't pull Git LFS
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar/
-  INIT_INPUT: '1\nyn'
+  INIT_INPUT: '1\nyn' # Omit machine learning packages by default, as they are only used by a few jobs.
 
 before_script:
   # Run the container start script to enable the pulseaudio & xserver
@@ -15,7 +15,6 @@ before_script:
   - python3 -V
 
   # Install packages and requirements
-  # Leave out machine learning packages because they are not used within the CI right now.
   - printf $INIT_INPUT | ./init/init.sh || true
 
   - source init/bashrc || true
@@ -27,7 +26,7 @@ stages:
 
 
 ######## BUILD STAGE ########
-# buikd kitcar-ros and simulation
+# build kitcar-ros and simulation
 build-code:
   stage: build
   script: &build-all
