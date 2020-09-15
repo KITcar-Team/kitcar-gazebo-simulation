@@ -8,9 +8,10 @@ from torch.nn import Flatten
 from .helper import get_norm_layer
 from .resnet_block import ResnetBlock
 from .init_from_options import InitFromOptions
+from .nn_module import NNModule
 
 
-class WassersteinCritic(nn.Module):
+class WassersteinCritic(NNModule):
     def __init__(
         self,
         input_nc: int,

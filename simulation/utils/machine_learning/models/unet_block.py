@@ -3,8 +3,10 @@ import functools
 import torch
 from torch import nn as nn
 
+from .nn_module import NNModule
 
-class UnetSkipConnectionBlock(nn.Module):
+
+class UnetSkipConnectionBlock(NNModule):
     """Defines the Unet submodule with skip connection. X
     -------------------identity----------------------
     |-- downsampling -- |submodule| -- upsampling --|
