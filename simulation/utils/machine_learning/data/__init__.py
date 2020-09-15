@@ -21,11 +21,9 @@ def load_unpaired_unlabeled_datasets(
     Args:
         dir_a: path to images of domain a
         dir_b: path to images of domain b
-        max_dataset_size (int): maximum amount of images to load; -1 means
-            infinity
+        max_dataset_size (int): maximum amount of images to load; -1 means infinity
         batch_size (int): input batch size
-        sequential (bool): if true, takes images in order,
-            otherwise takes them randomly
+        sequential (bool): if true, takes images in order, otherwise takes them randomly
         num_threads (int): threads for loading data
         grayscale_a (bool): transform domain a to gray images
         grayscale_b (bool): transform domain b to gray images

@@ -56,12 +56,10 @@ def test_forward(batch_size, input_nc, height_log_2, width_log_2):
 def test_optimization_step():
     """Testing very basic functionality of optimizing.
 
-    Testing if the optimization works is hard.
-    Here, some very basic things are tested:
+    Testing if the optimization works is hard. Here, some very basic things are tested:
 
     * Does the wasserstein distance increase when running the optimization?
-    * Is the distance close to zero, if random distributions are given
-      and the generator is the identity?
+    * Is the distance close to zero, if random distributions are given and the generator is the identity?
     * Is the generator unchanged?
     """
     # 1. Distances close to zero if both batches are randomly sampled each iteration

@@ -23,8 +23,7 @@ class RosConnector:
     ):
         """Initialize the RosConnector class
 
-        Use default test options but could be via command-line.
-        Load and setup the model
+        Use default test options but could be via command-line. Load and setup the model
         """
         with open(config_file) as conf:
             configs = yaml.load(conf, Loader=yaml.FullLoader)

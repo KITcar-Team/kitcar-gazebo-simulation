@@ -54,8 +54,7 @@ def save_images(
 
     Args:
         destination: the folder to save the images to
-        visuals (dict): an ordered dictionary that stores (name, images (either
-            tensor or numpy) ) pairs
+        visuals (dict): an ordered dictionary that stores (name, images (either tensor or numpy) ) pairs
         aspect_ratio (float): the aspect ratio of saved images
         post_fix (str): The string that extends the prefix_path
     """

@@ -27,10 +27,10 @@ IMG_EXTENSIONS = [
 
 
 def is_image_file(filename):
-    """Checks if a file is an image :param filename: the file name to check
+    """Checks if a file is an image
 
     Args:
-        filename:
+        filename: the file name to check
     """
     return any(filename.endswith(extension) for extension in IMG_EXTENSIONS)
 

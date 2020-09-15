@@ -26,32 +26,25 @@ def create_generator(
 
     Returns a generator
 
-    Our current implementation provides two types of generators:
-        U-Net: [unet_128] (for 128x128 input images) and [unet_256] (for 256x256
-        input images) The original U-Net paper: https://arxiv.org/abs/1505.04597
+    Our current implementation provides two types of generators: U-Net: [unet_128] (for 128x128 input images) and [
+    unet_256] (for 256x256 input images) The original U-Net paper: https://arxiv.org/abs/1505.04597
 
-        Resnet-based generator: [resnet_6blocks] (with 6 Resnet blocks) and
-        [resnet_9blocks] (with 9 Resnet blocks) Resnet-based generator consists
-        of several Resnet blocks between a few downsampling/upsampling
-        operations. We adapt Torch code from Justin Johnson's neural style
-        transfer project (https://github.com/jcjohnson/fast-neural-style).
+    Resnet-based generator: [resnet_6blocks] (with 6 Resnet blocks) and [resnet_9blocks] (with 9 Resnet blocks)
+    Resnet-based generator consists of several Resnet blocks between a few downsampling/upsampling operations. We
+    adapt Torch code from Justin Johnson's neural style transfer project (
+    https://github.com/jcjohnson/fast-neural-style).
 
     It uses RELU for non-linearity.
 
     Args:
         input_nc (int): # of input image channels: 3 for RGB and 1 for grayscale
-        output_nc (int): # of output image channels: 3 for RGB and 1 for
-            grayscale
+        output_nc (int): # of output image channels: 3 for RGB and 1 for grayscale
         ngf (int): # of gen filters in the last conv layer
-        netg (str): specify generator architecture [resnet_<ANY_INTEGER>blocks |
-            unet_256 | unet_128]
-        norm (str): instance normalization or batch normalization [instance |
-            batch | none]
+        netg (str): specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]
+        norm (str): instance normalization or batch normalization [instance | batch | none]
         use_dropout (bool): enable or disable dropout
-        activation (str): Choose which activation to use. [TANH | HARDTANH |
-            SELU | CELU | SOFTSHRINK | SOFTSIGN]
-        conv_layers_in_block (int): specify number of convolution layers per
-            resnet block
+        activation (str): Choose which activation to use. [TANH | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
+        conv_layers_in_block (int): specify number of convolution layers per resnet block
         dilations: dilation for individual conv layers in every resnet block
     """
     norm_layer = get_norm_layer(norm_type=norm)

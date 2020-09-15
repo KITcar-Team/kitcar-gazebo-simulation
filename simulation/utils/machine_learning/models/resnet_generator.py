@@ -13,11 +13,10 @@ from .nn_module import NNModule
 
 
 class ResnetGenerator(NNModule):
-    """Resnet-based generator that consists of Resnet blocks between a few
-    downsampling/upsampling operations.
+    """Resnet-based generator that consists of Resnet blocks between a few downsampling/upsampling operations.
 
-    We adapt Torch code and idea from Justin Johnson's neural style transfer
-    project(https://github.com/jcjohnson/fast-neural-style)
+    We adapt Torch code and idea from Justin Johnson's neural style transfer project(
+    https://github.com/jcjohnson/fast-neural-style)
     """
 
     def __init__(
@@ -42,11 +41,9 @@ class ResnetGenerator(NNModule):
             norm_layer (nn.Module): normalization layer
             use_dropout (bool): if use dropout layers
             n_blocks (int): the number of ResNet blocks
-            padding_type (str): the name of padding layer in conv layers:
-                reflect | replicate | zero
-            activation (str):
-            conv_layers_in_block (int): Number of convolution layers in each
-                block.
+            padding_type (str): the name of padding layer in conv layers: reflect | replicate | zero
+            activation (str): Choose which activation to use. [TANH | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
+            conv_layers_in_block (int): Number of convolution layers in each block.
             dilations: List of dilations for each conv layer.
         """
         assert n_blocks >= 0
