@@ -3,8 +3,8 @@ from typing import Optional, List
 
 from torch import nn as nn, Tensor
 
-from simulation.utils.machine_learning.cycle_gan.models.helper import get_activation_layer
-from simulation.utils.machine_learning.cycle_gan.models.resnet_block import ResnetBlock
+from .helper import get_activation_layer
+from .resnet_block import ResnetBlock
 
 
 class ResnetGenerator(nn.Module):
@@ -117,3 +117,17 @@ class ResnetGenerator(nn.Module):
             input (Tensor): the input tensor
         """
         return self.model(input)
+
+    @classmethod
+    def from_options(cls, **kwargs: dict):
+        """Create instance from relevant keywords in dictionary.
+
+        Args:
+            **kwargs (dict): the dict with keys matching the constructor
+                variables
+        """
+        init_keys = cls.__init__.__code__.co_varnames  # Access the init functions arguments
+        kwargs = {
+            key: kwargs[key] for key in init_keys if key in kwargs
+        }  # Select all elements in kwargs, that are also arguments of the init function
+        return cls(**kwargs)
