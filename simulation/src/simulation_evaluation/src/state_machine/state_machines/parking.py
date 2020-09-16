@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """ParkingStateMachine keeps track of parking.
 
-See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.parking` for implementation details of the \
-    states used in this StateMachine.
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.parking` for implementation details of the
+states used in this StateMachine.
 """
 
 from typing import Callable
@@ -21,18 +20,9 @@ from simulation.src.simulation_evaluation.src.state_machine.states.parking impor
     SuccessfullyParked,
 )
 
-__copyright__ = "KITcar"
-
 
 class ParkingStateMachine(StateMachine):
-    """Keep track of parking.
-
-    Inheriting from StateMachine makes it possible to handle all states from outside.
-
-    .. autoattribute:: StateMachine.failure_collision
-    .. autoattribute:: StateMachine.failure_off_road
-    .. autoattribute:: StateMachine.failure_left
-    """
+    """Keep track of parking."""
 
     off: "ActiveState" = Off()  # noqa: F821
     """Default state"""

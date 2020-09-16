@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """OvertakingStateMachine keeps track of overtaking obstacles.
 
-See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.overtaking` for implementation details of the \
-    states used in this StateMachine.
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.overtaking` for implementation details of the
+states used in this StateMachine.
 """
 
 from typing import Callable
@@ -16,18 +15,9 @@ from simulation.src.simulation_evaluation.src.state_machine.states.overtaking im
     Right,
 )
 
-__copyright__ = "KITcar"
-
 
 class OvertakingStateMachine(StateMachine):
-    """Keep track of overtaking obstacles.
-
-    Inheriting from StateMachine makes it possible to handle all states from outside.
-
-    .. autoattribute:: StateMachine.failure_collision
-    .. autoattribute:: StateMachine.failure_off_road
-    .. autoattribute:: StateMachine.failure_left
-    """
+    """Keep track of overtaking obstacles."""
 
     off: "ActiveState" = Off()  # noqa: F821
     """Default state"""
