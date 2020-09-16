@@ -17,8 +17,7 @@ else:
 
 
 class Visualizer:
-    """This class includes several functions that can display/save images and
-    print/save logging information.
+    """This class includes several functions that can display/save images and print/save logging information.
 
     It uses a Python library 'visdom' for display.
     """
@@ -38,8 +37,7 @@ class Visualizer:
 
         Args:
             display_id (int): window id of the web display
-            name (str): name of the experiment. It decides where to store
-                samples and models
+            name (str): name of the experiment. It decides where to store samples and models
             display_port (int): visdom port of the web display
             checkpoints_dir (str): models are saved here
         """
@@ -55,7 +53,7 @@ class Visualizer:
             self.vis = Visdom(port=self.port)
 
         if not os.path.isdir(os.path.join(checkpoints_dir, name)):
-            os.makedirs(checkpoints_dir)
+            os.makedirs(checkpoints_dir, exist_ok=True)
             os.makedirs(os.path.join(checkpoints_dir, name))
 
         self.log_name = os.path.join(checkpoints_dir, name, "loss_log.txt")
@@ -67,12 +65,16 @@ class Visualizer:
         """Reset the self.saved status"""
         self.saved = False
 
-    def create_visdom_connections(self, port: int) -> None:
-        """If the program could not connect to Visdom server, this function will
-        start a new server at port < self.port >
+    @staticmethod
+    def create_visdom_connections(port: int) -> None:
+        """If the program could not connect to Visdom server, this function will start a new server
+        at port <self.port>
         """
         subprocess.Popen(
-            ["visdom", "-p", str(port)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            ["visdom", "-p", str(port)],
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
         print(f"Launched Visdom server: http://localhost:{port}")
 
@@ -141,15 +143,12 @@ class Visualizer:
             )
 
     def plot_current_losses(self, epoch: int, counter_ratio: float, losses: dict) -> None:
-        """display the current losses on visdom display: dictionary of error
-        labels and values
+        """display the current losses on visdom display: dictionary of error labels and values
 
         Args:
             epoch (int): current epoch
-            counter_ratio (float): progress (percentage) in the current epoch,
-                between 0 to 1
-            losses (dict): training losses stored in the format of (name, float)
-                pairs
+            counter_ratio (float): progress (percentage) in the current epoch, between 0 to 1
+            losses (dict): training losses stored in the format of (name, float) pairs
         """
         if not hasattr(self, "plot_data"):
             self.plot_data = {"X": [], "Y": [], "legend": list(losses.keys())}
@@ -174,7 +173,7 @@ class Visualizer:
         # Create sub plot
         ax = fig.add_subplot(1, 1, 1)
         # transpose y data, as self.plot_data['Y'] has the wrong format for matplotlib
-        y_data_transposed = [[] for i in range(8)]
+        y_data_transposed = [[] for _ in range(8)]
         for entry in self.plot_data["Y"]:
             for i, item in enumerate(entry):
                 y_data_transposed[i].append(item)
@@ -189,20 +188,23 @@ class Visualizer:
 
     # losses: same format as |losses| of plot_current_losses
     def print_current_losses(
-        self, epoch: int, iters: int, losses: dict, t_comp: float
+        self, epoch: int, iters: int, losses: dict, t_comp: float, estimated_time: float
     ) -> None:
         """print current losses on console; also save the losses to the disk
 
         Args:
             epoch (int): current epoch
-            iters (int): current training iteration during this epoch (reset to
-                0 at the end of every epoch)
-            losses (dict): training losses stored in the format of (name, float)
-                pairs
-            t_comp (float): computational time per data point (normalized by
-                batch_size)
+            iters (int): current training iteration during this epoch (reset to 0 at the end of every epoch)
+            losses (dict): training losses stored in the format of (name, float) pairs
+            t_comp (float): computational time per data point (normalized by batch_size)
+            estimated_time (float): the estimated time until training finishes
         """
-        message = "(epoch: %d, iters: %d, time: %.3f) " % (epoch, iters, t_comp)
+        hours, remainder = divmod(estimated_time, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        message = (
+            f"(epoch: {epoch}, iters: {iters}, time: {t_comp:.3f}, ETA: {hours:.0f}:{minutes:.0f}:{seconds:.0f} "
+            f"hh:mm:ss) "
+        )
         for k, v in losses.items():
             message += "%s: %.3f " % (k, v)
 

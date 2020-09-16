@@ -13,13 +13,7 @@ from PIL import Image
 
 
 class BaseDataset(data.Dataset):
-    """This is the base class for other datasets.
-
-    To create a subclass, you need to implement the following four functions:
-    -- <__init__>: initialize the class, first call BaseDataset.__init__(self,
-    opt). -- <__len__>: return the size of dataset. -- <__getitem__>: get a data
-    point.
-    """
+    """This is the base class for other datasets."""
 
     def __len__(self):
         """Return the total number of images in the dataset."""

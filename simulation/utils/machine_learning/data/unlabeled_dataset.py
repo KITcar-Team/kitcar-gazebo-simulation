@@ -26,8 +26,7 @@ class UnlabeledDataset(BaseDataset):
         Args:
             folder_path: path to the dataset
             max_dataset_size: maximum amount of images to load
-            transform_properties: dict containing properties for transforming
-                images
+            transform_properties: dict containing properties for transforming images
         """
         self.folder_path = folder_path
         self.max_dataset_size = max_dataset_size
@@ -72,9 +71,7 @@ class UnlabeledDataset(BaseDataset):
 
 
 class UnlabeledDataLoader:
-    """Wrapper class of Dataset class that performs multi-threaded data
-    loading
-    """
+    """Wrapper class of Dataset class that performs multi-threaded data loading"""
 
     def __init__(
         self,
@@ -86,8 +83,8 @@ class UnlabeledDataLoader:
     ):
         """Initialize this class
 
-        Step 1: create a dataset instance given the name Step 2: create a
-        multi-threaded data loader.
+        Step 1: create a dataset instance given the name
+        Step 2: create a multi-threaded data loader.
 
         Args:
             dataset (UnlabeledDataset): the dataset to load

@@ -2,8 +2,10 @@ import functools
 
 from torch import nn as nn, Tensor
 
+from simulation.utils.machine_learning.models.nn_module import NNModule
 
-class NLayerDiscriminator(nn.Module):
+
+class NLayerDiscriminator(NNModule):
     """Defines a PatchGAN discriminator"""
 
     def __init__(
@@ -12,7 +14,7 @@ class NLayerDiscriminator(nn.Module):
         ndf: int = 64,
         n_layers: int = 3,
         norm_layer: nn.Module = nn.BatchNorm2d,
-        use_sigmoid: bool = False,
+        use_sigmoid: bool = True,
         is_quadratic: bool = True,
     ):
         """Construct a PatchGAN discriminator

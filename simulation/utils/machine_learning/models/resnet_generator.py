@@ -3,16 +3,20 @@ from typing import Optional, List
 
 from torch import nn as nn, Tensor
 
-from simulation.utils.machine_learning.cycle_gan.models.helper import get_activation_layer
-from simulation.utils.machine_learning.cycle_gan.models.resnet_block import ResnetBlock
+from .helper import get_activation_layer
+from .resnet_block import ResnetBlock
+
+from .init_from_options import InitFromOptions
 
 
-class ResnetGenerator(nn.Module):
-    """Resnet-based generator that consists of Resnet blocks between a few
-    downsampling/upsampling operations.
+from .nn_module import NNModule
 
-    We adapt Torch code and idea from Justin Johnson's neural style transfer
-    project(https://github.com/jcjohnson/fast-neural-style)
+
+class ResnetGenerator(NNModule):
+    """Resnet-based generator that consists of Resnet blocks between a few downsampling/upsampling operations.
+
+    We adapt Torch code and idea from Justin Johnson's neural style transfer project(
+    https://github.com/jcjohnson/fast-neural-style)
     """
 
     def __init__(
@@ -37,11 +41,9 @@ class ResnetGenerator(nn.Module):
             norm_layer (nn.Module): normalization layer
             use_dropout (bool): if use dropout layers
             n_blocks (int): the number of ResNet blocks
-            padding_type (str): the name of padding layer in conv layers:
-                reflect | replicate | zero
-            activation (str):
-            conv_layers_in_block (int): Number of convolution layers in each
-                block.
+            padding_type (str): the name of padding layer in conv layers: reflect | replicate | zero
+            activation (str): Choose which activation to use. [TANH | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
+            conv_layers_in_block (int): Number of convolution layers in each block.
             dilations: List of dilations for each conv layer.
         """
         assert n_blocks >= 0
@@ -117,3 +119,7 @@ class ResnetGenerator(nn.Module):
             input (Tensor): the input tensor
         """
         return self.model(input)
+
+
+# Add this function here because of troubles with the sphinx documentation.
+ResnetGenerator.from_options = InitFromOptions.from_options

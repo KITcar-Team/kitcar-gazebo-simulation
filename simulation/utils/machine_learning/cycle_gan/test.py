@@ -1,11 +1,19 @@
 import argparse
 import os
+import pickle
 
+import torch
 import yaml
 
 import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
+from simulation.utils.machine_learning.cycle_gan.models.generator import create_generator
+from simulation.utils.machine_learning.cycle_gan.models.wcycle_gan import (
+    WassersteinCycleGANModel,
+)
 from simulation.utils.machine_learning.data.image_operations import save_images
+from simulation.utils.machine_learning.models.helper import get_norm_layer, init_net
+from simulation.utils.machine_learning.models.resnet_generator import ResnetGenerator
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Read config file.")
@@ -34,30 +42,65 @@ if __name__ == "__main__":
         batch_size=1,
         sequential=True,
         num_threads=0,
-        grayscale_A=(opt["input_nc"] == 1),
-        grayscale_B=(opt["output_nc"] == 1),
+        grayscale_a=(opt["input_nc"] == 1),
+        grayscale_b=(opt["output_nc"] == 1),
         max_dataset_size=opt["max_dataset_size"],
         transform_properties=tf_properties,
     )  # create datasets for each domain (A and B)
 
-    model = CycleGANModel.from_options(
-        **opt
-    )  # create a model given model and other options
-    model.setup(
-        verbose=opt["verbose"], load_iter=opt["load_iter"], epoch=opt["epoch"],
+    del opt["dataset_a"]
+    del opt["dataset_b"]
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+    if opt["is_wgan"]:
+        netg_a = ResnetGenerator(
+            opt["input_nc"],
+            opt["output_nc"],
+            opt["ngf"],
+            get_norm_layer(opt["norm"]),
+            dilations=opt["dilations"],
+            conv_layers_in_block=opt["conv_layers_in_block"],
+        )
+    else:
+        netg_a = create_generator(
+            opt["input_nc"],
+            opt["output_nc"],
+            opt["ngf"],
+            opt["netg"],
+            opt["norm"],
+            not opt["no_dropout"],
+            opt["activation"],
+            opt["conv_layers_in_block"],
+            opt["dilations"],
+        )
+
+    netg_b = pickle.loads(pickle.dumps(netg_a))
+
+    netg_a = init_net(netg_a, opt["init_type"], opt["init_gain"], device)
+    netg_b = init_net(netg_b, opt["init_type"], opt["init_gain"], device)
+
+    ModelClass = CycleGANModel if not opt["is_wgan"] else WassersteinCycleGANModel
+
+    model = ModelClass.from_options(netg_a=netg_a, netg_b=netg_b, **opt)
+
+    model.networks.load(
+        os.path.join(opt["checkpoints_dir"], opt["name"], f"{opt['epoch']}_net_"),
+        device=device,
     )
+    model.networks.print(opt["verbose"])
+
     model.eval()
-    for i, ((A, A_paths), (B, B_paths)) in enumerate(zip(dataset_a, dataset_b)):
-        model.set_input(
-            {"A": A, "A_paths": A_paths, "B": B, "B_paths": B_paths}
-        )  # unpack data from dataset and apply preprocessing
-        model.test()  # run inference
-        visuals = model.get_current_visuals()  # get image results
+    for i, ((a, _), (b, _)) in enumerate(zip(dataset_a, dataset_b)):
+        a = a.to(device)
+        b = b.to(device)
+        stats = model.test(a, b)  # run inference
+        visuals = stats.get_visuals()
         if i % 5 == 0:
             print("processing (%04d)-th image." % i)
         save_images(
             visuals=visuals,
             destination=os.path.join(opt["results_dir"], opt["name"]),
             aspect_ratio=opt["aspect_ratio"],
-            iteration_count=i,
+            post_fix=str(i),
         )

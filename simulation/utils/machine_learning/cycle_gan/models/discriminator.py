@@ -1,10 +1,7 @@
-from typing import List
-
 from torch import nn
 
-from simulation.utils.machine_learning.cycle_gan.models.helper import (
+from simulation.utils.machine_learning.models.helper import (
     get_norm_layer,
-    init_net,
 )
 from simulation.utils.machine_learning.cycle_gan.models.n_layer_discriminator import (
     NLayerDiscriminator,
@@ -20,9 +17,6 @@ def create_discriminator(
     netd: str,
     n_layers_d: int = 3,
     norm: str = "batch",
-    init_type: str = "normal",
-    init_gain: float = 0.02,
-    gpu_ids: List[int] = [0],
     use_sigmoid: bool = False,
 ) -> nn.Module:
     """Create a discriminator
@@ -40,8 +34,7 @@ def create_discriminator(
         the discriminator with the parameter <n_layers_d> (default=3 as used in
         [basic] (PatchGAN).)
 
-    The discriminator has been initialized by <init_net>. It uses Leaky RELU
-    for non-linearity.
+    It uses Leaky RELU for non-linearity.
 
     Args:
         input_nc (int): # of input image channels: 3 for RGB and 1 for grayscale
@@ -52,10 +45,6 @@ def create_discriminator(
         n_layers_d (int): number of layers in the discriminator network
         norm (str): instance normalization or batch normalization [instance |
             batch | none]
-        init_type (str): network initialization [normal | xavier | kaiming |
-            orthogonal]
-        init_gain (float): scaling factor for normal, xavier and orthogonal.
-        gpu_ids (List[int]): gpu ids: e.g. 0 0,1,2, 0,2. use -1 for CPU
         use_sigmoid (bool): Use sigmoid activation at the end of discriminator
             network
     """
@@ -70,7 +59,9 @@ def create_discriminator(
             input_nc, ndf, n_layers_d, norm_layer=norm_layer, use_sigmoid=use_sigmoid
         )
     elif netd == "no_patch":  # without any patch gan
-        net = NoPatchDiscriminator(input_nc, norm_layer=norm_layer, n_layers_d=n_layers_d)
+        net = NoPatchDiscriminator(
+            input_nc, norm_layer=norm_layer, n_layers_d=n_layers_d, use_sigmoid=use_sigmoid
+        )
     else:
         raise NotImplementedError("Discriminator model name [%s] is not recognized" % netd)
-    return init_net(net, init_type, init_gain, gpu_ids)
+    return net
