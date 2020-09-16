@@ -21,11 +21,7 @@ from simulation.src.simulation_evaluation.src.state_machine.states.lane import (
 
 
 class LaneStateMachine(StateMachine):
-    """Keep track of which part of the road the car is on.
-
-    .. autoattribute:: StateMachine.failure_collision
-    .. autoattribute:: StateMachine.failure_off_road
-    """
+    """Keep track of which part of the road the car is on."""
 
     collision = FailureCollision()
     """End state when driving into an obstacle"""
