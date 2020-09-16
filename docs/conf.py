@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # KITcar Simulation documentation build configuration file, created by
 # sphinx-quickstart on Sun Feb 16 00:00:20 2020.
@@ -20,46 +19,9 @@
 import os
 import sys
 from pathlib import Path
-from unittest.mock import Mock
 from typing import List
 
 sys.path.insert(0, os.path.abspath(".."))
-
-
-# Prevent all of these libraries to be installed just for the configuration
-MOCK_MODULES = [
-    "yaml",
-    "PIL",
-    "PIL.ImageOps",
-    "PIL.Image",
-    "pyxb",
-    "pyxb.binding",
-    "pyxb.binding.saxer",
-    "pyxb.utils",
-    "pyxb.utils.utility",
-    "pyxb.utils.domutils",
-    "pyxb.utils.six",
-    "pyxb.binding",
-    "pyxb.binding.datatypes",
-    "torch",
-    "torch.nn",
-    "torch.nn.functional",
-    "torch.nn.modules",
-    "torch.nn.modules.module",
-    "torch.utils",
-    "torch.utils.data",
-    "torch.optim",
-    "torch.optim.lr_scheduler",
-    "torch.optim.optimizer",
-    "torch.autograd",
-    "torchvision",
-    "torchvision.transforms",
-    "dominate",
-    "dominate.tags",
-]
-
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = Mock()
 
 
 def create_run_apidoc(root: str, exclude: List[str] = None):
