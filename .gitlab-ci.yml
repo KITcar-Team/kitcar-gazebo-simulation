@@ -55,6 +55,13 @@ test-python-packages:
     # Test the urdf package
     - python3 simulation/utils/urdf/test/test_core.py
 
+test-machine-learning-package:
+  stage: test
+  variables:
+    INIT_INPUT: '1\nyy'
+  script:
+    - python3 -m simulation.utils.machine_learning.models.test.test_wgan_critic
+
 test-ros-packages:
   stage: test
   script:

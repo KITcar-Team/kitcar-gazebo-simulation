@@ -23,8 +23,7 @@ class RosConnector:
     ):
         """Initialize the RosConnector class
 
-        Use default test options but could be via command-line.
-        Load and setup the model
+        Use default test options but could be via command-line. Load and setup the model
         """
         with open(config_file) as conf:
             configs = yaml.load(conf, Loader=yaml.FullLoader)
@@ -39,7 +38,8 @@ class RosConnector:
             **opt
         )  # create a model given model and other options
         self.model.setup(
-            verbose=opt["verbose"], load_iter=opt["load_iter"],
+            verbose=opt["verbose"],
+            load_iter=opt["load_iter"],
         )
         # model.eval()
 
@@ -76,10 +76,10 @@ class RosConnector:
         image.unsqueeze_(0)
 
         # Inference
-        result: torch.Tensor = self.model.netg_a.forward(image).detach()
+        result = self.model.netg_a.forward(image).detach()
 
         # From [-1,1] to [0,256]
-        result: np.ndarray = tensor2im(result, to_rgb=False)
+        result = tensor2im(result, to_rgb=False)
 
         # Resize to the size the input image has
         result = cv2.resize(result, dsize=(w, h), interpolation=cv2.INTER_LINEAR)
