@@ -8,7 +8,7 @@ from .resnet_block import ResnetBlock
 from .init_from_options import InitFromOptions
 
 
-class ResnetGenerator(nn.Module):
+class ResnetGenerator(nn.Module, InitFromOptions):
     """Resnet-based generator that consists of Resnet blocks between a few downsampling/upsampling operations.
 
     We adapt Torch code and idea from Justin Johnson's neural style transfer project(
@@ -115,7 +115,3 @@ class ResnetGenerator(nn.Module):
             input (Tensor): the input tensor
         """
         return self.model(input)
-
-
-# Add this function here because of troubles with the sphinx documentation.
-ResnetGenerator.from_options = InitFromOptions.from_options
