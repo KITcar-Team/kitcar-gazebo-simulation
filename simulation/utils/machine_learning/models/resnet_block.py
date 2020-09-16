@@ -2,10 +2,8 @@ from typing import List
 
 from torch import nn as nn, Tensor
 
-from .nn_module import NNModule
 
-
-class ResnetBlock(NNModule):
+class ResnetBlock(nn.Module):
     """Define a Resnet block"""
 
     def __init__(

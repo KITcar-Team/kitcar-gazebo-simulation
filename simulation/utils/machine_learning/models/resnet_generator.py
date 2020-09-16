@@ -8,10 +8,7 @@ from .resnet_block import ResnetBlock
 from .init_from_options import InitFromOptions
 
 
-from .nn_module import NNModule
-
-
-class ResnetGenerator(NNModule):
+class ResnetGenerator(nn.Module):
     """Resnet-based generator that consists of Resnet blocks between a few downsampling/upsampling operations.
 
     We adapt Torch code and idea from Justin Johnson's neural style transfer project(
