@@ -10,7 +10,7 @@ from .resnet_block import ResnetBlock
 from .init_from_options import InitFromOptions
 
 
-class WassersteinCritic(nn.Module):
+class WassersteinCritic(nn.Module, InitFromOptions):
     def __init__(
         self,
         input_nc: int,
@@ -175,7 +175,3 @@ class WassersteinCritic(nn.Module):
             self._clip_weights(weight_clips)
 
         return -1 * loss_d.detach().item()
-
-
-# Add this function here because of troubles with the sphinx documentation.
-WassersteinCritic.from_options = InitFromOptions.from_options
