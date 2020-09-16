@@ -2,10 +2,8 @@ from torch import nn as nn, Tensor
 
 from .unet_block import UnetSkipConnectionBlock
 
-from .nn_module import NNModule
 
-
-class UnetGenerator(NNModule):
+class UnetGenerator(nn.Module):
     """Create a Unet-based generator"""
 
     def __init__(
