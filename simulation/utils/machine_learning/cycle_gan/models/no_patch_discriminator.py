@@ -1,10 +1,8 @@
 import torch
 from torch import nn as nn
 
-from simulation.utils.machine_learning.models.nn_module import NNModule
 
-
-class NoPatchDiscriminator(NNModule):
+class NoPatchDiscriminator(nn.Module):
     def __init__(
         self,
         input_nc: int,

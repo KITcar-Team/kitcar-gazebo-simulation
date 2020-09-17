@@ -5,7 +5,7 @@ variables:
   GIT_LFS_SKIP_SMUDGE: "1"  #  Don't pull Git LFS
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar/
-  INIT_INPUT: '1\nyn' # Omit machine learning packages by default, as they are only used by a few jobs.
+  INIT_INPUT: '1\nyn' # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
 
 before_script:
   # Run the container start script to enable the pulseaudio & xserver
@@ -158,6 +158,7 @@ test-cyclegan:
 test-documentation:
   stage: test
   variables:
+    INIT_INPUT: '1\nyy'
     GIT_LFS_SKIP_SMUDGE: "0"  #  Pull git lfs
   script:
     # Test if the onboarding documentation is correct
@@ -172,6 +173,7 @@ test-documentation:
 build-documentation:
   stage: deploy
   variables:
+    INIT_INPUT: '1\nyy'
     GIT_LFS_SKIP_SMUDGE: "0"  #  Pull git lfs
   script:
     # Build the documentation

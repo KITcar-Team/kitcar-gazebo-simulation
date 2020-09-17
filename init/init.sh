@@ -28,9 +28,9 @@ pip_install_reqs(){
     echo -e "\nStart installing python packages from \e[2minit/$1\e[22m"
     case "$UBUNTU_VERSION" in
       "focal") # Ubuntu 20.04
-        pip3 install --no-warn-script-location -r $INIT_DIR/$1;;
+        pip3 install --upgrade --upgrade-strategy eager --no-warn-script-location -r $INIT_DIR/$1;;
       "bionic")
-        pip3 install -r $INIT_DIR/$1;;
+        pip3 install --upgrade --upgrade-strategy eager -r $INIT_DIR/$1;;
       *)
         echo -e "\n\e[31mERROR: You are not using the correct version of Ubuntu (bionic or focal)!\e[39m" ;
         exit;
