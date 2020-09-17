@@ -9,8 +9,8 @@ test_dr_drift_256:
     md5: 960192440d7011e941306c290b3bf11f
   - path: checkpoints/dr_drift_256/latest_net_g_b.pth
     md5: fa19ccada3659a17fb3a3398d8eb8525
-  - path: config.yaml
-    md5: bcc1907a92a66e5d48307fa4c49836ff
+  - path: configs
+    md5: c29cd2596519a2fa40343986783b2587.dir
   outs:
   - path: results/dr_drift_256/images
     md5: 2863337531f342cb0d09e9703c494ab2.dir
@@ -43,9 +43,9 @@ train_dr_drift_256:
   - path: ./../../../../data/real_images/maschinen_halle_no_obstacles
     md5: 981c3d3a603118ade9afa92b7f60cd00.dir
   - path: ./../../../../data/simulated_images/random_roads
-    md5: bc533a1005c5c883bdcd29a4eaafd3cf.dir
-  - path: config.yaml
-    md5: bcc1907a92a66e5d48307fa4c49836ff
+    md5: e22c4da27c6a8e2b2b2324bdeb5c32ff.dir
+  - path: configs
+    md5: c29cd2596519a2fa40343986783b2587.dir
   outs:
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
     md5: 84ef6d1630b9ae7e3d706f9dd6c2e3d0
