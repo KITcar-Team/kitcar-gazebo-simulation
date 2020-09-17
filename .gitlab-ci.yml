@@ -197,28 +197,15 @@ cml-cyclegan:
     - dvc pull make_video_dr_drift_256 --run-cache # for stacked video
     - dvc pull stacked_gif_dr_drift_256 --run-cache # for stacked gif
     - cd ../../../../
-    # copy the loss graph to root directory
-    - mkdir cml
-    - cp simulation/utils/machine_learning/cycle_gan/results/dr_drift_256/stacked.mp4 cml/stacked.mp4
-    - cp simulation/utils/machine_learning/cycle_gan/results/dr_drift_256/stacked.gif cml/stacked.gif
-    - cp simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/loss.png cml/loss.png
-    - cp simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/loss.png loss.png
     # Create content for the report.md
     - echo "## Dr Drift 256" >> report.md
     - echo "# Translated video" >> report.md
-    - echo "![Dr Drift 256](https://git.kitcar-team.de/kitcar/kitcar-gazebo-simulation/-/jobs/"$CI_JOB_ID"/artifacts/raw/cml/stacked.gif)" >> report.md
+    - cml-publish simulation/utils/machine_learning/cycle_gan/results/dr_drift_256/stacked.mp4 --gitlab-uploads --md --title 'MP4' >> report.md
     - echo "<br>" >> report.md
-    - echo "You can find the full size version [here](https://git.kitcar-team.de/kitcar/kitcar-gazebo-simulation/-/jobs/"$CI_JOB_ID"/artifacts/browse/cml)." >> report.md
     - echo "# Loss values" >> report.md
-    - cml-publish loss.png --md >> report.md
+    - cml-publish simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/loss.png --gitlab-uploads --md --title 'Loss values' >> report.md
     # Send report.md as comment
     - cml-send-comment report.md
-  artifacts:
-    paths:
-      - cml/stacked.gif
-      - cml/loss.png
-      - cml/stacked.mp4
-    expire_in: 2 weeks
 
 # Build and deploy the CI docker image to the gitlab registry
 # This is done everytime the master branch is updated
