@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 from simulation.src.simulation_evaluation.src.state_machine.state_machines.lane import (
     LaneStateMachine,
@@ -16,8 +14,6 @@ from simulation.src.simulation_evaluation.src.state_machine.state_machines.prior
 from simulation.src.simulation_evaluation.src.state_machine.state_machines.progress import (
     ProgressStateMachine,
 )
-
-__copyright__ = "KITcar"
 
 
 lane = LaneStateMachine(None)

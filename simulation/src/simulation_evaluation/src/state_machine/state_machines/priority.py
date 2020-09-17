@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """PriorityStateMachine keeps track of stoping or halting in front of stop or halt lines.
 
-See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.priority` for implementation details of the \
-    states used in this StateMachine.
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.priority` for implementation details of the
+states used in this StateMachine.
 """
 
 from typing import Callable
@@ -22,14 +21,7 @@ __copyright__ = "KITcar"
 
 
 class PriorityStateMachine(StateMachine):
-    """Keep track of stoping and halting in front of stop or halt lines.
-
-    Inheriting from StateMachine makes it possible to handle all states from outside.
-
-    .. autoattribute:: StateMachine.failure_collision
-    .. autoattribute:: StateMachine.failure_off_road
-    .. autoattribute:: StateMachine.failure_left
-    """
+    """Keep track of stoping and halting in front of stop or halt lines."""
 
     off: "ActiveState" = Off()  # noqa: F821
     """Default state"""
