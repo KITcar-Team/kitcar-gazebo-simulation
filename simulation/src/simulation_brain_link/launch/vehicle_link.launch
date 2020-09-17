@@ -6,6 +6,7 @@
   <arg name="car_name" default="dr_drift" />
 
   <arg name="apply_gan" default="false" />
+  <arg name="use_wasserstein_gan" default="true" />
   <arg name="use_deprecated_camera" default="false" />
 
   <arg name="set_twist" default="true" />
@@ -42,6 +43,7 @@
 
   <include if="$(eval arg('use_deprecated_camera') == 0)" file="$(find simulation_brain_link)/launch/sensor_camera_node.launch">
     <arg name="apply_gan" value="$(arg apply_gan)"/>
+    <arg name="use_wasserstein_gan" value="$(arg use_wasserstein_gan)"/>
   </include>
 
   <!-- Simulate all time of flight sensors -->

@@ -150,30 +150,6 @@ def init_net(
     return net
 
 
-def get_activation_layer(activation: str) -> nn.Module:
-    """Return the matching activation layer.
-
-    Args:
-        activation (str): string for the activation layer [TANH | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
-    """
-    if activation.lower() == "tanh":
-        return nn.Tanh()
-    elif activation.lower() == "hardtanh":
-        return nn.Hardtanh()
-    elif activation == "selu":
-        return nn.SELU()
-    elif activation == "celu":
-        return nn.CELU()
-    elif activation == "softshrink":
-        return nn.Softshrink()
-    elif activation == "softsign":
-        return nn.Softsign()
-    else:
-        raise NotImplementedError(
-            "Activation function %s is not implemented yet." % activation
-        )
-
-
 def set_requires_grad(nets: List[nn.Module], requires_grad: bool = False):
     """Set requires_grad=False for all the networks to avoid unnecessary computations
 

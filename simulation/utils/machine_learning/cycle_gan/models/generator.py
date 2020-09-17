@@ -18,7 +18,7 @@ def create_generator(
     netg: str,
     norm: str = "batch",
     use_dropout: bool = False,
-    activation: str = "TANH",
+    activation: nn.Module = nn.Tanh(),
     conv_layers_in_block: int = 2,
     dilations: List[int] = None,
 ) -> nn.Module:
@@ -43,7 +43,7 @@ def create_generator(
         netg (str): specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]
         norm (str): instance normalization or batch normalization [instance | batch | none]
         use_dropout (bool): enable or disable dropout
-        activation (str): Choose which activation to use. [TANH | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
+        activation (nn.Module): Choose which activation to use.
         conv_layers_in_block (int): specify number of convolution layers per resnet block
         dilations: dilation for individual conv layers in every resnet block
     """

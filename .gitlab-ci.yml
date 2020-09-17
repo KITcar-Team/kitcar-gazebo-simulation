@@ -135,7 +135,7 @@ test-cyclegan:
     changes:
       - data/real_images.dvc
       - data/simulated_images/**/*
-      - simulation/utils/machine_learning
+      - simulation/utils/machine_learning/**/*
   tags:
     - workstation
   script:

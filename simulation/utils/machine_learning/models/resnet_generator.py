@@ -3,7 +3,6 @@ from typing import Optional, List
 
 from torch import nn as nn, Tensor
 
-from .helper import get_activation_layer
 from .resnet_block import ResnetBlock
 
 from .init_from_options import InitFromOptions
@@ -28,7 +27,7 @@ class ResnetGenerator(NNModule):
         use_dropout: bool = False,
         n_blocks: int = 6,
         padding_type: str = "reflect",
-        activation: str = "TANH",
+        activation: nn.Module = nn.Tanh(),
         conv_layers_in_block: int = 2,
         dilations: Optional[List[int]] = None,
     ):
@@ -108,7 +107,7 @@ class ResnetGenerator(NNModule):
             ]
         model += [nn.ReflectionPad2d(3)]
         model += [nn.Conv2d(ngf, output_nc, kernel_size=7, padding=0)]
-        model += [get_activation_layer(activation)]
+        model += [activation]
 
         self.model = nn.Sequential(*model)
 

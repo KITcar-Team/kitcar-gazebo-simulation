@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
   <arg name="apply_gan" default="false" />
+  <arg name="use_wasserstein_gan" default="true" />
 
   <node name="sensor_camera_node" ns="simulation_brain_link" pkg="simulation_brain_link" type="sensor_camera_node" output="screen">
     <rosparam file="$(find simulation_brain_link)/param/sensor_camera/topics.yaml" command="load" ns="topics" />
     <rosparam file="$(find simulation_brain_link)/param/sensor_camera/default.yaml" command="load" />
 
     <param name="apply_gan" value="$(arg apply_gan)" />
+    <param name="use_wasserstein_gan" value="$(arg use_wasserstein_gan)" />
   </node>
 </launch>
