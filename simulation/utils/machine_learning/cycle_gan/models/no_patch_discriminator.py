@@ -10,7 +10,7 @@ class NoPatchDiscriminator(nn.Module):
         n_layers_d: int = 4,
         use_sigmoid: bool = True,
     ):
-        """Construct a no patch gan discriminator
+        """Construct a no patch gan discriminator.
 
         Args:
             input_nc (int): the number of channels in input images
@@ -47,7 +47,7 @@ class NoPatchDiscriminator(nn.Module):
         self.model = nn.Sequential(*model)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forwarding through network and avg pooling
+        """Forwarding through network and avg pooling.
 
         Args:
             x (torch.Tensor): the input tensor

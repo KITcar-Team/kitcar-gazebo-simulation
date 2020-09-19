@@ -1,15 +1,14 @@
-import unittest
-import random
 import functools
+import random
+import unittest
 
-from simulation_evaluation.msg import Speaker as SpeakerMsg
 from gazebo_simulation.msg import CarState as CarStateMsg
+from simulation_evaluation.msg import Speaker as SpeakerMsg
 
-from simulation.utils.geometry import Line, Pose, Polygon, Point
+from simulation.utils.geometry import Line, Point, Polygon, Pose
 
 from .. import AreaSpeaker
-from . import fake_msgs
-from . import utils
+from . import fake_msgs, utils
 
 
 class ModuleTest(unittest.TestCase):
@@ -78,7 +77,7 @@ class ModuleTest(unittest.TestCase):
         )
 
     def test_speak_function(self):
-        """Test speaker msg """
+        """Test speaker msg."""
         # Car msg
         pose = Pose(Point(1, 3), 0)
 

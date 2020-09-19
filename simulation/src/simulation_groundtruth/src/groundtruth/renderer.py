@@ -1,22 +1,20 @@
-from dataclasses import dataclass, field
-from simulation.utils.geometry import Vector, Transform
-from typing import Tuple, Set, DefaultDict, List, Dict, Callable
 import itertools
-from collections import defaultdict
 import os
-from simulation.utils.road.road import Road
-
-from simulation.utils.road.renderer.tile import Tile
-from time import gmtime, strftime
+import shutil
 import time as time_module
-import yaml
+from collections import defaultdict
+from contextlib import suppress
+from dataclasses import dataclass, field
+from time import gmtime, strftime
+from typing import Callable, DefaultDict, Dict, List, Set, Tuple
 
 import rospy
-
-import shutil
-from contextlib import suppress
-
+import yaml
 from simulation_groundtruth.msg import GroundtruthStatus
+
+from simulation.utils.geometry import Transform, Vector
+from simulation.utils.road.renderer.tile import Tile
+from simulation.utils.road.road import Road
 
 
 def current_pretty_time():
@@ -44,9 +42,10 @@ class PreviousRendering:
         try:
             with open(file_path, "r") as file:
                 prev = yaml.load(file.read(), Loader=yaml.FullLoader)
-            assert (
-                type(prev) == PreviousRendering
-            ), "Information of previous rendering is corrupt. Will be ignored in the following!"
+            assert type(prev) == PreviousRendering, (
+                "Information of previous rendering is corrupt."
+                "Will be ignored in the following!"
+            )
             return prev
         except Exception as e:
             print(e)
@@ -98,11 +97,17 @@ class Renderer:
 
     @property
     def materials_path(self) -> str:
-        return os.path.join(self.roads_path, f".{self.road._name}",)
+        return os.path.join(
+            self.roads_path,
+            f".{self.road._name}",
+        )
 
     @property
     def road_file_path(self) -> str:
-        return os.path.join(self.roads_path, f"{self.road._name}.py",)
+        return os.path.join(
+            self.roads_path,
+            f"{self.road._name}.py",
+        )
 
     # Previous
     @property
@@ -160,10 +165,12 @@ class Renderer:
             minx, miny, maxx, maxy = box.bounds
 
             tiles_x = range(
-                int(minx / self.tile_size.x) - 2, int(maxx / self.tile_size.x) + 2,
+                int(minx / self.tile_size.x) - 2,
+                int(maxx / self.tile_size.x) + 2,
             )
             tiles_y = range(
-                int(miny / self.tile_size.y) - 2, int(maxy / self.tile_size.y) + 2,
+                int(miny / self.tile_size.y) - 2,
+                int(maxy / self.tile_size.y) + 2,
             )
 
             tile_keys = itertools.product(tiles_x, tiles_y)

@@ -1,17 +1,18 @@
 from typing import List, Tuple
-from geometry_msgs.msg import Twist
-import rospy
 
-from simulation.utils.ros_base.node_base import NodeBase
-from simulation.utils.geometry import Line, Polygon, Transform, Vector
+import rospy
 from gazebo_simulation.msg import CarState as CarStateMsg
+from geometry_msgs.msg import Twist
+
+from simulation.utils.geometry import Line, Polygon, Transform, Vector
+from simulation.utils.ros_base.node_base import NodeBase
 
 
 class EvaluationTestNode(NodeBase):
     """Node primarily useful to test and debug nodes in the evaluation pipeline.
 
-    The node has a number of predefined paths and is able to fake CarState messages
-    as if the car was driving on one of those paths.
+    The node has a number of predefined paths and is able to fake CarState messages as if
+    the car was driving on one of those paths.
     """
 
     def __init__(self):
@@ -47,8 +48,7 @@ class EvaluationTestNode(NodeBase):
     def _get_path(self) -> Line:
         """Create a predefined path.
 
-        Depending on the *path* parameter,
-        one of the predefined paths is created.
+        Depending on the *path* parameter, one of the predefined paths is created.
         """
         right_center = -1 / 2 * self.param.lane_width  # -0.2 by default
         left_center = 1 / 2 * self.param.lane_width  # 0.2 by default

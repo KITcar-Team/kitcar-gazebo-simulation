@@ -1,19 +1,19 @@
-"""ProgressStateMachine keeps track if the car has started, is driving or has finished the drive.
+"""ProgressStateMachine keeps track if the car has started, is driving or has finished the
+drive.
 
-See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.progress` for implementation details of the
-states used in this StateMachine.
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.progress` for
+implementation details of the states used in this StateMachine.
 """
 
 from typing import Callable
 
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
-    StateMachine,
-)
 from simulation.src.simulation_evaluation.src.state_machine.states.progress import (
     BeforeStart,
     Finished,
     Running,
 )
+
+from .state_machine import StateMachine
 
 
 class ProgressStateMachine(StateMachine):

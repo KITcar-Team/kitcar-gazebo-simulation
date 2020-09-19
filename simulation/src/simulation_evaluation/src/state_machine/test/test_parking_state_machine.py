@@ -3,11 +3,11 @@
 import unittest
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
+
 from simulation.src.simulation_evaluation.src.state_machine.state_machines.parking import (
     ParkingStateMachine,
 )
 from simulation.src.simulation_evaluation.src.state_machine.test.test import Test
-
 
 __copyright__ = "KITcar"
 
@@ -43,7 +43,8 @@ class ModuleTest(Test):
         )
 
     def test_input_mutliple_times(self):
-        """Test if inputting speaker msgs multiple times changes anything (which it shouldn't)."""
+        """Test if inputting speaker msgs multiple times changes anything (which it
+        shouldn't)."""
         inputs = [
             SpeakerMsg.SPEED_UNLIMITED_ZONE,
             SpeakerMsg.SPEED_UNLIMITED_ZONE,
@@ -86,7 +87,8 @@ class ModuleTest(Test):
         )
 
     def test_unrelated_msgs(self):
-        """Test if inputting unrelated speaker msgs changes anything (which it shouldn't)."""
+        """Test if inputting unrelated speaker msgs changes anything (which it
+        shouldn't)."""
         inputs = [
             SpeakerMsg.SPEED_UNLIMITED_ZONE,
             SpeakerMsg.SPEED_51_60,
@@ -129,7 +131,8 @@ class ModuleTest(Test):
         )
 
     def test_right_lane(self):
-        """Test if state machine works as expected if car drives into right lane after trying to park in."""
+        """Test if state machine works as expected if car drives into right lane after
+        trying to park in."""
         inputs = [
             SpeakerMsg.SPEED_UNLIMITED_ZONE,
             SpeakerMsg.PARKING_ZONE,

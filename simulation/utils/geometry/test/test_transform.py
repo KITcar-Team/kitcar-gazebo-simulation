@@ -1,17 +1,16 @@
-import unittest
 import math
 import random
+import unittest
 
-from simulation.utils.geometry.point import Point
-from simulation.utils.geometry.vector import Vector
+import geometry_msgs.msg as g_msgs
+from pyquaternion import Quaternion
+
 from simulation.utils.geometry.line import Line
+from simulation.utils.geometry.point import Point
 from simulation.utils.geometry.polygon import Polygon
 from simulation.utils.geometry.pose import Pose
 from simulation.utils.geometry.transform import Transform
-
-from pyquaternion import Quaternion
-
-import geometry_msgs.msg as g_msgs
+from simulation.utils.geometry.vector import Vector
 
 
 class ModuleTest(unittest.TestCase):
@@ -43,7 +42,7 @@ class ModuleTest(unittest.TestCase):
         self.assertAlmostEqual(p1.rotation.z, p2.rotation.z)
 
     def test_tf_init(self):
-        """ Test if tf class can be initialized as expected. """
+        """Test if tf class can be initialized as expected."""
         # Create from quaternion
         v = Vector(1, 3, 2)
         o = Quaternion(math.sqrt(1 / 2), 0, 0, math.sqrt(1 / 2))

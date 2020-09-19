@@ -2,25 +2,23 @@
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 from simulation_evaluation.msg import State as StateMsg
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
-    StateMachine,
-)
-from simulation.src.simulation_evaluation.src.state_machine.states.state import State
+
+from ..state_machines.state_machine import StateMachine
+from .state import State
 
 
 class Off(State):
     """This state is the default state.
 
-    Once the state machine receives this state, the next state will we chage accordingly to its next method.
-
-    Inheriting from State gives this class the ability to hand down description and value to State. Same \
-        goes for input_msg which gets parsed to the method next if no state change was detected.
+    Once the state machine receives this state, the next state will we chage accordingly to
+    its next method.
     """
 
     def __init__(self):
         """Init state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car is not inside a stop zone.",
@@ -31,12 +29,12 @@ class Off(State):
         """Next state.
 
         Arguments:
-            state_machine (StateMachine): On which state machine the states gets executed
+            state_machine: On which state machine the states gets executed
             input_msg: Integer of message
 
         Returns:
-            Class object of next state. If no state change was detected here, check for failure state before
-            returning this state.
+            Class object of next state. If no state change was detected here,
+            check for failure state before returning this state.
         """
         if input_msg == SpeakerMsg.STOP_ZONE:
             return state_machine.in_stop_zone
@@ -49,16 +47,15 @@ class Off(State):
 class InHaltZone(State):
     """This state occurs when the car drives inside a halt zone.
 
-    Once the state machine receives this state, the next state will we chage accordingly to its next method.
-
-    Inheriting from State gives this class the ability to hand down description and value to State. Same \
-        goes for input_msg which gets parsed to the method next if no state change was detected.
+    Once the state machine receives this state, the next state will we chage accordingly to
+    its next method.
     """
 
     def __init__(self):
         """Init state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car is inside a halt zone.", value=StateMsg.PRIORITY_IN_HALT_ZONE
@@ -68,12 +65,12 @@ class InHaltZone(State):
         """Next state.
 
         Arguments:
-            state_machine (StateMachine): On which state machine the states gets executed
+            state_machine: On which state machine the states gets executed
             input_msg: Integer of message
 
         Returns:
-            Class object of next state. If no state change was detected here, check for failure state before
-            returning this state.
+            Class object of next state. If no state change was detected here,
+            check for failure state before returning this state.
         """
         if input_msg == SpeakerMsg.SPEED_HALTED:
             return state_machine.successfully_stopped
@@ -87,16 +84,15 @@ class InHaltZone(State):
 class InStopZone(State):
     """This state occurs when the car drives into a stop zone.
 
-    Once the state machine receives this state, the next state will we chage accordingly to its next method.
-
-    Inheriting from State gives this class the ability to hand down description and value to State. Same \
-        goes for input_msg which gets parsed to the method next if no state change was detected.
+    Once the state machine receives this state, the next state will we chage accordingly to
+    its next method.
     """
 
     def __init__(self):
         """Init state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car is inside a stop zone.", value=StateMsg.PRIORITY_IN_STOP_ZONE
@@ -106,12 +102,12 @@ class InStopZone(State):
         """Next state.
 
         Arguments:
-            state_machine (StateMachine): On which state machine the states gets executed
+            state_machine: On which state machine the states gets executed
             input_msg: Integer of message
 
         Returns:
-            Class object of next state. If no state change was detected here, check for failure state before
-            returning this state.
+            Class object of next state. If no state change was detected here,
+            check for failure state before returning this state.
         """
         if input_msg == SpeakerMsg.SPEED_STOPPED:
             return state_machine.successfully_stopped
@@ -124,16 +120,15 @@ class InStopZone(State):
 class SuccessfullyStopped(State):
     """This state occurs when the car stops in the stop zone.
 
-    Once the state machine receives this state, the next state will we chage accordingly to its next method.
-
-    Inheriting from State gives this class the ability to hand down description and value to State. Same \
-        goes for input_msg which gets parsed to the method next if no state change was detected.
+    Once the state machine receives this state, the next state will we chage accordingly to
+    its next method.
     """
 
     def __init__(self):
         """Init state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car successfully stopped.", value=StateMsg.PRIORITY_SUCCESS_STOP
@@ -143,12 +138,12 @@ class SuccessfullyStopped(State):
         """Next state.
 
         Arguments:
-            state_machine (StateMachine): On which state machine the states gets executed
+            state_machine: On which state machine the states gets executed
             input_msg: Integer of message
 
         Returns:
-            Class object of next state. If no state change was detected here, check for failure state before
-            returning this state.
+            Class object of next state. If no state change was detected here,
+            check for failure state before returning this state.
         """
         if input_msg == SpeakerMsg.NO_STOP_ZONE:
             return state_machine.off
@@ -159,15 +154,15 @@ class SuccessfullyStopped(State):
 class FailureInStopZone(State):
     """This end state occurs when the car does not stop inside the stop zone.
 
-    Once the state machine receives this state, the state can no longer change into a new one.
-
-    Inheriting from State gives this class the ability to hand down description and value to State.
+    Once the state machine receives this state, the state can no longer change into a new
+    one.
     """
 
     def __init__(self):
         """Init end state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car drove out of stop zone but was not allowed to.",

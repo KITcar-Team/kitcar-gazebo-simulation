@@ -1,19 +1,17 @@
-"""Polygon"""
+"""Polygon."""
 
 __copyright__ = "KITcar"
 
-import shapely.geometry  # Base class
-import shapely.affinity as affinity
+from contextlib import suppress
+from typing import List
 
-import numpy as np
 import geometry_msgs.msg as geometry_msgs
+import numpy as np
+import shapely.affinity as affinity
+import shapely.geometry  # Base class
 
 from simulation.utils.geometry.point import Point
 from simulation.utils.geometry.transform import Transform
-
-from contextlib import suppress
-
-from typing import List
 
 from .frame import validate_and_maintain_frames
 
@@ -104,7 +102,7 @@ class Polygon(shapely.geometry.polygon.Polygon):
 
     @validate_and_maintain_frames
     def __rmul__(self, tf: Transform):
-        """ Transform this polygon.
+        """Transform this polygon.
 
         Args:
             tf (Transform): Transformation to apply

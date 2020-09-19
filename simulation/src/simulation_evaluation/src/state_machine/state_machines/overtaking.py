@@ -1,19 +1,18 @@
 """OvertakingStateMachine keeps track of overtaking obstacles.
 
-See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.overtaking` for implementation details of the
-states used in this StateMachine.
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.overtaking` for
+implementation details of the states used in this StateMachine.
 """
 
 from typing import Callable
 
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
-    StateMachine,
-)
 from simulation.src.simulation_evaluation.src.state_machine.states.overtaking import (
     Left,
     Off,
     Right,
 )
+
+from .state_machine import StateMachine
 
 
 class OvertakingStateMachine(StateMachine):

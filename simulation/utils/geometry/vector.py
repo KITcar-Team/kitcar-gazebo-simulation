@@ -1,15 +1,15 @@
-"""Vector"""
+"""Vector."""
 
-import numbers
 import math
-from warnings import warn
+import numbers
 from contextlib import suppress
 from typing import Union
+from warnings import warn
 
+import geometry_msgs.msg as geometry_msgs
+import numpy as np
 import shapely.geometry  # Base class
 from pyquaternion import Quaternion
-import numpy as np
-import geometry_msgs.msg as geometry_msgs
 
 from .frame import validate_and_maintain_frames
 
@@ -17,9 +17,8 @@ from .frame import validate_and_maintain_frames
 class Vector(shapely.geometry.point.Point):
     """Implementation of the mathematical vector object.
 
-    Inheriting from shapely enables to use their powerful operations in combination with \
-    other objects,
-    e.g. lines, polygons.
+    Inheriting from shapely enables to use their powerful operations in combination with
+    other objects, e.g. lines, polygons.
 
     Initialization can be done in one of the following ways.
 
@@ -65,7 +64,8 @@ class Vector(shapely.geometry.point.Point):
 
         if isinstance(args[0], (geometry_msgs.Vector3, geometry_msgs.Point)):
             warn(
-                f"Initializing {self.__class__} with {args[0].__class__} directly is deprecated."
+                f"Initializing {self.__class__} with {args[0].__class__}"
+                "directly is deprecated."
                 f"Use {self.__class__.from_geometry_msg} instead.",
                 DeprecationWarning,
             )
@@ -90,14 +90,16 @@ class Vector(shapely.geometry.point.Point):
         """To ROS geometry_msg.
 
         Returns:
-            This vector as a geometry_msgs/Vector3 """
+            This vector as a geometry_msgs/Vector3
+        """
         return geometry_msgs.Vector3(x=self.x, y=self.y, z=self.z)
 
     def to_numpy(self) -> np.ndarray:
         """To numpy array.
 
         Returns:
-            Vector as a numpy array. """
+            Vector as a numpy array.
+        """
         return np.array([self.x, self.y, self.z])
 
     @validate_and_maintain_frames
@@ -153,7 +155,7 @@ class Vector(shapely.geometry.point.Point):
 
         Returns:
             :math:`\\vec{vec} \\cdot \\vec{v}`
-            """
+        """
         if isinstance(vec, self.__class__):
             return vec.x * self.x + vec.y * self.y + vec.z * self.z
 
@@ -187,7 +189,8 @@ class Vector(shapely.geometry.point.Point):
 
     def __repr__(self) -> str:
         return (
-            f"{self.__class__.__qualname__}{tuple(round(val,8) for val in [self.x,self.y,self.z])}"
+            f"{self.__class__.__qualname__}"
+            f"{tuple(round(val,8) for val in [self.x,self.y,self.z])}"
             + (f"(frame: {self._frame.name})" if self._frame is not None else "")
         )
 

@@ -3,33 +3,20 @@
 from typing import Callable
 
 import rospy
+from simulation_evaluation.msg import Speaker as SpeakerMsg
+from simulation_evaluation.msg import State as StateMsg
 from std_msgs.msg import String as StringMsg
 
 from simulation.utils.ros_base.node_base import NodeBase
 
-# Messages
-from simulation_evaluation.msg import Speaker as SpeakerMsg
-from simulation_evaluation.msg import State as StateMsg
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.overtaking import (
-    OvertakingStateMachine,
-)
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.parking import (
-    ParkingStateMachine,
-)
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.priority import (
-    PriorityStateMachine,
-)
+from .state_machines.lane import LaneStateMachine
+from .state_machines.overtaking import OvertakingStateMachine
+from .state_machines.parking import ParkingStateMachine
+from .state_machines.priority import PriorityStateMachine
 
 # StateMachines
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.progress import (
-    ProgressStateMachine,
-)
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
-    StateMachine,
-)
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.lane import (
-    LaneStateMachine,
-)
+from .state_machines.progress import ProgressStateMachine
+from .state_machines.state_machine import StateMachine
 
 
 def log(logger: Callable[[str], None] = rospy.loginfo):
@@ -105,13 +92,15 @@ class StateMachineNode(NodeBase):
     def initalize_state_machines(self):
         """Init each state machine.
 
-        Creates a list with each StateMachine in .state_machines, creates a publisher for each get topic in \
-            .sm_publishers and creates a subscriper for each set topic in .set_publishers.
+        Creates a list with each StateMachine in .state_machines, creates a publisher for
+        each get topic in .sm_publishers and creates a subscriper for each set topic in
+        .set_publishers.
         """
         t = self.param.topics
         definitions = []
         # Add new StateMachine here
-        # Usage: (StateMachineObject, Topic path for publisher, Topic path for manually setting the state machine)
+        # Usage: (StateMachineObject, Topic path for publisher,
+        # Topic path for manually setting the state machine)
         definitions.append((LaneStateMachine, t.lane.get, t.lane.set))
         definitions.append((ProgressStateMachine, t.progress.get, t.progress.set))
         definitions.append((OvertakingStateMachine, t.overtaking.get, t.overtaking.set))

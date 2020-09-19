@@ -1,27 +1,26 @@
 """Road class used to define roads as a python class.
 
-A simulated road can be defined through an object of type Road.
-It contains all sections of that road as a list.
+A simulated road can be defined through an object of type Road. It contains all sections of
+that road as a list.
 """
 
-import sys
-import random
 import importlib
 import os
+import random
+import sys
 from dataclasses import dataclass, field
 from typing import List, Tuple
 
+from simulation.utils.geometry import Pose, Transform
 from simulation.utils.road.sections.road_section import RoadSection
-
-from simulation.utils.geometry import Transform, Pose
 
 
 @dataclass
 class Road:
     """Container object for roads.
 
-    A road consists of multiple road sections that are concatenated.
-    The sections attribute contains these sections in the correct order.
+    A road consists of multiple road sections that are concatenated. The sections attribute
+    contains these sections in the correct order.
     """
 
     _name: str = field(default=None, init=False)

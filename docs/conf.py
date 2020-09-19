@@ -25,10 +25,11 @@ sys.path.insert(0, os.path.abspath(".."))
 
 
 def create_run_apidoc(root: str, exclude: List[str] = None):
-    """Create the run apidoc function which is used by better-apidoc to build .rst files from modules and packages."""
+    """Create the run apidoc function which is used by better-apidoc to build .rst files
+    from modules and packages."""
 
     def run_apidoc(app):
-        """Generate API documentation"""
+        """Generate API documentation."""
 
         apidoc_args = [
             "better-apidoc",

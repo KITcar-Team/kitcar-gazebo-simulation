@@ -1,13 +1,10 @@
 import rospy
-
+from gazebo_simulation.msg import CarState as CarStateMsg
 from visualization_msgs.msg import Marker
 
-from gazebo_simulation.msg import CarState as CarStateMsg
-
-from simulation.utils.geometry.point import Point
-
-from simulation.utils.ros_base.node_base import NodeBase
 import simulation.utils.ros_base.visualization as visualization
+from simulation.utils.geometry.point import Point
+from simulation.utils.ros_base.node_base import NodeBase
 
 
 class CarStateVisualizationNode(NodeBase):
@@ -15,9 +12,8 @@ class CarStateVisualizationNode(NodeBase):
 
     Attributes:
         frame_publisher (rospy.publisher): Publishes the cars frame as a rviz marker.
-        view_cone_publisher (rospy.publisher): Publishes the cars view cone as a rviz marker.
+        view_cone_publisher (rospy.publisher): Publishes the cars view cone as rviz marker.
         state_subscriber (rospy.subscriber): Subscribes to car_state
-
     """
 
     def __init__(self):

@@ -1,17 +1,16 @@
-import unittest
 import math
-
-from simulation.utils.geometry.point import Point
-from simulation.utils.geometry.point import InvalidPointOperationError
-from simulation.utils.geometry.vector import Vector
+import unittest
 
 import geometry_msgs.msg as g_msgs
 import numpy as np
 
+from simulation.utils.geometry.point import InvalidPointOperationError, Point
+from simulation.utils.geometry.vector import Vector
+
 
 class ModuleTest(unittest.TestCase):
     def test_point_init(self):
-        """ Test if the point class can be initialize. """
+        """Test if the point class can be initialize."""
 
         # Basic
         p1 = Point(1, 3)

@@ -15,7 +15,8 @@ class ModuleTest(Test):
     """Test if the ParkingStateMachine behaves as expected."""
 
     def test_left_lane(self):
-        """Test if state machine works as expected drives between the left and right lane."""
+        """Test if state machine works as expected drives between the left and right
+        lane."""
         inputs = [
             SpeakerMsg.RIGHT_LANE,
             SpeakerMsg.LEFT_LANE,
@@ -85,7 +86,8 @@ class ModuleTest(Test):
         )
 
     def test_off_road(self):
-        """Test if state machine works as expected if car drives offroad while trying to park in."""
+        """Test if state machine works as expected if car drives offroad while trying to
+        park in."""
         inputs = [
             SpeakerMsg.SPEED_UNLIMITED_ZONE,
             SpeakerMsg.LEFT_LANE,

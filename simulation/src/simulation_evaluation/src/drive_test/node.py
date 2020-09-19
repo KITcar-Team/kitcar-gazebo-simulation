@@ -1,10 +1,8 @@
 import rospy
-
-from std_msgs.msg import String as StringMsg
-
 from simulation_brain_link.msg import MissionMode
 from simulation_evaluation.msg import Referee as RefereeMsg
 from simulation_groundtruth.msg import GroundtruthStatus
+from std_msgs.msg import String as StringMsg
 
 from simulation.utils.ros_base.node_base import NodeBase
 
@@ -50,7 +48,7 @@ class DriveTestNode(NodeBase):
         # Then the speakers will operate on a false groundtruth!
         rospy.wait_for_message(self.param.topics.referee.info, RefereeMsg)
 
-        # For some reason this is necessary for the mission mode publisher to work correctly!
+        # For some reason this is necessary for the mission mode publisher to work correctly
         rospy.sleep(0.1)
 
         self.referee_subscriber = rospy.Subscriber(

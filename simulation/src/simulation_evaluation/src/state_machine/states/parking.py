@@ -2,10 +2,9 @@
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 from simulation_evaluation.msg import State as StateMsg
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
-    StateMachine,
-)
-from simulation.src.simulation_evaluation.src.state_machine.states.state import State
+
+from ..state_machines.state_machine import StateMachine
+from .state import State
 
 
 class ParkingState(State):
@@ -20,16 +19,15 @@ class ParkingState(State):
 class Off(ParkingState):
     """This state is the default state.
 
-    Once the state machine receives this state, the next state will we chage accordingly to its next method.
-
-    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
-        goes for input_msg which gets parsed to the method next if no state change was detected.
+    Once the state machine receives this state, the next state will we chage accordingly to
+    its next method.
     """
 
     def __init__(self):
         """Init state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car is not inside a parking zone.",
@@ -40,12 +38,12 @@ class Off(ParkingState):
         """Next state.
 
         Arguments:
-            state_machine (StateMachine): On which state machine the states gets executed
+            state_machine: On which state machine the states gets executed
             input_msg: Integer of message
 
         Returns:
-            Class object of next state. If no state change was detected here, check for failure state before
-            returning this state.
+            Class object of next state. If no state change was detected here,
+            check for failure state before returning this state.
         """
         if input_msg == SpeakerMsg.PARKING_ZONE:
             return state_machine.in_parking_zone
@@ -56,16 +54,15 @@ class Off(ParkingState):
 class InParkingZone(ParkingState):
     """This state occurs when the car drives into the parking zone.
 
-    Once the state machine receives this state, the next state will we chage accordingly to its next method.
-
-    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
-        goes for input_msg which gets parsed to the method next if no state change was detected.
+    Once the state machine receives this state, the next state will we chage accordingly to
+    its next method.
     """
 
     def __init__(self):
         """Init state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car is inside a parking zone.", value=StateMsg.PARKING_IN_ZONE
@@ -79,8 +76,8 @@ class InParkingZone(ParkingState):
             input_msg: Integer of message
 
         Returns:
-            Class object of next state. If no state change was detected here, check for failure state before
-            returning this state.
+            Class object of next state. If no state change was detected here,
+            check for failure state before returning this state.
         """
         if input_msg == SpeakerMsg.LEFT_LANE:
             return state_machine.parking_attempt
@@ -95,16 +92,15 @@ class InParkingZone(ParkingState):
 class ParkingAttempt(ParkingState):
     """This state occurs when the car starts an attempt to park in.
 
-    Once the state machine receives this state, the next state will we chage accordingly to its next method.
-
-    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
-        goes for input_msg which gets parsed to the method next if no state change was detected.
+    Once the state machine receives this state, the next state will we chage accordingly to
+    its next method.
     """
 
     def __init__(self):
         """Init state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car is driving into one parking spot or at least is trying to.",
@@ -119,8 +115,8 @@ class ParkingAttempt(ParkingState):
             input_msg: Integer of message
 
         Returns:
-            Class object of next state. If no state change was detected here, check for failure state before
-            returning this state.
+            Class object of next state. If no state change was detected here,
+            check for failure state before returning this state.
         """
         if input_msg == SpeakerMsg.LEFT_LANE:
             return state_machine.parking_attempt
@@ -135,16 +131,15 @@ class ParkingAttempt(ParkingState):
 class Parking(ParkingState):
     """This state occurs when the car drives a parking space.
 
-    Once the state machine receives this state, the next state will we chage accordingly to its next method.
-
-    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
-        goes for input_msg which gets parsed to the method next if no state change was detected.
+    Once the state machine receives this state, the next state will we chage accordingly to
+    its next method.
     """
 
     def __init__(self):
         """Init state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car is waiting until it has successfully parked.",
@@ -159,7 +154,8 @@ class Parking(ParkingState):
             input_msg: Integer of message
 
         Returns:
-            Class object of next state. If no state change was detected here, check for failure state before
+            Class object of next state. If no state change was detected here,
+            check for failure state before
             returning this state.
         """
         if input_msg == SpeakerMsg.SPEED_HALTED:
@@ -175,16 +171,15 @@ class Parking(ParkingState):
 class SuccessfullyParked(ParkingState):
     """This state occurs when the car successfully parks inside a parking space.
 
-    Once the state machine receives this state, the next state will we chage accordingly to its next method.
-
-    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
-        goes for input_msg which gets parsed to the method next if no state change was detected.
+    Once the state machine receives this state, the next state will we chage accordingly to
+    its next method.
     """
 
     def __init__(self):
         """Init state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car has successfully parked.", value=StateMsg.PARKING_SUCCESS
@@ -194,12 +189,12 @@ class SuccessfullyParked(ParkingState):
         """Next state.
 
         Arguments:
-            state_machine (StateMachine): On which state machine the states gets executed
+            state_machine: On which state machine the states gets executed
             input_msg: Integer of message
 
         Returns:
-            Class object of next state. If no state change was detected here, check for failure state before
-            returning this state.
+            Class object of next state. If no state change was detected here,
+            check for failure state before returning this state.
         """
         if input_msg == SpeakerMsg.LEFT_LANE:
             return state_machine.parking_out
@@ -212,16 +207,15 @@ class SuccessfullyParked(ParkingState):
 class ParkingOut(ParkingState):
     """This state occurs when the car drives out of the parking space.
 
-    Once the state machine receives this state, the next state will we chage accordingly to its next method.
-
-    Inheriting from ParkingState gives this class the ability to hand down description and value to ParkingState. Same \
-        goes for input_msg which gets parsed to the method next if no state change was detected.
+    Once the state machine receives this state, the next state will we chage accordingly to
+    its next method.
     """
 
     def __init__(self):
         """Init state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car is driving out of the parking spot.",
@@ -236,8 +230,8 @@ class ParkingOut(ParkingState):
             input_msg: Integer of message
 
         Returns:
-            Class object of next state. If no state change was detected here, check for failure state before
-            returning this state.
+            Class object of next state. If no state change was detected here,
+            check for failure state before returning this state.
         """
         if input_msg == SpeakerMsg.LEFT_LANE:
             return state_machine.parking_out
@@ -250,15 +244,15 @@ class ParkingOut(ParkingState):
 class FailureInRightLane(State):
     """This end state occurs when the car drives onto the right lane.
 
-    Once the state machine receives this state, the state can no longer change into a new one.
-
-    Inheriting from State gives this class the ability to hand down description and value to State.
+    Once the state machine receives this state, the state can no longer change into a new
+    one.
     """
 
     def __init__(self):
         """Init end state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car failed to park.", value=StateMsg.PARKING_FORBIDDEN_RIGHT
@@ -268,15 +262,15 @@ class FailureInRightLane(State):
 class FailureInLeftLane(State):
     """This end state occurs when the car drives onto the left lane.
 
-    Once the state machine receives this state, the state can no longer change into a new one.
-
-    Inheriting from State gives this class the ability to hand down description and value to State.
+    Once the state machine receives this state, the state can no longer change into a new
+    one.
     """
 
     def __init__(self):
         """Init end state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(
             description="Car did not halt in parking spot.",

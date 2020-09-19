@@ -1,7 +1,6 @@
-import unittest
 import math
 import random
-
+import unittest
 
 import geometry_msgs.msg as g_msgs
 import numpy as np
@@ -11,7 +10,7 @@ from simulation.utils.geometry.vector import Vector
 
 class ModuleTest(unittest.TestCase):
     def test_vector_init(self):
-        """ Test if the vector class can be initialize. """
+        """Test if the vector class can be initialize."""
 
         # Basic
         p1 = Vector(1, 3)

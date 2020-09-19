@@ -1,18 +1,19 @@
 import argparse
 import os
-from typing import Tuple, List
+from typing import List, Tuple
 
 
 def images_to_video(
     image_pattern: str, output_file: str, scale: Tuple[int, int] = (1280, 650)
 ) -> None:
-    """This function takes images and put them into a video
+    """This function takes images and put them into a video.
 
     Args:
         image_pattern: an pattern for all images.
             For example "images/%d_real_b.png" will match files like "images/5_real_b.png"
         output_file: the output file for example "videos/real_b.mp4"
-        scale: scaling each image to this dimension so you can scale each image to format 1280x650
+        scale: scaling each image to this dimension so you can scale each image
+            to format 1280x650
     """
     cmd = "ffmpeg -y "
     cmd += f'-i "{image_pattern}" '
@@ -29,12 +30,11 @@ def make_2x2_video_grid(
     video_paths: List[str],
     output_file: str,
 ):
-    """This function takes 4 images and puts them into a 2x2 Grid
+    """This function takes 4 images and puts them into a 2x2 Grid.
 
     Args:
         video_paths: array of paths to the 4 videos
         output_file: output file for the resulting video
-
     """
     cmd = "ffmpeg -y "
     for video_path in video_paths:

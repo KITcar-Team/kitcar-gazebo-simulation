@@ -1,17 +1,15 @@
-""" TrafficIsland."""
+"""TrafficIsland."""
 
+import math
 from dataclasses import dataclass
 from typing import List
-import math
 
-from simulation.utils.geometry import Point, Vector, Line, Polygon
-
-from simulation.utils.road.config import Config
-from simulation.utils.road.sections.road_section import RoadSection, MarkedLine
 import simulation.utils.road.sections.type as road_section_type
-from simulation.utils.road.sections import SurfaceMarkingPoly, SurfaceMarking
-from simulation.utils.road.sections import TrafficSign
+from simulation.utils.geometry import Line, Point, Polygon, Vector
+from simulation.utils.road.config import Config
+from simulation.utils.road.sections import SurfaceMarking, SurfaceMarkingPoly, TrafficSign
 from simulation.utils.road.sections.bezier_curve import add_quad_bezier_points
+from simulation.utils.road.sections.road_section import MarkedLine, RoadSection
 
 
 @dataclass
@@ -180,7 +178,7 @@ class TrafficIsland(RoadSection):
     @property
     def middle_line(self) -> Line:
         """Line: Middle line of the road section.
-            Here it is the left middle line.
+        Here it is the left middle line.
         """
         return self.middle_line_r
 

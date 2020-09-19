@@ -1,21 +1,19 @@
-import unittest
-import random
 import math
+import random
+import unittest
 
 import geometry_msgs.msg as g_msgs
-import numpy as np
-
-from hypothesis import given
 import hypothesis.strategies as st
-
-from simulation.utils.geometry.point import Point
-from simulation.utils.geometry.pose import Pose
-from simulation.utils.geometry.vector import Vector
-from simulation.utils.geometry.line import Line
-from simulation.utils.geometry.polygon import Polygon
-from simulation.utils.geometry.transform import Transform
+import numpy as np
+from hypothesis import given
 
 import simulation.utils.geometry.line as line_module
+from simulation.utils.geometry.line import Line
+from simulation.utils.geometry.point import Point
+from simulation.utils.geometry.polygon import Polygon
+from simulation.utils.geometry.pose import Pose
+from simulation.utils.geometry.transform import Transform
+from simulation.utils.geometry.vector import Vector
 
 TOLERANCE = 0.007
 
@@ -201,9 +199,9 @@ class ModuleTest(unittest.TestCase):
     def test_line_cut(self, point_count: int, cut_length: float):
         """Test the line's class cut function.
 
-        The test creates a line, cuts it into two and adjoins the two lines again.
-        The resulting line must be the same as the initial line.
-        Additionally, some sanity checks are performed.
+        The test creates a line, cuts it into two and adjoins the two lines again. The
+        resulting line must be the same as the initial line. Additionally, some sanity
+        checks are performed.
         """
         if point_count == 0 and cut_length > 0 or point_count == 1:
             return
@@ -273,7 +271,7 @@ class ModuleTest(unittest.TestCase):
         self.assertEqual(poly1, poly2)
 
     def test_polygon_extract(self):
-        """ Test if the polygon methods extraction functions work."""
+        """Test if the polygon methods extraction functions work."""
         points = self.create_points()
 
         poly = Polygon(points)

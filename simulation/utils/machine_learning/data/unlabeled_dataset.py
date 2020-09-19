@@ -1,13 +1,10 @@
-from typing import Union, List, Tuple, Dict, Any
+from typing import Any, Dict, List, Tuple, Union
 
 import torch
 import torchvision.transforms as transforms
 from PIL import Image
 
-from .base_dataset import (
-    BaseDataset,
-    get_transform,
-)
+from .base_dataset import BaseDataset, get_transform
 from .image_folder import make_dataset
 
 
@@ -71,7 +68,7 @@ class UnlabeledDataset(BaseDataset):
 
 
 class UnlabeledDataLoader:
-    """Wrapper class of Dataset class that performs multi-threaded data loading"""
+    """Wrapper class of Dataset class that performs multi-threaded data loading."""
 
     def __init__(
         self,
@@ -81,7 +78,7 @@ class UnlabeledDataLoader:
         num_threads: int = 1,
         sequential: bool = False,
     ):
-        """Initialize this class
+        """Initialize this class.
 
         Step 1: create a dataset instance given the name
         Step 2: create a multi-threaded data loader.
@@ -115,11 +112,11 @@ class UnlabeledDataLoader:
         return self
 
     def __len__(self):
-        """Return the number of data in the dataset"""
+        """Return the number of data in the dataset."""
         return min(len(self.dataset), self.max_dataset_size)
 
     def __iter__(self):
-        """Return a batch of data"""
+        """Return a batch of data."""
         for i, data in enumerate(self.dataloader):
             if i * self.batch_size >= self.max_dataset_size:
                 break

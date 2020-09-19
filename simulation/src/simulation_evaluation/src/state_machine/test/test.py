@@ -2,7 +2,6 @@
 
 import unittest
 
-
 __copyright__ = "KITcar"
 
 
@@ -18,7 +17,8 @@ class Test(unittest.TestCase):
         self.callback_called += 1
 
     def state_machine_assert_on_input(self, state_machine, inputs, states, called):
-        """Assert that state_machine is in the right state after inputing an input from the lists states and inputs."""
+        """Assert that state_machine is in the right state after inputing an input from the
+        lists states and inputs."""
         self.setUp()
 
         for input, state in zip(inputs, states):

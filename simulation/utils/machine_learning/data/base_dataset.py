@@ -1,12 +1,13 @@
 """This module implements an abstract base class (ABC) 'BaseDataset' for datasets.
 
-It also includes common transformation functions (e.g., get_transform, __scale_width), which can be later used in
-subclasses. """
+It also includes common transformation functions (e.g., get_transform, __scale_width), which
+can be later used in subclasses.
+"""
 import random
-from typing import Tuple, Dict, Any
+from typing import Any, Dict, Tuple
 
-import PIL.ImageOps
 import numpy as np
+import PIL.ImageOps
 import torch.utils.data as data
 import torchvision.transforms as transforms
 from PIL import Image
@@ -20,7 +21,7 @@ class BaseDataset(data.Dataset):
         return -1
 
     def __getitem__(self, index):
-        """Returns the item at index
+        """Returns the item at index.
 
         Args:
             index: the index of the item to get
@@ -179,7 +180,8 @@ def __apply_mask(img: Image.Image, mask_file: str) -> Image.Image:
         mask_file (str): path to mask image file
     """
     mask = Image.open(mask_file)
-    # Use inverted mask as the intensity of the masking. This means that white parts are see through.
+    # Use inverted mask as the intensity of the masking.
+    # This means that white parts are see through.
     img.paste(mask, (0, 0), PIL.ImageOps.invert(mask))
     return img
 

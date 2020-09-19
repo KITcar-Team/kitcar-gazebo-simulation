@@ -1,18 +1,15 @@
-"""Transformation"""
+"""Transformation."""
 
-__copyright__ = "KITcar"
-
+import math
+import numbers
+from contextlib import suppress
 
 # Compatible formats
 import geometry_msgs.msg as geometry_msgs
-from simulation.utils.geometry.vector import Vector
+import numpy as np
 from pyquaternion import Quaternion
 
-import numbers
-import math
-import numpy as np
-
-from contextlib import suppress
+from simulation.utils.geometry.vector import Vector
 
 from .frame import validate_and_maintain_frames
 
@@ -27,7 +24,7 @@ class Transform:
 
     Args:
         1 (geometry_msgs/Transformation): initialize from geometry_msgs.
-        2 (Vector, float): Second argument is the transformation's rotation angle in radians.
+        2 (Vector, float): Second argument is the transformation's rotation angle in radian.
         3 (Vector, pyquaternion.Quaternion): Vector and quaternion.
 
 
@@ -110,11 +107,12 @@ class Transform:
             axis: Axis the rotation is projected onto.
 
         Returns:
-            The angle that a vector is rotated, when this transformation is applied."""
+            The angle that a vector is rotated, when this transformation is applied.
+        """
 
-        # Project the rotation axis onto the rotation axis to get the amount of the rotation \
+        # Project the rotation axis onto the rotation axis to get the amount of the rotation
         # that is in the axis' direction!
-        # Also the quaternions rotation axis is sometimes flipped at which point \
+        # Also the quaternions rotation axis is sometimes flipped at which point
         # the angles flip their sign,
         # taking the scalar product with the axis fixes that as well
         return Vector(self.rotation.axis) * axis * self.rotation.radians
@@ -139,7 +137,10 @@ class Transform:
     def to_affine_matrix(self) -> np.ndarray:
         """Get transformation as an affine matrix."""
         return np.column_stack(
-            (self.rotation.rotation_matrix, self.translation.to_numpy(),)
+            (
+                self.rotation.rotation_matrix,
+                self.translation.to_numpy(),
+            )
         )
 
     @validate_and_maintain_frames
@@ -152,7 +153,8 @@ class Transform:
         Example:
             Easily modify a vector multiple times:
 
-            :math:`(\\text{Tf}_1*\\text{Tf}_2)*\\vec{v} = \\text{Tf}_1*( \\text{Tf}_2*\\vec{v})`
+            :math:`(\\text{Tf}_1*\\text{Tf}_2)*\\vec{v} =
+                \\text{Tf}_1*( \\text{Tf}_2*\\vec{v})`
 
         Returns:
             The product transformation.

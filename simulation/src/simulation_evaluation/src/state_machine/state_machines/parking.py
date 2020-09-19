@@ -1,14 +1,11 @@
 """ParkingStateMachine keeps track of parking.
 
-See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.parking` for implementation details of the
-states used in this StateMachine.
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.parking` for
+implementation details of the states used in this StateMachine.
 """
 
 from typing import Callable
 
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
-    StateMachine,
-)
 from simulation.src.simulation_evaluation.src.state_machine.states.parking import (
     FailureInLeftLane,
     FailureInRightLane,
@@ -19,6 +16,8 @@ from simulation.src.simulation_evaluation.src.state_machine.states.parking impor
     ParkingOut,
     SuccessfullyParked,
 )
+
+from .state_machine import StateMachine
 
 
 class ParkingStateMachine(StateMachine):

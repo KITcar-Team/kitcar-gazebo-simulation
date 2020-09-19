@@ -3,27 +3,27 @@ from typing import List
 
 import yaml
 
+from simulation.utils.geometry import Vector
 from simulation.utils.urdf import (
     Attribute,
-    XmlObject,
-    Origin,
-    Gazebo,
-    Visual,
-    Collision,
-    Geometry,
     Box,
+    CameraProperties,
+    Collision,
+    DepthCamera,
+    Gazebo,
+    Geometry,
+    Link,
     Material,
     Mesh,
-    Link,
-    Plugin,
     MonoCamera,
-    CameraProperties,
-    DepthCamera,
+    Origin,
+    Plugin,
+    Visual,
+    XmlObject,
 )
-from simulation.utils.geometry import Vector
 
-from .car_specs import CarSpecs
 from .camera_specs import CameraSpecs
+from .car_specs import CarSpecs
 from .tof_sensors import TofSensor
 
 
@@ -67,7 +67,8 @@ class DrDrift(XmlObject):
         # that the resulting origin is on the rear axis!
         chassis_origin = Origin([specs.wheelbase / 2, 0, specs.cog_height])
 
-        # The visual origin is slightly adjusted by hand because the model is a little bit off.
+        # The visual origin is slightly adjusted by hand because the model
+        # is a little bit off.
         visual_origin = Origin(
             xyz=[chassis_origin.xyz[0] - 0.025, 0, chassis_origin.xyz[2] + 0.01]
         )
@@ -158,16 +159,23 @@ def load_dr_drift(
         camera_specs.save(save_camera_calibration)
 
     # Load time of flight sensors positions from coordinate systems definition
-    with open(coordinate_systems_path, "r",) as file:
+    with open(
+        coordinate_systems_path,
+        "r",
+    ) as file:
         co_system_dict = yaml.load(file, Loader=yaml.SafeLoader)
 
     if save_static_coordinates is not None:
-        with open(save_static_coordinates, "w",) as file:
+        with open(
+            save_static_coordinates,
+            "w",
+        ) as file:
             file.write(yaml.dump(co_system_dict, Dumper=yaml.SafeDumper))
 
     tof_origins = {
         key: Origin(
-            xyz=[val["x"], val["y"], val["z"]], rpy=[val["roll"], val["pitch"], val["yaw"]],
+            xyz=[val["x"], val["y"], val["z"]],
+            rpy=[val["roll"], val["pitch"], val["yaw"]],
         )
         for key, val in co_system_dict.items()
     }

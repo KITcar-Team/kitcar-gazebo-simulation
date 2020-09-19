@@ -3,11 +3,11 @@
 import unittest
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
+
 from simulation.src.simulation_evaluation.src.state_machine.state_machines.progress import (
     ProgressStateMachine,
 )
 from simulation.src.simulation_evaluation.src.state_machine.test.test import Test
-
 
 __copyright__ = "KITcar"
 

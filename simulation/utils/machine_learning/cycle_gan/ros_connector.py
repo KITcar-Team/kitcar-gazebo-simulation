@@ -7,16 +7,17 @@ import torch
 from PIL import Image
 
 from simulation.utils.machine_learning.data.base_dataset import get_transform
+
+from ..data.image_operations import tensor2im
 from .configs.test_options import CycleGANTestOptions, WassersteinCycleGANTestOptions
 from .models.cycle_gan_model import CycleGANModel
-from ..data.image_operations import tensor2im
 
 
 class RosConnector:
     """Implementation of a simple ROS interface to translate simulated to "real" images."""
 
     def __init__(self, use_wasserstein=True):
-        """Initialize the RosConnector class
+        """Initialize the RosConnector class.
 
         Use default test options but could be via command-line. Load and setup the model
         """

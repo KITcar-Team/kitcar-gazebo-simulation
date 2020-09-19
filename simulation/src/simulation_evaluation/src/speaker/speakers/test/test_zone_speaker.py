@@ -1,21 +1,16 @@
-import unittest
-
-from simulation_evaluation.msg import Speaker as SpeakerMsg
-
-import random
-import numpy
-
-from simulation.utils.geometry import Line, Pose, Polygon, Transform
-import simulation.utils.road.sections.type as road_section_type
-
-from simulation.src.simulation_evaluation.src.speaker.speakers import ZoneSpeaker
-
 import functools
+import random
+import unittest
+from typing import List
 
+import numpy
 import simulation_groundtruth.msg as groundtruth_msgs
 import simulation_groundtruth.srv as groundtruth_srvs
+from simulation_evaluation.msg import Speaker as SpeakerMsg
 
-from typing import List
+import simulation.utils.road.sections.type as road_section_type
+from simulation.src.simulation_evaluation.src.speaker.speakers import ZoneSpeaker
+from simulation.utils.geometry import Line, Polygon, Pose, Transform
 
 from . import fake_msgs
 

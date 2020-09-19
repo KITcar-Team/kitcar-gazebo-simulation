@@ -1,7 +1,7 @@
 """Class definitions of tags used only for gazebo."""
 from dataclasses import dataclass
 
-from .core import XmlObject, Attribute
+from .core import Attribute, XmlObject
 
 
 @dataclass

@@ -4,17 +4,17 @@ import os
 import pickle
 from abc import ABC
 from dataclasses import dataclass
-from typing import List, Union, Tuple
+from typing import List, Tuple, Union
 
 import torch
-from torch import nn, Tensor
+from torch import Tensor, nn
 from torch.nn import L1Loss, MSELoss
 from torch.optim import RMSprop
 
 from simulation.utils.machine_learning.models import helper
-from .cycle_gan_stats import CycleGANStats
-
 from simulation.utils.machine_learning.models.init_from_options import InitFromOptions
+
+from .cycle_gan_stats import CycleGANStats
 
 
 @dataclass
@@ -99,8 +99,8 @@ class CycleGANNetworks:
             )
 
     def print(self, verbose: bool) -> None:
-        """Print the total number of parameters in the network and (if verbose)
-        network architecture
+        """Print the total number of parameters in the network and (if verbose) network
+        architecture.
 
         Args:
             verbose (bool): print the network architecture
@@ -189,15 +189,14 @@ class BaseModel(ABC, InitFromOptions):
                 )
 
     def forward(self, real_a, real_b) -> Tuple[Tensor, Tensor, Tensor, Tensor]:
-        """Run forward pass; called by both functions <optimize_parameters> and
-        <test>.
-        """
+        """Run forward pass; called by both functions <optimize_parameters> and <test>."""
         fake_b = self.networks.g_a(real_a)  # G_A(A)
         fake_a = self.networks.g_b(real_b)  # G_B(B)
 
         # Calculate cycle. Add gaussian if self.cycle_noise_stddev is not 0
-        # See: https://discuss.pytorch.org/t/writing-a-simple-gaussian-noise-layer-in-pytorch/4694
-        # There are two individual noise terms because fake_A and fake_B may have different dimensions
+        # See: https://discuss.pytorch.org/t/writing-a-simple-gaussian-noise-layer-in-pytorch/4694 # noqa: E501
+        # There are two individual noise terms because fake_A and fake_B may
+        # have different dimensions
         # (At end of dataset were one of them is not a full batch for example)
 
         if self.cycle_noise_stddev == 0:
@@ -223,9 +222,9 @@ class BaseModel(ABC, InitFromOptions):
     def test(self, batch_a, batch_b) -> CycleGANStats:
         """Forward function used in test time.
 
-        This function wraps <forward> function in no_grad() so we don't save
-        intermediate steps for backpropagation It also calls <compute_visuals>
-        to produce additional visualization results
+        This function wraps <forward> function in no_grad() so we don't save intermediate
+        steps for backpropagation It also calls <compute_visuals> to produce additional
+        visualization results
         """
         with torch.no_grad():
             fake_a, fake_b, rec_a, rec_b = self.forward(batch_a, batch_b)
@@ -240,7 +239,7 @@ class BaseModel(ABC, InitFromOptions):
         lr_step_factor: float = 0.1,
         n_epochs: int = 100,
     ):
-        """Create schedulers
+        """Create schedulers.
 
         Args:
             lr_policy: learning rate policy. [linear | step | plateau | cosine]
@@ -256,7 +255,7 @@ class BaseModel(ABC, InitFromOptions):
         ]
 
     def eval(self) -> None:
-        """Make models eval mode during test time"""
+        """Make models eval mode during test time."""
         for net in self.networks:
             net.eval()
 
