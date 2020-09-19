@@ -16,6 +16,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive xargs --arg-file=/packages_
 
 # Install pip packages
 RUN pip3 install --no-warn-script-location -r /requirements.txt
+# Install documentation and machine learning packages as well
+RUN pip3 install --no-warn-script-location -r /requirements_documentation.txt
+RUN pip3 install --no-warn-script-location -r /requirements_machine_learning.txt
 
 # Reduce image size by removing apt cache
 RUN rm -rf /var/lib/apt/lists/*
