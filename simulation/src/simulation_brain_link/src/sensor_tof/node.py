@@ -12,18 +12,17 @@ import rospy
 
 # Messages
 import sensor_msgs.point_cloud2
-from sensor_msgs.msg import Range, PointCloud2
+from sensor_msgs.msg import PointCloud2, Range
 
 from simulation.utils.geometry.vector import Vector
-
 from simulation.utils.ros_base.node_base import NodeBase
 
 __copyright__ = "KITcar"
 
 
 class SensorTofNode(NodeBase):
-    """ROS node which receives a pointcloud and publishes the point with minimum norm of that pointcloud.
-    This is done to emulate a time of flight sensor.
+    """ROS node which receives a pointcloud and publishes the point with minimum norm of
+    that pointcloud. This is done to emulate a time of flight sensor.
 
     Attributes:
         subscriber (rospy.subscriber): Subscribes to depth camera sensor from gazebo
@@ -31,7 +30,7 @@ class SensorTofNode(NodeBase):
     """
 
     def __init__(self):
-        """ initialize the node"""
+        """initialize the node."""
 
         super().__init__(name="tof_sensor_node")  # Name can be overwritten in launch file
 

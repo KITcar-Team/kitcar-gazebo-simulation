@@ -1,11 +1,12 @@
 import functools
-from typing import Callable, List, Any
+from typing import Any, Callable, List
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
-from simulation_groundtruth.msg import Section as SectionMsg, Lane as LaneMsg
+from simulation_groundtruth.msg import Lane as LaneMsg
+from simulation_groundtruth.msg import Section as SectionMsg
 
-from simulation.utils.geometry import Polygon
 import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.geometry import Polygon
 
 from .speaker import Speaker
 

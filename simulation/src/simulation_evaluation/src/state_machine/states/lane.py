@@ -2,25 +2,23 @@
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 from simulation_evaluation.msg import State as StateMsg
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
-    StateMachine,
-)
 
+from ..state_machines.state_machine import StateMachine
 from .state import State
 
 
 class FailureCollision(State):
     """This end state occurs when the car crashed into an obstacle.
 
-    Once the state machine receives this state, the state can no longer change into a new one.
-
-    Inheriting from State gives this class the ability to hand down description and value to State.
+    Once the state machine receives this state, the state can no longer change into a new
+    one.
     """
 
     def __init__(self):
         """Init end state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(description="Car crashed.", value=StateMsg.COLLISION)
 
@@ -37,15 +35,15 @@ class FailureBlockedArea(State):
 class FailureOffRoad(State):
     """This end state occurs when the car drives of the road.
 
-    Once the state machine receives this state, the state can no longer change into a new one.
-
-    Inheriting from State gives this class the ability to hand down description and value to State.
+    Once the state machine receives this state, the state can no longer change into a new
+    one.
     """
 
     def __init__(self):
         """Init end state.
 
-        Initializing does not need any arguments however description and value have to initialized to super.
+        Initializing does not need any arguments however description and value have to
+        initialized to super.
         """
         super().__init__(description="Car drove off the road.", value=StateMsg.OFF_ROAD)
 
@@ -57,11 +55,12 @@ class LaneState(State):
         """Next state.
 
         Arguments:
-            state_machine (StateMachine): On which state machine the states gets executed
+            state_machine: On which state machine the states gets executed
             input_msg: Integer of message
 
         Returns:
-            Class object of next failure state or defaults to self if no failure state was detected.
+            Class object of next failure state or defaults to self
+            if no failure state was detected.
         """
         if input_msg == SpeakerMsg.OFF_ROAD:
             return state_machine.off_road
@@ -79,7 +78,8 @@ class Right(LaneState):
     def __init__(self):
         """Set description and state value."""
         super().__init__(
-            description="The car is in the right lane.", value=StateMsg.RIGHT_LANE,
+            description="The car is in the right lane.",
+            value=StateMsg.RIGHT_LANE,
         )
 
     def next(self, state_machine, input_msg: int) -> State:
@@ -98,7 +98,8 @@ class ParkingRight(LaneState):
     def __init__(self):
         """Set description and state value."""
         super().__init__(
-            description="The car parks on the right side.", value=StateMsg.PARKING_RIGHT,
+            description="The car parks on the right side.",
+            value=StateMsg.PARKING_RIGHT,
         )
 
     def next(self, state_machine, input_msg: int):
@@ -115,7 +116,8 @@ class Left(LaneState):
     def __init__(self):
         """Set description and state value."""
         super().__init__(
-            description="Car is in the left lane.", value=StateMsg.LEFT_LANE,
+            description="Car is in the left lane.",
+            value=StateMsg.LEFT_LANE,
         )
 
     def next(self, state_machine, input_msg: int):
@@ -134,7 +136,8 @@ class ParkingLeft(LaneState):
     def __init__(self):
         """Set description and state value."""
         super().__init__(
-            description="The car parks on the left side.", value=StateMsg.PARKING_LEFT,
+            description="The car parks on the left side.",
+            value=StateMsg.PARKING_LEFT,
         )
 
     def next(self, state_machine, input_msg: int):

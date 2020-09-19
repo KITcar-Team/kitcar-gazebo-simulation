@@ -1,5 +1,6 @@
-from simulation.utils.geometry import Polygon
 from typing import Iterable
+
+from simulation.utils.geometry import Polygon
 
 
 def polygon_list_almost_equal(list1: Iterable[Polygon], list2: Iterable[Polygon]):
@@ -22,8 +23,8 @@ def polygon_list_almost_equal(list1: Iterable[Polygon], list2: Iterable[Polygon]
 
 
 def assert_msgs_for_pos(speaker, frame, *msg_types):
-    """Ensure that the speaker returns the correct msg when the vehicle is at a
-    given position."""
+    """Ensure that the speaker returns the correct msg when the vehicle is at a given
+    position."""
     msg_types = list(msg_types)
     speaker.car_frame = frame
     for t in speaker.speak():

@@ -58,7 +58,8 @@ class SensorCameraNode(NodeBase):
         The image is cropped to simulate the internal preprocessing of our real camera.
 
         Args:
-            img_msg: Published image message."""
+            img_msg: Published image message.
+        """
 
         br = CvBridge()
         cv_img = br.imgmsg_to_cv2(img_msg)

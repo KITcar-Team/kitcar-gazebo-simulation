@@ -1,24 +1,24 @@
 """Intersection."""
 
 import math
-import numpy as np
 from dataclasses import dataclass
-from typing import Tuple, List
+from typing import List, Tuple
 
-from simulation.utils.geometry import Point, Line, Vector, Pose, Polygon
+import numpy as np
 
-from simulation.utils.road.sections.road_section import RoadSection
-from simulation.utils.road.sections.road_section import MarkedLine
-from simulation.utils.road.config import Config
 import simulation.utils.road.sections.type as road_section_type
-from simulation.utils.road.sections.traffic_sign import TrafficSign
+from simulation.utils.geometry import Line, Point, Polygon, Pose, Vector
+from simulation.utils.road.config import Config
+from simulation.utils.road.sections.road_section import MarkedLine, RoadSection
 from simulation.utils.road.sections.surface_marking import SurfaceMarkingRect
+from simulation.utils.road.sections.traffic_sign import TrafficSign
 
 
 def _get_stop_line(line1: Line, line2: Line, kind) -> SurfaceMarkingRect:
     """Return a line perpendicular to both provided (assumed parallel) lines.
 
-    The returned line will be at the first point where both lines are parallel to each other plus 2cm offset.
+    The returned line will be at the first point where both lines are parallel to each other
+    plus 2cm offset.
     """
     beginning_line1 = line1.interpolate(0.02)
     beginning_line2 = line2.interpolate(0.02)
@@ -139,7 +139,8 @@ class Intersection(RoadSection):
     @property
     def v(self):
         return Vector(
-            Config.road_width * self.cos, Config.road_width * math.sin(self._alpha),
+            Config.road_width * self.cos,
+            Config.road_width * math.sin(self._alpha),
         )
 
     @property
@@ -161,7 +162,8 @@ class Intersection(RoadSection):
     @property
     def ls(self):
         return Vector(
-            0, (-1 * self.u + (-1 + self.sin) / (self.cos * self.cos) * self.v).y,
+            0,
+            (-1 * self.u + (-1 + self.sin) / (self.cos * self.cos) * self.v).y,
         )
 
     @property
@@ -492,7 +494,7 @@ class Intersection(RoadSection):
     def get_bounding_box(self) -> Polygon:
         """Get a polygon around the road section.
 
-        Bounding box is an approximate representation of all points within a given distance \
+        Bounding box is an approximate representation of all points within a given distance
         of this geometric object.
         """
         return Polygon(self.middle_line.buffer(1.5 * self.size))
@@ -624,7 +626,9 @@ class Intersection(RoadSection):
                 # roadmarking "turn right" in west
                 markings.append(
                     SurfaceMarkingRect(
-                        kind=opposite_marking, angle=opposite_angle, center=opposite_center,
+                        kind=opposite_marking,
+                        angle=opposite_angle,
+                        center=opposite_center,
                     )
                 )
 

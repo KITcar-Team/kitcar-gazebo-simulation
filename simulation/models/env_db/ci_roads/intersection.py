@@ -1,11 +1,10 @@
 """A simple road for the onboarding task."""
 
-from simulation.utils.road.road import Road  # Definition of the road class
-from simulation.utils.road.sections import StraightRoad
-from simulation.utils.road.sections import Intersection
-
-import os
 import math
+import os
+
+from simulation.utils.road.road import Road  # Definition of the road class
+from simulation.utils.road.sections import Intersection, StraightRoad
 
 road = Road()
 road.append(StraightRoad(length=4))

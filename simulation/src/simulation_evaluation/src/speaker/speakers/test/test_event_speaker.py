@@ -1,14 +1,13 @@
-import unittest
-import random
 import functools
+import random
+import unittest
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 
 from simulation.utils.geometry import Line, Polygon, Transform
 
 from .. import EventSpeaker
-from . import fake_msgs
-from . import utils
+from . import fake_msgs, utils
 
 
 class ModuleTest(unittest.TestCase):

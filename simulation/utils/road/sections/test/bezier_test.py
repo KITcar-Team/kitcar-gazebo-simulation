@@ -1,14 +1,9 @@
-import unittest
 import math
+import unittest
 
 import simulation.utils.road.sections.type as road_section_type
-
-from simulation.utils.geometry import Transform, Point, Vector
-
-from simulation.utils.road.sections import (
-    CubicBezier,
-    QuadBezier,
-)
+from simulation.utils.geometry import Point, Transform, Vector
+from simulation.utils.road.sections import CubicBezier, QuadBezier
 
 
 class ModuleTest(unittest.TestCase):

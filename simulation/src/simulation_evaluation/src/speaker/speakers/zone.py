@@ -2,19 +2,16 @@
 
 import bisect
 import functools
-from typing import Callable, List, Any, Tuple
+from typing import Any, Callable, List, Tuple
 
-# Messages
-from simulation_evaluation.msg import Speaker as SpeakerMsg
-from simulation_groundtruth.msg import (
-    Section as SectionMsg,
-    Lane as LaneMsg,
-    LabeledPolygon as LabeledPolygonMsg,
-)
 import simulation_groundtruth.srv as groundtruth_srv
+from simulation_evaluation.msg import Speaker as SpeakerMsg
+from simulation_groundtruth.msg import LabeledPolygon as LabeledPolygonMsg
+from simulation_groundtruth.msg import Lane as LaneMsg
+from simulation_groundtruth.msg import Section as SectionMsg
 
-from simulation.utils.geometry import Point
 import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.geometry import Point
 from simulation.utils.road.sections import SurfaceMarking
 
 from .speaker import Speaker
@@ -46,8 +43,8 @@ class ZoneSpeaker(Speaker):
             surface_marking_proxy: function which returns surface_markings in a section.
             parking_proxy: function which returns parking msg in a section.
             intersection_proxy: function which returns intersection msg in a section.
-            parking_spot_buffer: buffer around parking spots in which a parking attempt \
-                    is also accepted
+            parking_spot_buffer: buffer around parking spots in which a parking attempt
+                is also accepted
             overtaking_buffer: buffer around obstacles that the car is allowed to overtake
             start_zone_buffer: beginning of the road that is considered as a start zone
             end_zone_buffer: end of the road that is considered as the end
@@ -72,9 +69,8 @@ class ZoneSpeaker(Speaker):
 
     @functools.cached_property
     def overtaking_zones(self) -> List[Tuple[float, float]]:
-        """Intervals in which the car is allowed to overtake \
-                along the :py:attr:`Speaker.middle_line`.
-        """
+        """Intervals in which the car is allowed to overtake along the
+        :py:attr:`Speaker.middle_line`."""
         # Get all obstacle polygons
         obstacles = list(
             obstacle
@@ -83,7 +79,8 @@ class ZoneSpeaker(Speaker):
             for obstacle in self.get_obstacles_in_section(sec.id)
         )
 
-        # Get blocked area polygons because the car is allowed to drive onto the left lane there!
+        # Get blocked area polygons because the car
+        # is allowed to drive onto the left lane there!
         surface_markings = list(
             surface_marking
             for sec in self.sections

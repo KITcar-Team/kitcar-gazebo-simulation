@@ -1,11 +1,11 @@
 """Coordinate frame class that can be connected to other frames.
 
-The idea of this class is to provide a simple API of dealing with
-geometric objects in multiple coordinate frames easily.
+The idea of this class is to provide a simple API of dealing with geometric objects in
+multiple coordinate frames easily.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, NewType, Any
+from typing import Any, Dict, NewType
 
 TransformType = NewType("Transform", Any)
 

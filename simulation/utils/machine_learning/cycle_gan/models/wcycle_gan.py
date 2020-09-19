@@ -1,18 +1,21 @@
-from typing import Tuple, List
+from typing import List, Tuple
 
 import torch
 from torch import Tensor, nn
 
 from simulation.utils.machine_learning.models.helper import set_requires_grad
+
 from .base_model import BaseModel, CycleGANNetworks
 from .cycle_gan_stats import CycleGANStats
 
 
 class WassersteinCycleGANModel(BaseModel):
-    """This class implements the CycleGAN model, for learning image-to-image translation without paired data.
+    """This class implements the CycleGAN model, for learning image-to-image translation
+    without paired data.
 
-    By default, it uses a '--netg resnet_9blocks' ResNet generator, a '--netd basic' discriminator (PatchGAN
-    introduced by pix2pix), and a least-square GANs objective ('--gan_mode lsgan').
+    By default, it uses a '--netg resnet_9blocks' ResNet generator,
+    a '--netd basic' discriminator (PatchGAN introduced by pix2pix),
+    and a least-square GANs objective ('--gan_mode lsgan').
 
     CycleGAN paper: https://arxiv.org/pdf/1703.10593.pdf
     """
@@ -40,14 +43,15 @@ class WassersteinCycleGANModel(BaseModel):
         """Initialize the CycleGAN class.
 
         Args:
-            is_train (bool): enable or disable training mode
-            beta1 (float): momentum term of adam
-            lr (float): initial learning rate for adam
-            lr_policy (str): linear #learning rate policy. [linear | step | plateau | cosine]
-            lambda_idt_a (int): weight for loss of domain A
-            lambda_idt_b (int): weight for loss of domain B
-            lambda_cycle (float): weight for loss identity
-            is_l1 (bool): Decide whether to use l1 loss or l2 loss as cycle and identity loss functions
+            is_train: enable or disable training mode
+            beta1: momentum term of adam
+            lr: initial learning rate for adam
+            lr_policy: linear #learning rate policy. [linear | step | plateau | cosine]
+            lambda_idt_a: weight for loss of domain A
+            lambda_idt_b: weight for loss of domain B
+            lambda_cycle: weight for loss identity
+            is_l1: Decide whether to use l1 loss or l2 loss as cycle
+                and identity loss functions
         """
         self.wgan_initial_n_critic = wgan_initial_n_critic
         self.clips = (wgan_clip_lower, wgan_clip_upper)
@@ -73,19 +77,33 @@ class WassersteinCycleGANModel(BaseModel):
         )
 
     def update_critic_a(
-        self, batch_a: Tensor, batch_b: Tensor, clip_bounds: Tuple[float, float] = None,
+        self,
+        batch_a: Tensor,
+        batch_b: Tensor,
+        clip_bounds: Tuple[float, float] = None,
     ):
         set_requires_grad([self.networks.d_a], requires_grad=True)
         return self.networks.d_a.perform_optimization_step(
-            self.networks.g_a, self.optimizer_d, batch_a, batch_b, clip_bounds,
+            self.networks.g_a,
+            self.optimizer_d,
+            batch_a,
+            batch_b,
+            clip_bounds,
         )
 
     def update_critic_b(
-        self, batch_a: Tensor, batch_b: Tensor, clip_bounds: Tuple[float, float] = None,
+        self,
+        batch_a: Tensor,
+        batch_b: Tensor,
+        clip_bounds: Tuple[float, float] = None,
     ):
         set_requires_grad([self.networks.d_b], requires_grad=True)
         return self.networks.d_b.perform_optimization_step(
-            self.networks.g_b, self.optimizer_d, batch_b, batch_a, clip_bounds,
+            self.networks.g_b,
+            self.optimizer_d,
+            batch_b,
+            batch_a,
+            clip_bounds,
         )
 
     def update_generators(self, batch_a: Tensor, batch_b: Tensor):

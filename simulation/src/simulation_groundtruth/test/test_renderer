@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 import sys
-import rospy
 import unittest
 from typing import List
 
-from simulation.utils.ros_base.node_base import NodeBase
-
-from simulation.utils.road.sections import RoadSection
-
-from simulation.utils.road.renderer.tile import Tile
+import rospy
+from gazebo_simulation.msg import CarState as CarStateMsg
+from shapely.geometry import MultiPolygon
+from simulation_groundtruth.msg import GroundtruthStatus
 
 from simulation.src.simulation_groundtruth.src.groundtruth.node import GroundtruthNode
-
 from simulation.src.simulation_groundtruth.src.groundtruth.renderer import Renderer
-from shapely.geometry import MultiPolygon
-
-from simulation.utils.road.road import Road
 from simulation.utils.geometry import Vector
-from gazebo_simulation.msg import CarState as CarStateMsg
-from simulation_groundtruth.msg import GroundtruthStatus
+from simulation.utils.road.renderer.tile import Tile
+from simulation.utils.road.road import Road
+from simulation.utils.road.sections import RoadSection
+from simulation.utils.ros_base.node_base import NodeBase
 
 PKG = "simulation_groundtruth"
 
@@ -83,8 +79,11 @@ class RendererTestNode(unittest.TestCase, GroundtruthNode):
                 self.assertEqual(
                     tile.frame.intersects(sec.get_bounding_box()),
                     sec.id in tile.sections,
-                    msg=f"tile frame: {tile.frame}, section's box: {sec.get_bounding_box()},"
-                    f"sec id: {sec.id}, tile's sections:{tile.sections.keys()}",
+                    msg=(
+                        f"tile frame: {tile.frame}, section's box:"
+                        "{sec.get_bounding_box()},"
+                        f"sec id: {sec.id}, tile's sections:{tile.sections.keys()}"
+                    ),
                 )
 
         # Assert that every road section is completely covered with tiles
@@ -93,7 +92,10 @@ class RendererTestNode(unittest.TestCase, GroundtruthNode):
                 MultiPolygon(tile.frame for tile in tiles if (sec.id in tile.sections))
                 .buffer(0.01)
                 .contains(sec.get_bounding_box()),
-                msg=f"Section: {sec}, Tile sections: {[tile.sections.keys() for tile in tiles]},",
+                msg=(
+                    f"Section: {sec}, Tile sections:"
+                    f"{[tile.sections.keys() for tile in tiles]},"
+                ),
             )
 
     def _test_tile_spawning(self):

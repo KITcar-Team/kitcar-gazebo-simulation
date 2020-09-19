@@ -1,10 +1,9 @@
 """Functions creating Mock objects that behave like road sections."""
-from unittest.mock import Mock
+import inspect
 from typing import List, Tuple
+from unittest.mock import Mock
 
 from simulation.utils.geometry import Line, Polygon
-import inspect
-
 from simulation.utils.road.sections.line_tuple import LineTuple
 
 """A word on what's going on here.
@@ -175,7 +174,7 @@ def mock_intersection(
         west
         east
         north
-        """
+    """
 
     # The following 3 lines extract all function arguments
     # and values into a dictionary!

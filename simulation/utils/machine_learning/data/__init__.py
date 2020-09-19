@@ -1,4 +1,4 @@
-from typing import Tuple, Dict, Any, Union, List
+from typing import Any, Dict, List, Tuple, Union
 
 from .unlabeled_dataset import UnlabeledDataLoader, UnlabeledDataset
 

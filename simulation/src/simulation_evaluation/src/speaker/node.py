@@ -1,29 +1,26 @@
 """ROS node that connects multiple speakers to ROS topics."""
 
 import rospy
-
-from simulation.utils.ros_base.node_base import NodeBase
-from simulation.src.simulation_evaluation.src.speaker.speakers import (
-    AreaSpeaker,
-    ZoneSpeaker,
-    EventSpeaker,
-    SpeedSpeaker,
-    BroadcastSpeaker,
-)
-
-# Messages
 from gazebo_simulation.msg import CarState as CarStateMsg
-from simulation_evaluation.msg import Speaker as SpeakerMsg
 from simulation_evaluation.msg import Broadcast as BroadcastMsg
+from simulation_evaluation.msg import Speaker as SpeakerMsg
+from simulation_groundtruth.msg import GroundtruthStatus
 from simulation_groundtruth.srv import (
-    SectionSrv,
+    IntersectionSrv,
+    LabeledPolygonSrv,
     LaneSrv,
     ParkingSrv,
-    LabeledPolygonSrv,
-    IntersectionSrv,
+    SectionSrv,
 )
 
-from simulation_groundtruth.msg import GroundtruthStatus
+from simulation.src.simulation_evaluation.src.speaker.speakers import (
+    AreaSpeaker,
+    BroadcastSpeaker,
+    EventSpeaker,
+    SpeedSpeaker,
+    ZoneSpeaker,
+)
+from simulation.utils.ros_base.node_base import NodeBase
 
 
 class SpeakerNode(NodeBase):
@@ -142,7 +139,10 @@ class SpeakerNode(NodeBase):
         )
 
         append_speaker(
-            BroadcastSpeaker(section_proxy=self.section_proxy, lane_proxy=self.lane_proxy,),
+            BroadcastSpeaker(
+                section_proxy=self.section_proxy,
+                lane_proxy=self.lane_proxy,
+            ),
             self.param.topics.broadcast,
             msg_type=BroadcastMsg,
         )
@@ -173,7 +173,6 @@ class SpeakerNode(NodeBase):
 
         Args:
             msg: New CarState message
-
         """
         # Pipe car state msg to every speaker handler
         for speaker, _ in self.speakers:

@@ -1,13 +1,12 @@
 import functools
-from typing import Union, List
+from typing import List, Union
 
 import torch
 from torch import nn
 from torch.nn import init
 from torch.optim import lr_scheduler
-from torch.optim.lr_scheduler import LambdaLR, StepLR, ReduceLROnPlateau
+from torch.optim.lr_scheduler import LambdaLR, ReduceLROnPlateau, StepLR
 from torch.optim.optimizer import Optimizer
-
 
 ###############################################################################
 # Helper Functions
@@ -15,9 +14,10 @@ from torch.optim.optimizer import Optimizer
 
 
 def get_norm_layer(norm_type: str = "instance") -> nn.Module:
-    """Return a normalization layer
+    """Return a normalization layer.
 
-    For BatchNorm, we use learnable affine parameters and track running statistics (mean/stddev). For InstanceNorm,
+    For BatchNorm, we use learnable affine parameters
+    and track running statistics (mean/stddev). For InstanceNorm,
     we do not use learnable affine parameters. We do not track running statistics.
 
     Args:
@@ -46,10 +46,11 @@ def get_scheduler(
     n_epochs: int,
     lr_step_factor: float,
 ) -> Union[LambdaLR, StepLR, ReduceLROnPlateau]:
-    """Return a learning rate scheduler
+    """Return a learning rate scheduler.
 
-    For 'linear', we keep the same learning rate for the first <n_epochs> epochs and linearly decay the rate to zero
-    over the next <n_epochs_decay> epochs. For other schedulers (step, plateau, and cosine), we use the default
+    For 'linear', we keep the same learning rate for the first <n_epochs> epochs
+    and linearly decay the rate to zero over the next <n_epochs_decay> epochs.
+    For other schedulers (step, plateau, and cosine), we use the default
     PyTorch schedulers. See https://pytorch.org/docs/stable/optim.html for more details.
 
     Args:
@@ -88,12 +89,14 @@ def init_weights(
 ) -> None:
     """Initialize network weights.
 
-    We use 'normal' in the original pix2pix and CycleGAN paper. But xavier and kaiming might work better for some
-    applications. Feel free to try yourself.
+    We use 'normal' in the original pix2pix and CycleGAN paper.
+    But xavier and kaiming might work better for some applications.
+    Feel free to try yourself.
 
     Args:
         net (nn.Module): network to be initialized
-        init_type (str): the name of an initialization method: normal | xavier | kaiming | orthogonal
+        init_type (str): the name of an initialization method:
+            normal | xavier | kaiming | orthogonal
         init_gain (float): scaling factor for normal, xavier and orthogonal.
     """
 
@@ -141,7 +144,8 @@ def init_net(
 
     Args:
         net (nn.Module): the network to be initialized
-        init_type (str): the name of an initialization method: normal | xavier | kaiming | orthogonal
+        init_type (str): the name of an initialization method:
+            normal | xavier | kaiming | orthogonal
         init_gain (float): scaling factor for normal, xavier and orthogonal.
         device: on which device should the net run
     """
@@ -151,7 +155,7 @@ def init_net(
 
 
 def set_requires_grad(nets: List[nn.Module], requires_grad: bool = False):
-    """Set requires_grad=False for all the networks to avoid unnecessary computations
+    """Set requires_grad=False for all the networks to avoid unnecessary computations.
 
     Args:
         nets (List[nn.Module]): set require grads for this list of networks

@@ -6,18 +6,17 @@ for implementation details of the states used in this StateMachine.
 
 from typing import Callable
 
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
-    StateMachine,
-)
 from simulation.src.simulation_evaluation.src.state_machine.states.lane import (
+    FailureBlockedArea,
+    FailureCollision,
+    FailureOffRoad,
     Left,
-    Right,
     ParkingLeft,
     ParkingRight,
-    FailureCollision,
-    FailureBlockedArea,
-    FailureOffRoad,
+    Right,
 )
+
+from .state_machine import StateMachine
 
 
 class LaneStateMachine(StateMachine):

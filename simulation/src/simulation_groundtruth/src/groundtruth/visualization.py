@@ -1,29 +1,26 @@
 #!/usr/bin/env python3
 """Node that publishes groundtruth information for rviz."""
 
-import rospy
 from typing import List
 
-from simulation.utils.geometry import Polygon, Point
+import rospy
+from geometry_msgs.msg import Point32 as GeomPoint
+from simulation_groundtruth.msg import Parking as ParkingMsg
 
 # Received from simulation.src.simulation_groundtruth.src.groundtruth extractor
 from simulation_groundtruth.srv import (
-    SectionSrv,
+    IntersectionSrv,
+    LabeledPolygonSrv,
     LaneSrv,
     ParkingSrv,
-    LabeledPolygonSrv,
-    IntersectionSrv,
+    SectionSrv,
 )
-from simulation_groundtruth.msg import Parking as ParkingMsg
-from geometry_msgs.msg import Point32 as GeomPoint
-
+from visualization_msgs.msg import Marker
 
 import simulation.utils.road.sections.type as road_section_type
-
-from simulation.utils.ros_base.node_base import NodeBase
 import simulation.utils.ros_base.visualization as visualization
-
-from visualization_msgs.msg import Marker
+from simulation.utils.geometry import Point, Polygon
+from simulation.utils.ros_base.node_base import NodeBase
 
 
 class GroundtruthVisualizationNode(NodeBase):
@@ -35,8 +32,7 @@ class GroundtruthVisualizationNode(NodeBase):
                 topic listed in the parameter file.
         get_sections, get_lane, get_parking, get_obstacles, get_intersection \
                 (rospy.ServiceProxy): Can be called for groundtruth information.
-
-        """
+    """
 
     def __init__(self):
 
@@ -110,15 +106,24 @@ class GroundtruthVisualizationNode(NodeBase):
             lane_msg = self.get_lane(id).lane_msg
 
             self._publish_point_marker(
-                lane_msg.left_line, "left_line", id, self.param.colors.left_line,
+                lane_msg.left_line,
+                "left_line",
+                id,
+                self.param.colors.left_line,
             )
 
             self._publish_point_marker(
-                lane_msg.middle_line, "middle_line", id, self.param.colors.middle_line,
+                lane_msg.middle_line,
+                "middle_line",
+                id,
+                self.param.colors.middle_line,
             )
 
             self._publish_point_marker(
-                lane_msg.right_line, "right_line", id, self.param.colors.right_line,
+                lane_msg.right_line,
+                "right_line",
+                id,
+                self.param.colors.right_line,
             )
 
     def _show_parking_markers(self):

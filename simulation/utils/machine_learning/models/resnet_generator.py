@@ -1,15 +1,16 @@
 import functools
-from typing import Optional, List
+from typing import List, Optional
 
-from torch import nn as nn, Tensor
-
-from .resnet_block import ResnetBlock
+from torch import Tensor
+from torch import nn as nn
 
 from .init_from_options import InitFromOptions
+from .resnet_block import ResnetBlock
 
 
 class ResnetGenerator(nn.Module, InitFromOptions):
-    """Resnet-based generator that consists of Resnet blocks between a few downsampling/upsampling operations.
+    """Resnet-based generator that consists of Resnet blocks between a few
+    downsampling/upsampling operations.
 
     We adapt Torch code and idea from Justin Johnson's neural style transfer project(
     https://github.com/jcjohnson/fast-neural-style)
@@ -28,7 +29,7 @@ class ResnetGenerator(nn.Module, InitFromOptions):
         conv_layers_in_block: int = 2,
         dilations: Optional[List[int]] = None,
     ):
-        """Construct a Resnet-based generator
+        """Construct a Resnet-based generator.
 
         Args:
             input_nc (int): the number of channels in input images
@@ -37,8 +38,10 @@ class ResnetGenerator(nn.Module, InitFromOptions):
             norm_layer (nn.Module): normalization layer
             use_dropout (bool): if use dropout layers
             n_blocks (int): the number of ResNet blocks
-            padding_type (str): the name of padding layer in conv layers: reflect | replicate | zero
-            activation (str): Choose which activation to use. [TANH | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
+            padding_type (str): the name of padding layer in conv layers:
+                reflect | replicate | zero
+            activation (str): Choose which activation to use.
+                [TANH | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
             conv_layers_in_block (int): Number of convolution layers in each block.
             dilations: List of dilations for each conv layer.
         """

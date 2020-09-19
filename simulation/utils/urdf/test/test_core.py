@@ -1,21 +1,19 @@
 """Tests of the urdf.core module.
 
-The tests written here consist of simple classes that are filled
-with values using the hypothesis package.
+The tests written here consist of simple classes that are filled with values using the
+hypothesis package.
 """
 import functools
 import itertools
-from dataclasses import dataclass
-from typing import Tuple, Iterable
-
 import xml.etree.cElementTree as cET
 import xml.etree.ElementTree as ET
+from dataclasses import dataclass
+from typing import Iterable, Tuple
 
-from hypothesis import given
 import hypothesis.strategies as st
+from hypothesis import given
 
 from simulation.utils.geometry import Vector
-
 from simulation.utils.urdf.core import Attribute, XmlObject
 
 
@@ -38,7 +36,8 @@ def log_parameters(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         print(
-            f"Running {func.__name__} with arguments: {args} and keyword arguments: {kwargs}"
+            f"Running {func.__name__} with arguments:"
+            f"{args} and keyword arguments: {kwargs}"
         )
         func(*args, **kwargs)
 
@@ -148,9 +147,10 @@ def test_custom_values(vec_xyz: Tuple[float, float, float], iterable: Iterable):
     cET.SubElement(expected_xml, "vec").text = f"{vec_xyz[0]} {vec_xyz[1]} {vec_xyz[2]}"
     cET.SubElement(expected_xml, "itr").text = " ".join(str(val) for val in itr_cp)
 
-    assert _elements_equal(
-        generated_xml, expected_xml
-    ), f"Generated {ET.tostring(generated_xml)} not match the expected {ET.tostring(expected_xml)}."
+    assert _elements_equal(generated_xml, expected_xml), (
+        f"Generated {ET.tostring(generated_xml)} not match the expected"
+        f" {ET.tostring(expected_xml)}."
+    )
 
 
 if __name__ == "__main__":

@@ -1,19 +1,20 @@
 """ParkingArea, ParkingLot, ParkingSpot and StartLine."""
 
+import itertools
 import math
 from dataclasses import dataclass, field
 from typing import List
-import itertools
 
-from simulation.utils.geometry import Point, Vector, Line, Polygon, Transform
-
-from simulation.utils.road.config import Config
-from simulation.utils.road.sections.road_section import MarkedLine
 import simulation.utils.road.sections.type as road_section_type
-from simulation.utils.road.sections import StraightRoad
-from simulation.utils.road.sections import ParkingObstacle
-from simulation.utils.road.sections import SurfaceMarkingRect
-from simulation.utils.road.sections import RoadSection
+from simulation.utils.geometry import Line, Point, Polygon, Transform, Vector
+from simulation.utils.road.config import Config
+from simulation.utils.road.sections import (
+    ParkingObstacle,
+    RoadSection,
+    StraightRoad,
+    SurfaceMarkingRect,
+)
+from simulation.utils.road.sections.road_section import MarkedLine
 
 
 @dataclass
@@ -138,7 +139,6 @@ class ParkingLot(_ParkingLot):
         opening_angle (float): Opening angle of the outside border of the parking lot.
         depth (float): Depth of the parking spots within the parking lot.
         spots (List[ParkingSpot]): Parking spots within the lot.
-
     """
 
     @property
@@ -287,7 +287,7 @@ class ParkingArea(_ParkingArea):
     def get_bounding_box(self) -> Polygon:
         """Get a polygon around the road section.
 
-        Bounding box is an approximate representation of all points within a given distance \
+        Bounding box is an approximate representation of all points within a given distance
         of this geometric object.
         """
         biggest_depth = 0

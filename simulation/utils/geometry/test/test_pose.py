@@ -1,14 +1,13 @@
-import unittest
 import math
-
-from simulation.utils.geometry.point import Point
-from simulation.utils.geometry.vector import Vector
-from simulation.utils.geometry.pose import Pose
-from simulation.utils.geometry.transform import Transform
-
-from pyquaternion import Quaternion
+import unittest
 
 import geometry_msgs.msg as g_msgs
+from pyquaternion import Quaternion
+
+from simulation.utils.geometry.point import Point
+from simulation.utils.geometry.pose import Pose
+from simulation.utils.geometry.transform import Transform
+from simulation.utils.geometry.vector import Vector
 
 
 class ModuleTest(unittest.TestCase):
@@ -22,7 +21,7 @@ class ModuleTest(unittest.TestCase):
         self.assertAlmostEqual(p1.orientation.z, p2.orientation.z)
 
     def test_pose_init(self):
-        """ Test if pose class can be initialized as expected. """
+        """Test if pose class can be initialized as expected."""
         # Create from quaternion
         p = Point(1, 3, 2)
         o = Quaternion(math.sqrt(1 / 2), 0, 0, math.sqrt(1 / 2))

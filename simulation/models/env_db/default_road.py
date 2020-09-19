@@ -3,15 +3,15 @@ import math
 
 from simulation.utils.road.road import Road  # Definition of the road class
 from simulation.utils.road.sections import (
-    StraightRoad,
-    LeftCircularArc,
-    ZebraCrossing,
     Intersection,
+    LeftCircularArc,
     ParkingArea,
     ParkingLot,
-    ParkingSpot,
     ParkingObstacle,
+    ParkingSpot,
     StaticObstacle,
+    StraightRoad,
+    ZebraCrossing,
 )
 from simulation.utils.road.sections.road_section import RoadSection
 

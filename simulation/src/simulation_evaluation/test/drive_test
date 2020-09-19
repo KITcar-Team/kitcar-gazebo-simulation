@@ -2,8 +2,8 @@
 import sys
 import unittest
 
-import rostest
 import rospy
+import rostest
 
 from simulation.src.simulation_evaluation.src.drive_test.node import DriveTestNode
 
@@ -35,8 +35,10 @@ class DriveTest(unittest.TestCase):
 
         prev_states, last_states = node.last_state_machine_transition
         failure_msg = (
-            f"Drive finished in state: {node.state}, but should be {node.param.expected_result_state}\n"
-            f"The state machines went from being in the states\n{prev_states} to \n{last_states}."
+            f"Drive finished in state: {node.state},"
+            f"but should be {node.param.expected_result_state}\n"
+            f"The state machines went from being in the states\n"
+            f"{prev_states} to \n{last_states}."
         )
 
         self.assertEqual(node.state, node.param.expected_result_state, failure_msg)

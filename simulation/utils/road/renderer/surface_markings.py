@@ -1,17 +1,17 @@
-from simulation.utils.road.sections import SurfaceMarking
-import os
 import math
+import os
 from typing import List
 
-import simulation.utils.road.renderer.utils as utils  # no
-from simulation.utils.road.config import Config
-from simulation.utils.road.sections.road_section import RoadSection, MarkedLine
-from simulation.utils.geometry import Vector, Line, Polygon, Point
-
 from gi import require_version
+from gi.repository import Rsvg  # noqa: 402
+
+import simulation.utils.road.renderer.utils as utils  # no
+from simulation.utils.geometry import Line, Point, Polygon, Vector
+from simulation.utils.road.config import Config
+from simulation.utils.road.sections import SurfaceMarking
+from simulation.utils.road.sections.road_section import MarkedLine, RoadSection
 
 require_version("Rsvg", "2.0")
-from gi.repository import Rsvg  # noqa: 402
 
 
 def draw(ctx, surface_marking: SurfaceMarking):
@@ -29,7 +29,7 @@ def draw(ctx, surface_marking: SurfaceMarking):
             "simulation",
             "models",
             "meshes",
-            f"Fahrbahnmarkierung_Pfeil_"
+            "Fahrbahnmarkierung_Pfeil_"
             + (
                 "L" if surface_marking.kind != SurfaceMarking.LEFT_TURN_MARKING else "R"
             )  # turn arrows are mirrored in rendering process
@@ -57,7 +57,11 @@ def draw(ctx, surface_marking: SurfaceMarking):
         )
 
         utils.draw_line(
-            ctx, line, line_width=0.04, dash_length=0.08, dash_gap=0.06,
+            ctx,
+            line,
+            line_width=0.04,
+            dash_length=0.08,
+            dash_gap=0.06,
         )
     if surface_marking.kind == SurfaceMarking.START_LINE:
         draw_start_lane(ctx, surface_marking.frame)
@@ -76,10 +80,12 @@ def draw(ctx, surface_marking: SurfaceMarking):
 
 
 def draw_start_lane(ctx, frame: Polygon):
-    """Draw the checkerboard pattern to mark the beginning of a parking area in the given frame.
+    """Draw the checkerboard pattern to mark the beginning of a parking area in the given
+    frame.
 
     Args:
-        frame: Frame of the start lane. **Points of the frame must be given in the right order!**
+        frame: Frame of the start lane.
+            **Points of the frame must be given in the right order!**
             first point : start on left line
             second point: end on left line
             third point : end on right line
@@ -109,7 +115,8 @@ def draw_blocked_area(ctx, frame: Polygon):
     """Draw a blocked area in the given frame.
 
     Args:
-        frame: Frame of the blocked area. **Points of the frame must be given in the right order!**
+        frame: Frame of the blocked area.
+            **Points of the frame must be given in the right order!**
             first point : start on right line
             second point: left of first point, towards middle line
             third point : left of fourth point, towards middle line
@@ -133,7 +140,8 @@ def draw_zebra_crossing(
     """Draw a zebra crossing in the given frame.
 
     Args:
-        frame: Frame of the zebra crossing. **Points of the frame must be given in the right order!**
+        frame: Frame of the zebra crossing.
+            **Points of the frame must be given in the right order!**
             first point : start on left line
             second point: end on left line
             third point : end on right line
@@ -162,12 +170,14 @@ def draw_zebra_crossing(
 
 
 def draw_crossing_lines(ctx, frame: Polygon):
-    """Draw a crossing area for pedestrian, which is only marked by dashed lines, in the given frame.
+    """Draw a crossing area for pedestrian, which is only marked by dashed lines, in the
+    given frame.
 
     The dashed lines are perpendicular to the road.
 
     Args:
-        frame: Frame of the crossing area. **Points of the frame must be given in the right order!**
+        frame: Frame of the crossing area.
+            **Points of the frame must be given in the right order!**
             first point : start on left line
             second point: end on left line
             third point : end on right line
@@ -177,21 +187,29 @@ def draw_crossing_lines(ctx, frame: Polygon):
     dash_length = 0.04
     utils.draw_line(
         ctx,
-        MarkedLine([points[0], points[3]], style=RoadSection.DASHED_LINE_MARKING,),
+        MarkedLine(
+            [points[0], points[3]],
+            style=RoadSection.DASHED_LINE_MARKING,
+        ),
         dash_length=dash_length,
     )
     utils.draw_line(
         ctx,
-        MarkedLine([points[1], points[2]], style=RoadSection.DASHED_LINE_MARKING,),
+        MarkedLine(
+            [points[1], points[2]],
+            style=RoadSection.DASHED_LINE_MARKING,
+        ),
         dash_length=dash_length,
     )
 
 
 def draw_traffic_island_blocked(ctx, frame: Polygon):
-    """Draw a blocked area, which splits the two lanes of the traffic island, in the given frame.
+    """Draw a blocked area, which splits the two lanes of the traffic island, in the given
+    frame.
 
     Args:
-        frame: Frame of the blocked area. **Points of the frame must be given in the right order!**
+        frame: Frame of the blocked area.
+            **Points of the frame must be given in the right order!**
             first half of points: left border
             second half: right border
     """
@@ -208,7 +226,8 @@ def draw_parking_spot_x(ctx, frame: Polygon):
     """Draw two crossing lines (X) in the given frame to represent a blocked spot.
 
     Args:
-        frame: Frame of the parking spot. **Points of the frame must be given in the right order!**
+        frame: Frame of the parking spot.
+            **Points of the frame must be given in the right order!**
             first point : left lower corner of parking spot
             second point: left upper corner
             third point : right upper corner

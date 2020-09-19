@@ -1,19 +1,21 @@
 import torch
-from torch import nn, Tensor
+from torch import Tensor, nn
 from torch.nn.functional import mse_loss
 
 from simulation.utils.machine_learning.cycle_gan.models.base_model import BaseModel
 from simulation.utils.machine_learning.data.image_pool import ImagePool
 from simulation.utils.machine_learning.models.helper import set_requires_grad
+
 from .cycle_gan_stats import CycleGANStats
 
 
 class CycleGANModel(BaseModel):
-    """This class implements the CycleGAN model, for learning image-to-image translation without paired data.
+    """This class implements the CycleGAN model, for learning image-to-image translation
+    without paired data.
 
-    By default, it uses a '--netg resnet_9blocks' ResNet generator, a '--netd basic' discriminator (PatchGAN
-    introduced by pix2pix), and a least-square GANs objective ('--gan_mode lsgan'). CycleGAN paper:
-    https://arxiv.org/pdf/1703.10593.pdf
+    By default, it uses a '--netg resnet_9blocks' ResNet generator, a '--netd basic'
+    discriminator (PatchGAN introduced by pix2pix), and a least-square GANs objective ('--
+    gan_mode lsgan'). CycleGAN paper: https://arxiv.org/pdf/1703.10593.pdf
     """
 
     def __init__(
@@ -37,15 +39,16 @@ class CycleGANModel(BaseModel):
         """Initialize the CycleGAN class.
 
         Args:
-            is_train (bool): enable or disable training mode
-            cycle_noise_stddev (int): Standard deviation of noise added to the cycle input. Mean is 0.
-            pool_size (int): the size of image buffer that stores previously generated images
-            beta1 (float): momentum term of adam
-            lr (float): initial learning rate for adam
-            lr_policy (str): linear #learning rate policy. [linear | step | plateau | cosine]
-            lambda_idt_a (int): weight for loss of domain A
-            lambda_idt_b (int): weight for loss of domain B
-            lambda_cycle (float): weight for loss identity
+            is_train: enable or disable training mode
+            cycle_noise_stddev: Standard deviation of noise added to the cycle input.
+                Mean is 0.
+            pool_size: the size of image buffer that stores previously generated images
+            beta1: momentum term of adam
+            lr: initial learning rate for adam
+            lr_policy: linear #learning rate policy. [linear | step | plateau | cosine]
+            lambda_idt_a: weight for loss of domain A
+            lambda_idt_b: weight for loss of domain B
+            lambda_cycle: weight for loss identity
         """
         super().__init__(
             netg_a,
@@ -84,7 +87,7 @@ class CycleGANModel(BaseModel):
     def backward_d_basic(
         self, netd: nn.Module, real: torch.Tensor, fake: torch.Tensor
     ) -> Tensor:
-        """Calculate GAN loss for the discriminator
+        """Calculate GAN loss for the discriminator.
 
         We also call loss_d.backward() to calculate the gradients.
 
@@ -108,19 +111,20 @@ class CycleGANModel(BaseModel):
         return loss_d
 
     def backward_d_a(self, real_b, fake_b) -> float:
-        """Calculate GAN loss for discriminator D_A"""
+        """Calculate GAN loss for discriminator D_A."""
         fake_b = self.fake_b_pool.query(fake_b)
         loss_d_a = self.backward_d_basic(self.networks.d_a, real_b, fake_b).item()
         return loss_d_a
 
     def backward_d_b(self, real_a, fake_a) -> float:
-        """Calculate GAN loss for discriminator D_B"""
+        """Calculate GAN loss for discriminator D_B."""
         fake_a = self.fake_a_pool.query(fake_a)
         loss_d_b = self.backward_d_basic(self.networks.d_b, real_a, fake_a).item()
         return loss_d_b
 
     def do_iteration(self, batch_a: torch.Tensor, batch_b: torch.Tensor):
-        """Calculate losses, gradients, and update network weights; called in every training iteration"""
+        """Calculate losses, gradients, and update network weights; called in every training
+        iteration."""
         real_a = batch_a
         real_b = batch_b
         # forward

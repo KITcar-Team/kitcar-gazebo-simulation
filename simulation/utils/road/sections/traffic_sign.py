@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from simulation.utils.road.sections.road_element import RoadElementRect
-
 from typing import Tuple
+
+from simulation.utils.road.sections.road_element import RoadElementRect
 
 
 @dataclass
@@ -38,17 +38,33 @@ class TrafficSign(RoadElementRect):
     TURN_LEFT = SignTuple("Links_abbiegen")
     TURN_RIGHT = SignTuple("Rechts_abbiegen")
     STVO_222 = SignTuple(
-        "VorbeifahrtRechts_pedestrian", (0.11, 0.15, 0.15), (-0.055, 0, 0.075),
+        "VorbeifahrtRechts_pedestrian",
+        (0.11, 0.15, 0.15),
+        (-0.055, 0, 0.075),
     )
     PRIORITY = SignTuple("Vorfahrt")
-    STVO_350_10 = SignTuple("PedestrianCrossing",)
-    CURVE_LEFT = SignTuple("Abbiegeschild_links", (0.09, 0.1, 0.11), (-0.045, 0, 0.055),)
-    CURVE_LEFT_LARGE = SignTuple(
-        "Abbiegeschild_gross_links", (0.09, 0.3, 0.11), (-0.045, 0, 0.055),
+    STVO_350_10 = SignTuple(
+        "PedestrianCrossing",
     )
-    CURVE_RIGHT = SignTuple("Abbiegeschild_rechts", (0.09, 0.1, 0.11), (-0.045, 0, 0.055),)
+    CURVE_LEFT = SignTuple(
+        "Abbiegeschild_links",
+        (0.09, 0.1, 0.11),
+        (-0.045, 0, 0.055),
+    )
+    CURVE_LEFT_LARGE = SignTuple(
+        "Abbiegeschild_gross_links",
+        (0.09, 0.3, 0.11),
+        (-0.045, 0, 0.055),
+    )
+    CURVE_RIGHT = SignTuple(
+        "Abbiegeschild_rechts",
+        (0.09, 0.1, 0.11),
+        (-0.045, 0, 0.055),
+    )
     CURVE_RIGHT_LARGE = SignTuple(
-        "Abbiegeschild_gross_links", (0.09, 0.3, 0.11), (-0.045, 0, 0.055),
+        "Abbiegeschild_gross_links",
+        (0.09, 0.3, 0.11),
+        (-0.045, 0, 0.055),
     )
 
     kind: SignTuple = None

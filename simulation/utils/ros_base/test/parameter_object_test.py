@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Test if the Parameter object used in NodeBase behaves as expected.
-"""
+"""Test if the Parameter object used in NodeBase behaves as expected."""
 import unittest
 
 from simulation.utils.ros_base.node_base import ParameterObject

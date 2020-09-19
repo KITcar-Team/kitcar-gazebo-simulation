@@ -1,17 +1,15 @@
 """Definition of the EventSpeaker class."""
 import functools
-from typing import Callable, List, Any
+from typing import Any, Callable, List
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
-from simulation_groundtruth.msg import (
-    Section as SectionMsg,
-    Lane as LaneMsg,
-    LabeledPolygon as LabeledPolygonMsg,
-    Parking as ParkingMsg,
-)
+from simulation_groundtruth.msg import LabeledPolygon as LabeledPolygonMsg
+from simulation_groundtruth.msg import Lane as LaneMsg
+from simulation_groundtruth.msg import Parking as ParkingMsg
+from simulation_groundtruth.msg import Section as SectionMsg
 
-from simulation.utils.geometry import Polygon
 import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.geometry import Polygon
 from simulation.utils.road.sections import SurfaceMarking
 
 from .speaker import Speaker
@@ -34,8 +32,8 @@ class EventSpeaker(Speaker):
         parking_spot_buffer: float,
         min_parking_wheels: int
     ):
-        """Event speaker with funtions that can be queried for groundtruth information \
-                and parameters.
+        """Event speaker with funtions that can be queried for groundtruth information and
+        parameters.
 
         Args:
             section_proxy: Returns all sections when called.
@@ -43,8 +41,8 @@ class EventSpeaker(Speaker):
             obstacle_proxy: function which returns obstacles in a section.
             parking_proxy: function which returns parking msg in a section.
             parking_spot_buffer: buffer making accepted parking spots larger
-            min_parking_wheels: Minimum amount of wheels which must be inside \
-                    a parking spot when parking.
+            min_parking_wheels: Minimum amount of wheels which must be inside
+                a parking spot when parking.
         """
         super().__init__(
             section_proxy=section_proxy,

@@ -9,8 +9,8 @@ from torch.nn.modules.module import ModuleAttributeError
 
 import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.configs.train_options import (
-    WassersteinCycleGANTrainOptions,
     CycleGANTrainOptions,
+    WassersteinCycleGANTrainOptions,
 )
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
 from simulation.utils.machine_learning.cycle_gan.models.discriminator import (
@@ -224,11 +224,13 @@ if __name__ == "__main__":
                 )
                 visualizer.display_current_results(visuals)
 
-        model.update_learning_rate()  # update learning rates in the beginning of every epoch.
+        # update learning rates in the beginning of every epoch.
+        model.update_learning_rate()
         print(f"Saving the model at the end of epoch {epoch}")
         model.networks.save(os.path.join(opt.checkpoints_dir, opt.name, "latest_net_"))
         model.networks.save(os.path.join(opt.checkpoints_dir, opt.name, f"{epoch}_net_"))
         visualizer.save_losses_as_image()
         print(
-            f"End of epoch {epoch} / {total_epochs} \t Time Taken: {time.time()-epoch_start_time} sec"
+            f"End of epoch {epoch} / {total_epochs} \t"
+            f"Time Taken: {time.time()-epoch_start_time} sec"
         )

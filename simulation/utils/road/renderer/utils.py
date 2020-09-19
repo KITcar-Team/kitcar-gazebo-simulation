@@ -1,7 +1,7 @@
-from simulation.utils.geometry import Polygon
-from simulation.utils.road.sections.road_section import RoadSection, MarkedLine
-
 from typing import List
+
+from simulation.utils.geometry import Polygon
+from simulation.utils.road.sections.road_section import MarkedLine, RoadSection
 
 
 def draw_line(
@@ -21,7 +21,8 @@ def draw_line(
         if dash_gap is None:
             dash_gap = dash_length
         ctx.set_dash(
-            [dash_length, dash_gap], marked_line.prev_length % (dash_length + dash_gap),
+            [dash_length, dash_gap],
+            marked_line.prev_length % (dash_length + dash_gap),
         )
     else:
         ctx.set_dash([])

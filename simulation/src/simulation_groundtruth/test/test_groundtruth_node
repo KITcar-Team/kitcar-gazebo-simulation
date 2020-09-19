@@ -1,32 +1,27 @@
 #!/usr/bin/env python3
 import sys
-import rospy
 import unittest
 
-from simulation.utils.ros_base.node_base import NodeBase
-
-from simulation.utils.geometry import Line, Polygon
+import rospy
+from simulation_groundtruth.msg import GroundtruthStatus
+from simulation_groundtruth.msg import Lane as LaneMsg
+from simulation_groundtruth.srv import (
+    IntersectionSrv,
+    LabeledPolygonSrv,
+    LaneSrv,
+    ParkingSrv,
+    SectionSrv,
+)
 
 import simulation.utils.road.sections.type as road_section_type
-from simulation.utils.road.sections.line_tuple import LineTuple
-
 from simulation.src.simulation_groundtruth.src.groundtruth.groundtruth import Groundtruth
 from simulation.src.simulation_groundtruth.src.groundtruth.test.mock_node import (
     GroundtruthMockNode,
 )
-
-from simulation_groundtruth.srv import (
-    SectionSrv,
-    LaneSrv,
-    ParkingSrv,
-    LabeledPolygonSrv,
-    IntersectionSrv,
-)
-from simulation_groundtruth.msg import (
-    Lane as LaneMsg,
-    GroundtruthStatus,
-)
+from simulation.utils.geometry import Line, Polygon
 from simulation.utils.road.road import Road
+from simulation.utils.road.sections.line_tuple import LineTuple
+from simulation.utils.ros_base.node_base import NodeBase
 
 PKG = "simulation_groundtruth"
 
@@ -34,9 +29,9 @@ PKG = "simulation_groundtruth"
 class GroundtruthTestNode(unittest.TestCase, GroundtruthMockNode):
     """Unittest which tests the groundtruth node.
 
-    The basic idea is to subclass the GroundtruthMockNode which already creates \
-    a number of *mocked* test roads and write functions to test if the groundtruth \
-    is correctly extracted and made available through services.
+    The basic idea is to subclass the GroundtruthMockNode which already creates a number of
+    *mocked* test roads and write functions to test if the groundtruth is correctly
+    extracted and made available through services.
     """
 
     def setUp(self):
@@ -72,7 +67,8 @@ class GroundtruthTestNode(unittest.TestCase, GroundtruthMockNode):
         self.assertEqual(len(obstacle_msgs), len(obstacles))
         for obstacle_msg, obstacle in zip(obstacle_msgs, obstacles):
             rospy.logdebug(
-                f"MSG: {Polygon(obstacle_msg.frame).get_points()} and {obstacle.get_points()}"
+                f"MSG: {Polygon(obstacle_msg.frame).get_points()}"
+                f"and {obstacle.get_points()}"
             )
             self.assertEqual(Polygon(obstacle_msg.frame), obstacle.frame)
 

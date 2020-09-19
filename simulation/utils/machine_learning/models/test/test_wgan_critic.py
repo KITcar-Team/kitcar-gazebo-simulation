@@ -5,7 +5,7 @@ import pickle
 
 import torch
 from hypothesis import given, settings
-from hypothesis.strategies import integers, floats
+from hypothesis.strategies import floats, integers
 
 from simulation.utils.machine_learning.models.wasserstein_critic import WassersteinCritic
 
@@ -59,7 +59,8 @@ def test_optimization_step():
     Testing if the optimization works is hard. Here, some very basic things are tested:
 
     * Does the wasserstein distance increase when running the optimization?
-    * Is the distance close to zero, if random distributions are given and the generator is the identity?
+    * Is the distance close to zero, if random distributions are given
+        and the generator is the identity?
     * Is the generator unchanged?
     """
     # 1. Distances close to zero if both batches are randomly sampled each iteration
@@ -84,8 +85,8 @@ def test_optimization_step():
 
     assert sum(distances) / iterations < 0.1
 
-    # 2. Distances increase if batches are constant and critic should learn which one is which
-    #    and generator is the identity
+    # 2. Distances increase if batches are constant and critic should learn which one
+    # is which and generator is the identity
     critic = WassersteinCritic(input_nc=input_nc, height=height, width=width)
     optimizer = torch.optim.RMSprop(critic.parameters(), lr=0.00005)
     generator = torch.nn.Identity()

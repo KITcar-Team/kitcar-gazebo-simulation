@@ -1,10 +1,11 @@
 import functools
 
-from torch import nn as nn, Tensor
+from torch import Tensor
+from torch import nn as nn
 
 
 class NLayerDiscriminator(nn.Module):
-    """Defines a PatchGAN discriminator"""
+    """Defines a PatchGAN discriminator."""
 
     def __init__(
         self,
@@ -15,7 +16,7 @@ class NLayerDiscriminator(nn.Module):
         use_sigmoid: bool = True,
         is_quadratic: bool = True,
     ):
-        """Construct a PatchGAN discriminator
+        """Construct a PatchGAN discriminator.
 
         Args:
             input_nc (int): the number of channels in input images

@@ -1,12 +1,12 @@
 """Quadratic- and CubicBezierCurves."""
 
-from typing import Union, Sequence
 from dataclasses import dataclass
+from typing import Sequence, Union
+
 import numpy as np
 
-from simulation.utils.geometry import Point, Line
-
 import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.geometry import Line, Point
 from simulation.utils.road.sections.road_section import RoadSection
 
 
@@ -62,7 +62,8 @@ class QuadBezier(BezierCurve):
 
     Args:
         p1 (Union[Point, Sequence[float]]): Control point 1.
-          Y-Value has to be zero in order to match the gradient of the last section at the start.
+            Y-Value has to be zero in order to match the gradient
+            of the last section at the start.
         p2 (Union[Point, Sequence[float]]): Control point 2.
     """
 
