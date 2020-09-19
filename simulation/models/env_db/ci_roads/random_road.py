@@ -1,22 +1,21 @@
-import random
 import math
+import random
 
 from simulation.utils.geometry import Point
-
 from simulation.utils.road.road import Road
 from simulation.utils.road.sections import (
-    StraightRoad,
+    BlockedArea,
+    Intersection,
+    LeftCircularArc,
     ParkingArea,
     ParkingLot,
     ParkingObstacle,
     ParkingSpot,
     RightCircularArc,
-    LeftCircularArc,
     StaticObstacle,
-    Intersection,
+    StraightRoad,
     TrafficIsland,
     ZebraCrossing,
-    BlockedArea,
 )
 
 road = Road()
@@ -122,7 +121,9 @@ for _ in range(50):
                 ),
                 BlockedArea(obstacles=random.choice([[get_random_obstacle()], []])),
                 ZebraCrossing(),
-                StraightRoad(obstacles=random.choice([[get_random_obstacle()], []]),),
+                StraightRoad(
+                    obstacles=random.choice([[get_random_obstacle()], []]),
+                ),
                 TrafficIsland(
                     zebra_marking_type=random.choice(
                         [TrafficIsland.LINES, TrafficIsland.ZEBRA]

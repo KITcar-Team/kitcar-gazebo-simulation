@@ -7,14 +7,14 @@ Run these tests with::
     python3 -m simulation.src.simulation_evaluation.src.speaker.speakers.test
 """
 
-from . import test_speaker as speaker
-from . import test_event_speaker as event
-from . import test_area_speaker as area
-from . import test_speed_speaker as speed
-from . import test_zone_speaker as zone
-
 # Create test suite
 import unittest
+
+from . import test_area_speaker as area
+from . import test_event_speaker as event
+from . import test_speaker as speaker
+from . import test_speed_speaker as speed
+from . import test_zone_speaker as zone
 
 suite = unittest.TestSuite()
 

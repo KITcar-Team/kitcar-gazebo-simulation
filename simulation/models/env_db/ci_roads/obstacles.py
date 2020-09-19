@@ -2,10 +2,10 @@ import math
 
 from simulation.utils.road.road import Road  # Definition of the road class
 from simulation.utils.road.sections import (
-    StraightRoad,
     LeftCircularArc,
     RightCircularArc,
     StaticObstacle,
+    StraightRoad,
 )
 
 road = Road()

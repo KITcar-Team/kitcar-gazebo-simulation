@@ -6,8 +6,7 @@ from .speaker import Speaker
 
 
 class BroadcastSpeaker(Speaker):
-    """Keep high level information about the drive \
-            (like speed, distance driven, current section).
+    """Keep high level information about the drive (e.g. speed, distance driven).
 
     Instead of returning Speaker msgs this speaker returns a Broadcast msg.
     """

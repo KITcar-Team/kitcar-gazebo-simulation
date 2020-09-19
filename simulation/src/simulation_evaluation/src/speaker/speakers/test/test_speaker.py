@@ -1,27 +1,27 @@
-import math
-import unittest
 import functools
+import math
 import random
-from . import fake_msgs
+import unittest
 
-from simulation.utils.geometry import Line, Vector, Pose, Polygon, Point
+import gazebo_simulation.msg as gazebo_sim_msgs
+import geometry_msgs.msg as geometry_msgs
 
 from simulation.src.simulation_evaluation.src.speaker.speakers import Speaker
+from simulation.utils.geometry import Line, Point, Polygon, Pose, Vector
 
-import geometry_msgs.msg as geometry_msgs
-import gazebo_simulation.msg as gazebo_sim_msgs
+from . import fake_msgs
 
 
 class ModuleTest(unittest.TestCase):
     def test_line_functions(self):
-        """Create a line of points as middle line and check if the following functions/attributes work:
+        """Create a line of points as middle line and check if the following
+        functions/attributes work:
 
         * get_road_lines()
         * section_intervals
         * middle_line
         * arc_length
         * current_section
-
         """
 
         n_section = 10
@@ -113,7 +113,7 @@ class ModuleTest(unittest.TestCase):
         self.assertEqual(speaker.car_speed, abs(linear_twist))
 
     def test_overlapping_inside_funcs(self):
-        """ Test polygon functions:
+        """Test polygon functions:
 
         * get_interval_for_polygon()
         * car_is_inside()

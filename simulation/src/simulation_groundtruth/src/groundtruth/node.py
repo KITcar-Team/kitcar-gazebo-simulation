@@ -1,56 +1,55 @@
 import rospy
-from std_srvs.srv import Empty as EmptySrv
-from std_msgs.msg import Empty as EmptyMsg, String as StringMsg
 from gazebo_msgs.msg import ModelStates
-
 from gazebo_simulation.msg import CarState as CarStateMsg
+from simulation_groundtruth.msg import GroundtruthStatus
 from simulation_groundtruth.srv import (
-    SectionSrv,
-    SectionSrvRequest,
-    SectionSrvResponse,
+    IntersectionSrv,
+    IntersectionSrvRequest,
+    IntersectionSrvResponse,
+    LabeledPolygonSrv,
+    LabeledPolygonSrvResponse,
     LaneSrv,
     LaneSrvRequest,
     LaneSrvResponse,
     ParkingSrv,
     ParkingSrvRequest,
     ParkingSrvResponse,
-    LabeledPolygonSrv,
-    LabeledPolygonSrvResponse,
-    IntersectionSrv,
-    IntersectionSrvRequest,
-    IntersectionSrvResponse,
+    SectionSrv,
+    SectionSrvRequest,
+    SectionSrvResponse,
 )
-
-from simulation.utils.geometry import Vector
-from simulation.utils.ros_base.node_base import NodeBase
+from std_msgs.msg import Empty as EmptyMsg
+from std_msgs.msg import String as StringMsg
+from std_srvs.srv import Empty as EmptySrv
 
 import simulation.utils.road.road as road_module
-
 from simulation.src.simulation_groundtruth.src.groundtruth.groundtruth import Groundtruth
-from simulation.src.simulation_groundtruth.src.groundtruth.renderer import Renderer
 from simulation.src.simulation_groundtruth.src.groundtruth.object_controller import (
     ObjectController,
 )
-
-from simulation_groundtruth.msg import GroundtruthStatus
+from simulation.src.simulation_groundtruth.src.groundtruth.renderer import Renderer
+from simulation.utils.geometry import Vector
+from simulation.utils.ros_base.node_base import NodeBase
 
 
 class GroundtruthNode(NodeBase):
     """ROS node providing services to access the road's groundtruth.
 
     Attributes:
-        groundtruth (Groundtruth): Stores road sections \
-                and allows to access groundtruth information.
+        groundtruth (Groundtruth): Stores road sections
+            and allows to access groundtruth information.
         renderer (Renderer): Render and update the road in Gazebo.
-        object_controller (ObjectController): Create and track objects (e.g. obstacles, signs) \
-                in Gazebo.
+        object_controller (ObjectController): Create and track objects
+            (e.g. obstacles, signs) in Gazebo.
         section_srv (rospy.Service): ROS service to access section ids and types.
         lane_srv (rospy.Service): ROS service to access the lanes of a road section.
         obstacle_srv (rospy.Service): ROS service to access obstacles in a road section.
         parking_srv (rospy.Service): ROS service to access parking spots \
                 and other parking information.
-        surface_marking_srv (rospy.Service): ROS service to access surface markings in a road section.
-        intersection_srv (rospy.Service): ROS service to access information of an intersection.
+        surface_marking_srv (rospy.Service): ROS service to access surface markings
+            in a road section.
+        intersection_srv (rospy.Service): ROS service to access information
+            of an intersection.
     """
 
     def __init__(self, name="groundtruth_node", log_level=rospy.INFO):
@@ -72,7 +71,9 @@ class GroundtruthNode(NodeBase):
             force_reload=self.param.force_reload_road,
         )
         self.object_controller = ObjectController(
-            road, remove_model=self._remove_model, spawn_model=self._spawn_model,
+            road,
+            remove_model=self._remove_model,
+            spawn_model=self._spawn_model,
         )
 
         self.model_names = []

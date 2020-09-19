@@ -1,13 +1,12 @@
 """The RoadSection is parent to all other RoadSection classes."""
 
+import math
 from dataclasses import dataclass, field
 from typing import List, Tuple
-import math
 
-from simulation.utils.geometry import Transform, Polygon, Line, Pose
-
+from simulation.utils.geometry import Line, Polygon, Pose, Transform
 from simulation.utils.road.config import Config
-from simulation.utils.road.sections import StaticObstacle, TrafficSign, SurfaceMarking
+from simulation.utils.road.sections import StaticObstacle, SurfaceMarking, TrafficSign
 
 
 class MarkedLine(Line):
@@ -148,7 +147,7 @@ class RoadSection(_RoadSection):
     def get_bounding_box(self) -> Polygon:
         """Get a polygon around the road section.
 
-        Bounding box is an approximate representation of all points within a given distance \
+        Bounding box is an approximate representation of all points within a given distance
         of this geometric object.
         """
         return Polygon(self.middle_line.buffer(1.5 * Config.road_width))

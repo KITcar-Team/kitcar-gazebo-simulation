@@ -1,10 +1,11 @@
 from typing import List
 
-from torch import nn as nn, Tensor
+from torch import Tensor
+from torch import nn as nn
 
 
 class ResnetBlock(nn.Module):
-    """Define a Resnet block"""
+    """Define a Resnet block."""
 
     def __init__(
         self,
@@ -16,10 +17,11 @@ class ResnetBlock(nn.Module):
         n_conv_layers: int = 2,
         dilations: List[int] = None,
     ):
-        """Initialize the Resnet block
+        """Initialize the Resnet block.
 
-        A resnet block is a conv block with skip connections We construct a conv block with build_conv_block
-        function, and implement skip connections in <forward> function. Original Resnet paper:
+        A resnet block is a conv block with skip connections.
+        We construct a conv block with build_conv_block function,
+        and implement skip connections in <forward> function. Original Resnet paper:
         https://arxiv.org/pdf/1512.03385.pdf
 
         Args:
@@ -58,7 +60,8 @@ class ResnetBlock(nn.Module):
             dilations: List of dilations for each conv layer.
 
         Returns:
-            A conv block (with a conv layer, a normalization layer, and a non-linearity layer (ReLU))
+            A conv block (with a conv layer, a normalization layer,
+            and a non-linearity layer (ReLU))
         """
         if dilations == "None":
             dilations = [1 for _ in range(n_conv_layers)]
@@ -103,7 +106,7 @@ class ResnetBlock(nn.Module):
         return nn.Sequential(*conv_block)
 
     def forward(self, x: Tensor) -> Tensor:
-        """Standard forward with skip connection
+        """Standard forward with skip connection.
 
         Args:
             x (Tensor): the input tensor

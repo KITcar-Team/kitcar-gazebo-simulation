@@ -1,9 +1,9 @@
 import argparse
+import os
 import subprocess
+import threading
 import time
 from pathlib import Path
-import os
-import threading
 
 import rosnode
 

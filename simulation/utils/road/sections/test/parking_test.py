@@ -1,15 +1,10 @@
-import unittest
 import math
+import unittest
 
-from simulation.utils.geometry import Point, Transform, Line, Polygon
 import simulation.utils.road.sections.type as road_section_type
-from simulation.utils.road.sections import (
-    ParkingArea,
-    ParkingLot,
-    ParkingSpot,
-)
-
+from simulation.utils.geometry import Line, Point, Polygon, Transform
 from simulation.utils.road.config import Config
+from simulation.utils.road.sections import ParkingArea, ParkingLot, ParkingSpot
 
 
 class ModuleTest(unittest.TestCase):
@@ -44,7 +39,10 @@ class ModuleTest(unittest.TestCase):
         )
 
         pa = ParkingArea(
-            length=LENGTH, left_lots=[left_lot], right_lots=[right_lot], transform=TF,
+            length=LENGTH,
+            left_lots=[left_lot],
+            right_lots=[right_lot],
+            transform=TF,
         )
         self.assertEqual(pa.__class__.TYPE, road_section_type.PARKING_AREA)
 
@@ -54,7 +52,8 @@ class ModuleTest(unittest.TestCase):
         si = Point(LEFT_START, Config.road_width)
         # start_outer
         so = Point(
-            si.x + LEFT_DEPTH / math.tan(OPENING_ANGLE), Config.road_width + LEFT_DEPTH,
+            si.x + LEFT_DEPTH / math.tan(OPENING_ANGLE),
+            Config.road_width + LEFT_DEPTH,
         )
         # end outer, both lots have 0.4 width
         eo = Point(so.x + 0.8, so.y)
@@ -87,7 +86,8 @@ class ModuleTest(unittest.TestCase):
         si = Point(RIGHT_START, -Config.road_width)
         # start_outer
         so = Point(
-            si.x + RIGHT_DEPTH / math.tan(OPENING_ANGLE), -Config.road_width - RIGHT_DEPTH,
+            si.x + RIGHT_DEPTH / math.tan(OPENING_ANGLE),
+            -Config.road_width - RIGHT_DEPTH,
         )
         # end outer, lot has 0.6 width
         eo = Point(so.x + 0.6, -Config.road_width - RIGHT_DEPTH)
@@ -101,7 +101,8 @@ class ModuleTest(unittest.TestCase):
             TF * Polygon([Point(eo.x, ei.y), eo, so, Point(so.x, si.y)]),
         )
         self.assertEqual(
-            pa.right_lots[0].spots[0].kind, ParkingSpot.BLOCKED,
+            pa.right_lots[0].spots[0].kind,
+            ParkingSpot.BLOCKED,
         )
 
     ###

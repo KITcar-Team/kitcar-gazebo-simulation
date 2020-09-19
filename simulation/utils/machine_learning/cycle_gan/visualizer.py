@@ -17,7 +17,8 @@ else:
 
 
 class Visualizer:
-    """This class includes several functions that can display/save images and print/save logging information.
+    """This class includes several functions that can display/save images and print/save
+    logging information.
 
     It uses a Python library 'visdom' for display.
     """
@@ -29,7 +30,7 @@ class Visualizer:
         display_port: int = 8097,
         checkpoints_dir: str = "./checkpoints",
     ):
-        """Initialize the Visualizer class
+        """Initialize the Visualizer class.
 
         Step 1: Cache the training/test options
         Step 2: connect to a visdom server
@@ -62,14 +63,13 @@ class Visualizer:
             log_file.write("================ Training Loss (%s) ================\n" % now)
 
     def reset(self) -> None:
-        """Reset the self.saved status"""
+        """Reset the self.saved status."""
         self.saved = False
 
     @staticmethod
     def create_visdom_connections(port: int) -> None:
-        """If the program could not connect to Visdom server, this function will start a new server
-        at port <self.port>
-        """
+        """If the program could not connect to Visdom server, this function will start a new
+        server at port <self.port>"""
         subprocess.Popen(
             ["visdom", "-p", str(port)],
             shell=True,
@@ -87,7 +87,8 @@ class Visualizer:
         html = (
             "<style>"
             "table"
-            "{ border: 1px solid white; width: 500px; height: 200px; text-align: center; border-collapse: collapse; }"
+            "{ border: 1px solid white; width: 500px; height: 200px;"
+            "text-align: center; border-collapse: collapse; }"
             "table td, table th"
             "{ border: 1px solid #FFFFFF; padding: 3px 2px; }"
             "table tbody td"
@@ -97,7 +98,8 @@ class Visualizer:
             "table thead"
             "{ background: #0B6FA4; border-bottom: 5px solid #FFFFFF; }"
             "table thead th {"
-            "font-size: 17px; font-weight: bold; color: white; text-align: center; border-left: 2px solid white;}"
+            "font-size: 17px; font-weight: bold; color: white;"
+            "text-align: center; border-left: 2px solid white;}"
             "table thead th:first-child"
             "{ border-left: none; }"
             "</style> "
@@ -143,12 +145,13 @@ class Visualizer:
             )
 
     def plot_current_losses(self, epoch: int, counter_ratio: float, losses: dict) -> None:
-        """display the current losses on visdom display: dictionary of error labels and values
+        """display the current losses on visdom display: dictionary of error labels and
+        values.
 
         Args:
-            epoch (int): current epoch
-            counter_ratio (float): progress (percentage) in the current epoch, between 0 to 1
-            losses (dict): training losses stored in the format of (name, float) pairs
+            epoch: current epoch
+            counter_ratio: progress (percentage) in the current epoch, between 0 to 1
+            losses: training losses stored in the format of (name, float) pairs
         """
         if not hasattr(self, "plot_data"):
             self.plot_data = {"X": [], "Y": [], "legend": list(losses.keys())}
@@ -190,11 +193,12 @@ class Visualizer:
     def print_current_losses(
         self, epoch: int, iters: int, losses: dict, t_comp: float, estimated_time: float
     ) -> None:
-        """print current losses on console; also save the losses to the disk
+        """print current losses on console; also save the losses to the disk.
 
         Args:
             epoch (int): current epoch
-            iters (int): current training iteration during this epoch (reset to 0 at the end of every epoch)
+            iters (int): current training iteration during this epoch
+                (reset to 0 at the end of every epoch)
             losses (dict): training losses stored in the format of (name, float) pairs
             t_comp (float): computational time per data point (normalized by batch_size)
             estimated_time (float): the estimated time until training finishes
@@ -202,8 +206,8 @@ class Visualizer:
         hours, remainder = divmod(estimated_time, 3600)
         minutes, seconds = divmod(remainder, 60)
         message = (
-            f"(epoch: {epoch}, iters: {iters}, time: {t_comp:.3f}, ETA: {hours:.0f}:{minutes:.0f}:{seconds:.0f} "
-            f"hh:mm:ss) "
+            f"(epoch: {epoch}, iters: {iters}, time: {t_comp:.3f},"
+            f"ETA: {hours:.0f}:{minutes:.0f}:{seconds:.0f} hh:mm:ss) "
         )
         for k, v in losses.items():
             message += "%s: %.3f " % (k, v)

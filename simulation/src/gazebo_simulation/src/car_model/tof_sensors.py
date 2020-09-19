@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from simulation.utils.urdf import DepthCameraProperties, Origin
 from simulation.utils.geometry import Vector
+from simulation.utils.urdf import DepthCameraProperties, Origin
 
 
 def _get_depth_properties(name: str) -> DepthCameraProperties:

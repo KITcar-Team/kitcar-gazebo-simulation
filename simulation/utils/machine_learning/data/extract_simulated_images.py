@@ -1,7 +1,6 @@
 import argparse
 
-from . import record_simulated_rosbag
-from . import rosbag_to_images
+from . import record_simulated_rosbag, rosbag_to_images
 
 
 def main(**kwargs):

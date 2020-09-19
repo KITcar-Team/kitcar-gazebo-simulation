@@ -1,14 +1,12 @@
-""" BlockedArea."""
+"""BlockedArea."""
 
-from dataclasses import dataclass
 import math
+from dataclasses import dataclass
 
-from simulation.utils.geometry import Point, Polygon
-
-from simulation.utils.road.config import Config
-from simulation.utils.road.sections import StraightRoad
 import simulation.utils.road.sections.type as road_section_type
-from simulation.utils.road.sections import SurfaceMarkingPoly
+from simulation.utils.geometry import Point, Polygon
+from simulation.utils.road.config import Config
+from simulation.utils.road.sections import StraightRoad, SurfaceMarkingPoly
 
 
 @dataclass

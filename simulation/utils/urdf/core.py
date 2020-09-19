@@ -1,13 +1,12 @@
 """Class definitions of core building blocks of the package."""
+import xml.dom.minidom
 import xml.etree.cElementTree as cET
 import xml.etree.ElementTree
-import xml.dom.minidom
+from collections import Iterable
 from dataclasses import dataclass, field
+from typing import Any, List
 
 from simulation.utils.geometry import Vector
-
-from typing import Any, List
-from collections import Iterable
 
 
 class Attribute(str):
@@ -151,8 +150,8 @@ class Origin(XmlObject):
         return cls([vector.x, vector.y, vector.z])
 
     @classmethod
-    def from_list(cls, l: List[float]):
-        return cls(l[:3], l[3:])
+    def from_list(cls, lst: List[float]):
+        return cls(lst[:3], lst[3:])
 
 
 @dataclass

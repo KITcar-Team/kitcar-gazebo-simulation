@@ -6,8 +6,8 @@ import torch
 
 import simulation.utils.machine_learning.data as ml_data
 from simulation.utils.machine_learning.cycle_gan.configs.test_options import (
-    WassersteinCycleGANTestOptions,
     CycleGANTestOptions,
+    WassersteinCycleGANTestOptions,
 )
 from simulation.utils.machine_learning.cycle_gan.models.cycle_gan_model import CycleGANModel
 from simulation.utils.machine_learning.cycle_gan.models.generator import create_generator

@@ -1,14 +1,12 @@
 from torch import nn
 
-from simulation.utils.machine_learning.models.helper import (
-    get_norm_layer,
-)
 from simulation.utils.machine_learning.cycle_gan.models.n_layer_discriminator import (
     NLayerDiscriminator,
 )
 from simulation.utils.machine_learning.cycle_gan.models.no_patch_discriminator import (
     NoPatchDiscriminator,
 )
+from simulation.utils.machine_learning.models.helper import get_norm_layer
 
 
 def create_discriminator(
@@ -19,7 +17,7 @@ def create_discriminator(
     norm: str = "batch",
     use_sigmoid: bool = False,
 ) -> nn.Module:
-    """Create a discriminator
+    """Create a discriminator.
 
     Returns a discriminator
 

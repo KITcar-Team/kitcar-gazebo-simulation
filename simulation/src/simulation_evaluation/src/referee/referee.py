@@ -3,8 +3,8 @@
 The referee is used to provide a score and other metrics to a simulated drive.
 """
 
-from typing import Callable
 from dataclasses import dataclass
+from typing import Callable
 
 from simulation_evaluation.msg import Referee as RefereeMsg
 from simulation_evaluation.msg import State as StateMsg

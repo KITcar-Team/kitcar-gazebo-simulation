@@ -1,22 +1,19 @@
 """Line."""
 
 from contextlib import suppress
+from typing import Callable, List, Tuple
 
-from typing import List, Callable, Tuple
-
-import shapely.geometry  # Base class
-import shapely.affinity as affinity
-
-import numpy as np
 import geometry_msgs.msg as geometry_msgs
+import numpy as np
+import shapely.affinity as affinity
+import shapely.geometry  # Base class
 
 from simulation.utils.geometry.point import Point
-from simulation.utils.geometry.vector import Vector
-from simulation.utils.geometry.transform import Transform
 from simulation.utils.geometry.pose import Pose
+from simulation.utils.geometry.transform import Transform
+from simulation.utils.geometry.vector import Vector
 
 from .frame import validate_and_maintain_frames
-
 
 APPROXIMATION_DISTANCE = 0.00005
 CURVATURE_APPROX_DISTANCE = 0.005
@@ -75,7 +72,6 @@ class Line(shapely.geometry.linestring.LineString):
         1 ([Point]): List of points or anything that can be initialized as a point,
                      e.g. Vector, geometry_msgs.Point,np.array)
         2 ([]): Empty list creates an empty line.
-
     """
 
     @classmethod
@@ -272,7 +268,7 @@ class Line(shapely.geometry.linestring.LineString):
 
     @validate_and_maintain_frames
     def __rmul__(self, tf: Transform):
-        """ Transform this line.
+        """Transform this line.
 
         Args:
             tf (Transform): Transformation to apply

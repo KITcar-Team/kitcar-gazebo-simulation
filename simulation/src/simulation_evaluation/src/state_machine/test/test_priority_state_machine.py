@@ -3,11 +3,11 @@
 import unittest
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
+
 from simulation.src.simulation_evaluation.src.state_machine.state_machines.priority import (
     PriorityStateMachine,
 )
 from simulation.src.simulation_evaluation.src.state_machine.test.test import Test
-
 
 __copyright__ = "KITcar"
 
@@ -37,7 +37,8 @@ class ModuleTest(Test):
         )
 
     def test_input_multiple_times(self):
-        """Test if inputting speaker msgs multiple times changes anything (which it shouldn't)."""
+        """Test if inputting speaker msgs multiple times changes anything (which it
+        shouldn't)."""
         inputs = [
             SpeakerMsg.STOP_ZONE,
             SpeakerMsg.STOP_ZONE,
@@ -68,7 +69,8 @@ class ModuleTest(Test):
         )
 
     def test_unrelated_msgs(self):
-        """Test if inputting unrelated speaker msgs changes anything (which it shouldn't)."""
+        """Test if inputting unrelated speaker msgs changes anything (which it
+        shouldn't)."""
         inputs = [
             SpeakerMsg.STOP_ZONE,
             SpeakerMsg.SPEED_0,

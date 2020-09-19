@@ -2,19 +2,20 @@
 # -*- coding: utf-8 -*-
 """ROS node base class with a pythonic parameter interface."""
 
-import rospy
-from cachetools import cached, TTLCache
-import yaml
-
 from typing import Any, Callable, Dict
+
+import rospy
+import yaml
+from cachetools import TTLCache, cached
 
 
 class NodeBase:
-    """Abstract ROS Node class with additional functionality
+    """Abstract ROS Node class with additional functionality.
 
     Args:
         name (str): Name of the node
-        parameter_cache_time (int) = 1: Duration for which parameters will be cached, for performance
+        parameter_cache_time (int) = 1: Duration for which parameters will be cached
+            for performance
         log_level (int) = rospy.INFO: Loglevel with which the node works.
 
     A basic node with a subscriber and publisher can be created in the following way:
@@ -40,7 +41,8 @@ class NodeBase:
     Attributes:
         param (ParameterObject): Attribute of type :class:`ParameterObject`,
             which provides an abstraction layer to access ROS parameters.
-            The following line shows how to access a ROS parameter in any subclass of called *param_1*:
+            The following line shows how to access a ROS parameter in any subclass
+            of called *param_1*:
 
             >>> self.param.param_1  # doctest: +SKIP
             \'value_1\'
@@ -135,8 +137,7 @@ class NodeBase:
         return get_cached_param(key)
 
     def _set_param(self, key: str, value: Any):
-        """Set ROS parameter.
-        Also the parameter cache is cleared, to prevent incoherence.
+        """Set ROS parameter. Also the parameter cache is cleared, to prevent incoherence.
 
         Arguments:
             key (str): Name of the ROS parameter
@@ -150,8 +151,8 @@ class NodeBase:
         rospy.set_param(key, value)
 
     def run(self, *, function: Callable = None, rate: float = 1):
-        """Helper function, starting the node and shutting it down once ROS signals to.
-        Can only be called if the subclass implements start and stop functions.
+        """Helper function, starting the node and shutting it down once ROS signals to. Can
+        only be called if the subclass implements start and stop functions.
 
         Args:
             rate (float): Rate with which to update active/ not active status of the node
@@ -186,7 +187,8 @@ class ParameterObject:
     """ROS parameter wrapper to recursively get and set parameters.
 
     This class enables to access nested parameters within nodes.
-    For example in any subclass of NodeBase one can call nested parameters (if they are defined!) in the following way:
+    For example in any subclass of NodeBase one can call nested parameters
+    (if they are defined!) in the following way:
 
     >>> self.param.dict_of_parameters.key  # doctest: +SKIP
 
@@ -194,13 +196,14 @@ class ParameterObject:
 
     >>> rospy.get_param(\"~dict_of_parameters/key\")  # doctest: +SKIP
 
-    This is achieved by overriding the __getattr__ and __setattr__ functions and passing calls through to the
+    This is achieved by overriding the __getattr__ and __setattr__ functions
+    and passing calls through to the
 
 
     Arguments:
-        ns (str): Namespace this parameter dictionary operates in
-        set_param_func (Callable[[str,Any], None]): Callable object which gets called when a parameter is set
-        get_param_func(Callable[[str],Any]): Callable object which gets called when a parameter is accessed
+        ns: Namespace this parameter dictionary operates in
+        set_param_func: Callable object which gets called when a parameter is set
+        get_param_func: Callable object which gets called when a parameter is accessed
 
     Attributes:
         _ns (str): Namespace of this object
@@ -220,11 +223,11 @@ class ParameterObject:
         self._get_param = get_param_func
 
     def __getattr__(self, key: str) -> Any:
-        """Retrieving a parameter
+        """Retrieving a parameter.
 
         Returns:
-            Value of the parameter in this namespace with key ``key`` or a ParameterObject in the subnamespace
-            of ``key``.
+            Value of the parameter in this namespace with key ``key`` or a ParameterObject
+            in the subnamespace of ``key``.
 
         Raises:
             KeyError if parameter is not found.

@@ -5,10 +5,9 @@ As any other road sections, line markings can be variied and obstacles created o
 
 from dataclasses import dataclass
 
-from simulation.utils.geometry import Point, Line
-
-from simulation.utils.road.sections.road_section import RoadSection
 import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.geometry import Line, Point
+from simulation.utils.road.sections.road_section import RoadSection
 
 
 @dataclass

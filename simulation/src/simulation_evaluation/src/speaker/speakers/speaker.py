@@ -1,18 +1,16 @@
 """Base class for all other speakers."""
 import bisect
-import itertools
 import functools
-from typing import Callable, List, Any, Iterable, Tuple
+import itertools
+from typing import Any, Callable, Iterable, List, Tuple
 
 from gazebo_simulation.msg import CarState as CarStateMsg
-from simulation_groundtruth.msg import (
-    Section as SectionMsg,
-    Lane as LaneMsg,
-    LabeledPolygon as LabeledPolygonMsg,
-)
 from simulation_evaluation.msg import Speaker as SpeakerMsg
+from simulation_groundtruth.msg import LabeledPolygon as LabeledPolygonMsg
+from simulation_groundtruth.msg import Lane as LaneMsg
+from simulation_groundtruth.msg import Section as SectionMsg
 
-from simulation.utils.geometry import Polygon, Line, Pose, Vector
+from simulation.utils.geometry import Line, Polygon, Pose, Vector
 from simulation.utils.road.sections.line_tuple import LineTuple
 
 
@@ -24,15 +22,15 @@ class Speaker:
     It converts information about the cars state and the predefined groundtruth
     into SpeakerMsg's which serve as inputs for the state machines.
 
-    Information is passed to the speaker by calling the :py:func:`Speaker.listen` function \
+    Information is passed to the speaker by calling the :py:func:`Speaker.listen` function
             with a new CarState msg.
     Output can be retrieved in form of Speaker msgs by calling the .speak function.
 
     Attributes:
         sections (Callable[[], List[SectionMsg]]): List of all sections as SectionMsgs
         get_lanes (Callable[[int], LaneMsg]): Get LaneMsg for a given section
-        get_obstacles (Callable[[int], List[LabeledPolygonMsg]]): Get ObstacleMsg \
-                for a given section
+        get_obstacles (Callable[[int], List[LabeledPolygonMsg]]): Get ObstacleMsg
+            for a given section
         get_intersection (Callable[[int], Any]): Get intersections for a given section
     """
 
@@ -51,8 +49,9 @@ class Speaker:
             section_proxy: Returns all sections when called.
             lane_proxy: Returns a LaneMsg for each section.
             obstacle_proxy: Optional function which returns obstacles in a section.
-            surface_marking_proxy: Optional function which returns surface_markings in a section.
-            intersection_proxy: Optional function which returns an IntersectionMsg \
+            surface_marking_proxy: Optional function which returns surface_markings
+                in a section.
+            intersection_proxy: Optional function which returns an IntersectionMsg
                 for a section. (Only makes sense if the section is an intersection.)
         """
         self.sections = section_proxy().sections

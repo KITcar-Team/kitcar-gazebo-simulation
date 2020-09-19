@@ -2,7 +2,6 @@
 from typing import List
 
 import rospy
-
 from simulation_evaluation.msg import Speaker as SpeakerMsg
 
 from .speaker import Speaker

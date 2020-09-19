@@ -1,14 +1,12 @@
-import rospy
-import numpy as np
 import geometry_msgs.msg
-
+import numpy as np
+import rospy
 from gazebo_simulation.msg import CarState as CarStateMsg
 
-from simulation.utils.ros_base.node_base import NodeBase
-from simulation.utils.geometry import Point, Polygon, Transform
-
-from simulation.src.gazebo_simulation.src.car_model.car_specs import CarSpecs
 from simulation.src.gazebo_simulation.src.car_model.camera_specs import CameraSpecs
+from simulation.src.gazebo_simulation.src.car_model.car_specs import CarSpecs
+from simulation.utils.geometry import Point, Polygon, Transform
+from simulation.utils.ros_base.node_base import NodeBase
 
 
 class CarStateNode(NodeBase):
@@ -18,12 +16,14 @@ class CarStateNode(NodeBase):
         car_frame (shapely.geom.Polygon): Frame of car in vehicle coordinate system
         model_pose_subscriber (rospy.Subscriber): Receive the cars pose
         model_twist_subscriber (rospy.Subscriber): Receive the cars twist
-        get_vehicle_twist (Callable[[],None]: Returns current vehicle twist by calling the service proxy
-        publisher (rospy.publisher): CarStateMsg) publishes real time information about the car
+        get_vehicle_twist (Callable[[],None]: Returns current vehicle twist by calling
+            the service proxy
+        publisher (rospy.publisher): CarStateMsg) publishes real time information about
+            the car
     """
 
     def __init__(self):
-        """ initialize the node"""
+        """initialize the node."""
 
         super(CarStateNode, self).__init__(name="car_state_node")
 
@@ -119,7 +119,8 @@ class CarStateNode(NodeBase):
             return
 
         # Calculate a few points to approximate view frame
-        # Add points on horizon of our camera (at view_distance away from vehicle) /approximates a view cone
+        # Add points on horizon of our camera (at view_distance away from vehicle)
+        # /approximates a view cone
         # Create geom.Polygon from points
         self.view_cone = Polygon(
             [Point(0, 0)]

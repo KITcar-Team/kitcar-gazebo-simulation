@@ -1,13 +1,27 @@
 # See https://pre-commit.com for more information
-    # See https://pre-commit.com/hooks.html for more hooks
-    default_language_version:
-      python: python3.8
-    repos:
-      - repo: https://github.com/ambv/black
-        rev: stable
-        hooks:
-          - id: black
-      - repo: https://github.com/pre-commit/pre-commit-hooks
-        rev: v2.0.0
-        hooks:
-          - id: flake8
+# See https://pre-commit.com/hooks.html for more hooks
+# See https://medium.com/staqu-dev-logs/keeping-python-code-clean-with-pre-commit-hooks-black-flake8-and-isort-cac8b01e0ea1
+default_language_version:
+  python: python3.8
+repos:
+- repo: https://github.com/ambv/black
+  rev: stable
+  hooks:
+    - id: black
+- repo: https://github.com/asottile/seed-isort-config
+  rev: v1.9.3
+  hooks:
+  - id: seed-isort-config
+- repo: https://github.com/pre-commit/mirrors-isort
+  rev: v5.5.2
+  hooks:
+  - id: isort
+- repo: https://github.com/myint/docformatter
+  rev: v1.3.1
+  hooks:
+    - id: docformatter
+      args: [-i, --wrap-summaries, "92", --wrap-descriptions, "92"]
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.3.0
+  hooks:
+    - id: flake8

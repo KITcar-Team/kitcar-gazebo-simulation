@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """Base class State."""
-
-__copyright__ = "KITcar"
 
 
 class State:
@@ -21,7 +18,7 @@ class State:
         """Next state.
 
         Arguments:
-            state_machine (StateMachine): On which state machine the states gets executed
+            state_machine: On which state machine the states gets executed
             input_msg: Integer of message
 
         Returns:

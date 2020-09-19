@@ -1,33 +1,12 @@
 """Class definitions of tags used to define cameras."""
 from dataclasses import dataclass
+
 from simulation.utils.geometry import Vector
 
-from .core import (
-    Attribute,
-    XmlObject,
-    Origin,
-)
-
-from .link import (
-    Box,
-    Material,
-    Visual,
-    Collision,
-    Link,
-    Geometry,
-)
-
-from .gazebo import (
-    Plugin,
-    Gazebo,
-    Sensor,
-)
-
-from .joint import (
-    Parent,
-    Child,
-    Joint,
-)
+from .core import Attribute, Origin, XmlObject
+from .gazebo import Gazebo, Plugin, Sensor
+from .joint import Child, Joint, Parent
+from .link import Box, Collision, Geometry, Link, Material, Visual
 
 
 @dataclass
@@ -130,7 +109,12 @@ class _Camera(XmlObject):
     sensor: CameraSensor
 
     def __init__(
-        self, name: str, origin: Origin, size: Vector, mass: float, chassis_link: Link,
+        self,
+        name: str,
+        origin: Origin,
+        size: Vector,
+        mass: float,
+        chassis_link: Link,
     ):
 
         box = Geometry(Box(size))
