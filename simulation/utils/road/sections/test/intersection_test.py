@@ -1,11 +1,10 @@
-import unittest
 import math
-
-from simulation.utils.geometry import Transform, Point, Line, Vector
+import unittest
 
 import simulation.utils.road.sections.type as road_section_type
-from simulation.utils.road.sections.intersection import Intersection
+from simulation.utils.geometry import Line, Point, Transform, Vector
 from simulation.utils.road.config import Config
+from simulation.utils.road.sections.intersection import Intersection
 
 
 class ModuleTest(unittest.TestCase):

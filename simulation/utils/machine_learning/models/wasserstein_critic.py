@@ -1,13 +1,13 @@
 import functools
-from typing import Optional, List, Tuple
+from typing import List, Optional, Tuple
 
 import torch
 from torch import nn as nn
 from torch.nn import Flatten
 
 from .helper import get_norm_layer
-from .resnet_block import ResnetBlock
 from .init_from_options import InitFromOptions
+from .resnet_block import ResnetBlock
 
 
 class WassersteinCritic(nn.Module, InitFromOptions):

@@ -1,10 +1,11 @@
-from torch import nn as nn, Tensor
+from torch import Tensor
+from torch import nn as nn
 
 from .unet_block import UnetSkipConnectionBlock
 
 
 class UnetGenerator(nn.Module):
-    """Create a Unet-based generator"""
+    """Create a Unet-based generator."""
 
     def __init__(
         self,
@@ -15,14 +16,16 @@ class UnetGenerator(nn.Module):
         norm_layer: nn.Module = nn.BatchNorm2d,
         use_dropout: bool = False,
     ):
-        """Construct a Unet generator
+        """Construct a Unet generator.
 
-        We construct the U-Net from the innermost layer to the outermost layer. It is a recursive process.
+        We construct the U-Net from the innermost layer to the outermost layer.
+        It is a recursive process.
 
         Args:
             input_nc (int): the number of channels in input images
             output_nc (int): the number of channels in output images
-            num_downs (int): the number of downsampling layers in UNet. For example, # if |num_downs| == 7,
+            num_downs (int): the number of downsampling layers in UNet.
+                For example, # if |num_downs| == 7,
                 image of size 128x128 will become of size 1x1 # at the bottleneck
             ngf (int): the number of filters in the last conv layer
             norm_layer (nn.Module): normalization layer

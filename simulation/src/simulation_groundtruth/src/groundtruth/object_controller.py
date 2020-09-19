@@ -1,14 +1,13 @@
-from typing import List, Callable
 from dataclasses import dataclass
+from typing import Callable, List
 
 import rospy
+from gazebo_simulation.msg import CarState as CarStateMsg
 
-from simulation.utils.road.road import Road
-from simulation.utils.road.sections import StaticObstacle
 import simulation.utils.road.renderer.obstacle as render_obstacle
 import simulation.utils.road.renderer.traffic_sign as render_sign
-
-from gazebo_simulation.msg import CarState as CarStateMsg
+from simulation.utils.road.road import Road
+from simulation.utils.road.sections import StaticObstacle
 
 
 @dataclass
@@ -37,7 +36,7 @@ class ObjectController:
     def load(self, model_names: List[str]):
         """Reload all objects."""
         # Update obstacles
-        rospy.loginfo(f"Starting to place obstacles and signs.")
+        rospy.loginfo("Starting to place obstacles and signs.")
         objects_to_remove = [
             model_name
             for model_name in model_names

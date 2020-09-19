@@ -9,7 +9,8 @@ Additionally, the commonly used `xacro <http://wiki.ros.org/xacro>`_ is less pow
 python and, again, another tool.
 
 The basic idea used throughout the package is the inheritance from :py:class:`XmlObject`.
-:py:func:`XmlObject.create_xml` creates a :py:class:`xml.etree.cElementTree.Element` from the class instance.
+:py:func:`XmlObject.create_xml` creates a :py:class:`xml.etree.cElementTree.Element`
+from the class instance.
 It does so by converting all instance attributes into xml attributes and sub elements.
 If a class attribute is an instance of a subclass of :py:class:`XmlObject`,
 the objects :py:func:`XmlObject.create_xml` is called recursively.
@@ -19,50 +20,35 @@ The :py:class:`XmlObject` in combination with
 allows to create lightweight classes that define urdf components when converted to xml.
 """
 
-from .core import Attribute, XmlObject, Origin, Axis  # noqa: 402, 401
-
-from .link import (
-    Color,
-    Inertia,
-    Inertial,
-    Box,
-    Sphere,
-    Cylinder,
-    Geometry,
-    Mesh,
-    Material,
-    Visual,
-    Collision,
-    Link,
-)  # noqa: 402, 401
-
-from .joint import (
-    JointDynamics,
-    JointLimit,
-    Parent,
-    Child,
-    Joint,
-)  # noqa: 402, 401
-
-from .gazebo import (
-    Plugin,
-    Gazebo,
-    Sensor,
-)  # noqa: 402, 401
-
-
-from .camera import (
-    MonoCamera,
-    DepthCamera,
+from .camera import (  # noqa: 402, 401
     CameraClip,
     CameraDefinition,
     CameraImage,
     CameraPlugin,
-    DepthCameraPlugin,
-    CameraSensor,
     CameraProperties,
+    CameraSensor,
+    DepthCamera,
+    DepthCameraPlugin,
     DepthCameraProperties,
-)  # noqa: 402, 401
+    MonoCamera,
+)
+from .core import Attribute, Axis, Origin, XmlObject  # noqa: 402, 401
+from .gazebo import Gazebo, Plugin, Sensor  # noqa: 402, 401
+from .joint import Child, Joint, JointDynamics, JointLimit, Parent  # noqa: 402, 401
+from .link import (  # noqa: 402, 401
+    Box,
+    Collision,
+    Color,
+    Cylinder,
+    Geometry,
+    Inertia,
+    Inertial,
+    Link,
+    Material,
+    Mesh,
+    Sphere,
+    Visual,
+)
 
 __all__ = [
     "Attribute",

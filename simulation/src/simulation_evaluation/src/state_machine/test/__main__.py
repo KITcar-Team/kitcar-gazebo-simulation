@@ -3,14 +3,14 @@
 Whenever this module is executed, all of the tests included below are run.
 """
 
-import simulation.src.simulation_evaluation.src.state_machine.test.test_lane_state_machine as lane
-import simulation.src.simulation_evaluation.src.state_machine.test.test_overtaking_state_machine as overtaking
-import simulation.src.simulation_evaluation.src.state_machine.test.test_parking_state_machine as parking
-import simulation.src.simulation_evaluation.src.state_machine.test.test_priority_state_machine as priority
-import simulation.src.simulation_evaluation.src.state_machine.test.test_progress_state_machine as progress
-
 # Create test suite
 import unittest
+
+from . import test_lane_state_machine as lane
+from . import test_overtaking_state_machine as overtaking
+from . import test_parking_state_machine as parking
+from . import test_priority_state_machine as priority
+from . import test_progress_state_machine as progress
 
 suite = unittest.TestSuite()
 

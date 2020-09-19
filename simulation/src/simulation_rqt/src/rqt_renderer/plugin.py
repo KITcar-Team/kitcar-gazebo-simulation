@@ -1,17 +1,13 @@
 import os
 
-import yaml
-import rospy
 import rospkg
-
+import rospy
+import yaml
 from python_qt_binding import loadUi
-
-from qt_gui.plugin import Plugin
 from python_qt_binding.QtWidgets import QPushButton, QWidget
-
-
-from std_msgs.msg import Empty as EmptyMsg
+from qt_gui.plugin import Plugin
 from simulation_groundtruth.msg import GroundtruthStatus
+from std_msgs.msg import Empty as EmptyMsg
 
 
 class SimulationRendererPlugin(Plugin):

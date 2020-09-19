@@ -24,7 +24,7 @@ def tensor2im(input_image: Tensor, img_type=np.uint8, to_rgb: bool = True) -> np
 
 
 def save_image(image_numpy: np.ndarray, image_path: str, aspect_ratio: float = 1.0) -> None:
-    """Save a numpy image to the disk
+    """Save a numpy image to the disk.
 
     Args:
         image_numpy (np.ndarray): input numpy array
@@ -54,7 +54,8 @@ def save_images(
 
     Args:
         destination: the folder to save the images to
-        visuals (dict): an ordered dictionary that stores (name, images (either tensor or numpy) ) pairs
+        visuals (dict): an ordered dictionary that stores
+            (name, images (either tensor or numpy) ) pairs
         aspect_ratio (float): the aspect ratio of saved images
         post_fix (str): The string that extends the prefix_path
     """

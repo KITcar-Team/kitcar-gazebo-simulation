@@ -1,21 +1,18 @@
-from typing import List, Dict
 import functools
-from dataclasses import dataclass
-import random
 import math
+import random
+from dataclasses import dataclass
+from typing import Dict, List
 
+import geometry_msgs.msg
 import rospy
 import std_msgs
-import geometry_msgs.msg
+from simulation_brain_link.msg import State as StateEstimationMsg
+from simulation_groundtruth.srv import LaneSrv, SectionSrv
 from tf2_msgs.msg import TFMessage
 
+from simulation.utils.geometry import Line, Pose, Transform, Vector
 from simulation.utils.ros_base.node_base import NodeBase
-from simulation.utils.geometry import Vector, Transform, Line, Pose
-from simulation_brain_link.msg import State as StateEstimationMsg
-from simulation_groundtruth.srv import (
-    SectionSrv,
-    LaneSrv,
-)
 
 
 @dataclass
@@ -55,7 +52,8 @@ class AutomaticDriveNode(NodeBase):
         """Start node."""
         self.pub_tf = rospy.Publisher(
             "/tf", TFMessage, queue_size=100
-        )  # See: https://github.com/ros/geometry2/blob/melodic-devel/tf2_ros/src/tf2_ros/transform_broadcaster.py
+        )  # See: https://github.com/ros/geometry2/blob/melodic-devel
+        # /tf2_ros/src/tf2_ros/transform_broadcaster.py
 
         self.state_estimation_publisher = rospy.Publisher(
             self.param.topics.vehicle_simulation_link.state_estimation,
@@ -137,7 +135,8 @@ class AutomaticDriveNode(NodeBase):
             road_width = 0.4
             while x < length:
                 offset = max(
-                    min((0.5 - random.random()) * 2 * road_width, road_width), -road_width,
+                    min((0.5 - random.random()) * 2 * road_width, road_width),
+                    -road_width,
                 )
 
                 p = self.middle_line.interpolate_pose(x)
@@ -192,8 +191,8 @@ class AutomaticDriveNode(NodeBase):
         # Calculate position, speed, and yaw
         position = self.driving_line.interpolate(self._driving_state.distance_driven)
 
-        # Depending on the align_with_middle_line parameter, the car is always parallel to the
-        # middle line or to the driving line.
+        # Depending on the align_with_middle_line parameter, the car is always parallel
+        # to the middle line or to the driving line.
         alignment_line = (
             self.middle_line if self.param.align_with_middle_line else self.driving_line
         )

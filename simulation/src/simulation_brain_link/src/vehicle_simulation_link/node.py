@@ -1,28 +1,23 @@
-"""VehicleSimulationLinkNode"""
+"""VehicleSimulationLinkNode."""
 
 from contextlib import suppress
 
-from pyquaternion import Quaternion
-
-import rospy
 import geometry_msgs.msg
-from tf2_msgs.msg import TFMessage
+import rospy
 import std_msgs.msg
-
-from simulation.utils.ros_base.node_base import NodeBase
-from simulation.utils.geometry import Transform, Vector
-
-# Messages
+from gazebo_simulation.msg import SetModelPose as SetModelPoseMsg
+from gazebo_simulation.msg import SetModelTwist as SetModelTwistMsg
+from pyquaternion import Quaternion
 from simulation_brain_link.msg import State as StateEstimationMsg
-from gazebo_simulation.msg import (
-    SetModelTwist as SetModelTwistMsg,
-    SetModelPose as SetModelPoseMsg,
-)
+from tf2_msgs.msg import TFMessage
+
+from simulation.utils.geometry import Transform, Vector
+from simulation.utils.ros_base.node_base import NodeBase
 
 
 class VehicleSimulationLinkNode(NodeBase):
-    """ROS node to translate state_estimation messages into movement
-    of the vehicle in Gazebo and provide a simulation to world transformation.
+    """ROS node to translate state_estimation messages into movement of the vehicle in
+    Gazebo and provide a simulation to world transformation.
 
     Whenever the pose of the vehicle is updated and a new message
     is received the updated twist is calculated and published.
@@ -60,7 +55,8 @@ class VehicleSimulationLinkNode(NodeBase):
         """Start node."""
         self.pub_tf = rospy.Publisher(
             "/tf", TFMessage, queue_size=100
-        )  # See: https://github.com/ros/geometry2/blob/melodic-devel/tf2_ros/src/tf2_ros/transform_broadcaster.py
+        )  # See: https://github.com/ros/geometry2/blob/melodic-devel/
+        # tf2_ros/src/tf2_ros/transform_broadcaster.py
         self.sub_tf = rospy.Subscriber("/tf", TFMessage, self.receive_tf)
 
         self.set_model_twist_publisher = rospy.Publisher(

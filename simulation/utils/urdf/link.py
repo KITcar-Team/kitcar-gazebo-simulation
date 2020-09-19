@@ -18,13 +18,13 @@ Example:
     ...  # Calculate inertial tensor from simulation.utils.geometry and mass
 """
 
-from dataclasses import dataclass, field
 import xml.etree.cElementTree as cET
+from dataclasses import dataclass, field
 from typing import Tuple
 
 from simulation.utils.geometry import Vector
 
-from .core import XmlObject, Attribute, Origin
+from .core import Attribute, Origin, XmlObject
 
 
 def _origin_default_list():

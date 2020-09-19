@@ -1,7 +1,7 @@
-from typing import Dict
+import math
 from dataclasses import dataclass, field
 from functools import partial
-import math
+from typing import Dict
 
 import numpy as np
 import yaml
@@ -110,7 +110,8 @@ class CameraSpecs(Specs):
         self.optical_center_x = self.output_size["width"] - self.capture_size["width"] / 2
         self.optical_center_y = self.output_size["height"] - self.capture_size["height"] / 2
 
-        # By creating a camera with horizontal_fov, the focal_length_x is implicitly used for y as well!
+        # By creating a camera with horizontal_fov,
+        # the focal_length_x is implicitly used for y as well!
         self.focal_length_y = self.focal_length_x
 
     def save(self, file_path: str, simplify=True, remove_clip=True, remove_sizes=True):

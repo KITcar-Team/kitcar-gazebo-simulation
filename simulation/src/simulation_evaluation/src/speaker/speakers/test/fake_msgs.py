@@ -1,13 +1,13 @@
-from typing import List
-import math
 import itertools
+import math
 import random
+from typing import List
 
 import simulation_groundtruth.msg as groundtruth_msgs
 import simulation_groundtruth.srv as groundtruth_srvs
 
+from simulation.utils.geometry import Line, Point, Polygon, Vector
 from simulation.utils.road.sections.line_tuple import LineTuple
-from simulation.utils.geometry import Line, Vector, Polygon, Point
 
 
 def create_points(
@@ -74,7 +74,8 @@ def section_srv(section_count: int = 4, section_types: List[int] = None):
 def lane_msgs(
     lines: List[LineTuple] = [], id: int = 0
 ) -> groundtruth_srvs.LaneSrvResponse:  # Don't care about the default value list
-    """Imitate the response of the groundtruth lane service by returning what's in lines at idx id."""
+    """Imitate the response of the groundtruth lane service by returning what's in lines at
+    idx id."""
     lane_msg = groundtruth_msgs.Lane()
 
     lane_msg.left_line = lines[id].left.to_geometry_msgs()

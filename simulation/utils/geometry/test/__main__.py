@@ -1,17 +1,19 @@
 """Definition of the geometry module tests.
 
-Whenever this module is executed, all of the tests included below are run."""
+Whenever this module is executed, all of the tests included below are run.
+"""
 
-import simulation.utils.geometry.test.test_vector as vector
-import simulation.utils.geometry.test.test_point as point
-import simulation.utils.geometry.test.test_pose as pose
-import simulation.utils.geometry.test.test_transform as transform
-import simulation.utils.geometry.test.test_line_and_polygon as line_and_polygon
-import simulation.utils.geometry.test.test_frame as frame
+import sys
 
 # Create test suite
 import unittest
-import sys
+
+import simulation.utils.geometry.test.test_frame as frame
+import simulation.utils.geometry.test.test_line_and_polygon as line_and_polygon
+import simulation.utils.geometry.test.test_point as point
+import simulation.utils.geometry.test.test_pose as pose
+import simulation.utils.geometry.test.test_transform as transform
+import simulation.utils.geometry.test.test_vector as vector
 
 suite = unittest.TestSuite()
 

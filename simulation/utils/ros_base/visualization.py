@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 """Utility functions for visualizing ROS messages in rviz."""
 
-import rospy
 import math
+from typing import List
 
+import rospy
 from visualization_msgs.msg import Marker
 
 from simulation.utils.geometry.point import Point
-
-from typing import List
 
 
 def get_marker_for_points(
@@ -22,16 +21,17 @@ def get_marker_for_points(
     ns: str = None,
     duration: float = 1
 ) -> Marker:
-    """ Rviz marker message from a list of points.
+    """Rviz marker message from a list of points.
 
     Arguments:
-        points (list(Point)): Points to visualize
-        frame_id (str): Name of the points' coordinate frame (e.g. world, vehicle, simulation)
-        type (int): Rviz marker type
-        rgba (list(float)): Color of the marker
-        id (int): Marker id
-        ns (str): Rviz namespace
-        duration (float): Marker will be shown for this long
+        points: Points to visualize
+        frame_id: Name of the points' coordinate frame
+            (e.g. world, vehicle, simulation)
+        type: Rviz marker type
+        rgba: Color of the marker
+        id: Marker id
+        ns: Rviz namespace
+        duration: Marker will be shown for this long
 
     Returns:
         Marker msg that rviz can display

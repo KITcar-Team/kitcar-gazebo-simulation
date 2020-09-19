@@ -1,19 +1,16 @@
-from typing import Tuple, List
 from collections import namedtuple
-
-from simulation_groundtruth.msg import (
-    Section as SectionMsg,
-    Line as LineMsg,
-    Lane as LaneMsg,
-    Parking as ParkingMsg,
-    LabeledPolygon as LabeledPolygonMsg,
-)
-from simulation.utils.geometry import Line
-
-from simulation.utils.road.sections import Intersection
-from simulation.utils.road.road import Road
-
 from dataclasses import dataclass
+from typing import List, Tuple
+
+from simulation_groundtruth.msg import LabeledPolygon as LabeledPolygonMsg
+from simulation_groundtruth.msg import Lane as LaneMsg
+from simulation_groundtruth.msg import Line as LineMsg
+from simulation_groundtruth.msg import Parking as ParkingMsg
+from simulation_groundtruth.msg import Section as SectionMsg
+
+from simulation.utils.geometry import Line
+from simulation.utils.road.road import Road
+from simulation.utils.road.sections import Intersection
 
 
 def _lane_msg_from_lines(left: Line, middle: Line, right: Line) -> LaneMsg:
@@ -26,7 +23,8 @@ def _lane_msg_from_lines(left: Line, middle: Line, right: Line) -> LaneMsg:
 
 
 IntersectionTuple = namedtuple(
-    "IntersectionTuple", ["turn", "rule", "south", "west", "east", "north"],
+    "IntersectionTuple",
+    ["turn", "rule", "south", "west", "east", "north"],
 )
 """Container for information about an intersection."""
 

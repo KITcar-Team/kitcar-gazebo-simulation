@@ -1,23 +1,23 @@
 import errno
-from dataclasses import dataclass, field
-from typing import Tuple, Dict
-import os
 import hashlib
+import os
+from dataclasses import dataclass, field
+from typing import Dict, Tuple
 
 import cairo
 
-from simulation.utils.geometry import Vector, Transform, Polygon
-import simulation.utils.road.renderer.utils as utils
-from simulation.utils.road.sections.road_section import RoadSection
 import simulation.utils.road.renderer.surface_markings as render_surface_markings
+import simulation.utils.road.renderer.utils as utils
+from simulation.utils.geometry import Polygon, Transform, Vector
+from simulation.utils.road.sections.road_section import RoadSection
 
 
 @dataclass
 class Tile:
     """Piece of the groundplane with lines used to display road lines on the ground.
 
-    The groundplane in simulation is made out of many rectangular tiles.
-    Each tile displays an image on the ground.
+    The groundplane in simulation is made out of many rectangular tiles. Each tile displays
+    an image on the ground.
     """
 
     COUNTER = 0
@@ -138,7 +138,8 @@ class Tile:
             <enable_wind>0</enable_wind>
             <kinematic>0</kinematic>
           </link>
-          <pose frame=''>{self.transform.translation.x} {self.transform.translation.y} 0 0 -0 0</pose>
+          <pose frame=''>{self.transform.translation.x} {self.transform.translation.y}
+            0 0 -0 0</pose>
         </model>
         """
 

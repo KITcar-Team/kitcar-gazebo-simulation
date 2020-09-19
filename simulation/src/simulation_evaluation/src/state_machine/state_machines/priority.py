@@ -1,14 +1,11 @@
 """PriorityStateMachine keeps track of stoping or halting in front of stop or halt lines.
 
-See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.priority` for implementation details of the
-states used in this StateMachine.
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.states.priority` for
+implementation details of the states used in this StateMachine.
 """
 
 from typing import Callable
 
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.state_machine import (
-    StateMachine,
-)
 from simulation.src.simulation_evaluation.src.state_machine.states.priority import (
     FailureInStopZone,
     InHaltZone,
@@ -16,6 +13,8 @@ from simulation.src.simulation_evaluation.src.state_machine.states.priority impo
     Off,
     SuccessfullyStopped,
 )
+
+from .state_machine import StateMachine
 
 __copyright__ = "KITcar"
 

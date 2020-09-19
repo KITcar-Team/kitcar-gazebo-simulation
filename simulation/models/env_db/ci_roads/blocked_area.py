@@ -1,5 +1,5 @@
 from simulation.utils.road.road import Road
-from simulation.utils.road.sections import StraightRoad, BlockedArea
+from simulation.utils.road.sections import BlockedArea, StraightRoad
 
 road = Road()
 road.append(StraightRoad(length=3))

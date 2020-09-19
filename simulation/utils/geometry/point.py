@@ -1,6 +1,4 @@
-"""
-Basic point class which is compatible with all needed formats
-"""
+"""Basic point class which is compatible with all needed formats."""
 
 __copyright__ = "KITcar"
 
@@ -24,14 +22,14 @@ class Point(Vector):
     the interpretation of a point in the mathematical sense.
 
     Uses vector's initializer.
-
     """
 
     def to_geometry_msg(self) -> geometry_msgs.Point:
         """To ROS geometry_msg.
 
         Returns:
-            This point as a geometry_msgs/Point """
+            This point as a geometry_msgs/Point
+        """
         return geometry_msgs.Point32(x=self.x, y=self.y, z=self.z)
 
     def rotated(self, *args, **kwargs):
@@ -51,7 +49,10 @@ class Point(Vector):
 
     @validate_and_maintain_frames
     def __rmul__(self, obj: Transform):
-        """Right multiplication of a point. Only defined for transformations."""
+        """Right multiplication of a point.
+
+        Only defined for transformations.
+        """
         if type(obj) == Transform:
             # Transform * self
             return self.__class__(obj * Vector(self))

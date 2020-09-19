@@ -5,7 +5,8 @@ from torch import nn as nn
 
 
 class UnetSkipConnectionBlock(nn.Module):
-    """Defines the Unet submodule with skip connection. X
+    """Defines the Unet submodule with skip connection. X.
+
     -------------------identity----------------------
     |-- downsampling -- |submodule| -- upsampling --|
     """
@@ -78,7 +79,7 @@ class UnetSkipConnectionBlock(nn.Module):
         self.model = nn.Sequential(*model)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward with skip connection, if this is not the outermost
+        """Forward with skip connection, if this is not the outermost.
 
         Args:
             x (torch.Tensor): the input tensor

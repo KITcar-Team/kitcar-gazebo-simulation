@@ -1,28 +1,24 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""GazeboRateControlNode: Adjusts Gazebos update rate to guarantee sensor updates with desired frequency."""
+"""Adjusts Gazebos update rate to guarantee sensor updates with desired frequency."""
 
-import rospy
-
-from gazebo_msgs.srv import (
-    SetPhysicsPropertiesRequest,
-    GetPhysicsPropertiesRequest,
-    SetPhysicsProperties,
-    GetPhysicsProperties,
-)
 import time
 
+import rospy
 import rostopic
+from gazebo_msgs.srv import (
+    GetPhysicsProperties,
+    GetPhysicsPropertiesRequest,
+    SetPhysicsProperties,
+    SetPhysicsPropertiesRequest,
+)
 
 from simulation.utils.ros_base.node_base import NodeBase
 
 
 class GazeboRateControlNode(NodeBase):
-    """Control gazebos update rate to meet desired sensor update rates.
-    """
+    """Control gazebos update rate to meet desired sensor update rates."""
 
     def __init__(self):
-        """Initialize the node"""
+        """Initialize the node."""
 
         super().__init__(name="gazebo_rate_control_node")
 
@@ -55,7 +51,10 @@ class GazeboRateControlNode(NodeBase):
         for target in self.param.targets:
             topic = target["topic"]
             self.subscribers[topic] = rospy.Subscriber(
-                topic, rospy.AnyMsg, self.rater.callback_hz, callback_args=topic,
+                topic,
+                rospy.AnyMsg,
+                self.rater.callback_hz,
+                callback_args=topic,
             )
             # Wait for atleast one message on every target topic
             rospy.wait_for_message(topic, rospy.AnyMsg)
@@ -72,7 +71,10 @@ class GazeboRateControlNode(NodeBase):
         super().stop()
 
     def _calculate_update_rate(
-        self, update_rate: float, frequency: float, desired_frequency: float,
+        self,
+        update_rate: float,
+        frequency: float,
+        desired_frequency: float,
     ) -> float:
         """Calculate new update rate.
 
@@ -118,7 +120,8 @@ class GazeboRateControlNode(NodeBase):
         self.set_physics(new_properties)
 
     def update(self):
-        """Adjust Gazebos update rate to meet desired output frequency of the target topic."""
+        """Adjust Gazebos update rate to meet desired output frequency of the target
+        topic."""
         old_update_rate = self.get_physics(GetPhysicsPropertiesRequest()).max_update_rate
 
         # Calculate new update rate considering all targets
@@ -134,7 +137,9 @@ class GazeboRateControlNode(NodeBase):
             self._last_target_frequencies[topic] = frequency
 
             rate = self._calculate_update_rate(
-                old_update_rate, frequency=frequency, desired_frequency=desired_frequency,
+                old_update_rate,
+                frequency=frequency,
+                desired_frequency=desired_frequency,
             )
             if rate is not None:
                 rospy.logdebug(

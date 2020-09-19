@@ -5,7 +5,7 @@ Examples are traffic signs, obstacles or surface markings (e.g. turn arrow on th
 
 from dataclasses import dataclass
 
-from simulation.utils.geometry import Polygon, Point, Transform, Vector, Line
+from simulation.utils.geometry import Line, Point, Polygon, Transform, Vector
 
 
 @dataclass
@@ -30,7 +30,8 @@ class RoadElement:
             >>> from simulation.utils.geometry import Line, Point, Transform
             >>> from simulation.utils.road.sections.road_element import RoadElementRect
             >>> line = Line([Point(0, 0), Point(0, 10)])  # y axis
-            >>> normalized_el = RoadElementRect(center=Point(1, 1))  # normalize_x is True by default
+            >>> normalized_el = RoadElementRect(center=Point(1, 1))
+            ... # normalize_x is True by default
             >>> normalized_el.set_transform(line)
             >>> normalized_el.transform
             Transform(translation=Vector(0.0, 1.0, 0.0),\

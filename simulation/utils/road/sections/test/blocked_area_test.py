@@ -1,12 +1,10 @@
-import unittest
 import math
+import unittest
 
-from simulation.utils.geometry import Point, Polygon, Transform
-
-from simulation.utils.road.sections.blocked_area import BlockedArea
 import simulation.utils.road.sections.type as road_section_type
-
+from simulation.utils.geometry import Point, Polygon, Transform
 from simulation.utils.road.config import Config
+from simulation.utils.road.sections.blocked_area import BlockedArea
 
 
 class ModuleTest(unittest.TestCase):

@@ -1,12 +1,11 @@
-""" ZebraCrossing."""
+"""ZebraCrossing."""
 
 from dataclasses import dataclass
 
+import simulation.utils.road.sections.type as road_section_type
 from simulation.utils.geometry import Point, Polygon
-
 from simulation.utils.road.config import Config
 from simulation.utils.road.sections import StraightRoad, SurfaceMarkingRect
-import simulation.utils.road.sections.type as road_section_type
 
 
 @dataclass

@@ -1,17 +1,15 @@
-from simulation.utils.geometry import Line, Polygon, Transform, Point
+from unittest.mock import Mock
 
+from simulation_groundtruth.msg import Parking as ParkingMsg
+from simulation_groundtruth.srv import IntersectionSrvResponse
+
+import simulation.utils.road.sections.type as road_section_type
 from simulation.src.simulation_groundtruth.src.groundtruth.node import GroundtruthNode
 from simulation.src.simulation_groundtruth.src.groundtruth.test import (
     road_section_mocks as section_mocks,
 )
-
-import simulation.utils.road.sections.type as road_section_type
+from simulation.utils.geometry import Line, Point, Polygon, Transform
 from simulation.utils.road.sections.line_tuple import LineTuple
-
-from simulation_groundtruth.srv import IntersectionSrvResponse
-from simulation_groundtruth.msg import Parking as ParkingMsg
-
-from unittest.mock import Mock
 
 PKG = "simulation_groundtruth"
 
@@ -204,9 +202,8 @@ def create_intersection(
 class GroundtruthMockNode(GroundtruthNode):
     """Subclass of GroundtruthNode which loads mock road sections for testing.
 
-    The parameter *road* can be used to specify which road should be created.
-    All options are explained in the parameter file.
-
+    The parameter *road* can be used to specify which road should be created. All options
+    are explained in the parameter file.
     """
 
     def _load_road(self):

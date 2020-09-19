@@ -1,20 +1,16 @@
 from typing import Tuple
 
 import rospy
+from simulation_evaluation.msg import Broadcast as BroadcastMsg
+from simulation_evaluation.msg import Referee as RefereeMsg
+from simulation_evaluation.msg import State as StateMsg
 from std_msgs.msg import Bool as BoolMsg
-
-from simulation.utils.ros_base.node_base import NodeBase
-
-from simulation_evaluation.msg import (
-    State as StateMsg,
-    Broadcast as BroadcastMsg,
-    Referee as RefereeMsg,
-)
 
 from simulation.src.simulation_evaluation.src.referee.referee import (
     Referee,
     StateMachineConnector,
 )
+from simulation.utils.ros_base.node_base import NodeBase
 
 
 class RefereeNode(NodeBase):
@@ -116,7 +112,10 @@ class RefereeNode(NodeBase):
         """Update referee output with new broadcast msg."""
 
         # Update referee with current states
-        output = self.referee.update(rospy.Time.now().to_sec(), broadcast.distance,)
+        output = self.referee.update(
+            rospy.Time.now().to_sec(),
+            broadcast.distance,
+        )
 
         if output:
             rospy.logdebug(output)

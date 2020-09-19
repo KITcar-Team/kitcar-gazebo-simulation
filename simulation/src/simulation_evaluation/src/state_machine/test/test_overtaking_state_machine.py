@@ -3,11 +3,10 @@
 import unittest
 
 from simulation_evaluation.msg import Speaker as SpeakerMsg
-from simulation.src.simulation_evaluation.src.state_machine.state_machines.overtaking import (
-    OvertakingStateMachine,
-)
+
 from simulation.src.simulation_evaluation.src.state_machine.test.test import Test
 
+from ..state_machines.overtaking import OvertakingStateMachine
 
 __copyright__ = "KITcar"
 
@@ -37,7 +36,8 @@ class ModuleTest(Test):
         )
 
     def test_input_mutliple_times(self):
-        """Test if inputting speaker msgs multiple times changes anything (which it shouldn't)."""
+        """Test if inputting speaker msgs multiple times changes anything (which it
+        shouldn't)."""
         inputs = [
             SpeakerMsg.RIGHT_LANE,
             SpeakerMsg.RIGHT_LANE,
@@ -68,7 +68,8 @@ class ModuleTest(Test):
         )
 
     def test_unrelated_msgs(self):
-        """Test if inputting unrelated speaker msgs changes anything (which it shouldn't)."""
+        """Test if inputting unrelated speaker msgs changes anything (which it
+        shouldn't)."""
         inputs = [
             SpeakerMsg.RIGHT_LANE,
             SpeakerMsg.SPEED_0,
@@ -99,7 +100,8 @@ class ModuleTest(Test):
         )
 
     def test_left_side(self):
-        """Test if state machine reacts as expected if car is still on left side after overtaking zone ends."""
+        """Test if state machine reacts as expected if car is still on left side after
+        overtaking zone ends."""
         inputs = [
             SpeakerMsg.OVERTAKING_ZONE,
             SpeakerMsg.LEFT_LANE,
