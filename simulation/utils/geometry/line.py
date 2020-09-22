@@ -151,7 +151,14 @@ class Line(shapely.geometry.linestring.LineString):
         assert (
             side == "right" or side == "left"
         ), "Parallel offset is only possible to the right or left!"
-        coords = super().parallel_offset(offset, side).coords
+
+        offset_line = super().parallel_offset(offset, side)
+        try:
+            coords = offset_line.coords
+        except NotImplementedError:
+            # If offset_line is a multi part geometry!
+            coords = sum([list(line.coords) for line in offset_line], [])
+
         if side == "right":
             # Because shapely orders right hand offset lines in reverse
             coords = reversed(coords)
