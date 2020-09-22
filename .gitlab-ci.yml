@@ -56,6 +56,7 @@ test-python-packages:
     - python3 simulation/utils/urdf/test/test_core.py
 
 test-machine-learning-package:
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
   stage: test
   variables:
     INIT_INPUT: '1\nyy'
@@ -128,6 +129,7 @@ test-drive-evaluation:
     - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/blocked_area automatic_drive:=true expected_result_state:=3
 
 test-cyclegan:
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
   stage: test
   variables:
     INIT_INPUT: '1\nyy'
@@ -156,6 +158,7 @@ test-cyclegan:
     - dvc push
 
 test-documentation:
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
   stage: test
   variables:
     INIT_INPUT: '1\nyy'
@@ -171,6 +174,7 @@ test-documentation:
 # Build the sphinx documentation
 # If this is the master branch, the website deployer will also update doc.kitcar-team.de!
 build-documentation:
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
   stage: deploy
   variables:
     INIT_INPUT: '1\nyy'
@@ -185,6 +189,7 @@ build-documentation:
     expire_in: 2 day
 
 cml-cyclegan:
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
   stage: deploy
   image: dvcorg/cml-py3:latest
   only:
@@ -227,11 +232,15 @@ cml-cyclegan:
    - |
       if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
         export TAG_CI_IMAGE=focal
+        export TAG_CI_IMAGE_DOCS=docs
+        export TAG_CI_IMAGE_ML=machine_learning
         export TAG_DEFAULT_IMAGE=focal
         export TAG_DEFAULT_IMAGE_CI=ci
         export TAG_KITCAR_ROS_IMAGE=focal
       else
         export TAG_CI_IMAGE=focal_${CI_COMMIT_REF_NAME}
+        export TAG_CI_IMAGE_DOCS=docs_${CI_COMMIT_REF_NAME}
+        export TAG_CI_IMAGE_ML=machine_learning_${CI_COMMIT_REF_NAME}
         export TAG_DEFAULT_IMAGE=focal_${CI_COMMIT_REF_NAME}
         export TAG_DEFAULT_IMAGE_CI=ci_${CI_COMMIT_REF_NAME}
         export TAG_KITCAR_ROS_IMAGE=focal_${CI_COMMIT_REF_NAME}
@@ -244,6 +253,10 @@ cml-cyclegan:
     - cd simulation/docker/ci
     - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE
     - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE
+    - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE_DOCS
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_DOCS
+    - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE_ML
+    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_ML
     # Test building the default image
     - cd ../default
     - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE_CI $KITCAR_REPO_PATH
