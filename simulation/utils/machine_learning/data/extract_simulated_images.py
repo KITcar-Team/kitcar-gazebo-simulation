@@ -42,6 +42,9 @@ if __name__ == "__main__":
     parser.add_argument("--output_dir", help="Directory for resulting images.")
     parser.add_argument("--image_topic", help="Topic of the image to be extracted.")
     parser.add_argument(
+        "--randomize_path", help="Drive randomly on the road.", default=True
+    )
+    parser.add_argument(
         "--seed", help="Seed(s) passed when generating the road.", default=[None], nargs="+"
     )
     parser.add_argument("--max_duration", help="Maximum recording time.", default=120)
