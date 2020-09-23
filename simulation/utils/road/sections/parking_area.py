@@ -107,6 +107,11 @@ class _ParkingLot:
     LEFT_SIDE = "left"
     """Possible value of :attr:`side`. Parking lot is on the right side of the road."""
 
+    DEFAULT_LEFT_DEPTH = 0.5
+    """Default value for the depth of parking spots on the left side."""
+    DEFAULT_RIGHT_DEPTH = 0.3
+    """Default value for the depth of parking spots on the right side."""
+
     start: float = 0
     """Start of the parking lot along the middle line relative to the parking area."""
     spots: List[ParkingSpot] = field(default_factory=list)
@@ -115,8 +120,12 @@ class _ParkingLot:
     """Side of the road."""
     opening_angle: float = math.radians(60)
     """Opening angle of parking lot."""
-    depth: float = 0.4
-    """Depth of parking spots within this lot."""
+    depth: float = None
+    """Depth of parking spots within this lot.
+
+    If no other value is provided, the default depth of parking lots is 0.5m on the left
+    side and 0.3m on the right side.
+    """
     transform: Transform = None
     """Transform to origin of the parking lot.
 
@@ -304,6 +313,8 @@ class ParkingArea(_ParkingArea):
         for lot in self._left_lots:
             lot.transform = self.transform
             lot._side = ParkingLot.LEFT_SIDE
+            if lot.depth is None:
+                lot.depth = ParkingLot.DEFAULT_LEFT_DEPTH
         return self._left_lots
 
     @left_lots.setter
@@ -316,6 +327,8 @@ class ParkingArea(_ParkingArea):
         for lot in self._right_lots:
             lot.transform = self.transform
             lot._side = ParkingLot.RIGHT_SIDE
+            if lot.depth is None:
+                lot.depth = ParkingLot.DEFAULT_RIGHT_DEPTH
         return self._right_lots
 
     @right_lots.setter
