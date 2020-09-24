@@ -38,6 +38,20 @@ stages:
     - results/dr_drift_256/fake_b.mp4
     - results/dr_drift_256/real_a.mp4
     - results/dr_drift_256/stacked.mp4
+  test_discriminators_dr_drift_256:
+    cmd: python3 test_discriminators.py
+    deps:
+      - ./../../../../data/real_images/maschinen_halle_parking
+      - ./../../../../data/simulated_images/complex_road
+      - checkpoints/dr_drift_256/latest_net_g_a.pth
+      - checkpoints/dr_drift_256/latest_net_g_b.pth
+      - checkpoints/dr_drift_256/latest_net_d_a.pth
+      - checkpoints/dr_drift_256/latest_net_d_b.pth
+      - test_discriminators.py
+      - configs/base_options.py
+      - configs/test_options.py
+    outs:
+      - results/dr_drift_256/discriminator_losses.txt
   stacked_gif_dr_drift_256:
     cmd: python3 ../data/video_to_gif.py --input_file results/dr_drift_256/stacked.mp4
       --output_file results/dr_drift_256/stacked.gif --width 400 --length 10
