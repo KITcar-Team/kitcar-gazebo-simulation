@@ -11,7 +11,7 @@ create_simulated_images:
     random_roads/
   deps:
   - path: ../../simulation/models/env_db/ci_roads/random_road.py
-    md5: 7c2367a61bd6b9673df792b3f6465ab0
+    md5: 67acd0a6fe3c2fd3404155bf02dda0db
   - path: ../../simulation/models/meshes
     md5: 497334a736344f90dee99455cf9eb708.dir
   outs:
