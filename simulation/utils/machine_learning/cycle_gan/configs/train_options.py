@@ -50,8 +50,6 @@ class TrainOptions(BaseOptions):
     """Number of epochs to linearly decay learning rate to zero"""
     no_flip: bool = False
     """Flip 50% of all training images vertically"""
-    use_sigmoid: bool = True
-    """Use sigmoid activation at end of discriminator"""
     continue_train: bool = False
     """Load checkpoints or start from scratch"""
 

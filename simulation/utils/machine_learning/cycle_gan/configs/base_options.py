@@ -78,6 +78,8 @@ class BaseOptions:
     """Decide whether to use wasserstein cycle gan or standard cycle gan"""
     l1_or_l2_loss: str = "l1"
     """"l1" or "l2"; Decide whether to use l1 or l2 as cycle and identity loss functions"""
+    use_sigmoid: bool = True
+    """Use sigmoid activation at end of discriminator"""
 
     @classmethod
     def to_dict(cls) -> dict:
