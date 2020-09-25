@@ -113,7 +113,6 @@ if __name__ == "__main__":
     )
 
     model.create_schedulers(
-        epoch=opt.epoch,
         lr_policy=opt.lr_policy,
         lr_decay_iters=opt.lr_decay_iters,
         lr_step_factor=opt.lr_step_factor,
