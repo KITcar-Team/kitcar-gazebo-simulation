@@ -20,7 +20,7 @@ from simulation.utils.machine_learning.cycle_gan.models.generator import create_
 from simulation.utils.machine_learning.cycle_gan.models.wcycle_gan import (
     WassersteinCycleGANModel,
 )
-from simulation.utils.machine_learning.cycle_gan.visualizer import Visualizer
+from simulation.utils.machine_learning.data.visualizer import Visualizer
 from simulation.utils.machine_learning.models.helper import get_norm_layer, init_net
 from simulation.utils.machine_learning.models.resnet_generator import ResnetGenerator
 from simulation.utils.machine_learning.models.wasserstein_critic import WassersteinCritic
