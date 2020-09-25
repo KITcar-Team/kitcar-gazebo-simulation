@@ -74,6 +74,7 @@ def get_transform(
         mask (str): Path to a mask overlaid over all images
         preprocess (str): scaling and cropping of images at load time
             [resize_and_crop | crop | scale_width | scale_width_and_crop | none]
+        no_flip: Flip 50% of all training images vertically
         params: more params for cropping
         grayscale: enable or disable grayscale
         method: the transform method
