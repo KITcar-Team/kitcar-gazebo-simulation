@@ -6,6 +6,7 @@ from typing import Any, Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
 from visdom import Visdom
 
 from simulation.utils.machine_learning.data.image_operations import tensor2im
@@ -106,7 +107,9 @@ class Visualizer:
 
         self.vis.text(html)
 
-    def display_current_results(self, visuals: dict, images_per_row: int = 4) -> None:
+    def display_current_results(
+        self, visuals: Dict[str, torch.Tensor], images_per_row: int = 4
+    ):
         """Display current results on visdom.
 
         Args:
