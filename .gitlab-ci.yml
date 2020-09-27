@@ -189,9 +189,10 @@ build-documentation:
     expire_in: 2 day
 
 cml-cyclegan:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
   stage: deploy
-  image: dvcorg/cml-py3:latest
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  variables:
+    INIT_INPUT: '1\nyy'
   only:
     changes:
       - data/real_images.dvc
