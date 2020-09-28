@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from visdom import Visdom
 
-from simulation.utils.machine_learning.data.image_operations import tensor2im
+from .image_operations import tensor2im
 
 if sys.version_info[0] == 2:
     VisdomExceptionBase = Exception
