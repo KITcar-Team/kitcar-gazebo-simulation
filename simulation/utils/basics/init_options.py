@@ -1,5 +1,7 @@
 from typing import Any, Dict
 
+import yaml
+
 
 class InitOptions:
     @classmethod
@@ -36,3 +38,18 @@ class InitOptions:
             key: kwargs[key] for key in init_keys if key in kwargs
         }  # Select all elements in kwargs, that are also arguments of the init function
         return cls(**kwargs)
+
+    @classmethod
+    def from_yaml(cls, file_path: str):
+        """Load instance from a yaml file.
+
+        Only fields that are defined within the __init__ are loaded.
+
+        Args:
+            file_path: Location of the yaml file.
+        """
+        # Extract information from yaml file as a dict
+        with open(file_path) as file:
+            specs_dict = yaml.load(file, Loader=yaml.SafeLoader)
+        # Select only the information that the class wants
+        return cls.from_dict(**specs_dict)
