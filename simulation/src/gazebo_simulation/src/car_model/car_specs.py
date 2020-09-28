@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
+from simulation.utils.basics.init_options import InitOptions
+from simulation.utils.basics.save_options import SaveOptions
 from simulation.utils.geometry import Point, Vector
 from simulation.utils.urdf import JointDynamics, JointLimit
 
-from .specs import Specs
-
 
 @dataclass
-class CarSpecs(Specs):
+class CarSpecs(InitOptions, SaveOptions):
     wheelbase: float
     track: float
     vehicle_width: float

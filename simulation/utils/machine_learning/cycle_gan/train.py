@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
     ModelClass = CycleGANModel if not opt.is_wgan else WassersteinCycleGANModel
 
-    model = ModelClass.from_options(
+    model = ModelClass.from_dict(
         netg_a=netg_a, netg_b=netg_b, netd_a=netd_a, netd_b=netd_b, **opt.to_dict()
     )
 

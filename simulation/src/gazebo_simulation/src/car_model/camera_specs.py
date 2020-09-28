@@ -6,13 +6,12 @@ from typing import Dict
 import numpy as np
 import yaml
 
+from simulation.utils.basics.init_options import InitOptions
 from simulation.utils.geometry import Vector
-
-from .specs import Specs
 
 
 @dataclass
-class CameraSpecs(Specs):
+class CameraSpecs(InitOptions):
     """Camera specifications usually defined in kitcar-ros.
 
     With this class, the real calibration is used to create the simulated camera model.
