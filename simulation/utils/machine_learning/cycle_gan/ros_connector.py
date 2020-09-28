@@ -28,7 +28,7 @@ class RosConnector:
             pathlib.Path(__file__).parent.absolute(), opt.checkpoints_dir
         )
 
-        self.model = CycleGANModel.from_options(
+        self.model = CycleGANModel.from_dict(
             **opt.to_dict()
         )  # create a model given model and other options
         self.model.setup(

@@ -5,12 +5,13 @@ import torch
 from torch import nn as nn
 from torch.nn import Flatten
 
+from simulation.utils.basics.init_options import InitOptions
+
 from .helper import get_norm_layer
-from .init_from_options import InitFromOptions
 from .resnet_block import ResnetBlock
 
 
-class WassersteinCritic(nn.Module, InitFromOptions):
+class WassersteinCritic(nn.Module, InitOptions):
     def __init__(
         self,
         input_nc: int,
