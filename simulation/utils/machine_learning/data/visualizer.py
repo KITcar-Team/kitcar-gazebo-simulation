@@ -6,9 +6,10 @@ from typing import Any, Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
 from visdom import Visdom
 
-from simulation.utils.machine_learning.data.image_operations import tensor2im
+from .image_operations import tensor2im
 
 if sys.version_info[0] == 2:
     VisdomExceptionBase = Exception
@@ -45,26 +46,16 @@ class Visualizer:
         self.display_id = display_id
         self.name = name
         self.port = display_port
-        self.checkpoints_dir = checkpoints_dir
-        self.saved = False
-        if (
-            self.display_id > 0
-        ):  # connect to a visdom server given <display_port> and <display_server>
+        if self.display_id > 0:  # create visdom server instance and connect to it
             self.create_visdom_connections(self.port)
             self.vis = Visdom(port=self.port)
 
-        if not os.path.isdir(os.path.join(checkpoints_dir, name)):
-            os.makedirs(checkpoints_dir, exist_ok=True)
-            os.makedirs(os.path.join(checkpoints_dir, name))
+        os.makedirs(os.path.join(checkpoints_dir, name), exist_ok=True)
 
         self.log_name = os.path.join(checkpoints_dir, name, "loss_log.txt")
         with open(self.log_name, "a") as log_file:
             now = time.strftime("%c")
             log_file.write("================ Training Loss (%s) ================\n" % now)
-
-    def reset(self) -> None:
-        """Reset the self.saved status."""
-        self.saved = False
 
     @staticmethod
     def create_visdom_connections(port: int) -> None:
@@ -116,11 +107,14 @@ class Visualizer:
 
         self.vis.text(html)
 
-    def display_current_results(self, visuals: dict) -> None:
+    def display_current_results(
+        self, visuals: Dict[str, torch.Tensor], images_per_row: int = 4
+    ):
         """Display current results on visdom.
 
         Args:
-            visuals (dict): dictionary of images to display or save
+            visuals: dictionary of images to display or save
+            images_per_row: Amount of images per row
         """
         if self.display_id > 0:  # show images in the browser using visdom
             # create a table of images.
@@ -133,12 +127,12 @@ class Visualizer:
                 images.append(image_numpy.transpose([2, 0, 1]))
                 idx += 1
             white_image = np.ones_like(image_numpy.transpose([2, 0, 1])) * 255
-            while idx % 4 != 0:
+            while idx % images_per_row != 0:
                 images.append(white_image)
                 idx += 1
             self.vis.images(
                 images,
-                nrow=4,
+                nrow=images_per_row,
                 win=str(self.display_id + 1),
                 padding=2,
                 opts=dict(title=title + " images"),
@@ -169,8 +163,12 @@ class Visualizer:
             win=str(self.display_id),
         )
 
-    def save_losses_as_image(self):
-        """Save the tracked losses as png file under the checkpoint."""
+    def save_losses_as_image(self, path: str):
+        """Save the tracked losses as png file.
+
+        Args:
+            path: The path where the loss image should be stored
+        """
         # Create figure
         fig = plt.figure()
         # Create sub plot
@@ -187,9 +185,8 @@ class Visualizer:
             ax.legend()
 
         # Save plot
-        plt.savefig(os.path.join(self.checkpoints_dir, self.name, "loss.png"))
+        plt.savefig(path)
 
-    # losses: same format as |losses| of plot_current_losses
     def print_current_losses(
         self, epoch: int, iters: int, losses: dict, t_comp: float, estimated_time: float
     ) -> None:

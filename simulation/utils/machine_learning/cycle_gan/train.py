@@ -20,7 +20,7 @@ from simulation.utils.machine_learning.cycle_gan.models.generator import create_
 from simulation.utils.machine_learning.cycle_gan.models.wcycle_gan import (
     WassersteinCycleGANModel,
 )
-from simulation.utils.machine_learning.cycle_gan.visualizer import Visualizer
+from simulation.utils.machine_learning.data.visualizer import Visualizer
 from simulation.utils.machine_learning.models.helper import get_norm_layer, init_net
 from simulation.utils.machine_learning.models.resnet_generator import ResnetGenerator
 from simulation.utils.machine_learning.models.wasserstein_critic import WassersteinCritic
@@ -113,7 +113,6 @@ if __name__ == "__main__":
     )
 
     model.create_schedulers(
-        epoch=opt.epoch,
         lr_policy=opt.lr_policy,
         lr_decay_iters=opt.lr_decay_iters,
         lr_step_factor=opt.lr_step_factor,
@@ -226,10 +225,13 @@ if __name__ == "__main__":
 
         # update learning rates in the beginning of every epoch.
         model.update_learning_rate()
-        print(f"Saving the model at the end of epoch {epoch}")
-        model.networks.save(os.path.join(opt.checkpoints_dir, opt.name, "latest_net_"))
-        model.networks.save(os.path.join(opt.checkpoints_dir, opt.name, f"{epoch}_net_"))
-        visualizer.save_losses_as_image()
+
+        path = os.path.join(opt.checkpoints_dir, opt.name)
+        model.networks.save(os.path.join(path, "latest_net_"))
+        model.networks.save(os.path.join(path, f"{epoch}_net_"))
+        visualizer.save_losses_as_image(os.path.join(path, "loss.png"))
+        print(f"Saved the model at the end of epoch {epoch}")
+
         print(
             f"End of epoch {epoch} / {total_epochs} \t"
             f"Time Taken: {time.time()-epoch_start_time} sec"

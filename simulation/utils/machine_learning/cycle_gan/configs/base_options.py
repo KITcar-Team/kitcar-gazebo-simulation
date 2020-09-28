@@ -49,7 +49,8 @@ class BaseOptions:
     """# of discriminator filters in the first conv layer"""
     netd: str = "basic"
     """Specify discriminator architecture. [basic | n_layers | no_patch].
-    The basic model is a 70x70 PatchGAN. n_layers allows you to specify the layers in the discriminator.
+    The basic model is a 70x70 PatchGAN.
+    n_layers allows you to specify the layers in the discriminator.
     """
     netg: str = "resnet_9blocks"
     """specify generator architecture [resnet_<ANY_INTEGER>blocks | unet_256 | unet_128]"""
