@@ -162,15 +162,11 @@ build-documentation:
 cml-cyclegan:
   stage: deploy
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  when: manual
   variables:
     INIT_INPUT: '1\nyy'
   tags:
     - workstation
-  only:
-    changes:
-      - data/real_images.dvc
-      - data/simulated_images/**/*
-      - simulation/utils/machine_learning/**/*
   script:
     - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
     - dvc pull data/real_images/maschinen_halle_parking --run-cache
