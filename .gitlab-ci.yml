@@ -245,17 +245,18 @@ cml-cyclegan:
         export TAG_DEFAULT_IMAGE_CI=ci_${CI_COMMIT_REF_NAME}
         export TAG_KITCAR_ROS_IMAGE=focal_${CI_COMMIT_REF_NAME}
       fi
+   - apk add --no-cache docker-compose
   script:
     - docker --version
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     # Test building the ci image
     - cd simulation/docker/ci
-    - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE
+    - /bin/sh build.sh base $TAG_CI_IMAGE
     - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE
-    - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE_DOCS
+    - /bin/sh build.sh docs $TAG_CI_IMAGE_DOCS
     - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_DOCS
-    - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE_ML
+    - /bin/sh build.sh machine_learning $TAG_CI_IMAGE_ML
     - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_ML
     # Test building the default image
     - cd ../default

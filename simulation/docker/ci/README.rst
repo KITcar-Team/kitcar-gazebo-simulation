@@ -9,15 +9,16 @@ The image can be built by running the **build.sh** script:
 
 .. prompt:: bash
 
-  ./build.sh ${CI_REGISTRY} ${IMAGE_TAG}
+  ./build.sh ${SERVICE} ${IMAGE_TAG}
 
 from ``simulation/docker/ci``.
 
-Dependending on the provided `${IMAGE_TAG}` different packages are installed:
+Dependending on the provided `${SERVICE}` different packages are installed:
 
-* `${IMAGE_TAG}=docs`: Additional machine learning and documentation pip packages
+* `${SERVICE}=base`: No additional packages.
+* `${SERVICE}=docs`: Additional machine learning and documentation pip packages
   are installed. Both are necessary to build Sphinx.
-* `${IMAGE_TAG}=machine_learning`: Additional machine learning pip packages
+* `${SERVICE}=machine_learning`: Additional machine learning pip packages
   and NodeJS are installed. Both are necessary to train or test neural networks and
   publish the results using CML.
 
