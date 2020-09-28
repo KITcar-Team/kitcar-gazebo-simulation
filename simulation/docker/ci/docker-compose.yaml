@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+  base:
+    image: "git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}"
+    build:
+      context: .
+      args:
+        - INSTALL_DOC_PACKAGES=false
+        - INSTALL_ML_PACKAGES=false
+        - INSTALL_NODE_JS=false
+  docs:
+    image: "git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}"
+    build:
+      context: .
+      args:
+        - INSTALL_DOC_PACKAGES=true
+        - INSTALL_ML_PACKAGES=true
+        - INSTALL_NODE_JS=false
+  machine_learning:
+    image: "git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}"
+    build:
+      context: .
+      args:
+        - INSTALL_DOC_PACKAGES=false
+        - INSTALL_ML_PACKAGES=true
+        - INSTALL_NODE_JS=true
