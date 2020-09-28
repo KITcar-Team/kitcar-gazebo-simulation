@@ -7,7 +7,7 @@ import torch
 from hypothesis import given, settings
 from hypothesis.strategies import floats, integers
 
-from simulation.utils.machine_learning.models.wasserstein_critic import WassersteinCritic
+from ..wasserstein_critic import WassersteinCritic
 
 
 @settings(deadline=None)

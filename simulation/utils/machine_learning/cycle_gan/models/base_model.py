@@ -4,7 +4,7 @@ import os
 import pickle
 from abc import ABC
 from dataclasses import dataclass
-from typing import List, Tuple, Union
+from typing import List, Tuple
 
 import torch
 from torch import Tensor, nn
@@ -233,7 +233,6 @@ class BaseModel(ABC, InitOptions):
 
     def create_schedulers(
         self,
-        epoch: Union[int, str] = "latest",
         lr_policy: str = "linear",
         lr_decay_iters: int = 50,
         lr_step_factor: float = 0.1,
