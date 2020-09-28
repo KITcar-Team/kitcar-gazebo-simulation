@@ -13,26 +13,26 @@ test_dr_drift_256:
     md5: b0d95d796773eb8145bb527e5ce9d9f7.dir
   outs:
   - path: results/dr_drift_256/images
-    md5: 20f6d65115189524d635d37c4998199d.dir
+    md5: ba54c6d3f4f4872e943315b6b2dc9e1b.dir
 make_video_dr_drift_256:
   cmd: python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
-    results/dr_drift_256/images/fake_b/%d.png --output_file results/dr_drift_256/fake_b.mp4
+    results/dr_drift_256/images/fake_a/%d.png --output_file results/dr_drift_256/fake_a.mp4
     && python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
-    results/dr_drift_256/images/real_a/%d.png --output_file results/dr_drift_256/real_a.mp4
-    && ffmpeg -y -i results/dr_drift_256/real_a.mp4 -i results/dr_drift_256/fake_b.mp4
+    results/dr_drift_256/images/real_b/%d.png --output_file results/dr_drift_256/real_b.mp4
+    && ffmpeg -y -i results/dr_drift_256/real_b.mp4 -i results/dr_drift_256/fake_a.mp4
     -filter_complex vstack=inputs=2 results/dr_drift_256/stacked.mp4
   deps:
-  - path: results/dr_drift_256/images/fake_b
-    md5: 3ba60c27ab1ee22269cbe28b9161399f.dir
-  - path: results/dr_drift_256/images/real_a
-    md5: 45d73060545d88bb6cfe04c09e4ea6b3.dir
+  - path: results/dr_drift_256/images/fake_a
+    md5: 4a2695a92828ef0dbe3eb701298e8065.dir
+  - path: results/dr_drift_256/images/real_b
+    md5: 9c56baa9630ea80cd6337780442c54d1.dir
   outs:
-  - path: results/dr_drift_256/fake_b.mp4
-    md5: 940b6c3ab50da28c591cdc63a030171b
-  - path: results/dr_drift_256/real_a.mp4
-    md5: 11bd77aa72589834796c2cfeb4043aa5
+  - path: results/dr_drift_256/fake_a.mp4
+    md5: 23ab7add9389cc777794519b6315b0c0
+  - path: results/dr_drift_256/real_b.mp4
+    md5: 38356aaef3f58fa3c7a2b2d2433b0e4a
   - path: results/dr_drift_256/stacked.mp4
-    md5: 5ab924ab763dfe2ca335487b30a24ac7
+    md5: 76fd557643f5f2c59283268121f2400b
 train_dr_drift_256:
   cmd: python3 train.py
   deps:
@@ -56,18 +56,18 @@ train_dr_drift_256:
   - path: checkpoints/dr_drift_256/latest_net_g_b.pth
     md5: fa19ccada3659a17fb3a3398d8eb8525
   - path: checkpoints/dr_drift_256/loss.png
-    md5: 775e3152d4d818ac581128a91e94f64e
+    md5: fda0442d25b0651c3adc6db385303e03
   - path: checkpoints/dr_drift_256/loss_log.txt
-    md5: 3e653da6855cf1c706128ddb5248229b
+    md5: 8fc457d6eb28e9574b9e7656a7364833
 stacked_gif_dr_drift_256:
   cmd: python3 ../data/video_to_gif.py --input_file results/dr_drift_256/stacked.mp4
     --output_file results/dr_drift_256/stacked.gif --width 400 --length 10
   deps:
   - path: results/dr_drift_256/stacked.mp4
-    md5: 5ab924ab763dfe2ca335487b30a24ac7
+    md5: 76fd557643f5f2c59283268121f2400b
   outs:
   - path: results/dr_drift_256/stacked.gif
-    md5: 24b718ed34d5f65f7d3635691e2b6197
+    md5: 55188b85977013369631918f82082e33
 test_discriminators_dr_drift_256:
   cmd: python3 test_discriminators.py
   deps:
@@ -88,7 +88,7 @@ test_discriminators_dr_drift_256:
   - path: configs/test_options.py
     md5: 7bd2071ba7740e2f1ef20961bfb68761
   - path: test_discriminators.py
-    md5: f5dbaaa351149d89f8c0f6fc5fd76406
+    md5: f543033a66e8e4620c88b9629bae73d8
   outs:
   - path: results/dr_drift_256/discriminator_losses.txt
-    md5: 28e29a4876443671d06dc21a9dfc61a4
+    md5: f1a1f15cf4b3604d319ccbd498eeb8a9
