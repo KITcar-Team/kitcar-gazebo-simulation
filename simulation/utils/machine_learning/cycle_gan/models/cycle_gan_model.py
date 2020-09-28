@@ -2,10 +2,10 @@ import torch
 from torch import Tensor, nn
 from torch.nn.functional import mse_loss
 
-from simulation.utils.machine_learning.cycle_gan.models.base_model import BaseModel
 from simulation.utils.machine_learning.data.image_pool import ImagePool
 from simulation.utils.machine_learning.models.helper import set_requires_grad
 
+from .base_model import BaseModel
 from .cycle_gan_stats import CycleGANStats
 
 
