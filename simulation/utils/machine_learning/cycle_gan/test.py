@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     ModelClass = CycleGANModel if not opt.is_wgan else WassersteinCycleGANModel
 
-    model = ModelClass.from_options(netg_a=netg_a, netg_b=netg_b, **opt.to_dict())
+    model = ModelClass.from_dict(netg_a=netg_a, netg_b=netg_b, **opt.to_dict())
 
     model.networks.load(
         os.path.join(opt.checkpoints_dir, opt.name, f"{opt.epoch}_net_"),

@@ -149,11 +149,11 @@ def load_dr_drift(
                                  should be saved.
     """
 
-    car_specs = CarSpecs.from_file(car_specs_path)
-    camera_specs = CameraSpecs.from_file(camera_specs_path)
+    car_specs = CarSpecs.from_yaml(car_specs_path)
+    camera_specs = CameraSpecs.from_yaml(camera_specs_path)
 
     if save_car_specs is not None:
-        car_specs.save(save_car_specs)
+        car_specs.save_as_yaml(save_car_specs)
 
     if save_camera_calibration is not None:
         camera_specs.save(save_camera_calibration)

@@ -4,11 +4,12 @@ from typing import List, Optional
 from torch import Tensor
 from torch import nn as nn
 
-from .init_from_options import InitFromOptions
+from simulation.utils.basics.init_options import InitOptions
+
 from .resnet_block import ResnetBlock
 
 
-class ResnetGenerator(nn.Module, InitFromOptions):
+class ResnetGenerator(nn.Module, InitOptions):
     """Resnet-based generator that consists of Resnet blocks between a few
     downsampling/upsampling operations.
 

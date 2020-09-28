@@ -80,8 +80,8 @@ class CarStateNode(NodeBase):
 
     def read_car_config(self):
         """Process car parameters."""
-        car_specs = CarSpecs.from_file(self.param.car_specs_path)
-        camera_specs = CameraSpecs.from_file(self.param.camera_specs_path)
+        car_specs = CarSpecs.from_yaml(self.param.car_specs_path)
+        camera_specs = CameraSpecs.from_yaml(self.param.camera_specs_path)
 
         """ Car frame config """
         # Car frame should have it's origin at the center of the rear axle:
