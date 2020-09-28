@@ -11,8 +11,8 @@ from torch import Tensor, nn
 from torch.nn import L1Loss, MSELoss
 from torch.optim import RMSprop
 
+from simulation.utils.basics.init_options import InitOptions
 from simulation.utils.machine_learning.models import helper
-from simulation.utils.machine_learning.models.init_from_options import InitFromOptions
 
 from .cycle_gan_stats import CycleGANStats
 
@@ -124,7 +124,7 @@ class CycleGANNetworks:
         return (net for net in self.__dict__.values() if net is not None)
 
 
-class BaseModel(ABC, InitFromOptions):
+class BaseModel(ABC, InitOptions):
     def __init__(
         self,
         netg_a,
