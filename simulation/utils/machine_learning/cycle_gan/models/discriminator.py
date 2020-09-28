@@ -2,8 +2,8 @@ from torch import nn
 
 from simulation.utils.machine_learning.models.helper import get_norm_layer
 
-from .models.n_layer_discriminator import NLayerDiscriminator
-from .models.no_patch_discriminator import NoPatchDiscriminator
+from .n_layer_discriminator import NLayerDiscriminator
+from .no_patch_discriminator import NoPatchDiscriminator
 
 
 def create_discriminator(
