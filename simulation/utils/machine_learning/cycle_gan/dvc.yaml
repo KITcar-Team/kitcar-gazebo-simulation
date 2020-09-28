@@ -26,17 +26,17 @@ stages:
     - results/dr_drift_256/images
   make_video_dr_drift_256:
     cmd: python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
-      results/dr_drift_256/images/fake_b/%d.png --output_file results/dr_drift_256/fake_b.mp4
+      results/dr_drift_256/images/fake_a/%d.png --output_file results/dr_drift_256/fake_a.mp4
       && python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
-      results/dr_drift_256/images/real_a/%d.png --output_file results/dr_drift_256/real_a.mp4
-      && ffmpeg -y -i results/dr_drift_256/real_a.mp4 -i results/dr_drift_256/fake_b.mp4
+      results/dr_drift_256/images/real_b/%d.png --output_file results/dr_drift_256/real_b.mp4
+      && ffmpeg -y -i results/dr_drift_256/real_b.mp4 -i results/dr_drift_256/fake_a.mp4
       -filter_complex vstack=inputs=2 results/dr_drift_256/stacked.mp4
     deps:
-    - results/dr_drift_256/images/fake_b
-    - results/dr_drift_256/images/real_a
+    - results/dr_drift_256/images/fake_a
+    - results/dr_drift_256/images/real_b
     outs:
-    - results/dr_drift_256/fake_b.mp4
-    - results/dr_drift_256/real_a.mp4
+    - results/dr_drift_256/fake_a.mp4
+    - results/dr_drift_256/real_b.mp4
     - results/dr_drift_256/stacked.mp4
   test_discriminators_dr_drift_256:
     cmd: python3 test_discriminators.py
