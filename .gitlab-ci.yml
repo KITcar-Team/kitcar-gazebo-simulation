@@ -67,7 +67,7 @@ test-machine-learning-package:
   variables:
     INIT_INPUT: 1\nyy
   script:
-  - python3 -m simulation.utils.machine_learning.models.test.test_wgan_critic
+  - python3 -m simulation.utils.machine_learning.models.test
 
 test-ros-packages:
   stage: test
