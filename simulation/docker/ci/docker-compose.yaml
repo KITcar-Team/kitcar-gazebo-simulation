@@ -4,23 +4,17 @@ services:
     image: "git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}"
     build:
       context: .
-      args:
-        - INSTALL_DOC_PACKAGES=false
-        - INSTALL_ML_PACKAGES=false
-        - INSTALL_NODE_JS=false
   docs:
     image: "git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}"
     build:
       context: .
+      dockerfile: ./DockerfileDocs
       args:
-        - INSTALL_DOC_PACKAGES=true
-        - INSTALL_ML_PACKAGES=true
-        - INSTALL_NODE_JS=false
+        - PARENT_TAG=${CI_PARENT_TAG}
   machine_learning:
     image: "git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}"
     build:
       context: .
+      dockerfile: ./DockerfileMachineLearning
       args:
-        - INSTALL_DOC_PACKAGES=false
-        - INSTALL_ML_PACKAGES=true
-        - INSTALL_NODE_JS=true
+        - PARENT_TAG=${CI_PARENT_TAG}

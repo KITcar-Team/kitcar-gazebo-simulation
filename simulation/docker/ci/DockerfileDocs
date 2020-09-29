@@ -1,0 +1,5 @@
+ARG PARENT_TAG=ci
+FROM git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${PARENT_TAG}
+
+RUN pip3 install --upgrade --upgrade-strategy eager --no-warn-script-location \
+    -r /requirements_documentation.txt
