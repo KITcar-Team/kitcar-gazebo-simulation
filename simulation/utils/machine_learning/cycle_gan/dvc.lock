@@ -3,8 +3,8 @@ test_dr_drift_256:
   deps:
   - path: ./../../../../data/real_images/maschinen_halle_parking
     md5: 7415bfcca62c3c7e76cfb72eb59f8988.dir
-  - path: ./../../../../data/simulated_images/complex_road
-    md5: 5df71839e3d678fe27e3211f6d788da4.dir
+  - path: ./../../../../data/simulated_images/test_images
+    md5: 07a78e4add45af56b8afcad82f6b0877.dir
   - path: checkpoints/dr_drift_256/latest_net_g_a.pth
     md5: 960192440d7011e941306c290b3bf11f
   - path: checkpoints/dr_drift_256/latest_net_g_b.pth
