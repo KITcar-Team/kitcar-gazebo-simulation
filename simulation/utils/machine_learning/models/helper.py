@@ -28,7 +28,7 @@ def get_norm_layer(norm_type: str = "instance") -> Type[nn.Module]:
             nn.InstanceNorm2d, affine=False, track_running_stats=False
         )
     elif norm_type == "none":
-        norm_layer = nn.Identity()
+        norm_layer = nn.Identity
 
     else:
         raise NotImplementedError("normalization layer [%s] is not found" % norm_type)
