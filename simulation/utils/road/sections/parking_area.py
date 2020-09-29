@@ -11,6 +11,7 @@ from simulation.utils.road.config import Config
 from simulation.utils.road.sections import (
     ParkingObstacle,
     RoadSection,
+    StaticObstacle,
     StraightRoad,
     SurfaceMarkingRect,
 )
@@ -341,6 +342,17 @@ class ParkingArea(_ParkingArea):
         return sum(
             (lot.obstacles for lot in itertools.chain(self.left_lots, self.right_lots)), []
         )
+
+    @property
+    def obstacles(self) -> List[StaticObstacle]:
+        """List[StaticObstacle]: All obstacles within this section of the road."""
+        for obstacle in self._obstacles:
+            obstacle.set_transform(self.middle_line)
+        return self._obstacles + self.parking_obstacles
+
+    @obstacles.setter
+    def obstacles(self, obs: List[StaticObstacle]):
+        self._obstacles = obs
 
     @property
     def lines(self) -> List[MarkedLine]:
