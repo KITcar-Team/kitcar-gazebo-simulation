@@ -77,7 +77,7 @@ if __name__ == "__main__":
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     if opt.is_wgan:
-        netg_a = ResnetGenerator(
+        netg_a_to_b = ResnetGenerator(
             opt.input_nc,
             opt.output_nc,
             opt.ngf,
@@ -91,7 +91,7 @@ if __name__ == "__main__":
             dilations=opt.dilations,
         )
     else:
-        netg_a = create_generator(
+        netg_a_to_b = create_generator(
             opt.input_nc,
             opt.output_nc,
             opt.ngf,
@@ -106,18 +106,22 @@ if __name__ == "__main__":
             opt.input_nc, opt.ndf, opt.netd, opt.n_layers_d, opt.norm, opt.use_sigmoid
         )
 
-    netg_b = pickle.loads(pickle.dumps(netg_a))
+    netg_b_to_a = pickle.loads(pickle.dumps(netg_a_to_b))
     netd_b = pickle.loads(pickle.dumps(netd_a))
 
-    netg_a = init_net(netg_a, opt.init_type, opt.init_gain, device)
-    netg_b = init_net(netg_b, opt.init_type, opt.init_gain, device)
+    netg_a_to_b = init_net(netg_a_to_b, opt.init_type, opt.init_gain, device)
+    netg_b_to_a = init_net(netg_b_to_a, opt.init_type, opt.init_gain, device)
     netd_a = init_net(netd_a, opt.init_type, opt.init_gain, device)
     netd_b = init_net(netd_b, opt.init_type, opt.init_gain, device)
 
     ModelClass = CycleGANModel if not opt.is_wgan else WassersteinCycleGANModel
 
     model = ModelClass.from_dict(
-        netg_a=netg_a, netg_b=netg_b, netd_a=netd_a, netd_b=netd_b, **opt.to_dict()
+        netg_a_to_b=netg_a_to_b,
+        netg_b_to_a=netg_b_to_a,
+        netd_a=netd_a,
+        netd_b=netd_b,
+        **opt.to_dict(),
     )
 
     model.networks.load(
@@ -135,9 +139,9 @@ if __name__ == "__main__":
         batch_b = batch_b.to(device)
 
         real_a = batch_a
-        fake_b = model.networks.g_a(real_a)
+        fake_b = model.networks.g_a_to_b(real_a)
         real_b = batch_b
-        fake_a = model.networks.g_b(real_b)
+        fake_a = model.networks.g_b_to_a(real_b)
 
         sum_loss_a += calculate_loss_d(model.networks.d_a, real_b, fake_b)
         sum_loss_b += calculate_loss_d(model.networks.d_b, real_a, fake_a)

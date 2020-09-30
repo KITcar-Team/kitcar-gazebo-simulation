@@ -13,8 +13,8 @@ class CycleGANStats:
     rec_b: Tensor = None
     idt_a: Tensor = None
     idt_b: Tensor = None
-    loss_g_a: float = None
-    loss_g_b: float = None
+    loss_g_a_to_b: float = None
+    loss_g_b_to_a: float = None
     loss_idt_a: float = None
     loss_idt_b: float = None
     loss_cycle_a: float = None
@@ -41,8 +41,8 @@ class CycleGANStats:
 
     def get_losses(self):
         losses = {
-            "loss_g_a": self.loss_g_a,
-            "loss_g_b": self.loss_g_b,
+            "loss_g_a_to_b": self.loss_g_a_to_b,
+            "loss_g_b_to_a": self.loss_g_b_to_a,
             "loss_d_a": self.loss_d_a,
             "loss_d_b": self.loss_d_b,
             "loss_cycle_a": self.loss_cycle_a,

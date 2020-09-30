@@ -22,8 +22,8 @@ class WassersteinCycleGANModel(BaseModel):
 
     def __init__(
         self,
-        netg_a: nn.Module,
-        netg_b: nn.Module,
+        netg_a_to_b: nn.Module,
+        netg_b_to_a: nn.Module,
         netd_a: nn.Module = None,
         netd_b: nn.Module = None,
         is_train: bool = True,
@@ -58,11 +58,11 @@ class WassersteinCycleGANModel(BaseModel):
 
         self.wgan_n_critic = wgan_n_critic
 
-        self.networks = CycleGANNetworks(netg_a, netg_b, netd_a, netd_b)
+        self.networks = CycleGANNetworks(netg_a_to_b, netg_b_to_a, netd_a, netd_b)
 
         super().__init__(
-            netg_a,
-            netg_b,
+            netg_a_to_b,
+            netg_b_to_a,
             netd_a,
             netd_b,
             is_train,
@@ -84,7 +84,7 @@ class WassersteinCycleGANModel(BaseModel):
     ):
         set_requires_grad([self.networks.d_a], requires_grad=True)
         return self.networks.d_a.perform_optimization_step(
-            self.networks.g_a,
+            self.networks.g_a_to_b,
             self.optimizer_d,
             batch_a,
             batch_b,
@@ -99,7 +99,7 @@ class WassersteinCycleGANModel(BaseModel):
     ):
         set_requires_grad([self.networks.d_b], requires_grad=True)
         return self.networks.d_b.perform_optimization_step(
-            self.networks.g_b,
+            self.networks.g_b_to_a,
             self.optimizer_d,
             batch_b,
             batch_a,
@@ -108,59 +108,65 @@ class WassersteinCycleGANModel(BaseModel):
 
     def update_generators(self, batch_a: Tensor, batch_b: Tensor):
         """"""
+        real_a = batch_a
+        real_b = batch_b
+
         self.optimizer_g.zero_grad()  # set G_A and G_B's gradients to zero
         # G_A and G_B
         set_requires_grad(
             [self.networks.d_a, self.networks.d_b], False
         )  # Ds require no gradients when optimizing Gs
-        set_requires_grad([self.networks.g_a, self.networks.g_b], True)
+        set_requires_grad([self.networks.g_a_to_b, self.networks.g_b_to_a], True)
 
-        g_a_x = self.networks.g_a(batch_b)
-        f_g_a_x = self.networks.d_a(g_a_x)
-        loss_g_a = -torch.mean(f_g_a_x)
+        fake_a = self.networks.g_b_to_a(real_b)
+        loss_g_b_to_a = -torch.mean(self.networks.d_a(fake_a))
 
-        g_b_x = self.networks.g_b(batch_a)
-        f_g_b_x = self.networks.d_b(g_b_x)
-        loss_g_b = -torch.mean(f_g_b_x)
+        fake_b = self.networks.g_a_to_b(real_a)
+        loss_g_a_to_b = -torch.mean(self.networks.d_b(fake_b))
 
         # Identity loss
-        # G_A should be identity if real_B is fed: ||G_A(B) - B||
-        idt_a = self.networks.g_a(batch_a)
-        loss_idt_a = self.criterionIdt(idt_a, batch_a) * self.lambda_idt_a
-        # G_B should be identity if real_A is fed: ||G_B(A) - A||
-        idt_b = self.networks.g_b(batch_b)
-        loss_idt_b = self.criterionIdt(idt_b, batch_b) * self.lambda_idt_b
+        idt_a = self.networks.g_b_to_a(real_a)
+        idt_b = self.networks.g_a_to_b(real_b)
+        loss_idt_a = self.criterionIdt(idt_a, real_a) * self.lambda_idt_a
+        loss_idt_b = self.criterionIdt(idt_b, real_b) * self.lambda_idt_b
 
-        rec_a = self.networks.g_a(g_b_x)
-        rec_b = self.networks.g_b(g_a_x)
+        rec_a = self.networks.g_a_to_b(fake_a)
+        rec_b = self.networks.g_b_to_a(fake_b)
 
-        # Forward cycle loss || G_B(G_A(A)) - A||
-        loss_cycle_a = self.criterionCycle(rec_a, batch_a) * self.lambda_cycle
-        # Backward cycle loss || G_A(G_B(B)) - B||
-        loss_cycle_b = self.criterionCycle(rec_b, batch_b) * self.lambda_cycle
+        # Forward cycle loss
+        loss_cycle_a = self.criterionCycle(rec_a, real_a) * self.lambda_cycle
+        # Backward cycle loss
+        loss_cycle_b = self.criterionCycle(rec_b, real_b) * self.lambda_cycle
+
         # combined loss and calculate gradients
-        loss_g = loss_g_a + loss_g_b + loss_cycle_a + loss_cycle_b + loss_idt_a + loss_idt_b
+        loss_g = (
+            loss_g_a_to_b
+            + loss_g_b_to_a
+            + loss_cycle_a
+            + loss_cycle_b
+            + loss_idt_a
+            + loss_idt_b
+        )
         loss_g.backward()
 
         self.optimizer_g.step()  # update G_A and G_B's weights
 
-        stats = CycleGANStats(
-            real_a=batch_a,
-            real_b=batch_b,
-            fake_a=g_a_x,
-            fake_b=g_b_x,
-            rec_a=rec_a,
-            rec_b=rec_b,
-            idt_a=idt_a,
-            idt_b=idt_b,
-            loss_g_a=loss_g_a.item(),
-            loss_g_b=loss_g_b.item(),
-            loss_idt_a=loss_idt_a.item(),
-            loss_idt_b=loss_idt_b.item(),
-            loss_cycle_a=loss_cycle_a.item(),
-            loss_cycle_b=loss_cycle_b.item(),
+        return CycleGANStats(
+            real_a,
+            real_b,
+            fake_a,
+            fake_b,
+            rec_a,
+            rec_b,
+            idt_a,
+            idt_b,
+            loss_g_a_to_b.item(),
+            loss_g_b_to_a.item(),
+            loss_idt_a.item(),
+            loss_idt_b.item(),
+            loss_cycle_a.item(),
+            loss_cycle_b.item(),
         )
-        return stats
 
     def pre_training(self, critic_batches):
         # Update critic
