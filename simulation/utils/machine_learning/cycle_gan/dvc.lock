@@ -3,14 +3,14 @@ test_dr_drift_256:
   deps:
   - path: ./../../../../data/real_images/maschinen_halle_parking
     md5: 7415bfcca62c3c7e76cfb72eb59f8988.dir
-  - path: ./../../../../data/simulated_images/complex_road
-    md5: 5df71839e3d678fe27e3211f6d788da4.dir
-  - path: checkpoints/dr_drift_256/latest_net_g_a.pth
-    md5: 960192440d7011e941306c290b3bf11f
-  - path: checkpoints/dr_drift_256/latest_net_g_b.pth
-    md5: fa19ccada3659a17fb3a3398d8eb8525
+  - path: ./../../../../data/simulated_images/test_images
+    md5: 07a78e4add45af56b8afcad82f6b0877.dir
+  - path: checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
+    md5: 8e2d0e1334966ee8036070bf623a737d
+  - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
+    md5: ed27e477dd4c6c0b699c70507c4d6f65
   - path: configs
-    md5: b0d95d796773eb8145bb527e5ce9d9f7.dir
+    md5: a4365df7f026b598b2227c8601ff564c.dir
   outs:
   - path: results/dr_drift_256/images
     md5: ba54c6d3f4f4872e943315b6b2dc9e1b.dir
@@ -45,16 +45,16 @@ train_dr_drift_256:
   - path: ./../../../../data/simulated_images/random_roads
     md5: e22c4da27c6a8e2b2b2324bdeb5c32ff.dir
   - path: configs
-    md5: b0d95d796773eb8145bb527e5ce9d9f7.dir
+    md5: a4365df7f026b598b2227c8601ff564c.dir
   outs:
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
-    md5: 84ef6d1630b9ae7e3d706f9dd6c2e3d0
+    md5: e09d1c03d76f65b7e0ce57abc9c4dd66
   - path: checkpoints/dr_drift_256/latest_net_d_b.pth
-    md5: 434f3b0cc7d11243f58253b77205a5f1
-  - path: checkpoints/dr_drift_256/latest_net_g_a.pth
-    md5: 960192440d7011e941306c290b3bf11f
-  - path: checkpoints/dr_drift_256/latest_net_g_b.pth
-    md5: fa19ccada3659a17fb3a3398d8eb8525
+    md5: e9256884dddf7b82e57a5cf150141db7
+  - path: checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
+    md5: 8e2d0e1334966ee8036070bf623a737d
+  - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
+    md5: ed27e477dd4c6c0b699c70507c4d6f65
   - path: checkpoints/dr_drift_256/loss.png
     md5: fda0442d25b0651c3adc6db385303e03
   - path: checkpoints/dr_drift_256/loss_log.txt
@@ -73,22 +73,22 @@ test_discriminators_dr_drift_256:
   deps:
   - path: ./../../../../data/real_images/maschinen_halle_parking
     md5: 7415bfcca62c3c7e76cfb72eb59f8988.dir
-  - path: ./../../../../data/simulated_images/complex_road
-    md5: 5df71839e3d678fe27e3211f6d788da4.dir
+  - path: ./../../../../data/simulated_images/test_images
+    md5: 07a78e4add45af56b8afcad82f6b0877.dir
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
-    md5: 84ef6d1630b9ae7e3d706f9dd6c2e3d0
+    md5: e09d1c03d76f65b7e0ce57abc9c4dd66
   - path: checkpoints/dr_drift_256/latest_net_d_b.pth
-    md5: 434f3b0cc7d11243f58253b77205a5f1
-  - path: checkpoints/dr_drift_256/latest_net_g_a.pth
-    md5: 960192440d7011e941306c290b3bf11f
-  - path: checkpoints/dr_drift_256/latest_net_g_b.pth
-    md5: fa19ccada3659a17fb3a3398d8eb8525
+    md5: e9256884dddf7b82e57a5cf150141db7
+  - path: checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
+    md5: 8e2d0e1334966ee8036070bf623a737d
+  - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
+    md5: ed27e477dd4c6c0b699c70507c4d6f65
   - path: configs/base_options.py
     md5: 0843e4af3adb6be8c3e827fe820055d6
   - path: configs/test_options.py
-    md5: 7bd2071ba7740e2f1ef20961bfb68761
+    md5: b730072b5038b0bf246434aae8bea418
   - path: test_discriminators.py
-    md5: f543033a66e8e4620c88b9629bae73d8
+    md5: 86af08d3ddb6aab01d68509cf2a44594
   outs:
   - path: results/dr_drift_256/discriminator_losses.txt
-    md5: f1a1f15cf4b3604d319ccbd498eeb8a9
+    md5: a1d508316688352a55f3fc99de7ba509

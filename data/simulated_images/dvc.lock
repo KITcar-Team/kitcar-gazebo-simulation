@@ -17,3 +17,15 @@ create_simulated_images:
   outs:
   - path: random_roads
     md5: e22c4da27c6a8e2b2b2324bdeb5c32ff.dir
+create_test_images:
+  cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images
+    --road ci_roads/random_road --seed TEST --output_dir test_images --randomize_path
+    0 --image_topic /camera/image_raw && fdupes -dN test_images/
+  deps:
+  - path: ../../simulation/models/env_db/ci_roads/random_road.py
+    md5: 67acd0a6fe3c2fd3404155bf02dda0db
+  - path: ../../simulation/models/meshes
+    md5: 497334a736344f90dee99455cf9eb708.dir
+  outs:
+  - path: test_images
+    md5: 07a78e4add45af56b8afcad82f6b0877.dir
