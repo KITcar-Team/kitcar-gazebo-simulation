@@ -159,7 +159,6 @@ if __name__ == "__main__":
     for epoch in range(total_epochs):  # outer loop for all epochs
         epoch_start_time = time.time()  # timer for entire epoch
         epoch_iter = 0  # the number of training iterations in current epoch
-        visualizer.reset()  # reset the visualizer
 
         # batch generator
         if opt.is_wgan:
