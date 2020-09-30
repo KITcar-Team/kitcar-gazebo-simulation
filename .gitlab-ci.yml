@@ -38,6 +38,12 @@ build-code:
     - simulation/build
     expire_in: 2 day
 
+lint:
+  stage: build
+  script:
+  # Check if all files are correctly formatted and comply to our formatting rules.
+  - pre-commit run --all-files
+
 ######## TEST STAGE #########
 
 # Run module test in utils packages
