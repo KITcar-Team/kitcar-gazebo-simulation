@@ -1,6 +1,9 @@
 """Definition of the road.sections module
 
 Collect classes and functions which should be included in the road.sections module.
+
+If these imports are rearranged cyclic imports may occur. To prevent this:
+isort:skip_file
 """
 from simulation.utils.road.sections.obstacle import (
     StaticObstacle,
