@@ -5,9 +5,9 @@ test_dr_drift_256:
     md5: 7415bfcca62c3c7e76cfb72eb59f8988.dir
   - path: ./../../../../data/simulated_images/test_images
     md5: 07a78e4add45af56b8afcad82f6b0877.dir
-  - path: checkpoints/dr_drift_256/latest_net_g_a.pth
+  - path: checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
     md5: 8e2d0e1334966ee8036070bf623a737d
-  - path: checkpoints/dr_drift_256/latest_net_g_b.pth
+  - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
     md5: ed27e477dd4c6c0b699c70507c4d6f65
   - path: configs
     md5: a4365df7f026b598b2227c8601ff564c.dir
@@ -48,12 +48,12 @@ train_dr_drift_256:
     md5: a4365df7f026b598b2227c8601ff564c.dir
   outs:
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
-    md5: e9256884dddf7b82e57a5cf150141db7
-  - path: checkpoints/dr_drift_256/latest_net_d_b.pth
     md5: e09d1c03d76f65b7e0ce57abc9c4dd66
-  - path: checkpoints/dr_drift_256/latest_net_g_a.pth
+  - path: checkpoints/dr_drift_256/latest_net_d_b.pth
+    md5: e9256884dddf7b82e57a5cf150141db7
+  - path: checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
     md5: 8e2d0e1334966ee8036070bf623a737d
-  - path: checkpoints/dr_drift_256/latest_net_g_b.pth
+  - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
     md5: ed27e477dd4c6c0b699c70507c4d6f65
   - path: checkpoints/dr_drift_256/loss.png
     md5: fda0442d25b0651c3adc6db385303e03
@@ -76,19 +76,19 @@ test_discriminators_dr_drift_256:
   - path: ./../../../../data/simulated_images/test_images
     md5: 07a78e4add45af56b8afcad82f6b0877.dir
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
-    md5: e9256884dddf7b82e57a5cf150141db7
-  - path: checkpoints/dr_drift_256/latest_net_d_b.pth
     md5: e09d1c03d76f65b7e0ce57abc9c4dd66
-  - path: checkpoints/dr_drift_256/latest_net_g_a.pth
+  - path: checkpoints/dr_drift_256/latest_net_d_b.pth
+    md5: e9256884dddf7b82e57a5cf150141db7
+  - path: checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
     md5: 8e2d0e1334966ee8036070bf623a737d
-  - path: checkpoints/dr_drift_256/latest_net_g_b.pth
+  - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
     md5: ed27e477dd4c6c0b699c70507c4d6f65
   - path: configs/base_options.py
     md5: 0843e4af3adb6be8c3e827fe820055d6
   - path: configs/test_options.py
     md5: b730072b5038b0bf246434aae8bea418
   - path: test_discriminators.py
-    md5: f543033a66e8e4620c88b9629bae73d8
+    md5: 86af08d3ddb6aab01d68509cf2a44594
   outs:
   - path: results/dr_drift_256/discriminator_losses.txt
-    md5: f1a1f15cf4b3604d319ccbd498eeb8a9
+    md5: a1d508316688352a55f3fc99de7ba509

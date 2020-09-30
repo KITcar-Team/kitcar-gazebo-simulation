@@ -19,10 +19,20 @@ from .cycle_gan_stats import CycleGANStats
 
 @dataclass
 class CycleGANNetworks:
-    g_a: nn.Module
-    g_b: nn.Module
+    """Container class for all networks used within the CycleGAN.
+
+    The CycleGAN generally requires images from two domains a and b. It aims to translate
+    images from one domain to the other.
+    """
+
+    g_a_to_b: nn.Module
+    """Generator that transforms images from domain a to domain b."""
+    g_b_to_a: nn.Module
+    """Generator that transforms images from domain b to domain a."""
     d_a: nn.Module = None
+    """Discrimator that decides for images if they are real or fake in domain a."""
     d_b: nn.Module = None
+    """Discrimator that decides for images if they are real or fake in domain b."""
 
     def save(self, prefix_path: str) -> None:
         """Save all the networks to the disk.
@@ -127,8 +137,8 @@ class CycleGANNetworks:
 class BaseModel(ABC, InitOptions):
     def __init__(
         self,
-        netg_a,
-        netg_b,
+        netg_a_to_b,
+        netg_b_to_a,
         netd_a,
         netd_b,
         is_train,
@@ -152,7 +162,7 @@ class BaseModel(ABC, InitOptions):
 
         self.cycle_noise_stddev = cycle_noise_stddev if is_train else 0
 
-        self.networks = CycleGANNetworks(netg_a, netg_b, netd_a, netd_b)
+        self.networks = CycleGANNetworks(netg_a_to_b, netg_b_to_a, netd_a, netd_b)
 
         if self.is_train:
             # define loss functions
@@ -162,7 +172,8 @@ class BaseModel(ABC, InitOptions):
             if optimizer_type == "rms_prop":
                 self.optimizer_g = RMSprop(
                     itertools.chain(
-                        self.networks.g_a.parameters(), self.networks.g_b.parameters()
+                        self.networks.g_a_to_b.parameters(),
+                        self.networks.g_b_to_a.parameters(),
                     ),
                     lr=lr,
                 )
@@ -175,7 +186,8 @@ class BaseModel(ABC, InitOptions):
             else:
                 self.optimizer_g = torch.optim.Adam(
                     itertools.chain(
-                        self.networks.g_a.parameters(), self.networks.g_b.parameters()
+                        self.networks.g_a_to_b.parameters(),
+                        self.networks.g_b_to_a.parameters(),
                     ),
                     lr=lr,
                     betas=(beta1, 0.999),
@@ -190,8 +202,8 @@ class BaseModel(ABC, InitOptions):
 
     def forward(self, real_a, real_b) -> Tuple[Tensor, Tensor, Tensor, Tensor]:
         """Run forward pass; called by both functions <optimize_parameters> and <test>."""
-        fake_b = self.networks.g_a(real_a)  # G_A(A)
-        fake_a = self.networks.g_b(real_b)  # G_B(B)
+        fake_b = self.networks.g_a_to_b(real_a)  # G_A(A)
+        fake_a = self.networks.g_b_to_a(real_b)  # G_B(B)
 
         # Calculate cycle. Add gaussian if self.cycle_noise_stddev is not 0
         # See: https://discuss.pytorch.org/t/writing-a-simple-gaussian-noise-layer-in-pytorch/4694 # noqa: E501
@@ -209,13 +221,13 @@ class BaseModel(ABC, InitOptions):
                 .requires_grad_()
             )
             noise_b = (
-                torch.zeros(fake_a.size())
+                torch.zeros(fake_b.size())
                 .normal_(0, self.cycle_noise_stddev)
                 .requires_grad_()
             )
 
-        rec_a = self.networks.g_b(fake_b + noise_a)  # G_B(G_A(A))
-        rec_b = self.networks.g_a(fake_a + noise_b)  # G_A(G_B(B))
+        rec_a = self.networks.g_b_to_a(fake_b + noise_b)
+        rec_b = self.networks.g_a_to_b(fake_a + noise_a)
 
         return fake_a, fake_b, rec_a, rec_b
 
