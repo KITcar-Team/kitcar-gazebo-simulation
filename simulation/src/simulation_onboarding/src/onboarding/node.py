@@ -1,7 +1,5 @@
 """OnboardingNode."""
 
-__copyright__ = "KITcar"
-
 from simulation.utils.ros_base.node_base import NodeBase
 
 
@@ -21,12 +19,14 @@ class OnboardingNode(NodeBase):
 
     def start(self):
         """Start node."""
-        # When overwriting a function, ensure that the original function (NodeBase.start()) is also called
+        # When overwriting a function, ensure that the original function (NodeBase.start())
+        # is also called
         super().start()
 
     def stop(self):
         """Turn off node."""
-        # When overwriting a function, ensure that the original function (NodeBase.stop()) is also called
+        # When overwriting a function, ensure that the original function (NodeBase.stop())
+        # is also called
         super().stop()
 
     def steer(self):

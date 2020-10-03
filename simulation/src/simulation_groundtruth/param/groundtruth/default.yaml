@@ -13,4 +13,4 @@ colors:
 tile_size: [4, 4]
 tile_resolution: [1024, 1024]
 
-default_seed: "KITCAR"
+default_seed: KITCAR
