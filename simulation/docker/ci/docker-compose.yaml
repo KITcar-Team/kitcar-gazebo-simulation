@@ -1,20 +1,20 @@
 version: '3.3'
 services:
   base:
-    image: "git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}"
+    image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}
     build:
       context: .
   docs:
-    image: "git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}"
+    image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}
     build:
       context: .
       dockerfile: ./DockerfileDocs
       args:
-        - PARENT_TAG=${CI_PARENT_TAG}
+      - PARENT_TAG=${CI_PARENT_TAG}
   machine_learning:
-    image: "git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}"
+    image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}
     build:
       context: .
       dockerfile: ./DockerfileMachineLearning
       args:
-        - PARENT_TAG=${CI_PARENT_TAG}
+      - PARENT_TAG=${CI_PARENT_TAG}

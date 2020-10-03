@@ -41,7 +41,7 @@ See :mod:`simulation.src.simulation_brain_link.src.sensor_tof.node` for implemen
 
 Dynamics
 ----------
-The car needs to be moved, when `KITcar_brain` decides to start driving. Instead of reinventing the wheel, the contol team's(`Regelungsteam`) vehicle simulation is used to simulate driving behavior. 
+The car needs to be moved, when `KITcar_brain` decides to start driving. Instead of reinventing the wheel, the contol team's(`Regelungsteam`) vehicle simulation is used to simulate driving behavior.
 To do so, the command
 
 .. code-block::

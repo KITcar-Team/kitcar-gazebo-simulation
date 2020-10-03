@@ -2,40 +2,40 @@ image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:focal
 
 variables:
   GIT_STRATEGY: clone
-  GIT_LFS_SKIP_SMUDGE: "1"  #  Don't pull Git LFS
+  GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar/
-  INIT_INPUT: '1\nyn' # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
+  INIT_INPUT: 1\nyn   # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
 
 before_script:
   # Run the container start script to enable the pulseaudio & xserver
-  - bash init/docker_start_script.sh
+- bash init/docker_start_script.sh
 
   # Print out python version for debugging
-  - python3 -V
+- python3 -V
 
   # Install packages and requirements
-  - printf $INIT_INPUT | ./init/init.sh || true
+- printf $INIT_INPUT | ./init/init.sh || true
 
-  - source init/bashrc || true
+- source init/bashrc || true
 
 stages:
-  - build
-  - test
-  - deploy
+- build
+- test
+- deploy
 
 
 ######## BUILD STAGE ########
 # build kitcar-ros and simulation
 build-code:
   stage: build
-  script: &build-all
-    - cd  simulation
-    - catkin_make
+  script:
+  - cd  simulation
+  - catkin_make
   artifacts:
     paths:
-      - simulation/devel
-      - simulation/build
+    - simulation/devel
+    - simulation/build
     expire_in: 2 day
 
 ######## TEST STAGE #########
@@ -43,42 +43,42 @@ build-code:
 # Run module test in utils packages
 test-python-packages:
   stage: test
-  script: &test-utils
-    - python3 -m simulation.utils.geometry.test
-    - python3 simulation/utils/ros_base/test/parameter_object_test.py
+  script:
+  - python3 -m simulation.utils.geometry.test
+  - python3 simulation/utils/ros_base/test/parameter_object_test.py
 
-    - python3 -m simulation.utils.road.sections.test
+  - python3 -m simulation.utils.road.sections.test
 
-    - python3 -m simulation.src.simulation_evaluation.src.speaker.speakers.test
-    - python3 -m simulation.src.simulation_evaluation.src.state_machine.test
+  - python3 -m simulation.src.simulation_evaluation.src.speaker.speakers.test
+  - python3 -m simulation.src.simulation_evaluation.src.state_machine.test
 
     # Test the urdf package
-    - python3 simulation/utils/urdf/test/test_core.py
+  - python3 simulation/utils/urdf/test/test_core.py
 
 test-machine-learning-package:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
   stage: test
   variables:
-    INIT_INPUT: '1\nyy'
+    INIT_INPUT: 1\nyy
   script:
-    - python3 -m simulation.utils.machine_learning.models.test.test_wgan_critic
+  - python3 -m simulation.utils.machine_learning.models.test.test_wgan_critic
 
 test-ros-packages:
   stage: test
   script:
-    - cd simulation
-    - catkin_make run_tests -j1
-    - catkin_test_results  # Ensure that pipeline fails when test fails
+  - cd simulation
+  - catkin_make run_tests -j1
+  - catkin_test_results    # Ensure that pipeline fails when test fails
 
 # Run tests to ensure that the evaluation pipeline is working
 test-drive-evaluation:
   stage: test
   tags:
     # Always require to use the workstation to ensure enough computational power
-    - workstation
+  - workstation
   variables:
     DISPLAY: ":1.0"
-    PATH_FILES: "$KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/src/simulation_evaluation/param/drive/paths"
+    PATH_FILES: $KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/src/simulation_evaluation/param/drive/paths
   script:
     # The drive.test is used to evaluate how the car drives.
     # With automatic_drive:=true the path of the car is predetermined and thus the correctness
@@ -87,58 +87,66 @@ test-drive-evaluation:
     # #### Road: ci_roads/curves.py ####
     # Simple left and right curve
     # Success: Drive on right lane
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true
     # Failure: driving onto the left lane
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true path_file:=$PATH_FILES/left_lane.yaml expected_result_state:=3
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true
+    path_file:=$PATH_FILES/left_lane.yaml expected_result_state:=3
     # Failure: by driving off road
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true path_file:=$PATH_FILES/off_road.yaml expected_result_state:=3
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/curves automatic_drive:=true
+    path_file:=$PATH_FILES/off_road.yaml expected_result_state:=3
 
     # #### Road: ci_roads/obstacles.py ####
     # Road with multiple obstacles
     # Failure: Car will hit the obstacles
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/obstacles expected_result_state:=3 automatic_drive:=true
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/obstacles expected_result_state:=3
+    automatic_drive:=true
     # Success: Car evades the obstacles
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/obstacles automatic_drive:=true path_file:=$PATH_FILES/obstacles.yaml
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/obstacles automatic_drive:=true
+    path_file:=$PATH_FILES/obstacles.yaml
 
     # #### Road: ci_roads/intersection.py ####
     # Road with an intersection
-    - export INTERSECTION_TURN=0 # Don't turn
-    - export INTERSECTION_RULE=0 # Equal priority
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
+  - export INTERSECTION_TURN=0   # Don't turn
+  - export INTERSECTION_RULE=0   # Equal priority
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
     # Turn left
-    - export INTERSECTION_TURN=1
-    - export INTERSECTION_RULE=0 # Equal priority
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
+  - export INTERSECTION_TURN=1
+  - export INTERSECTION_RULE=0   # Equal priority
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
     # Turn right
-    - export INTERSECTION_TURN=2
-    - export INTERSECTION_RULE=0 # Equal priority
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
+  - export INTERSECTION_TURN=2
+  - export INTERSECTION_RULE=0   # Equal priority
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
     # Supposed to yield (failure)
-    - export INTERSECTION_TURN=0
-    - export INTERSECTION_RULE=1
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true expected_result_state:=3
+  - export INTERSECTION_TURN=0
+  - export INTERSECTION_RULE=1
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
+    expected_result_state:=3
     # Supposed to stop (failure)
-    - export INTERSECTION_TURN=0
-    - export INTERSECTION_RULE=2
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true expected_result_state:=3
+  - export INTERSECTION_TURN=0
+  - export INTERSECTION_RULE=2
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/intersection automatic_drive:=true
+    expected_result_state:=3
 
     # #### Road: ci_roads/blocked_area.py ####
     # Drive around the blocked area
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/blocked_area automatic_drive:=true path_file:=$PATH_FILES/blocked_area.yaml
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/blocked_area automatic_drive:=true
+    path_file:=$PATH_FILES/blocked_area.yaml
     # Drive into the blocked area
-    - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/blocked_area automatic_drive:=true expected_result_state:=3
+  - rostest simulation_evaluation drive.test time_limit:=300 road:=ci_roads/blocked_area automatic_drive:=true
+    expected_result_state:=3
 
 test-documentation:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
   stage: test
   variables:
-    INIT_INPUT: '1\nyy'
-    GIT_LFS_SKIP_SMUDGE: "0"  #  Pull git lfs
+    INIT_INPUT: 1\nyy
+    GIT_LFS_SKIP_SMUDGE: '0'  #  Pull git lfs
   script:
     # Test if the onboarding documentation is correct
-    - python3 docs/content/tutorials/road_examples/example.py
-    - cd docs
-    - make doctest
+  - python3 docs/content/tutorials/road_examples/example.py
+  - cd docs
+  - make doctest
 
 ######### Documentation ########
 
@@ -148,15 +156,15 @@ build-documentation:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
   stage: deploy
   variables:
-    INIT_INPUT: '1\nyy'
-    GIT_LFS_SKIP_SMUDGE: "0"  #  Pull git lfs
+    INIT_INPUT: 1\nyy
+    GIT_LFS_SKIP_SMUDGE: '0'  #  Pull git lfs
   script:
     # Build the documentation
-    - cd docs
-    - make html
+  - cd docs
+  - make html
   artifacts: # Extract artifacts to view the documentation that has been generated
     paths:
-      - docs/_build/html/*
+    - docs/_build/html/*
     expire_in: 2 day
 
 cml-cyclegan:
@@ -164,38 +172,40 @@ cml-cyclegan:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
   when: manual
   variables:
-    INIT_INPUT: '1\nyy'
+    INIT_INPUT: 1\nyy
   tags:
-    - workstation
+  - workstation
   script:
-    - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
-    - dvc pull data/real_images/maschinen_halle_parking --run-cache
-    - dvc pull data/simulated_images/test_images --run-cache
-    - cd simulation/utils/machine_learning/cycle_gan
+  - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
+  - dvc pull data/real_images/maschinen_halle_parking --run-cache
+  - dvc pull data/simulated_images/test_images --run-cache
+  - cd simulation/utils/machine_learning/cycle_gan
     # pull cache from server and checkout
-    - dvc pull dvc.yaml --run-cache
+  - dvc pull dvc.yaml --run-cache
     # Test current model, make videos and commit to dvc
-    - dvc repro test_dr_drift_256 -s
-    - dvc repro test_discriminators_dr_drift_256 -s
-    - dvc repro make_video_dr_drift_256 -s
-    - cd ../../../../
+  - dvc repro test_dr_drift_256 -s
+  - dvc repro test_discriminators_dr_drift_256 -s
+  - dvc repro make_video_dr_drift_256 -s
+  - cd ../../../../
     # Create content for the report.md
-    - echo "# Dr Drift 256" >> report.md
-    - echo "## Test Generators" >> report.md
-    - cml-publish simulation/utils/machine_learning/cycle_gan/results/dr_drift_256/stacked.mp4 --gitlab-uploads --md --title 'MP4' >> report.md
-    - echo "<br>" >> report.md
-    - echo "## Test Discriminators" >> report.md
-    - losses=`cat simulation/utils/machine_learning/cycle_gan/results/dr_drift_256/discriminator_losses.txt`
-    - A="$(cut -d',' -f1 <<<"$losses")"
-    - B="$(cut -d',' -f2 <<<"$losses")"
-    - echo "**AVG-Loss Discriminator A =** $A" >> report.md
-    - echo "<br>" >> report.md
-    - echo "**AVG-Loss Discriminator B =** $B" >> report.md
-    - echo "<br>" >> report.md
-    - echo "## Loss values" >> report.md
-    - cml-publish simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/loss.png --gitlab-uploads --md --title 'Loss values' >> report.md
+  - echo "# Dr Drift 256" >> report.md
+  - echo "## Test Generators" >> report.md
+  - cml-publish simulation/utils/machine_learning/cycle_gan/results/dr_drift_256/stacked.mp4 --gitlab-uploads
+    --md --title 'MP4' >> report.md
+  - echo "<br>" >> report.md
+  - echo "## Test Discriminators" >> report.md
+  - losses=`cat simulation/utils/machine_learning/cycle_gan/results/dr_drift_256/discriminator_losses.txt`
+  - A="$(cut -d',' -f1 <<<"$losses")"
+  - B="$(cut -d',' -f2 <<<"$losses")"
+  - echo "**AVG-Loss Discriminator A =** $A" >> report.md
+  - echo "<br>" >> report.md
+  - echo "**AVG-Loss Discriminator B =** $B" >> report.md
+  - echo "<br>" >> report.md
+  - echo "## Loss values" >> report.md
+  - cml-publish simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/loss.png
+    --gitlab-uploads --md --title 'Loss values' >> report.md
     # Send report.md as comment
-    - cml-send-comment report.md
+  - cml-send-comment report.md
 
 # Build and deploy the CI docker image to the gitlab registry
 # This is done everytime the master branch is updated
@@ -203,65 +213,65 @@ cml-cyclegan:
   stage: deploy
   image: docker:19.03.11
   tags:
-    - docker
+  - docker
   services:
-    - docker:19.03.11-dind
+  - docker:19.03.11-dind
   variables:
     # Ensure that lfs files are available in resulting images!
-    GIT_LFS_SKIP_SMUDGE: "0"  #  Pull Git LFS
+    GIT_LFS_SKIP_SMUDGE: '0'  #  Pull Git LFS
     DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
+    DOCKER_TLS_CERTDIR: ''
   before_script:
-   - |
-      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
-        export TAG_CI_IMAGE=focal
-        export TAG_CI_IMAGE_DOCS=docs
-        export TAG_CI_IMAGE_ML=machine_learning
-        export TAG_DEFAULT_IMAGE=focal
-        export TAG_DEFAULT_IMAGE_CI=ci
-        export TAG_KITCAR_ROS_IMAGE=focal
-      else
-        export TAG_CI_IMAGE=focal_${CI_COMMIT_REF_NAME}
-        export TAG_CI_IMAGE_DOCS=docs_${CI_COMMIT_REF_NAME}
-        export TAG_CI_IMAGE_ML=machine_learning_${CI_COMMIT_REF_NAME}
-        export TAG_DEFAULT_IMAGE=focal_${CI_COMMIT_REF_NAME}
-        export TAG_DEFAULT_IMAGE_CI=ci_${CI_COMMIT_REF_NAME}
-        export TAG_KITCAR_ROS_IMAGE=focal_${CI_COMMIT_REF_NAME}
-      fi
-   - apk add --no-cache docker-compose
+  - |
+    if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+      export TAG_CI_IMAGE=focal
+      export TAG_CI_IMAGE_DOCS=docs
+      export TAG_CI_IMAGE_ML=machine_learning
+      export TAG_DEFAULT_IMAGE=focal
+      export TAG_DEFAULT_IMAGE_CI=ci
+      export TAG_KITCAR_ROS_IMAGE=focal
+    else
+      export TAG_CI_IMAGE=focal_${CI_COMMIT_REF_NAME}
+      export TAG_CI_IMAGE_DOCS=docs_${CI_COMMIT_REF_NAME}
+      export TAG_CI_IMAGE_ML=machine_learning_${CI_COMMIT_REF_NAME}
+      export TAG_DEFAULT_IMAGE=focal_${CI_COMMIT_REF_NAME}
+      export TAG_DEFAULT_IMAGE_CI=ci_${CI_COMMIT_REF_NAME}
+      export TAG_KITCAR_ROS_IMAGE=focal_${CI_COMMIT_REF_NAME}
+    fi
+  - apk add --no-cache docker-compose
   script:
-    - docker --version
-    - docker info
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker --version
+  - docker info
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     # Test building the ci image
-    - cd simulation/docker/ci
-    - /bin/sh build.sh base $TAG_CI_IMAGE
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE
-    - /bin/sh build.sh machine_learning $TAG_CI_IMAGE_ML $TAG_CI_IMAGE
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_ML
-    - /bin/sh build.sh docs $TAG_CI_IMAGE_DOCS $TAG_CI_IMAGE_ML
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_DOCS
+  - cd simulation/docker/ci
+  - /bin/sh build.sh base $TAG_CI_IMAGE
+  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE
+  - /bin/sh build.sh machine_learning $TAG_CI_IMAGE_ML $TAG_CI_IMAGE
+  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_ML
+  - /bin/sh build.sh docs $TAG_CI_IMAGE_DOCS $TAG_CI_IMAGE_ML
+  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_DOCS
     # Test building the default image
-    - cd ../default
-    - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE_CI $KITCAR_REPO_PATH
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:$TAG_DEFAULT_IMAGE_CI
-    - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE /home/kitcar/
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:$TAG_DEFAULT_IMAGE
+  - cd ../default
+  - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE_CI $KITCAR_REPO_PATH
+  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:$TAG_DEFAULT_IMAGE_CI
+  - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE /home/kitcar/
+  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:$TAG_DEFAULT_IMAGE
     # Test building the kitcar_ros_ci image
-    - cd ../kitcar_ros_ci
-    - /bin/sh build.sh $CI_REGISTRY $TAG_DEFAULT_IMAGE_CI $TAG_KITCAR_ROS_IMAGE
-    - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/kitcar_ros_ci:$TAG_KITCAR_ROS_IMAGE
+  - cd ../kitcar_ros_ci
+  - /bin/sh build.sh $CI_REGISTRY $TAG_DEFAULT_IMAGE_CI $TAG_KITCAR_ROS_IMAGE
+  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/kitcar_ros_ci:$TAG_KITCAR_ROS_IMAGE
 
 deploy-docker-images-master:
   extends: .docker-images-template
   # Always run on master
   only:
-    - master
+  - master
 
 deploy-docker-images:
   extends: .docker-images-template
   # Allow to manually build the ci image
   # E.g. to test if the Dockerfile is still working
   except:
-    - master
+  - master
   when: manual

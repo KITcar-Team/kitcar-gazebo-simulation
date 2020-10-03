@@ -17,11 +17,11 @@
   <include file="$(find control)/launch/lateral_controller_node.launch">
        <arg name="car_name" value="$(arg car_name)" />
   </include>
-  
+
   <include file="$(find control)/launch/longitudinal_controller_node.launch">
        <arg name="car_name" value="$(arg car_name)" />
   </include>
-  
+
   <include file="$(find navigation)/launch/navigation.launch">
     <arg name="car_name" value="$(arg car_name)" />
   </include>

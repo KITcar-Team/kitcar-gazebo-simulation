@@ -1,4 +1,4 @@
-"""Definition of the road.sections module
+"""Definition of the road.sections module.
 
 Collect classes and functions which should be included in the road.sections module.
 
