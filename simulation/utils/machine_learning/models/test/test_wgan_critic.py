@@ -35,12 +35,10 @@ def test_weight_clipping(lower, upper):
 @given(
     integers(min_value=1, max_value=16),
     integers(min_value=1, max_value=3),
-    integers(min_value=3, max_value=6),
-    integers(min_value=3, max_value=6),
+    integers(min_value=3, max_value=6).map(lambda x: 2 ** x),
+    integers(min_value=3, max_value=6).map(lambda x: 2 ** x),
 )
-def test_forward(batch_size, input_nc, height_log_2, width_log_2):
-    height = 2 ** height_log_2
-    width = 2 ** width_log_2
+def test_forward(batch_size, input_nc, height, width):
     print(
         f"Test critic input with batch_size:{batch_size},"
         f"input_nc:{input_nc}, height:{height}, width:{width}"
