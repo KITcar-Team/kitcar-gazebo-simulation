@@ -4,6 +4,7 @@
 default_language_version:
   python: python3.8
 repos:
+  # Hooks that modify code
 - repo: https://github.com/ambv/black
   rev: stable
   hooks:
@@ -22,7 +23,27 @@ repos:
   - id: docformatter
     args: [-i, --wrap-summaries, '92', --wrap-descriptions, '92']
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v2.3.0
+  rev: v3.2.0  # Use the ref you want to point at
+  hooks:
+  - id: trailing-whitespace
+- repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+  rev: 0.1.0  # or specific tag
+  hooks:
+  - id: yamlfmt
+    args: [--mapping, '2', --sequence, '2', --offset, '0', --width, '92', --implicit_start, --preserve-quotes]
+
+  # Hooks for validation
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v3.2.0  # Use the ref you want to point at
+  hooks:
+  - id: check-yaml
+    args: [--allow-multiple-documents, --unsafe] # Use unsafe to allow custom tags (e.g. !degrees) in ROS parameter files
+  - id: check-executables-have-shebangs
+  - id: check-case-conflict
+  - id: debug-statements
+  - id: check-xml
+- repo: https://gitlab.com/pycqa/flake8
+  rev: master
   hooks:
   - id: flake8
 - repo: https://github.com/iterative/dvc
@@ -41,3 +62,7 @@ repos:
     stages:
     - post-checkout
     always_run: true
+- repo: https://gitlab.com/smop/pre-commit-hooks
+  rev: v1.0.0
+  hooks:
+  - id: check-gitlab-ci
