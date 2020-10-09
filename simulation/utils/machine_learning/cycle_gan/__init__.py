@@ -78,7 +78,6 @@ For testing purposes there are the following DVC stages:
 
     - test_dr_drift_256
     - make_video_dr_drift_256
-    - stacked_gif_dr_drift_256
 
 A DVC stage is executed with the following command:
 
