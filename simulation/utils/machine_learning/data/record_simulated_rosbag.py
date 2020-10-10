@@ -124,6 +124,11 @@ if __name__ == "__main__":
         "--seed", help="Seed(s) passed when generating the road.", default=[None], nargs="+"
     )
     parser.add_argument("--max_duration", help="Maximum recording time.", default=120)
+    parser.add_argument(
+        "--label_camera",
+        help="Start the label camera as well.",
+        action="store_true",
+    )
 
     parser.add_argument(
         "--control_sim_rate",
