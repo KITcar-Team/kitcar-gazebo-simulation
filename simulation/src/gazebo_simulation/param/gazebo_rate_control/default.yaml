@@ -2,10 +2,10 @@
 # If any of the topics are not publishing at all,
 # they are not considered!
 targets:
-  - topic: /camera/image_raw
-    desired: 55
-  - topic: /simulation/speaker/broadcast
-    desired: 25
+- topic: /camera/image_raw
+  desired: 55
+- topic: /simulation/speaker/broadcast
+  desired: 25
 
 # Restrictions on how much the gazebo update rate can be changed
 # Prevent stopping the simulation
