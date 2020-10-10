@@ -57,7 +57,7 @@ update_rate: 30
 # 6) Parking front right
 road: 2
 path: 3
-stops: [[2.7,1.1]]
+stops: [[2.7, 1.1]]
 
 # 7) Parking back right
 #road: 2

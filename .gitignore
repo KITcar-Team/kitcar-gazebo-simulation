@@ -41,7 +41,7 @@ Tests/polyfit_comparison/polyfit_comparison
 .catkin_workspace
 .clang_complete
 compile_commands.json
-# pycharm 
+# pycharm
 .idea/
 # ctags
 tags

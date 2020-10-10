@@ -17,7 +17,7 @@ Lessons
 * **Names** are assigned **values** that have a type
 * A **name** cannot be assigned to other **name**
 * An **assignment** never copies data
-* Immutable objects can't change their value, mutable objects can change through **modifying** or **rebinding** 
+* Immutable objects can't change their value, mutable objects can change through **modifying** or **rebinding**
 
 
 Sources

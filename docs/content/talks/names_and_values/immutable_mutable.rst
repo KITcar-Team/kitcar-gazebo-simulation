@@ -97,7 +97,7 @@ However:
 >>> list2
 ['hello', ' world']
 
-does create a new list. 
+does create a new list.
 
 .. graphviz::
 

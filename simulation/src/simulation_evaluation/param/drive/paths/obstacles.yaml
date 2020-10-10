@@ -1,12 +1,12 @@
 # Path specification to evade the obstacles on ci_roads/obstacles.py
 path:
-  - start: 0.4
-    offset: -0.2
-  - start: 3.5
-    offset: 0.2
-  - start: 5
-    offset: -0.2
-  - start: 6.5
-    offset: 0.2
-  - start: 10.5
-    offset: -0.2
+- start: 0.4
+  offset: -0.2
+- start: 3.5
+  offset: 0.2
+- start: 5
+  offset: -0.2
+- start: 6.5
+  offset: 0.2
+- start: 10.5
+  offset: -0.2
