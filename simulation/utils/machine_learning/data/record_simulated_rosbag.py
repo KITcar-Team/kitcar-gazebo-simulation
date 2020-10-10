@@ -125,6 +125,12 @@ if __name__ == "__main__":
     )
     parser.add_argument("--max_duration", help="Maximum recording time.", default=120)
 
+    parser.add_argument(
+        "--control_sim_rate",
+        help="Whether to control the sim rate.",
+        action="store_true",
+    )
+
     kwargs = {k: v for k, v in parser.parse_args()._get_kwargs()}
 
     main(**kwargs)
