@@ -55,6 +55,7 @@ to share knowledge and ensure common standards within the code.
    tutorials/roads.rst
    tutorials/road_sections.rst
    tutorials/models
+   tutorials/rosbags.rst
 
 
 .. toctree::
