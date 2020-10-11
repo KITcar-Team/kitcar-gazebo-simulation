@@ -36,7 +36,7 @@ def _get_stop_line(line1: Line, line2: Line, kind) -> SurfaceMarkingRect:
     line = Line([p1, p2])
     width = line.length
     center = 0.5 * (Vector(line.coords[0]) + Vector(line.coords[1]))
-    angle = Pose([0, 0], Vector(line.coords[1]) - Vector(line.coords[0])).get_angle()
+    angle = line1.interpolate_direction(arc_length=0).argument
 
     return SurfaceMarkingRect(
         kind=kind, angle=angle, width=width, normalize_x=False, center=center, depth=0.04
