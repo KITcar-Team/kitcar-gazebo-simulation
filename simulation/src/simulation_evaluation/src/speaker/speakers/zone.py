@@ -76,7 +76,7 @@ class ZoneSpeaker(Speaker):
             obstacle
             for sec in self.sections
             if sec.type != road_section_type.PARKING_AREA
-            for obstacle in self.get_obstacles_in_section(sec.id)
+            for obstacle, _ in self.get_obstacles_in_section(sec.id)
         )
 
         # Get blocked area polygons because the car
