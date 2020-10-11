@@ -7,6 +7,7 @@ import rospy
 from gazebo_simulation.msg import CarState as CarStateMsg
 from simulation_groundtruth.msg import GroundtruthStatus
 
+from simulation.src.simulation_groundtruth.src.groundtruth.groundtruth import Groundtruth
 from simulation.src.simulation_groundtruth.src.groundtruth.node import GroundtruthNode
 from simulation.src.simulation_groundtruth.src.groundtruth.object_controller import (
     ObjectController,
@@ -33,8 +34,10 @@ class ObjectControllerTestNode(unittest.TestCase, GroundtruthNode):
         self.__spawned_models: List[str] = []
         NodeBase.__init__(self, name="object_controller_test", log_level=rospy.DEBUG)
 
+        road = Road()
+        self.groundtruth = Groundtruth(road=road)  # Just for the initialization to work
         self.object_controller = ObjectController(
-            Road(),
+            road,
             remove_model=self._remove_model,
             spawn_model=self._spawn_model,
         )

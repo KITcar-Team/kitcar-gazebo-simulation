@@ -41,7 +41,8 @@ class Speaker:
         lane_proxy: Callable[[int], LaneMsg],
         obstacle_proxy: Callable[[int], List[LabeledPolygonMsg]] = None,
         surface_marking_proxy: Callable[[int], List[LabeledPolygonMsg]] = None,
-        intersection_proxy: Callable[[int], Any] = None
+        intersection_proxy: Callable[[int], Any] = None,
+        sign_proxy: Callable[[int], List[LabeledPolygonMsg]] = None,
     ):
         """Initialize speaker with funtions that can be queried for groundtruth information.
 
@@ -59,6 +60,7 @@ class Speaker:
         self.get_obstacles = obstacle_proxy
         self.get_surface_markings = surface_marking_proxy
         self.get_intersection = intersection_proxy
+        self.get_traffic_signs = sign_proxy
 
     def listen(self, msg: CarStateMsg):
         """Receive information about current observations and update internal values."""
@@ -157,6 +159,21 @@ class Speaker:
         obstacle_response = self.get_obstacles(section_id)
 
         return [(Polygon(o.frame), o.height) for o in obstacle_response.polygons]
+
+    def get_traffic_signs_in_section(self, section_id: int) -> List[Tuple[Polygon, float]]:
+        """Get all traffic_signs inside section as polygons.
+
+        Args:
+            section_id: id of the section
+
+        Returns:
+            Tuples of polygons describing the frames of the traffic_signs and their height.
+        """
+
+        assert isinstance(section_id, int)
+        traffic_sign_response = self.get_traffic_signs(section_id)
+
+        return [(Polygon(o.frame), o.height) for o in traffic_sign_response.polygons]
 
     def get_surface_markings_in_section(self, section_id: int) -> List[Tuple[int, Polygon]]:
         """Get all surface_markings inside as polygons.
