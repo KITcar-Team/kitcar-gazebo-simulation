@@ -4,6 +4,7 @@ intersection: /simulation/groundtruth/intersection
 parking: /simulation/groundtruth/parking
 obstacle: /simulation/groundtruth/obstacle
 surface_marking: /simulation/groundtruth/surface_marking
+traffic_sign: /simulation/groundtruth/traffic_sign
 
 spawn_model: /simulation/gazebo/world/spawn_sdf_model
 remove_model: /simulation/gazebo/world/remove_model

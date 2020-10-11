@@ -167,3 +167,21 @@ class Groundtruth:
             msg.type = surface_marking.kind
             msgs.append(msg)
         return msgs
+
+    def get_traffic_sign_msgs(self, id: int) -> List[LabeledPolygonMsg]:
+        """Labeled polygon msg for each traffic sign in the requested road section.
+
+        Args:
+            id: section id
+        """
+        signs = self.road.sections[id].traffic_signs
+        if signs is None:
+            return []
+        msgs = []
+        for sign in signs:
+            msg = LabeledPolygonMsg()
+            msg.frame = sign.frame.to_geometry_msg()
+            msg.type = 0
+            msg.height = sign.kind.collision_box_size[2]
+            msgs.append(msg)
+        return msgs

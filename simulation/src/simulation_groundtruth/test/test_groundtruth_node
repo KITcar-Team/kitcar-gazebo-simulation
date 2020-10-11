@@ -116,7 +116,7 @@ class GroundtruthTestNode(unittest.TestCase, GroundtruthMockNode):
 
     def _test_road(self):
         self.__road_sections = self._load_road().sections
-        self.groundtruth = Groundtruth(self._load_road())
+        self.groundtruth.road = self._load_road()
 
         rospy.logdebug(f"Testing groundtruth for road sections {self.__road_sections}")
 
