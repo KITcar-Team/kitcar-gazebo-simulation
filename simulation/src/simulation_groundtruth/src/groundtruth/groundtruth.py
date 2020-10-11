@@ -8,7 +8,7 @@ from simulation_groundtruth.msg import Line as LineMsg
 from simulation_groundtruth.msg import Parking as ParkingMsg
 from simulation_groundtruth.msg import Section as SectionMsg
 
-from simulation.utils.geometry import Line
+from simulation.utils.geometry import Line, Polygon
 from simulation.utils.road.road import Road
 from simulation.utils.road.sections import Intersection
 
@@ -140,10 +140,15 @@ class Groundtruth:
         if obstacles is None:
             return []
         msgs = []
+
         for obstacle in obstacles:
+            assert isinstance(obstacle.frame, Polygon)
+            assert isinstance(obstacle.height, float)
             msg = LabeledPolygonMsg()
             msg.frame = obstacle.frame.to_geometry_msg()
+            msg.height = obstacle.height
             msgs.append(msg)
+
         return msgs
 
     def get_surface_marking_msgs(self, id: int) -> List[LabeledPolygonMsg]:

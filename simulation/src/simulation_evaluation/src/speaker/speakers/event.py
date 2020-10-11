@@ -97,7 +97,7 @@ class EventSpeaker(Speaker):
             # And it further simplifies the polygons
             Polygon(o.buffer(BUFFER).exterior.coords)
             for sec in self.sections
-            for o in self.get_obstacles_in_section(sec.id)
+            for o, _ in self.get_obstacles_in_section(sec.id)
         ]
 
     @functools.cached_property

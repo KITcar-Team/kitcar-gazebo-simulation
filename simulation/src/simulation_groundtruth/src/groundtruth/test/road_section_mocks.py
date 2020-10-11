@@ -42,6 +42,7 @@ def _generic_mock(**kwargs):
         for i, obs in enumerate(kwargs["obstacles"]):
             m = Mock()
             m.frame = obs
+            m.height = (i % 4 + 5) / 10
             kwargs["obstacles"][i] = m
 
     for key, val in kwargs.items():

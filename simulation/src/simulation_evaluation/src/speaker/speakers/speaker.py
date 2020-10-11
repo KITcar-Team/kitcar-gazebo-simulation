@@ -143,18 +143,20 @@ class Speaker:
 
         return LineTuple(Line(msg.left_line), Line(msg.middle_line), Line(msg.right_line))
 
-    def get_obstacles_in_section(self, section_id: int) -> List[Polygon]:
+    def get_obstacles_in_section(self, section_id: int) -> List[Tuple[Polygon, float]]:
         """Get all obstacles inside as polygons.
 
         Args:
             section_id: id of the section
 
         Returns:
-            List of polygons describing the frames of the obstacles
+            List of polygons describing the frames of the obstacles and their height.
         """
-        obstacle_msgs = self.get_obstacles(section_id).polygons
 
-        return [Polygon(o.frame) for o in obstacle_msgs]
+        assert isinstance(section_id, int)
+        obstacle_response = self.get_obstacles(section_id)
+
+        return [(Polygon(o.frame), o.height) for o in obstacle_response.polygons]
 
     def get_surface_markings_in_section(self, section_id: int) -> List[Tuple[int, Polygon]]:
         """Get all surface_markings inside as polygons.
