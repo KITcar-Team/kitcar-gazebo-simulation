@@ -1,6 +1,7 @@
 import argparse
+import shutil
 
-from . import record_simulated_rosbag, rosbag_to_images
+from . import record_simulated_rosbag, rosbag_to_images, rosbag_to_labels
 
 
 def main(**kwargs):
@@ -19,12 +20,36 @@ def main(**kwargs):
         )
         # Extract images from that rosbag.
         rosbag_to_images.rosbag_to_images(
-            rosbag_dir, kwargs["output_dir"], kwargs["image_topic"]
+            rosbag_dir, kwargs["output_dir"], kwargs["image_topic"], name_after_header=True
         )
+        if kwargs["label_image_topic"] is True:
+            # Extract images from that rosbag.
+            rosbag_to_images.rosbag_to_images(
+                rosbag_dir,
+                kwargs["output_dir"] + "/debug",
+                kwargs["label_image_topic"],
+                name_after_header=True,
+            )
+
+        if kwargs["label_camera"] is True:
+            assert "label_file" in kwargs, "Required argument label_file missing."
+            assert "label_topic" in kwargs, "Required argument label_topic missing."
+
+            # Extract images from that rosbag.
+            rosbag_to_images.rosbag_to_images(
+                rosbag_dir,
+                kwargs["output_dir"] + "/debug",
+                kwargs["label_image_topic"],
+                name_after_header=True,
+            )
+
+            rosbag_to_labels.rosbag_to_labels(
+                rosbag_dir,
+                output_file=kwargs["label_file"],
+                label_topic=kwargs["label_topic"],
+            )
 
         # Delete the rosbag
-        import shutil
-
         shutil.rmtree(rosbag_dir)
 
 
@@ -45,9 +70,30 @@ if __name__ == "__main__":
         "--randomize_path", help="Drive randomly on the road.", default=True
     )
     parser.add_argument(
+        "--control_sim_rate",
+        help="Automatically adapt simulation speed.",
+        default=False,
+        action="store_true",
+    )
+    parser.add_argument(
         "--seed", help="Seed(s) passed when generating the road.", default=[None], nargs="+"
     )
     parser.add_argument("--max_duration", help="Maximum recording time.", default=120)
+
+    # Labels
+    parser.add_argument(
+        "--label_image_topic", help="Topic of the labeled debug image to be extracted."
+    )
+
+    parser.add_argument(
+        "--label_camera", help="Launch label camera.", action="store_true", default=False
+    )
+    parser.add_argument(
+        "--label_topic", help="Topic of the labels to be extracted.", required=False
+    )
+    parser.add_argument(
+        "--label_file", help="File path where to store the labels.", required=False
+    )
 
     kwargs = {k: v for k, v in parser.parse_args()._get_kwargs()}
 
