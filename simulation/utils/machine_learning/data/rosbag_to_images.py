@@ -7,7 +7,7 @@ from cv_bridge import CvBridge
 
 
 def rosbag_to_images(
-    bag_path: str, output_dir: str, image_topic: str, name_after_header: bool
+    bag_path: str, output_dir: str, image_topic: str, name_after_header: bool = False
 ) -> None:
 
     # Create output_dir if it doesnt exist
