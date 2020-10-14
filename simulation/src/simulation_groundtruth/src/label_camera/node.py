@@ -5,13 +5,14 @@ import numpy as np
 import rospy
 import tf2_ros
 from cv_bridge.core import CvBridge
-
-# Messages
 from gazebo_simulation.msg import CarState as CarStateMsg
 from sensor_msgs.msg import Image as ImageMsg
 from simulation_groundtruth.msg import GroundtruthStatus
 from simulation_groundtruth.msg import ImageLabels as ImageLabelsMsg
 from simulation_groundtruth.srv import LabeledPolygonSrv, LaneSrv, SectionSrv
+
+# Messages
+from std_srvs.srv import Empty as EmptySrv
 
 from simulation.src.gazebo_simulation.src.car_model.camera_specs import CameraSpecs
 from simulation.utils.geometry import Transform
@@ -48,12 +49,20 @@ class LabelCameraNode(NodeBase):
         traffic_sign_proxy = rospy.ServiceProxy(
             groundtruth_topics.traffic_sign, LabeledPolygonSrv, persistent=True
         )
+        self.pause_physics_proxy = rospy.ServiceProxy(
+            self.param.topics.pause_gazebo, EmptySrv
+        )
+        self.unpause_physics_proxy = rospy.ServiceProxy(
+            self.param.topics.unpause_gazebo, EmptySrv
+        )
         self._proxies = [
             section_proxy,
             lane_proxy,
             obstacle_proxy,
             surface_marking_proxy,
             traffic_sign_proxy,
+            self.unpause_physics_proxy,
+            self.pause_physics_proxy,
         ]
 
         rospy.wait_for_service(groundtruth_topics.section)
@@ -118,7 +127,7 @@ class LabelCameraNode(NodeBase):
 
     def receive_car_state(self, msg: CarStateMsg):
         """Receive CarState message and update transformations and label speaker."""
-        self.label_speaker.listen(msg)
+        self._latest_car_state_msg = msg
 
     def receive_image(self, msg: ImageMsg):
         """Receive new camera image and publish corresponding labels."""
@@ -131,46 +140,60 @@ class LabelCameraNode(NodeBase):
             rospy.logerr(f"Could not lookup transform {e}")
             return
 
-        image_size = (
-            self.camera_specs.output_size["width"],
-            self.camera_specs.output_size["height"],
-        )
+        # Pass latest car state to the speaker to ensure tf and
+        # car state are approximately synchronized
+        self.label_speaker.listen(self._latest_car_state_msg)
 
-        # Update transformations
-        BoundingBox.set_tfs(current_tf, self.camera_specs.P)
+        try:
+            # Pause physics to prevent the car from moving any further
+            # while calculating the bounding boxes
+            self.pause_physics_proxy()
 
-        visible_bbs = self.label_speaker.speak(image_size, self.camera_specs.horizontal_fov)
-
-        self.label_publisher.publish(
-            ImageLabelsMsg(
-                img_header=msg.header, bounding_boxes=[bb.to_msg() for bb in visible_bbs]
+            image_size = (
+                self.camera_specs.output_size["width"],
+                self.camera_specs.output_size["height"],
             )
-        )
 
-        # Optionally publish an image with bounding boxes drawn into it
-        if self.param.publish_debug_image:
-            colors = self.param.colors.as_dict()
+            # Update transformations
+            BoundingBox.set_tfs(current_tf, self.camera_specs.P)
 
-            visualization_bbs = (
-                VisualBoundingBox(
-                    bb.get_bounds(),
-                    label=bb.class_description,
-                    color=colors[str(bb.class_id // 100)]
-                    if str(bb.class_id // 100) in colors
-                    # ID Namespaces are in steps of 100.
-                    else colors[str(-1)],
+            visible_bbs = self.label_speaker.speak(
+                image_size, self.camera_specs.horizontal_fov
+            )
+
+            self.label_publisher.publish(
+                ImageLabelsMsg(
+                    img_header=msg.header,
+                    bounding_boxes=[bb.to_msg() for bb in visible_bbs],
                 )
-                for bb in visible_bbs
             )
 
-            br = CvBridge()
-            cv_img = br.imgmsg_to_cv2(msg)
-            cv_img: np.ndarray = cv_img.copy()
-            cv_img = cv2.cvtColor(cv_img, cv2.COLOR_GRAY2RGB)
+            # Optionally publish an image with bounding boxes drawn into it
+            if self.param.publish_debug_image:
+                colors = self.param.colors.as_dict()
 
-            for bb in visualization_bbs:
-                bb.draw(cv_img)
-            out_msg = br.cv2_to_imgmsg(cv_img, encoding="rgb8")
-            out_msg.header = msg.header
+                visualization_bbs = (
+                    VisualBoundingBox(
+                        bb.get_bounds(),
+                        label=bb.class_description,
+                        color=colors[str(bb.class_id // 100)]
+                        if str(bb.class_id // 100) in colors
+                        # ID Namespaces are in steps of 100.
+                        else colors[str(-1)],
+                    )
+                    for bb in visible_bbs
+                )
 
-            self.image_publisher.publish(out_msg)
+                br = CvBridge()
+                cv_img = br.imgmsg_to_cv2(msg)
+                cv_img: np.ndarray = cv_img.copy()
+                cv_img = cv2.cvtColor(cv_img, cv2.COLOR_GRAY2RGB)
+
+                for bb in visualization_bbs:
+                    bb.draw(cv_img)
+                out_msg = br.cv2_to_imgmsg(cv_img, encoding="rgb8")
+                out_msg.header = msg.header
+
+                self.image_publisher.publish(out_msg)
+        finally:
+            self.unpause_physics_proxy()

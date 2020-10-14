@@ -18,7 +18,6 @@ class LabelSpeaker(Speaker):
     def listen(self, msg: CarStateMsg):
         super().listen(msg)
         self.camera_fov = Polygon(msg.view_cone)
-
         LabelSpeaker._get_visible_sections.cache_clear()
 
     @functools.lru_cache(1)
