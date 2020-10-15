@@ -44,7 +44,6 @@ __all__ = [
     "ParkingArea",
     "ParkingLot",
     "ParkingSpot",
-    "StartLine",
     "StraightRoad",
     "ZebraCrossing",
     "RoadSection",
