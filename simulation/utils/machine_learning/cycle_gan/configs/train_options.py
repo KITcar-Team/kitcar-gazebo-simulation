@@ -12,10 +12,6 @@ class TrainOptions(BaseOptions):
     """Path to images of domain A (real images). Can be a list of folders."""
     dataset_b: List[str] = ["./../../../../data/simulated_images/random_roads"]
     """Path to images of domain B (simulated images). Can be a list of folders"""
-    display_env: str = "main"
-    """Visdom display environment name (default is "main")"""
-    display_freq: int = 5
-    """Frequency of showing training results on screen"""
     display_id: int = 1
     """Window id of the web display"""
     display_port: int = 8097
@@ -26,12 +22,6 @@ class TrainOptions(BaseOptions):
     """# threads for loading data"""
     print_freq: int = 10
     """Frequency of showing training results on console"""
-    save_by_iter: bool = False
-    """Whether saves model by iteration"""
-    save_epoch_freq: int = 1
-    """Frequency of saving checkpoints at the end of epochs"""
-    save_latest_freq: int = 1000
-    """Frequency of saving the latest results"""
     beta1: float = 0.5
     """Momentum term of adam"""
     batch_size: int = 1

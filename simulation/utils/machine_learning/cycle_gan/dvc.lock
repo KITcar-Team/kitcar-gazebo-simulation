@@ -10,7 +10,7 @@ test_dr_drift_256:
   - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
     md5: ed27e477dd4c6c0b699c70507c4d6f65
   - path: configs
-    md5: a4365df7f026b598b2227c8601ff564c.dir
+    md5: 626c87179a67d8c2e2cd16723fc2d5a2.dir
   outs:
   - path: results/dr_drift_256/images
     md5: 9c5c82f50eaf6c6d9cafbd152eed6710.dir
@@ -45,7 +45,7 @@ train_dr_drift_256:
   - path: ./../../../../data/simulated_images/random_roads
     md5: e22c4da27c6a8e2b2b2324bdeb5c32ff.dir
   - path: configs
-    md5: a4365df7f026b598b2227c8601ff564c.dir
+    md5: 626c87179a67d8c2e2cd16723fc2d5a2.dir
   outs:
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
     md5: e09d1c03d76f65b7e0ce57abc9c4dd66
@@ -84,7 +84,7 @@ test_discriminators_dr_drift_256:
   - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
     md5: ed27e477dd4c6c0b699c70507c4d6f65
   - path: configs/base_options.py
-    md5: 0843e4af3adb6be8c3e827fe820055d6
+    md5: 6c696c5e7922770cfc541de2af4f4355
   - path: configs/test_options.py
     md5: b730072b5038b0bf246434aae8bea418
   - path: test_discriminators.py
