@@ -1,5 +1,5 @@
 import functools
-from typing import List, Union
+from typing import List, Type, Union
 
 import torch
 from torch import nn
@@ -8,12 +8,8 @@ from torch.optim import lr_scheduler
 from torch.optim.lr_scheduler import LambdaLR, ReduceLROnPlateau, StepLR
 from torch.optim.optimizer import Optimizer
 
-###############################################################################
-# Helper Functions
-###############################################################################
 
-
-def get_norm_layer(norm_type: str = "instance") -> nn.Module:
+def get_norm_layer(norm_type: str = "instance") -> Type[nn.Module]:
     """Return a normalization layer.
 
     For BatchNorm, we use learnable affine parameters
@@ -21,7 +17,7 @@ def get_norm_layer(norm_type: str = "instance") -> nn.Module:
     we do not use learnable affine parameters. We do not track running statistics.
 
     Args:
-        norm_type (str): the name of the normalization layer: batch | instance | none
+        norm_type: Name of the normalization layer: batch | instance | none
     """
     if norm_type == "batch":
         norm_layer = functools.partial(
@@ -32,7 +28,7 @@ def get_norm_layer(norm_type: str = "instance") -> nn.Module:
             nn.InstanceNorm2d, affine=False, track_running_stats=False
         )
     elif norm_type == "none":
-        norm_layer = nn.Identity()
+        norm_layer = nn.Identity
 
     else:
         raise NotImplementedError("normalization layer [%s] is not found" % norm_type)
@@ -54,11 +50,11 @@ def get_scheduler(
     PyTorch schedulers. See https://pytorch.org/docs/stable/optim.html for more details.
 
     Args:
-        optimizer (Optimizer): the optimizer of the network
-        lr_policy (str): learning rate policy. [linear | step | plateau | cosine]
-        lr_decay_iters (int): multiply by a gamma every lr_decay_iters iterations
-        n_epochs (int): number of epochs with the initial learning rate
-        lr_step_factor (float): Multiplication factor at every step in the step scheduler
+        optimizer: Optimizer of the network's parameters
+        lr_policy: Learning rate policy. [linear | step | plateau | cosine]
+        lr_decay_iters: Multiply by a gamma every lr_decay_iters iterations
+        n_epochs: Number of epochs with the initial learning rate
+        lr_step_factor: Multiplication factor at every step in the step scheduler
     """
     if lr_policy == "linear":
 
@@ -94,10 +90,10 @@ def init_weights(
     Feel free to try yourself.
 
     Args:
-        net (nn.Module): network to be initialized
-        init_type (str): the name of an initialization method:
+        net: Network to be initialized
+        init_type: Name of an initialization method:
             normal | xavier | kaiming | orthogonal
-        init_gain (float): scaling factor for normal, xavier and orthogonal.
+        init_gain: Scaling factor for normal, xavier and orthogonal.
     """
 
     def init_func(m: nn.Module) -> None:  # define the initialization function
@@ -143,23 +139,23 @@ def init_net(
     Return an initialized network.
 
     Args:
-        net (nn.Module): the network to be initialized
-        init_type (str): the name of an initialization method:
+        net: Network to be initialized
+        init_type: Name of an initialization method:
             normal | xavier | kaiming | orthogonal
-        init_gain (float): scaling factor for normal, xavier and orthogonal.
-        device: on which device should the net run
+        init_gain: Scaling factor for normal, xavier and orthogonal.
+        device: Device to the net run
     """
     net.to(device)
     init_weights(net, init_type, init_gain=init_gain)
     return net
 
 
-def set_requires_grad(nets: List[nn.Module], requires_grad: bool = False):
+def set_requires_grad(nets: Union[List[nn.Module], nn.Module], requires_grad: bool = False):
     """Set requires_grad=False for all the networks to avoid unnecessary computations.
 
     Args:
-        nets (List[nn.Module]): set require grads for this list of networks
-        requires_grad (bool): enable or disable grads
+        nets: A single network or a list of networks
+        requires_grad: Enable or disable grads
     """
     if not isinstance(nets, list):
         nets = [nets]
