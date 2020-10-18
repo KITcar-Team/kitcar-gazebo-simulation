@@ -1,8 +1,7 @@
 import functools
-from typing import List, Optional
+from typing import List, Optional, Type
 
-from torch import Tensor
-from torch import nn as nn
+from torch import Tensor, nn
 
 from simulation.utils.basics.init_options import InitOptions
 
@@ -22,7 +21,7 @@ class ResnetGenerator(nn.Module, InitOptions):
         input_nc: int,
         output_nc: int,
         ngf: int = 64,
-        norm_layer: nn.Module = nn.BatchNorm2d,
+        norm_layer: Type[nn.Module] = nn.BatchNorm2d,
         use_dropout: bool = False,
         n_blocks: int = 6,
         padding_type: str = "reflect",
@@ -33,17 +32,17 @@ class ResnetGenerator(nn.Module, InitOptions):
         """Construct a Resnet-based generator.
 
         Args:
-            input_nc (int): the number of channels in input images
-            output_nc (int): the number of channels in output images
-            ngf (int): the number of filters in the last conv layer
-            norm_layer (nn.Module): normalization layer
-            use_dropout (bool): if use dropout layers
-            n_blocks (int): the number of ResNet blocks
-            padding_type (str): the name of padding layer in conv layers:
+            input_nc: Number of channels in input images
+            output_nc: Number of channels in output images
+            ngf: Number of filters in the last conv layer
+            norm_layer: Type of normalization layer
+            use_dropout: Whether to use dropout layers
+            n_blocks: Number of ResNet blocks
+            padding_type: Name of padding layer in conv layers:
                 reflect | replicate | zero
-            activation (str): Choose which activation to use.
+            activation: Choose which activation to use.
                 [TANH | HARDTANH | SELU | CELU | SOFTSHRINK | SOFTSIGN]
-            conv_layers_in_block (int): Number of convolution layers in each block.
+            conv_layers_in_block: Number of convolution layers in each block.
             dilations: List of dilations for each conv layer.
         """
         assert n_blocks >= 0
@@ -116,6 +115,6 @@ class ResnetGenerator(nn.Module, InitOptions):
         """Standard forward.
 
         Args:
-            input (Tensor): the input tensor
+            input: The input tensor
         """
         return self.model(input)

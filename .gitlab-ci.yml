@@ -67,7 +67,8 @@ test-machine-learning-package:
   variables:
     INIT_INPUT: 1\nyy
   script:
-  - python3 -m simulation.utils.machine_learning.models.test.test_wgan_critic
+  - python3 -m simulation.utils.machine_learning.models.test
+  - python3 -m simulation.utils.machine_learning.cycle_gan.models.test
 
 test-ros-packages:
   stage: test
@@ -183,8 +184,8 @@ cml-cyclegan:
   - workstation
   script:
   - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
-  - dvc pull data/real_images/maschinen_halle_parking --run-cache
-  - dvc pull data/simulated_images/test_images --run-cache
+  - dvc pull data/real_images/maschinen_halle_parking
+  - dvc pull data/simulated_images/test_images
   - cd simulation/utils/machine_learning/cycle_gan
     # pull cache from server and checkout
   - dvc pull dvc.yaml --run-cache
