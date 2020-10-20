@@ -42,10 +42,9 @@ Clone
 The first step is of course to clone the repository.
 These are some ways to get it:
 
-* **KITcar internal**. Clone this repository in the same directory as `kitcar-ros`.
-  Change into the correct directory. By default it's ``/home/<USERNAME>/kitcar`` and run::
+* **KITcar internal**. Clone this repository in the same directory as `kitcar-ros`. ::
 
-   git clone git@git.kitcar-team.de:kitcar/kitcar-gazebo-simulation.git
+   git clone git@git.kitcar-team.de:kitcar/kitcar-gazebo-simulation.git $KITCAR_REPO_PATH/kitcar-gazebo-simulation
 
 
 $KITCAR_REPO_PATH
@@ -142,3 +141,14 @@ You can now start the simulation with
    roslaunch gazebo_simulation master.launch
 
 Gazebo should now open with the car and a road.
+
+Troubleshooting
+---------------
+
+* **Gazebo isn't shown correctly**
+
+  This might be due to your graphics driver causing problems. Try to set ::
+
+      export LIBGL_ALWAYS_SOFTWARE=1
+
+  For further information take a look `here <http://wiki.ros.org/rviz/Troubleshooting>`_.
