@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+import sys
+import unittest
+
+import rospy
+from sensor_msgs.msg import Image as ImageMsg
+
+from simulation.utils.ros_base.node_base import NodeBase
+
+PKG = "simulation_brain_link"
+
+
+class CameraNodeTest(unittest.TestCase, NodeBase):
+    """ROS test to test if the sensor_camera_node publishes an image."""
+
+    def setUp(self):
+        NodeBase.__init__(self, name="test_sensor_camera_node", log_level=rospy.DEBUG)
+
+    def test_receive_image(self):
+        rospy.wait_for_message(self.param.topics.image_raw, ImageMsg)
+
+
+if __name__ == "__main__":
+    import rostest
+
+    rostest.rosrun(PKG, "test_sensor_camera_node", CameraNodeTest, sys.argv)
