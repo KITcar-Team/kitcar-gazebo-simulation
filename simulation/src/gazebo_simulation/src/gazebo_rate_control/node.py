@@ -1,6 +1,6 @@
 """Adjusts Gazebos update rate to guarantee sensor updates with desired frequency."""
 
-import time
+import contextlib
 
 import rospy
 import rostopic
@@ -15,7 +15,14 @@ from simulation.utils.ros_base.node_base import NodeBase
 
 
 class GazeboRateControlNode(NodeBase):
-    """Control gazebos update rate to meet desired sensor update rates."""
+    """Control gazebos update rate to meet desired sensor update rates.
+
+    Attributes:
+        relevant_targets (List[Dict[str, Any]]): Topics that should be monitored
+            and update rate that the topic should have.
+        _last_target_update (float): Last time the targets were updated.
+        _last_target_frequencies (List[float]): Last known update rate of each target.
+    """
 
     def __init__(self):
         """Initialize the node."""
@@ -23,14 +30,10 @@ class GazeboRateControlNode(NodeBase):
         super().__init__(name="gazebo_rate_control_node")
 
         self._last_target_frequencies = {}
+        self._last_target_update = 0
+        self.relevant_targets = []
 
-        self.start()
-
-        while not rospy.is_shutdown():
-            time.sleep(1 / self.param.update_rate.control.rate)
-            self.update()
-
-        self.stop()
+        super().run(function=self.update, rate=self.param.update_rate.control.rate)
 
     def start(self):
 
@@ -57,7 +60,9 @@ class GazeboRateControlNode(NodeBase):
                 callback_args=topic,
             )
             # Wait for atleast one message on every target topic
-            rospy.wait_for_message(topic, rospy.AnyMsg)
+            # Continue of none is received. The topic will then be disregarded (for now).
+            with contextlib.suppress(rospy.ROSException):
+                rospy.wait_for_message(topic, rospy.AnyMsg, timeout=0.1)
 
         super().start()
 
@@ -124,9 +129,19 @@ class GazeboRateControlNode(NodeBase):
         topic."""
         old_update_rate = self.get_physics(GetPhysicsPropertiesRequest()).max_update_rate
 
+        # Update target topics every second
+        if rospy.Time.now().to_sec() - self._last_target_update > 1:
+            # Find available topics
+            all_topics = set(t[0] for t in rospy.get_published_topics())
+            rospy.logdebug(all_topics)
+            self.relevant_targets = [
+                target for target in self.param.targets if target["topic"] in all_topics
+            ]
+            self._last_target_update = rospy.Time.now().to_sec()
+
         # Calculate new update rate considering all targets
         update_rates = []
-        for target in self.param.targets:
+        for target in self.relevant_targets:
             topic = target["topic"]
             desired_frequency = target["desired"]
 
