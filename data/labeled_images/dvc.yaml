@@ -1,0 +1,11 @@
+stages:
+  create_labeled_train_images:
+    cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images --road ci_roads/random_road
+      --seed kitcar1 kitcar2 --output_dir random_roads --image_topic /camera/image_raw --label_camera
+      --control_sim_rate --label_image_topic /simulation/label_camera/image --label_topic /simulation/label_camera/image_labels
+      --label_file random_roads/labels.yaml && fdupes -dN random_roads/ && fdupes -dN random_roads/debug # Remove duplicates
+    deps:
+    - ../../simulation/models/env_db/ci_roads/random_road.py
+    - ../../simulation/models/meshes
+    outs:
+    - random_roads
