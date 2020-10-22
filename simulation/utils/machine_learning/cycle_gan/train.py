@@ -148,7 +148,7 @@ if __name__ == "__main__":
 
     if opt.is_wgan:
         critic_batches = []
-        critic_gen = ml_data.sample_generator(dataset_a, dataset_b)
+        critic_gen = ml_data.unpaired_sample_generator(dataset_a, dataset_b)
         for _ in range(opt.wgan_initial_n_critic):
             (a_critic, _), (b_critic, _) = next(critic_gen)
             a_critic = a_critic.to(device)
@@ -166,10 +166,10 @@ if __name__ == "__main__":
 
         # batch generator
         if opt.is_wgan:
-            generator_input_gen = ml_data.sample_generator(
+            generator_input_gen = ml_data.unpaired_sample_generator(
                 dataset_a, dataset_b, n_samples=dataset_size // opt.batch_size
             )
-            critic_gen = ml_data.sample_generator(dataset_a, dataset_b)
+            critic_gen = ml_data.unpaired_sample_generator(dataset_a, dataset_b)
 
             def wgan_generator():
                 with suppress(StopIteration):
@@ -187,7 +187,7 @@ if __name__ == "__main__":
 
             batch_generator = wgan_generator()
         else:
-            generator_input_gen = ml_data.sample_generator(
+            generator_input_gen = ml_data.unpaired_sample_generator(
                 dataset_a, dataset_b, n_samples=dataset_size // opt.batch_size
             )
 

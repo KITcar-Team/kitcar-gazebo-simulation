@@ -6,7 +6,9 @@ import rosbag
 from cv_bridge import CvBridge
 
 
-def rosbag_to_images(bag_path: str, output_dir: str, image_topic: str) -> None:
+def rosbag_to_images(
+    bag_path: str, output_dir: str, image_topic: str, name_after_header: bool
+) -> None:
 
     # Create output_dir if it doesnt exist
     if not os.path.exists(output_dir):
@@ -32,7 +34,10 @@ def rosbag_to_images(bag_path: str, output_dir: str, image_topic: str) -> None:
             cv_img = bridge.imgmsg_to_cv2(msg, desired_encoding="passthrough")
 
             # Create image name from bag name
-            img_name = bag.filename.split("/")[-1].split(".")[0] + "_frame%06i.png" % count
+            img_name = (
+                f"{bag.filename.split('/')[-1].split('.')[0]}"
+                f"_frame{msg.header.seq if name_after_header else count:06}.png"
+            )
 
             cv2.imwrite(os.path.join(output_dir, img_name), cv_img)
             count += 1
@@ -46,6 +51,11 @@ if __name__ == "__main__":
     parser.add_argument("--bag", help="Directory with rosbag(s).")
     parser.add_argument("--output_dir", help="Output directory.")
     parser.add_argument("--image_topic", help="Image topic.")
+    parser.add_argument(
+        "--name_after_header",
+        help="Whether to use the message's header as the image's name.",
+        action="store_true",
+    )
 
     args = parser.parse_args()
-    rosbag_to_images(args.bag, args.output_dir, args.image_topic)
+    rosbag_to_images(args.bag, args.output_dir, args.image_topic, args.name_after_header)

@@ -4,6 +4,7 @@ It also includes common transformation functions (e.g., get_transform, __scale_w
 can be later used in subclasses.
 """
 import random
+from dataclasses import dataclass, field
 from typing import Any, Dict, Tuple
 
 import numpy as np
@@ -13,8 +14,12 @@ import torchvision.transforms as transforms
 from PIL import Image
 
 
+@dataclass
 class BaseDataset(data.Dataset):
     """This is the base class for other datasets."""
+
+    transform_properties: Dict[str, Any] = field(default_factory=dict)
+    """Properties passed as arguments to transform generation function."""
 
     def __len__(self):
         """Return the total number of images in the dataset."""
@@ -27,6 +32,11 @@ class BaseDataset(data.Dataset):
             index: the index of the item to get
         """
         raise NotImplementedError()
+
+    @property
+    def transform(self) -> transforms.Compose:
+        """transforms.Compose: Transformation that can be applied to images."""
+        return get_transform(**self.transform_properties)
 
 
 def get_params(
@@ -85,7 +95,7 @@ def get_transform(
     if grayscale:
         transform_list.append(transforms.Grayscale(1))
 
-    if mask != "None":
+    if mask is not None:
         transform_list.append(transforms.Lambda(lambda img: __apply_mask(img, mask)))
     if "resize" in preprocess:
         osize = [load_size, load_size]
