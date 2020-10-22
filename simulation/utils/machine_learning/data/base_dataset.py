@@ -5,7 +5,7 @@ can be later used in subclasses.
 """
 import random
 from dataclasses import dataclass, field
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Iterable, Tuple
 
 import numpy as np
 import PIL.ImageOps
@@ -40,22 +40,22 @@ class BaseDataset(data.Dataset):
 
 
 def get_params(
-    preprocess: str, load_size: int, crop_size: int, size: Tuple[int, int]
+    preprocess: Iterable, load_size: int, crop_size: int, size: Tuple[int, int]
 ) -> Dict[str, Any]:
     """
     Args:
-        preprocess (str): scaling and cropping of images at load time
-            [resize_and_crop | crop | scale_width | scale_width_and_crop | none]
-        load_size (int): scale images to this size
-        crop_size (int): then crop to this size
-        size (Tuple[int, int]): the image sizes
+        preprocess: Scaling and cropping of images at load time
+            [resize | crop | scale_width]
+        load_size: Scale images to this size
+        crop_size: Then crop to this size
+        size: The image sizes
     """
     w, h = size
     new_h = h
     new_w = w
-    if preprocess == "resize_and_crop":
+    if "resize" in preprocess and "crop" in preprocess:
         new_h = new_w = load_size
-    elif preprocess == "scale_width_and_crop":
+    elif "scale_width" in preprocess and "crop" in preprocess:
         new_w = load_size
         new_h = load_size * h // w
 
@@ -66,10 +66,10 @@ def get_params(
 
 
 def get_transform(
-    load_size: int,
-    crop_size: int,
+    load_size: int = -1,
+    crop_size: int = -1,
     mask: str = None,
-    preprocess: str = "none",
+    preprocess: Iterable = {},
     no_flip: bool = True,
     params=None,
     grayscale=False,
@@ -79,11 +79,11 @@ def get_transform(
     """Create transformation from arguments.
 
     Args:
-        load_size (int): scale images to this size
-        crop_size (int): then crop to this size
-        mask (str): Path to a mask overlaid over all images
-        preprocess (str): scaling and cropping of images at load time
-            [resize_and_crop | crop | scale_width | scale_width_and_crop | none]
+        load_size: Scale images to this size
+        crop_size: Then crop to this size
+        mask: Path to a mask overlaid over all images
+        preprocess: scaling and cropping of images at load time
+            [resize | crop | scale_width]
         no_flip: Flip 50% of all training images vertically
         params: more params for cropping
         grayscale: enable or disable grayscale
@@ -112,11 +112,6 @@ def get_transform(
             transform_list.append(
                 transforms.Lambda(lambda img: __crop(img, params["crop_pos"], crop_size))
             )
-
-    if preprocess == "none":
-        transform_list.append(
-            transforms.Lambda(lambda img: __make_power_2(img, base=4, method=method))
-        )
 
     if not no_flip:
         if params is None:
