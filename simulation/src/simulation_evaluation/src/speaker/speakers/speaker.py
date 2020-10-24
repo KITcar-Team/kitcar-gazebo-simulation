@@ -2,6 +2,7 @@
 import bisect
 import functools
 import itertools
+from dataclasses import dataclass
 from typing import Any, Callable, Iterable, List, Tuple
 
 from gazebo_simulation.msg import CarState as CarStateMsg
@@ -12,6 +13,14 @@ from simulation_groundtruth.msg import Section as SectionMsg
 
 from simulation.utils.geometry import Line, Polygon, Pose, Vector
 from simulation.utils.road.sections.line_tuple import LineTuple
+
+
+@dataclass
+class LabeledSpeakerPolygon:
+    id_: int
+    desc: str
+    frame: Polygon
+    height: float
 
 
 class Speaker:
@@ -145,51 +154,40 @@ class Speaker:
 
         return LineTuple(Line(msg.left_line), Line(msg.middle_line), Line(msg.right_line))
 
-    def get_obstacles_in_section(self, section_id: int) -> List[Tuple[Polygon, float]]:
-        """Get all obstacles inside as polygons.
+    def _get_labeled_polygons(
+        self, proxy: Callable[[int], List[LabeledPolygonMsg]], section_id: int
+    ) -> List[LabeledSpeakerPolygon]:
+        """Get all objects inside a section returned by a service.
 
         Args:
+            proxy: Service receiver function
             section_id: id of the section
 
         Returns:
-            List of polygons describing the frames of the obstacles and their height.
+            List of tuples containing id, description, polygon, and height.
         """
-
         assert isinstance(section_id, int)
-        obstacle_response = self.get_obstacles(section_id)
 
-        return [(Polygon(o.frame), o.height) for o in obstacle_response.polygons]
+        response = proxy(section_id)
 
-    def get_traffic_signs_in_section(self, section_id: int) -> List[Tuple[Polygon, float]]:
-        """Get all traffic_signs inside section as polygons.
+        return [
+            LabeledSpeakerPolygon(r.type, r.desc, Polygon(r.frame), r.height)
+            for r in response.polygons
+        ]
 
-        Args:
-            section_id: id of the section
+    def get_obstacles_in_section(self, section_id: int) -> List[LabeledSpeakerPolygon]:
+        """Get all obstacles in a section."""
+        return self._get_labeled_polygons(self.get_obstacles, section_id)
 
-        Returns:
-            Tuples of polygons describing the frames of the traffic_signs and their height.
-        """
+    def get_traffic_signs_in_section(self, section_id: int) -> List[LabeledSpeakerPolygon]:
+        """Get all traffic_signs inside section."""
+        return self._get_labeled_polygons(self.get_traffic_signs, section_id)
 
-        assert isinstance(section_id, int)
-        traffic_sign_response = self.get_traffic_signs(section_id)
-
-        return [(Polygon(o.frame), o.height) for o in traffic_sign_response.polygons]
-
-    def get_surface_markings_in_section(self, section_id: int) -> List[Tuple[int, Polygon]]:
-        """Get all surface_markings inside as polygons.
-
-        Args:
-            section_id: id of the section
-
-        Returns:
-            List of tuples with type and polygons describing
-            the frames of the surface_markings.
-        """
-        surface_marking_msgs: List[LabeledPolygonMsg] = self.get_surface_markings(
-            section_id
-        ).polygons
-
-        return [(o.type, Polygon(o.frame)) for o in surface_marking_msgs]
+    def get_surface_markings_in_section(
+        self, section_id: int
+    ) -> List[LabeledSpeakerPolygon]:
+        """Get all surface_markings inside a section."""
+        return self._get_labeled_polygons(self.get_surface_markings, section_id)
 
     def get_interval_for_polygon(self, *polygons: Iterable[Polygon]) -> Tuple[float, float]:
         """Get start and end points of the polygons.

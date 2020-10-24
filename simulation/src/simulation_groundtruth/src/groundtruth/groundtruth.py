@@ -144,9 +144,12 @@ class Groundtruth:
         for obstacle in obstacles:
             assert isinstance(obstacle.frame, Polygon)
             assert isinstance(obstacle.height, float)
+            assert isinstance(obstacle.id_, int)
             msg = LabeledPolygonMsg()
             msg.frame = obstacle.frame.to_geometry_msg()
             msg.height = obstacle.height
+            msg.type = obstacle.id_
+            msg.desc = obstacle.desc
             msgs.append(msg)
 
         return msgs
@@ -164,7 +167,8 @@ class Groundtruth:
         for surface_marking in surface_markings:
             msg = LabeledPolygonMsg()
             msg.frame = surface_marking.frame.to_geometry_msg()
-            msg.type = surface_marking.kind
+            msg.type = surface_marking.kind[0]
+            msg.desc = surface_marking.kind[1]
             msgs.append(msg)
         return msgs
 
@@ -181,7 +185,8 @@ class Groundtruth:
         for sign in signs:
             msg = LabeledPolygonMsg()
             msg.frame = sign.frame.to_geometry_msg()
-            msg.type = 0
+            msg.type = sign.kind.id_
+            msg.desc = sign.kind.mesh
             msg.height = sign.kind.collision_box_size[2]
             msgs.append(msg)
         return msgs

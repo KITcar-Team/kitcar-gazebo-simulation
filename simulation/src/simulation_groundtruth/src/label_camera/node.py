@@ -155,9 +155,10 @@ class LabelCameraNode(NodeBase):
                 VisualBoundingBox(
                     bb.get_bounds(),
                     label=bb.class_description,
-                    color=colors[bb.class_description]
-                    if bb.class_description in colors
-                    else colors["default"],
+                    color=colors[str(bb.class_id // 100)]
+                    if str(bb.class_id // 100) in colors
+                    # ID Namespaces are in steps of 100.
+                    else colors[str(-1)],
                 )
                 for bb in visible_bbs
             )

@@ -95,9 +95,9 @@ class EventSpeaker(Speaker):
             # Buffer the obstacle that is received from proxy because of some issues
             # with shapely thinking that the points are not a valid polygon!
             # And it further simplifies the polygons
-            Polygon(o.buffer(BUFFER).exterior.coords)
+            Polygon(lp.frame.buffer(BUFFER).exterior.coords)
             for sec in self.sections
-            for o, _ in self.get_obstacles_in_section(sec.id)
+            for lp in self.get_obstacles_in_section(sec.id)
         ]
 
     @functools.cached_property
@@ -107,10 +107,10 @@ class EventSpeaker(Speaker):
             # Buffer the blocked_area that is received from proxy because of some issues
             # with shapely thinking that the points are not a valid polygon!
             # And it further simplifies the polygons
-            Polygon(sm[1].buffer(BUFFER).exterior.coords)
+            Polygon(sm.frame.buffer(BUFFER).exterior.coords)
             for sec in self.sections
             for sm in self.get_surface_markings_in_section(sec.id)
-            if sm[0] == SurfaceMarking.BLOCKED_AREA
+            if sm.id_ == SurfaceMarking.BLOCKED_AREA[0]
         ]
 
     def speak(self) -> List[SpeakerMsg]:

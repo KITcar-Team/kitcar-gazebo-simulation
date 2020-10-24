@@ -4,9 +4,13 @@ from dataclasses import dataclass
 from simulation.utils.geometry import Point, Transform, Vector
 from simulation.utils.road.sections.road_element import RoadElementRect
 
+from . import ID
+
 
 @dataclass
 class StaticObstacle(RoadElementRect):
+    id_ = ID.register()
+    desc = "StaticObstacle"
     height: float = 0.2
     """Height of the obstacle."""
 
@@ -19,6 +23,9 @@ class _ParkingObstacle(StaticObstacle):
 
 @dataclass
 class ParkingObstacle(_ParkingObstacle):
+    id_ = ID.register()
+    desc = "ParkingObstacle"
+
     width: float = 0.15
     """Width of the obstacle."""
     depth: float = 0.15
