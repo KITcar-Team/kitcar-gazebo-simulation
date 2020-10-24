@@ -39,60 +39,28 @@ class LabelSpeaker(Speaker):
 
         return visibles
 
-    def _get_visible_obstacles(self) -> List[BoundingBox]:
-
-        obstacles = []
-        for sec in self._get_visible_sections():
-            for obs, height in self.get_obstacles_in_section(sec.id):
-                if obs.intersects(self.camera_fov):
-                    points = obs.get_points()
-                    points += [p + Vector(0, 0, height) for p in points]
-                    obstacles.append(
-                        BoundingBox(
-                            world_points=points, class_id=-1, class_description="obstacle"
-                        )
+    def _extract_bounding_boxes(self, func):
+        lp_gen = (lp for sec in self._get_visible_sections() for lp in func(sec.id))
+        bbs = []
+        for lp in lp_gen:
+            if lp.frame.intersects(self.camera_fov):
+                points = lp.frame.get_points()
+                points += [p + Vector(0, 0, lp.height) for p in points]
+                bbs.append(
+                    BoundingBox(
+                        world_points=points, class_id=lp.id_, class_description=lp.desc
                     )
-        return obstacles
+                )
+        return bbs
+
+    def _get_visible_obstacles(self) -> List[BoundingBox]:
+        return self._extract_bounding_boxes(self.get_obstacles_in_section)
 
     def _get_visible_surface_markings(self) -> List[BoundingBox]:
-
-        sms = []
-        for sec in self._get_visible_sections():
-            for type_, sm in self.get_surface_markings_in_section(sec.id):
-                if sm.intersects(self.camera_fov):
-                    points = sm.get_points()
-                    sms.append(
-                        BoundingBox(
-                            world_points=points, class_id=type_, class_description="SM"
-                        )
-                    )
-        return sms
+        return self._extract_bounding_boxes(self.get_surface_markings_in_section)
 
     def _get_visible_signs(self) -> List[BoundingBox]:
-
-        signs = []
-        for sec in self._get_visible_sections():
-            for sign, height in self.get_traffic_signs_in_section(sec.id):
-                if sign.intersects(self.camera_fov):
-                    all_points = sign.get_points()
-                    width = abs(Vector(all_points[0]) - Vector(all_points[-2]))
-                    points = [
-                        all_points[0] + Vector(0, 0, height),
-                        all_points[0] + Vector(0, 0, height - width),
-                    ] + list(
-                        reversed(
-                            [
-                                all_points[-2] + Vector(0, 0, height - width),
-                                all_points[-2] + Vector(0, 0, height),
-                            ]
-                        )
-                    )
-                    signs.append(
-                        BoundingBox(
-                            world_points=points, class_id=-2, class_description="sign"
-                        )
-                    )
-        return signs
+        return self._extract_bounding_boxes(self.get_traffic_signs_in_section)
 
     def speak(
         self, image_size: Tuple[int, int], horizontal_fov: float

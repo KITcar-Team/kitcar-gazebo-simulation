@@ -43,6 +43,8 @@ def _generic_mock(**kwargs):
             m = Mock()
             m.frame = obs
             m.height = (i % 4 + 5) / 10
+            m.id_ = i
+            m.desc = "test"
             kwargs["obstacles"][i] = m
 
     for key, val in kwargs.items():
