@@ -47,7 +47,7 @@ def test_loading_labeled_dataset():
     assert len(dataloader) == 2
 
     sample_gen = sample_generator(dataloader, 5)
-    assert len([0 for s in sample_gen]), 5
+    assert len([0 for s in sample_gen]) == 5
 
     sample_gen = sample_generator(dataloader, 5)
     # Check if first result is correct
