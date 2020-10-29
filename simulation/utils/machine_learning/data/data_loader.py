@@ -27,16 +27,11 @@ class DataLoader:
         self.dataset = dataset
         print("dataset [%s] was created" % type(self.dataset).__name__)
 
-        sampler = None
-        if sequential:
-            sampler = torch.utils.data.SequentialSampler(self.dataset)
-
         self.dataloader = torch.utils.data.DataLoader(
             self.dataset,
             batch_size=batch_size,
             shuffle=not sequential,
             num_workers=num_threads,
-            sampler=sampler,
         )
 
         self.batch_size = batch_size
