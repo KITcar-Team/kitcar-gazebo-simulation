@@ -25,8 +25,8 @@ reduce the effort spent keeping the datasets up to date.
 The principal idea is to use dvc pipelines, i.e. multiple commands with meta-information
 about dependencies and outputs that are defined in *dvc.yaml* files, to reproducibly create
 datasets that solely depend on the simulation.
-Whenever the dependencies change, the pipeline can be rerun and the updated dataset
-generated.
+Whenever the dependencies change, the pipeline can be run again and a new version of the
+dataset generated.
 
 
 Automatic Labeling
