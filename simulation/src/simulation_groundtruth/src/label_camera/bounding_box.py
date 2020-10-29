@@ -57,22 +57,22 @@ class BoundingBox:
             pixels.append(Vector(pixel_vec[0], pixel_vec[1]))
 
         pixel_poly = Polygon(pixels)
-        x, y, x2, y2 = pixel_poly.bounds
+        x1, y1, x2, y2 = pixel_poly.bounds
 
-        x, x2 = round(min(x, x2)), round(max(x, x2))
-        y, y2 = round(min(y, y2)), round(max(y, y2))
+        x1, x2 = round(min(x1, x2)), round(max(x1, x2))
+        y1, y2 = round(min(y1, y2)), round(max(y1, y2))
 
-        return x, y, x2, y2
+        return x1, y1, x2, y2
 
     def to_msg(
         self,
     ) -> LabeledBoundingBoxMsg:
         """Create a msg from this object."""
-        x, y, x2, y2 = self.get_bounds()
+        x1, y1, x2, y2 = self.get_bounds()
 
         return LabeledBoundingBoxMsg(
-            x1=x,
-            y1=y,
+            x1=x1,
+            y1=y1,
             x2=x2,
             y2=y2,
             class_id=self.class_id,
@@ -109,15 +109,15 @@ class VisualBoundingBox:
 
     def draw(
         self,
-        img: np.ndarray,
+        img: np.ndarray1,
     ):
         """Draw the bounding box into the given image."""
-        x, y, x2, y2 = self.bounds
+        x1, y1, x2, y2 = self.bounds
 
-        if x == -1 and x2 == -1:
+        if x1 == -1 and x2 == -1:
             return
 
-        cv2.rectangle(img, (x, y), (x2, y2), self.color, 2)
+        cv2.rectangle(img, (x1, y1), (x2, y2), self.color, 2)
 
         # Label
         (test_width, text_height), baseline = cv2.getTextSize(
@@ -125,15 +125,15 @@ class VisualBoundingBox:
         )
         cv2.rectangle(
             img,
-            (x, y),
-            (x + test_width, y - text_height - baseline),
+            (x1, y1),
+            (x1 + test_width, y1 - text_height - baseline),
             self.color,
             thickness=cv2.FILLED,
         )
         cv2.putText(
             img,
             self.label,
-            (x, y - baseline),
+            (x1, y1 - baseline),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.5,
             (255, 255, 255),
