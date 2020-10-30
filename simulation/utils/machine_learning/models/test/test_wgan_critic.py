@@ -135,6 +135,11 @@ def test_optimization_step():
         assert torch.all(i == o)
 
 
-test_weight_clipping()
-test_forward()
-test_optimization_step()
+def main():
+    test_weight_clipping()
+    test_forward()
+    test_optimization_step()
+
+
+if __name__ == "__main__":
+    main()
