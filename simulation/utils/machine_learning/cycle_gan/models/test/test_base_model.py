@@ -65,5 +65,10 @@ def test_load(input_nc, output_nc):
     shutil.rmtree("temp")
 
 
-test_save()
-test_load()
+def main():
+    test_save()
+    test_load()
+
+
+if __name__ == "__main__":
+    main()
