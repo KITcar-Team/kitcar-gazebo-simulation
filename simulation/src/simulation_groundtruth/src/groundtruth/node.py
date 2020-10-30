@@ -205,7 +205,6 @@ class GroundtruthNode(NodeBase):
 
         self.spawn_publisher.unregister()
         self.remove_publisher.unregister()
-        self.renderer_info_publisher.unregister()
         self.groundtruth_status_publisher.unregister()
 
     def update(self):
