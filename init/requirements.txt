@@ -17,6 +17,7 @@ python-dateutil==2.8.0
 pytz==2019.2
 PyXB==1.2.6
 PyYAML
+envyaml
 ratelimit==2.2.1
 rospkg==1.1.10
 scipy==1.4.1
@@ -30,3 +31,4 @@ testresources
 hypothesis==5.12.0
 pre-commit>=1.21.0
 dvc[all]
+tabulate==0.8.7
