@@ -88,7 +88,12 @@ def test_set_requires_grad():
     assert all(param.requires_grad for param in module2.parameters())
 
 
-test_get_norm_layer()
-test_get_scheduler()
-test_init_weights()
-test_set_requires_grad()
+def main():
+    test_get_norm_layer()
+    test_get_scheduler()
+    test_init_weights()
+    test_set_requires_grad()
+
+
+if __name__ == "__main__":
+    main()
