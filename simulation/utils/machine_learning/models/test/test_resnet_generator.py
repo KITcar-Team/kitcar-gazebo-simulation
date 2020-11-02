@@ -19,23 +19,28 @@ def test_resnet_generator(norm_type, **kwargs):
     )
 
 
-test_resnet_generator(
-    input_nc=2,
-    output_nc=2,
-    padding_type="reflect",
-    norm_type="none",
-    use_dropout=False,
-    activation=torch.nn.ReLU(),
-    conv_layers_in_block=3,
-    dilations=[2, 4, 2],
-)
-test_resnet_generator(
-    input_nc=2,
-    output_nc=3,
-    padding_type="reflect",
-    norm_type="instance",
-    use_dropout=True,
-    activation=torch.nn.Tanh(),
-    conv_layers_in_block=3,
-    dilations=None,
-)
+def main():
+    test_resnet_generator(
+        input_nc=2,
+        output_nc=2,
+        padding_type="reflect",
+        norm_type="none",
+        use_dropout=False,
+        activation=torch.nn.ReLU(),
+        conv_layers_in_block=3,
+        dilations=[2, 4, 2],
+    )
+    test_resnet_generator(
+        input_nc=2,
+        output_nc=3,
+        padding_type="reflect",
+        norm_type="instance",
+        use_dropout=True,
+        activation=torch.nn.Tanh(),
+        conv_layers_in_block=3,
+        dilations=None,
+    )
+
+
+if __name__ == "__main__":
+    main()
