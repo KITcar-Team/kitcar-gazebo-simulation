@@ -31,12 +31,6 @@ class BaseOptions:
     """weight for loss identity of domain B"""
     lambda_cycle: float = 10
     """weight for cycle loss"""
-    load_iter: int = 0
-    """Which iteration to load?
-
-    Tf load_iter > 0, the code will load models by iter_[load_iter] otherwise,
-    the code will load models by [epoch].
-    """
     load_size: int = 256
     """scale images to this size"""
     mask: str = "resources/mask.png"
