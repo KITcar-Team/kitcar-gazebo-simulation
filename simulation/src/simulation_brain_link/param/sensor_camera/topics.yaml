@@ -1,3 +1,4 @@
 pub_topic: /simulation/sensors/prepared/camera
 sub_topic: /simulation/sensors/raw/camera
 
+image_raw: /camera/image_raw

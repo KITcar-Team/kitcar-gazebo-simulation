@@ -6,6 +6,7 @@ variables:
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar/
   INIT_INPUT: 1\nyn   # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
+  DISPLAY: ":1.0"
 
 before_script:
   # Run the container start script to enable the pulseaudio & xserver
@@ -69,6 +70,11 @@ test-machine-learning-package:
   script:
   - python3 -m simulation.utils.machine_learning.models.test
   - python3 -m simulation.utils.machine_learning.cycle_gan.models.test
+    # Test if the camera publishes images with the cycle gan turned on
+  - dvc pull simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
+  - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
+  - rostest simulation_brain_link sensor_camera.test apply_gan:=true use_wasserstein_gan:=false
+  - rostest simulation_brain_link sensor_camera.test apply_gan:=true use_wasserstein_gan:=true
 
 test-ros-packages:
   stage: test
@@ -84,7 +90,6 @@ test-drive-evaluation:
     # Always require to use the workstation to ensure enough computational power
   - workstation
   variables:
-    DISPLAY: ":1.0"
     PATH_FILES: $KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/src/simulation_evaluation/param/drive/paths
   script:
     # The drive.test is used to evaluate how the car drives.
