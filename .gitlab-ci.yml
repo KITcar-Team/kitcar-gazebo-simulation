@@ -6,6 +6,7 @@ variables:
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar/
   INIT_INPUT: 1\nyn   # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
+  DISPLAY: ":1.0"
 
 before_script:
   # Run the container start script to enable the pulseaudio & xserver
@@ -89,7 +90,6 @@ test-drive-evaluation:
     # Always require to use the workstation to ensure enough computational power
   - workstation
   variables:
-    DISPLAY: ":1.0"
     PATH_FILES: $KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/src/simulation_evaluation/param/drive/paths
   script:
     # The drive.test is used to evaluate how the car drives.
