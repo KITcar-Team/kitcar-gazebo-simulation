@@ -74,6 +74,48 @@ class CameraSpecs(InitOptions):
         )
 
     @property
+    def t(self) -> np.matrix:
+        """np.ndarray: Translation vector from vehicle to camera.
+
+        In camera coordinates.
+        """
+        return np.matrix([self.t1, self.t2, self.t3]).T
+
+    @property
+    def M(self) -> np.matrix:
+        """np.matrix: Matrix M.
+
+        Transformation matrix from vehicle coordinates to camera coordinates.
+        """
+        t = 0.001 * self.t
+        M = np.zeros((3, 4))
+        M[0:3, 0:3] = self.R
+        M[:, 3:4] = t
+        return M
+
+    @property
+    def A(self) -> np.matrix:
+        """np.matrix: Matrix A.
+
+        Transformation matrix from camera coordinates to pixels.
+        """
+        return np.matrix(
+            [
+                [self.focal_length_x, 0, self.optical_center_x],
+                [0, self.focal_length_y, self.optical_center_y],
+                [0, 0, 1],
+            ]
+        )
+
+    @property
+    def P(self) -> np.matrix:
+        """np.matrix: Matrix P.
+
+        Transformation matrix from vehicle coordinates to pixels.
+        """
+        return self.A @ self.M
+
+    @property
     def t_vehicle(self) -> np.ndarray:
         """np.ndarray: Translation vector to the camera in vehicle coordinates."""
         return np.linalg.inv(self.R) @ np.array([self.t1, self.t2, self.t3])
@@ -89,7 +131,6 @@ class CameraSpecs(InitOptions):
     @property
     def rpy(self) -> Vector:
         """Vector: Vector of roll, pitch, yaw angles of the camera's pose."""
-        # return Vector(0, math.asin(-1 * self.r21), 0)
         return Vector(0, math.asin(-self.r21), 0)
 
     @property
