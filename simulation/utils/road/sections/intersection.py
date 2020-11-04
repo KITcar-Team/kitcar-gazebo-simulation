@@ -193,7 +193,8 @@ class Intersection(RoadSection):
 
     def cp_surface_south(self):
         return Vector(self.z - self.x + 0.5 * self.u) - Vector(
-            Config.get_surface_mark_dist(), Config.TURN_SF_MARK_WIDTH / 2
+            Config.get_surface_mark_dist() + Config.TURN_SF_MARK_LENGTH / 2,
+            0,
         )
 
     def cp_sign_west(self, sign_dist):
@@ -206,7 +207,12 @@ class Intersection(RoadSection):
     def cp_surface_west(self):
         return (
             Vector(self.z - 0.5 * self.x - self.u)
-            - Vector(Config.get_surface_mark_dist() * 1 / abs(self.u) * self.u)
+            - Vector(
+                (Config.get_surface_mark_dist() + Config.TURN_SF_MARK_LENGTH / 2)
+                * 1
+                / abs(self.u)
+                * self.u
+            )
             - Vector(Config.TURN_SF_MARK_WIDTH / 2 * 1 / abs(self.v) * self.v)
         )
 
@@ -225,7 +231,12 @@ class Intersection(RoadSection):
     def cp_surface_east(self):
         return (
             Vector(self.z + 0.5 * self.x + self.u)
-            + Vector(Config.get_surface_mark_dist() * 1 / abs(self.u) * self.u)
+            + Vector(
+                (Config.get_surface_mark_dist() + Config.TURN_SF_MARK_LENGTH / 2)
+                * 1
+                / abs(self.u)
+                * self.u
+            )
             + Vector(Config.TURN_SF_MARK_WIDTH / 2 * 1 / abs(self.v) * self.v)
         )
 
@@ -605,8 +616,10 @@ class Intersection(RoadSection):
             markings.append(
                 SurfaceMarkingRect(
                     kind=own_marking,
-                    angle=0.5 * math.pi,
+                    angle=0,
                     center=Point(self.cp_surface_south()),
+                    width=Config.TURN_SF_MARK_WIDTH,
+                    depth=Config.TURN_SF_MARK_LENGTH,
                 )
             )
             if self.rule != Intersection.YIELD:
@@ -615,8 +628,8 @@ class Intersection(RoadSection):
                     if self.turn == Intersection.LEFT
                     else SurfaceMarkingRect.LEFT_TURN_MARKING
                 )
-                opposite_angle = self._alpha + (
-                    0 if self.turn == Intersection.LEFT else math.pi
+                opposite_angle = self.angle + (
+                    0 if self.turn == Intersection.RIGHT else math.pi
                 )
                 opposite_center = Point(
                     self.cp_surface_west()
@@ -629,6 +642,8 @@ class Intersection(RoadSection):
                         kind=opposite_marking,
                         angle=opposite_angle,
                         center=opposite_center,
+                        width=Config.TURN_SF_MARK_WIDTH,
+                        depth=Config.TURN_SF_MARK_LENGTH,
                     )
                 )
 
