@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="publish_debug_image" default="true" />
+  <!-- Start the label camera node -->
+  <node name="label_camera_node" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="label_camera_node" output="screen">
+    <param name="publish_debug_image" value="$(arg publish_debug_image)"/>
+    <rosparam file="$(find simulation_groundtruth)/param/label_camera/default.yaml" command="load" />
+    <rosparam file="$(find simulation_groundtruth)/param/label_camera/topics.yaml" command="load" ns="topics" />
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics/groundtruth" />
+    <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state" />
+    <rosparam file="$(find gazebo_simulation)/param/car_specs/dr_drift/camera.yaml" command="load" ns="camera" />
+  </node>
+</launch>

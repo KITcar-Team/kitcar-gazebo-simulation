@@ -7,6 +7,7 @@ so that this class can load images from both current directory and its subdirect
 
 import os
 import os.path
+from typing import List
 
 IMG_EXTENSIONS = [
     ".jpg",
@@ -27,7 +28,7 @@ IMG_EXTENSIONS = [
 
 
 def is_image_file(filename):
-    """Checks if a file is an image.
+    """Check if a file is an image.
 
     Args:
         filename: the file name to check
@@ -35,8 +36,9 @@ def is_image_file(filename):
     return any(filename.endswith(extension) for extension in IMG_EXTENSIONS)
 
 
-def make_dataset(dir, max_dataset_size=float("inf")):
-    """
+def find_images(dir: str, max_dataset_size=float("inf")) -> List[str]:
+    """Recursively search for images in the given directory.
+
     Args:
         dir: the directory of the dataset
         max_dataset_size: the maximum amount of images to load

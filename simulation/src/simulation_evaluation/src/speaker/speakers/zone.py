@@ -73,10 +73,10 @@ class ZoneSpeaker(Speaker):
         :py:attr:`Speaker.middle_line`."""
         # Get all obstacle polygons
         obstacles = list(
-            obstacle
+            lp.frame
             for sec in self.sections
             if sec.type != road_section_type.PARKING_AREA
-            for obstacle in self.get_obstacles_in_section(sec.id)
+            for lp in self.get_obstacles_in_section(sec.id)
         )
 
         # Get blocked area polygons because the car
@@ -88,7 +88,7 @@ class ZoneSpeaker(Speaker):
         )
 
         blocked_areas = [
-            sm[1] for sm in surface_markings if sm[0] == SurfaceMarking.BLOCKED_AREA
+            sm.frame for sm in surface_markings if sm.id_ == SurfaceMarking.BLOCKED_AREA[0]
         ]
 
         # Intervals where polygons are along the middle line

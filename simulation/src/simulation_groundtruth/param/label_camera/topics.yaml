@@ -1,0 +1,5 @@
+debug_image: /simulation/label_camera/image
+image_labels: /simulation/label_camera/image_labels
+
+pause_gazebo: /gazebo/pause_physics
+unpause_gazebo: /gazebo/unpause_physics

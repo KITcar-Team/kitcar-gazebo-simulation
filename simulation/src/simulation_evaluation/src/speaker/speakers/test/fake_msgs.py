@@ -103,7 +103,9 @@ def obstacle_msgs(
 ) -> groundtruth_srvs.LabeledPolygonSrvResponse:
     response = groundtruth_srvs.LabeledPolygonSrvResponse()
     response.polygons = list(
-        groundtruth_msgs.LabeledPolygon(obtacle.to_geometry_msg(), 0)  # Dummy type 0
+        groundtruth_msgs.LabeledPolygon(
+            obtacle.to_geometry_msg(), random.random(), 0, "fake_obstacle"
+        )  # Dummy type 0
         for obtacle in obstacles
     )
 
@@ -186,7 +188,10 @@ def parking_msgs(
     right_msg.borders = [groundtruth_msgs.Line(right_border.to_geometry_msgs())]
     right_msg.spots = list(
         groundtruth_msgs.LabeledPolygon(
-            spot.to_geometry_msg(), groundtruth_msgs.Parking.SPOT_FREE
+            spot.to_geometry_msg(),
+            0,
+            groundtruth_msgs.Parking.SPOT_FREE,
+            "fake_parking_spot",
         )
         for spot in right_spots
     )
@@ -196,7 +201,10 @@ def parking_msgs(
     left_msg.borders = [groundtruth_msgs.Line(left_border.to_geometry_msgs())]
     left_msg.spots = list(
         groundtruth_msgs.LabeledPolygon(
-            spot.to_geometry_msg(), groundtruth_msgs.Parking.SPOT_FREE
+            spot.to_geometry_msg(),
+            0,
+            groundtruth_msgs.Parking.SPOT_FREE,
+            "fake_parking_spot",
         )
         for spot in left_spots
     )
