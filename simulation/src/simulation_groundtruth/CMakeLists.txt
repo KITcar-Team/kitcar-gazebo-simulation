@@ -58,8 +58,10 @@ add_message_files(
   Lane.msg
   Parking.msg
   LabeledPolygon.msg
+  LabeledBoundingBox.msg
   Line.msg
   GroundtruthStatus.msg
+  ImageLabels.msg
 )
 
 
