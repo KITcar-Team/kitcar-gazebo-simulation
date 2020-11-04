@@ -64,13 +64,16 @@ class GroundtruthTestNode(unittest.TestCase, GroundtruthMockNode):
         if obstacles is None:
             obstacles = []
 
-        self.assertEqual(len(obstacle_msgs), len(obstacles))
+        self.assertEqual(
+            len(obstacle_msgs), len(obstacles), str(obstacle_msgs) + str(obstacles)
+        )
         for obstacle_msg, obstacle in zip(obstacle_msgs, obstacles):
             rospy.logdebug(
                 f"MSG: {Polygon(obstacle_msg.frame).get_points()}"
                 f"and {obstacle.get_points()}"
             )
             self.assertEqual(Polygon(obstacle_msg.frame), obstacle.frame)
+            self.assertEqual(obstacle_msg.height, obstacle.height)
 
     def _assert_intersection(self, intersection_gt, intersection):
         rospy.logdebug("Asserting intersection.")
@@ -113,7 +116,7 @@ class GroundtruthTestNode(unittest.TestCase, GroundtruthMockNode):
 
     def _test_road(self):
         self.__road_sections = self._load_road().sections
-        self.groundtruth = Groundtruth(self._load_road())
+        self.groundtruth.road = self._load_road()
 
         rospy.logdebug(f"Testing groundtruth for road sections {self.__road_sections}")
 

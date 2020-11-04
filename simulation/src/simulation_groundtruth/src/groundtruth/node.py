@@ -1,7 +1,11 @@
+from dataclasses import dataclass
+from typing import Callable, List
+
 import rospy
 from gazebo_msgs.msg import ModelStates
 from gazebo_simulation.msg import CarState as CarStateMsg
 from simulation_groundtruth.msg import GroundtruthStatus
+from simulation_groundtruth.msg import LabeledPolygon as LabeledPolygonMsg
 from simulation_groundtruth.srv import (
     IntersectionSrv,
     IntersectionSrvRequest,
@@ -30,6 +34,29 @@ from simulation.src.simulation_groundtruth.src.groundtruth.object_controller imp
 from simulation.src.simulation_groundtruth.src.groundtruth.renderer import Renderer
 from simulation.utils.geometry import Vector
 from simulation.utils.ros_base.node_base import NodeBase
+
+
+@dataclass
+class LabeledPolygonService:
+    """Small wrapper class to easily create ROS services that offer LabeledPolygonMsgs."""
+
+    topic: str
+    callback: Callable[[id], List[LabeledPolygonMsg]]
+
+    def __post_init__(self):
+        self.service: rospy.Service = rospy.Service(
+            self.topic, LabeledPolygonSrv, self.request
+        )
+
+    def request(self, request: LabeledPolygonSrv) -> LabeledPolygonSrvResponse:
+        """Answer service request."""
+        response = LabeledPolygonSrvResponse()
+        response.polygons = self.callback(request.id)
+        rospy.logdebug(f"Answering labeled polygon request {response.polygons}")
+        return response
+
+    def shutdown(self):
+        self.service.shutdown()
 
 
 class GroundtruthNode(NodeBase):
@@ -177,12 +204,21 @@ class GroundtruthNode(NodeBase):
         self.parking_srv = rospy.Service(
             self.param.topics.parking, ParkingSrv, self.get_parking
         )
-        self.obstacle_srv = rospy.Service(
-            self.param.topics.obstacle, LabeledPolygonSrv, self.get_obstacles
-        )
-        self.surface_marking_srv = rospy.Service(
-            self.param.topics.surface_marking, LabeledPolygonSrv, self.get_surface_markings
-        )
+
+        self.labeled_polygon_services = [
+            LabeledPolygonService(
+                self.param.topics.obstacle, callback=self.groundtruth.get_obstacle_msgs
+            ),
+            LabeledPolygonService(
+                self.param.topics.surface_marking,
+                callback=self.groundtruth.get_surface_marking_msgs,
+            ),
+            LabeledPolygonService(
+                self.param.topics.traffic_sign,
+                callback=self.groundtruth.get_traffic_sign_msgs,
+            ),
+        ]
+
         self.intersection_srv = rospy.Service(
             self.param.topics.intersection, IntersectionSrv, self.get_intersection
         )
@@ -192,8 +228,10 @@ class GroundtruthNode(NodeBase):
         self.section_srv.shutdown()
         self.lane_srv.shutdown()
         self.parking_srv.shutdown()
-        self.obstacle_srv.shutdown()
         self.intersection_srv.shutdown()
+
+        for srv in self.labeled_polygon_services:
+            srv.shutdown()
 
         self.pause_physics_proxy.close()
         self.unpause_physics_proxy.close()
@@ -248,20 +286,6 @@ class GroundtruthNode(NodeBase):
         response = ParkingSrvResponse()
         response.left_msg, response.right_msg = self.groundtruth.get_parking_msg(request.id)
         rospy.logdebug(f"Answering parking request {response.left_msg, response.right_msg}")
-        return response
-
-    def get_obstacles(self, request: LabeledPolygonSrv) -> LabeledPolygonSrvResponse:
-        """Answer obstacle service request."""
-        response = LabeledPolygonSrvResponse()
-        response.polygons = self.groundtruth.get_obstacle_msgs(request.id)
-        rospy.logdebug(f"Answering obstacle request {response.polygons}")
-        return response
-
-    def get_surface_markings(self, request: LabeledPolygonSrv) -> LabeledPolygonSrvResponse:
-        """Answer surface_marking service request."""
-        response = LabeledPolygonSrvResponse()
-        response.polygons = self.groundtruth.get_surface_marking_msgs(request.id)
-        rospy.logdebug(f"Answering surface_marking request {response.polygons}")
         return response
 
     def get_intersection(self, request: IntersectionSrvRequest) -> IntersectionSrvResponse:

@@ -9,6 +9,7 @@ setup_args = generate_distutils_setup(
     packages=(
         [
             "groundtruth",
+            "label_camera",
         ]
     ),
     package_dir={"": "src"},

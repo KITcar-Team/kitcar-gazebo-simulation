@@ -70,6 +70,7 @@ test-machine-learning-package:
   script:
   - python3 -m simulation.utils.machine_learning.models.test
   - python3 -m simulation.utils.machine_learning.cycle_gan.models.test
+  - python3 -m simulation.utils.machine_learning.data.test
     # Test if the camera publishes images with the cycle gan turned on
   - dvc pull simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
   - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png

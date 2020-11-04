@@ -1,0 +1,5 @@
+colors:
+  "-1": [200, 200, 200] # Grey
+  "0": [43, 168, 74] # Kitcar green
+  "1": [242, 59, 32] # Kitcar red
+  "2": [36, 100, 255] # Kitcar blue

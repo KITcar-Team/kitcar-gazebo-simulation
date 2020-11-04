@@ -8,7 +8,7 @@ from simulation_groundtruth.msg import Line as LineMsg
 from simulation_groundtruth.msg import Parking as ParkingMsg
 from simulation_groundtruth.msg import Section as SectionMsg
 
-from simulation.utils.geometry import Line
+from simulation.utils.geometry import Line, Polygon
 from simulation.utils.road.road import Road
 from simulation.utils.road.sections import Intersection
 
@@ -140,10 +140,18 @@ class Groundtruth:
         if obstacles is None:
             return []
         msgs = []
+
         for obstacle in obstacles:
+            assert isinstance(obstacle.frame, Polygon)
+            assert isinstance(obstacle.height, float)
+            assert isinstance(obstacle.id_, int)
             msg = LabeledPolygonMsg()
             msg.frame = obstacle.frame.to_geometry_msg()
+            msg.height = obstacle.height
+            msg.type = obstacle.id_
+            msg.desc = obstacle.desc
             msgs.append(msg)
+
         return msgs
 
     def get_surface_marking_msgs(self, id: int) -> List[LabeledPolygonMsg]:
@@ -159,6 +167,26 @@ class Groundtruth:
         for surface_marking in surface_markings:
             msg = LabeledPolygonMsg()
             msg.frame = surface_marking.frame.to_geometry_msg()
-            msg.type = surface_marking.kind
+            msg.type = surface_marking.kind[0]
+            msg.desc = surface_marking.kind[1]
+            msgs.append(msg)
+        return msgs
+
+    def get_traffic_sign_msgs(self, id: int) -> List[LabeledPolygonMsg]:
+        """Labeled polygon msg for each traffic sign in the requested road section.
+
+        Args:
+            id: section id
+        """
+        signs = self.road.sections[id].traffic_signs
+        if signs is None:
+            return []
+        msgs = []
+        for sign in signs:
+            msg = LabeledPolygonMsg()
+            msg.frame = sign.frame.to_geometry_msg()
+            msg.type = sign.kind.id_
+            msg.desc = sign.kind.mesh
+            msg.height = sign.kind.collision_box_size[2]
             msgs.append(msg)
         return msgs

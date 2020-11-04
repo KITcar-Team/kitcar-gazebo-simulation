@@ -137,6 +137,11 @@ class Vector(shapely.geometry.point.Point):
 
         return Vector(x, y, z)
 
+    @property
+    def argument(self) -> float:
+        """float: Return the argument of the vector in radian."""
+        return math.atan2(self.y, self.x)
+
     @validate_and_maintain_frames
     def __sub__(self, vec):
         return self.__class__(self.x - vec.x, self.y - vec.y, self.z - vec.z)

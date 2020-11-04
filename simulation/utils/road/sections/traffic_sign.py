@@ -3,12 +3,18 @@ from typing import Tuple
 
 from simulation.utils.road.sections.road_element import RoadElementRect
 
+from . import ID
+
 
 @dataclass
 class SignTuple:
     mesh: str
+    id_: int = None
     collision_box_size: Tuple[float, float, float] = (0.11, 0.15, 0.29)
     collision_box_position: Tuple[float, float, float] = (-0.055, 0, 0.145)
+
+    def __post_init__(self):
+        self.id_ = ID.register(ns=100)
 
 
 @dataclass

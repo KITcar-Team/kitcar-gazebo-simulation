@@ -12,6 +12,8 @@ E.g. to generate a dataset for the cycle gan.
   <arg name="road" default="default_road" />
   <arg name="seed" default="__no_value__"/>
 
+  <arg name="label_camera" default="false" />
+
   <arg name="gui" default="true" />
 
   <arg name="automatic_drive" default="true" />
@@ -46,6 +48,7 @@ E.g. to generate a dataset for the cycle gan.
     <arg name="control_sim_rate" value="$(arg control_sim_rate)"/>
     <arg name="evaluate" value="$(arg evaluate)"/>
     <arg name="apply_gan" value="$(arg apply_gan)"/>
+    <arg name="label_camera" value="$(arg label_camera)"/>
 
     <arg name="include_automatic_drive" value="$(arg automatic_drive)"/>
     <arg name="randomize_path" value="$(arg randomize_path)"/>
@@ -56,6 +59,7 @@ E.g. to generate a dataset for the cycle gan.
     <arg if="$(arg automatic_drive)" name="include_vehicle_simulation" value="false" />
     <arg if="$(arg automatic_drive)" name="include_mission_mode_plugin" value="false" />
   </include>
+
 
   <!-- Record a rosbag of the drive.
        All topics are recorded, but compressed images left out as they create errors. -->

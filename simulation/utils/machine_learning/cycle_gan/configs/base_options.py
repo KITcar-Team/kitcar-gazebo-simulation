@@ -56,9 +56,10 @@ class BaseOptions:
     """instance normalization or batch normalization [instance | batch | none]"""
     output_nc: int = 1
     """of output image channels: 3 for RGB and 1 for grayscale"""
-    preprocess: str = "resize_and_crop"
+    preprocess: set = {"resize", "crop"}
     """Scaling and cropping of images at load time.
-    [resize_and_crop | crop | scale_width | scale_width_and_crop | none]
+
+    [resize | crop | scale_width]
     """
     verbose: bool = False
     """if specified, print more debugging information"""

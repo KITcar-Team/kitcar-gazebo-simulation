@@ -1,3 +1,5 @@
+.. _simulation_groundtruth:
+
 simulation_groundtruth
 ======================
 
@@ -9,6 +11,7 @@ about the current road.
    :caption: Packages and Modules
 
    ../_source_files/simulation.src.simulation_groundtruth.src.groundtruth
+   ../_source_files/simulation.src.simulation_groundtruth.src.label_camera
 
 GroundtruthNode
 ---------------
@@ -117,5 +120,23 @@ groundtruth of a number of simple roads.
 
       roslaunch simulation_groundtruth groundtruth_mock_node.launch
 
-   Parameters to modify the road and other properties can be found in \
-   *param/groundtruth_mock/default.yaml*
+   Parameters to modify the road and other properties can be found in
+   ``simulation/src/simulation_groundtruth/param/groundtruth_mock/default.yaml``.
+
+.. _label_camera_node:
+
+LabelCameraNode
+---------------
+
+The :mod:`simulation.src.simulation_groundtruth.src.label_camera.node` combines the car's
+position with the road's groundtruth to generate labels in the form of bounding boxes for
+the camera's images.
+
+.. note:: The node can be launched with:
+
+   .. code-block:: shell
+
+      roslaunch simulation_groundtruth label_camera_node.launch
+
+   Parameters and other properties can be found in
+   ``simulation/src/simulation_groundtruth/param/label_camera/default.yaml``.
