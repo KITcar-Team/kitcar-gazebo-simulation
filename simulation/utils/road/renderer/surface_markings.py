@@ -23,6 +23,13 @@ def draw(ctx, surface_marking: SurfaceMarking):
     ):
         ctx.translate(surface_marking.center.x, surface_marking.center.y)
         ctx.rotate(surface_marking.orientation)
+        # Translate to left upper corner of svg
+        ctx.translate(
+            surface_marking.depth / 2,
+            -surface_marking.width / 2,
+        )
+        # Then rotate by 90 degrees because svgs have the wrong direction!
+        ctx.rotate(math.pi / 2)
         image_file = os.path.join(
             os.environ.get("KITCAR_REPO_PATH"),
             "kitcar-gazebo-simulation",
@@ -46,7 +53,7 @@ def draw(ctx, surface_marking: SurfaceMarking):
         ctx.translate(surface_marking.center.x, surface_marking.center.y)
         ctx.rotate(surface_marking.orientation)
 
-        v = 0.5 * Vector(surface_marking.width, 0)
+        v = 0.5 * Vector(0, surface_marking.width)
         line = MarkedLine(
             [-1 * v, v],
             style=(
