@@ -1,0 +1,5 @@
+colors:
+  default: [200, 200, 200] # Grey
+  sign: [43, 168, 74] # Kitcar green
+  obstacle: [242, 168, 74] # Kitcar red
+  surface_marking: [59, 32, 242] # Kitcar blue

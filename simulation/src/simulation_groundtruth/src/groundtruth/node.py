@@ -38,6 +38,8 @@ from simulation.utils.ros_base.node_base import NodeBase
 
 @dataclass
 class LabeledPolygonService:
+    """Small wrapper class to easily create ROS services that offer LabeledPolygonMsgs."""
+
     topic: str
     callback: Callable[[id], List[LabeledPolygonMsg]]
 
