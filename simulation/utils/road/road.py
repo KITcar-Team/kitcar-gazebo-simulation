@@ -7,7 +7,6 @@ that road as a list.
 import importlib
 import os
 import random
-import sys
 from dataclasses import dataclass, field
 from typing import List, Tuple
 
@@ -82,6 +81,26 @@ DEFAULT_ROAD_DIR = os.path.join(
 )
 
 
+def _get_module(name: str):
+
+    if not os.path.isabs(name):
+        name = os.path.join(DEFAULT_ROAD_DIR, name)
+
+    if not name.endswith(".py"):
+        name += ".py"
+
+    # Remove .py
+    module_name = os.path.basename(name)[:-3]
+
+    try:
+        spec = importlib.util.spec_from_file_location(module_name, name)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module, name, module_name
+    except AttributeError or ModuleNotFoundError:
+        raise ValueError(f"Road {module_name} not found at {name}.")
+
+
 def load(road_name: str, seed: str = "KITCAR") -> Road:
     """Load road object from file.
 
@@ -90,25 +109,16 @@ def load(road_name: str, seed: str = "KITCAR") -> Road:
         seed: Predetermine random values.
     """
 
-    sys.path.append(DEFAULT_ROAD_DIR)
-
-    # Replace dashes in the road name with dots
-    module_name = road_name.replace("/", ".")
-
-    try:
-        road_module = importlib.import_module(module_name, DEFAULT_ROAD_DIR)
-    except ModuleNotFoundError:
-        raise ValueError(f"Road of name {road_name} not found in {DEFAULT_ROAD_DIR}.")
-
     # Set random seed
     # set it at this point because the module is reloaded afterwards
     # the above import is just to ensure that the road is in the module cache
     random.seed(seed)
 
     # Ensure that the road is up to date
-    importlib.reload(road_module)
+    road_module, file_path, road_name = _get_module(road_name)
 
     road = road_module.road
+    road._file_path = file_path
     road._name = road_name
     road._seed = seed
 
