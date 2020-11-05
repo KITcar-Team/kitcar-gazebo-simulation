@@ -102,13 +102,6 @@ class Renderer:
             f".{self.road._name}",
         )
 
-    @property
-    def road_file_path(self) -> str:
-        return os.path.join(
-            self.roads_path,
-            f"{self.road._name}.py",
-        )
-
     # Previous
     @property
     def prev_rendering(self) -> PreviousRendering:
@@ -119,7 +112,7 @@ class Renderer:
             self.prev_rendering is not None
             and self.road.use_seed
             and self.prev_rendering.seed == self.road._seed
-            and self.prev_rendering.time > os.path.getmtime(self.road_file_path)
+            and self.prev_rendering.time > os.path.getmtime(self.road._file_path)
         )
 
     def _load_prev_tiles(self) -> List[Tile]:
