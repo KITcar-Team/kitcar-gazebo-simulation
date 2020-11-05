@@ -63,7 +63,7 @@ E.g. to generate a dataset for the cycle gan.
 
   <!-- Record a rosbag of the drive.
        All topics are recorded, but compressed images left out as they create errors. -->
-  <node if="$(arg record_rosbag)" name="rosbag_record" type="rosbag_record.sh" pkg="kitcar" args='-o $(arg rosbag_path) -a -x "(.*)/compressed(.*)"' />
+  <node if="$(arg record_rosbag)" name="record_rosbag" type="record.sh" pkg="kitcar_rosbag" args='-o $(arg rosbag_path) -a -x "(.*)/compressed(.*)"' />
 
 </launch>
 
