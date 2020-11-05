@@ -26,3 +26,5 @@ visualization:
   parking_spot: /simulation/visualization/groundtruth/parking_spot
   obstacle: /simulation/visualization/groundtruth/obstacle
   intersection: /simulation/visualization/groundtruth/intersection
+  surface_marking: /simulation/visualization/groundtruth/surface_marking
+  traffic_sign: /simulation/visualization/groundtruth/traffic_sign

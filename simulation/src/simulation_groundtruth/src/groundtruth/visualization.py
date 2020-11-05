@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Node that publishes groundtruth information for rviz."""
 
-from typing import List
+from typing import List, Tuple
 
 import rospy
 from geometry_msgs.msg import Point32 as GeomPoint
@@ -63,6 +63,12 @@ class GroundtruthVisualizationNode(NodeBase):
         self.get_obstacles = rospy.ServiceProxy(
             self.param.topics.obstacle, LabeledPolygonSrv
         )
+        self.get_signs = rospy.ServiceProxy(
+            self.param.topics.traffic_sign, LabeledPolygonSrv
+        )
+        self.get_surface_markings = rospy.ServiceProxy(
+            self.param.topics.surface_marking, LabeledPolygonSrv
+        )
         self.get_intersection = rospy.ServiceProxy(
             self.param.topics.intersection, IntersectionSrv
         )
@@ -95,9 +101,30 @@ class GroundtruthVisualizationNode(NodeBase):
             rgba=rgba,
             id=id,
             ns=ns,
-            duration=5 / self.param.rate,  # Groundtruth is too slow otherwise!
+            duration=100 / self.param.rate,  # Groundtruth is too slow otherwise!
         )
         self.publishers[publisher_name].publish(marker)
+
+    def _update_labeled_polygon_topic(
+        self,
+        proxy: rospy.ServiceProxy,
+        publisher_name: str,
+        marker_color: Tuple[float, float, float, float],
+    ):
+        """Publish polygons for all elements."""
+        els = sum(
+            (
+                [
+                    Polygon(msg.frame).to_geometry_msg().points
+                    for msg in proxy(sec.id).polygons
+                ]
+                for sec in self.get_sections().sections
+            ),
+            [],
+        )
+
+        for id, el in enumerate(els):
+            self._publish_point_marker(el, publisher_name, id, marker_color)
 
     def _show_lane_markers(self):
         """Publish markers for all lane markings of road."""
@@ -186,22 +213,6 @@ class GroundtruthVisualizationNode(NodeBase):
 
                 spot_counter += 1
 
-    def _show_obstacle_markers(self):
-        """Publish polygons for all obstacles on the road."""
-        obstacles = sum(
-            (
-                [
-                    Polygon(msg.frame).to_geometry_msg().points
-                    for msg in self.get_obstacles(sec.id).polygons
-                ]
-                for sec in self.get_sections().sections
-            ),
-            [],
-        )
-
-        for id, obstacle in enumerate(obstacles):
-            self._publish_point_marker(obstacle, "obstacle", id, self.param.colors.obstacle)
-
     def _show_intersection_markers(self):
         """Publish lanes and surface markings of all intersections."""
         intersec_id = 0
@@ -250,6 +261,15 @@ class GroundtruthVisualizationNode(NodeBase):
         """Update all markers."""
         rospy.logdebug("Updating groundtruth visualization.")
         self._show_lane_markers()
-        self._show_obstacle_markers()
         self._show_parking_markers()
         self._show_intersection_markers()
+
+        self._update_labeled_polygon_topic(
+            self.get_obstacles, "obstacle", self.param.colors.obstacle
+        )
+        self._update_labeled_polygon_topic(
+            self.get_signs, "traffic_sign", self.param.colors.traffic_sign
+        )
+        self._update_labeled_polygon_topic(
+            self.get_surface_markings, "surface_marking", self.param.colors.surface_marking
+        )
