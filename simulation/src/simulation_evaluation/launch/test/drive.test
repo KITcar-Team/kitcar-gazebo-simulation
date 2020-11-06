@@ -31,7 +31,7 @@
 
   <!-- Record a rosbag of the drive.
        All topics are recorded, but compressed images left out as they create errors. -->
-  <node if="$(arg record_rosbag)" name="record_rosbag" type="record.sh" pkg="kitcar_rosbag" args='-o $(arg rosbag_path) -a -x "(.*)/compressed(.*)"' />
+  <node if="$(arg record_rosbag)" name="record" type="record.sh" pkg="kitcar_rosbag" args='-o $(arg rosbag_path) -a -x "(.*)/compressed(.*)"' />
 
   <include if="$(arg automatic_drive)" file="$(find gazebo_simulation)/launch/automatic_drive.launch">
     <arg name="path_file" value="$(arg path_file)"/>

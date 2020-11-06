@@ -1,4 +1,5 @@
 FROM ros:noetic-robot-focal
+ARG KITCAR_REPO_PATH=/home/kitcar/
 
 COPY init/* /
 
@@ -23,3 +24,9 @@ RUN rm -rf /var/lib/apt/lists/*
 
 # Source ROS within the bashrc
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+
+# Also add and build kitcar-rosbag
+# Needed to record rosbags in CI
+COPY kitcar-rosbag $KITCAR_REPO_PATH/kitcar-rosbag
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && cd ${KITCAR_REPO_PATH}/kitcar-rosbag && catkin_make"
+RUN echo "source ${KITCAR_REPO_PATH}/kitcar-rosbag/devel/setup.bash --extend" >> ~/.bashrc

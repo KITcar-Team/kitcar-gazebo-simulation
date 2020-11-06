@@ -4,6 +4,8 @@ services:
     image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}
     build:
       context: .
+      args:
+      - KITCAR_REPO_PATH=${CI_REPO_PATH}
   docs:
     image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${CI_IMAGE_TAG}
     build:
