@@ -3,6 +3,7 @@ import os
 from typing import List
 
 import cairo
+from cairo import Context
 
 import simulation.utils.road.renderer.utils as utils  # no
 from simulation.utils.geometry import Line, Point, Polygon, Vector
@@ -82,8 +83,56 @@ def draw(ctx, surface_marking: SurfaceMarking):
         draw_crossing_lines(ctx, surface_marking.frame)
     if surface_marking.kind == SurfaceMarking.TRAFFIC_ISLAND_BLOCKED:
         draw_traffic_island_blocked(ctx, surface_marking.frame)
+    if surface_marking.kind[1].startswith("ZONE_"):
+        _, limit, type = surface_marking.kind[1].split("_")
+        draw_speed_limit(ctx, surface_marking, limit, type.lower() == "start")
 
     ctx.restore()
+
+
+def draw_speed_limit(
+    ctx: Context, surface_marking: SurfaceMarking, limit: int, start_zone: bool
+):
+    """Draw a speed limit on the road. Add a cross if it is the end of a speed limit zone.
+
+    Args:
+        start_zone: Is this speed limit the start or end?
+    """
+    ctx.translate(
+        surface_marking.center.x, surface_marking.center.y
+    )  # Translate to the center point of the surface marking
+    ctx.rotate(surface_marking.orientation)
+
+    ctx.translate(
+        -surface_marking.depth / 2, surface_marking.width / 2
+    )  # Translate to the corner
+
+    # Position text and scale it
+    ctx.rotate(-math.pi / 2)  # rotate by 90deg
+    ctx.scale(1, -1)  # mirror y-axis to display text correctly
+    ctx.scale(0.7245, 1.8506)  # scale text to match rule book
+
+    # Set font options
+    ctx.select_font_face("DIN 1451 Std", cairo.FONT_SLANT_NORMAL)
+    ctx.set_font_size(0.4)
+    ctx.text_path(str(limit))
+    ctx.set_line_width(0.01)
+
+    # Draw text
+    _, _, text_width, text_height, _, _ = ctx.text_extents(str(limit))
+    ctx.fill_preserve()
+    ctx.stroke()
+
+    if not start_zone:
+        # Draw cross
+        padding = 0.025
+        ctx.set_line_width(0.03)
+        ctx.move_to(-padding, padding)
+        ctx.line_to(text_width + padding, -text_height - padding)
+        ctx.stroke()
+        ctx.move_to(-padding, -text_height - padding)
+        ctx.line_to(text_width + padding, padding)
+        ctx.stroke()
 
 
 def draw_start_lane(ctx, frame: Polygon):

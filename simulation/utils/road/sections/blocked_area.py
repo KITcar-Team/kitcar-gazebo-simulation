@@ -24,11 +24,11 @@ class BlockedArea(StraightRoad):
     _opening_angle: float = math.radians(60)
 
     def __post_init__(self):
-        self.surface_markings.append(
+        self.surface_markings += [
             SurfaceMarkingPoly(
                 frame=self._poly, kind=SurfaceMarkingPoly.BLOCKED_AREA, normalize_x=False
             )
-        )
+        ]
         super().__post_init__()
 
     @property
