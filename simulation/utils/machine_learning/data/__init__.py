@@ -35,9 +35,9 @@ def load_unpaired_unlabeled_datasets(
     max_dataset_size = float("inf") if max_dataset_size == -1 else max_dataset_size
 
     transform_properties["grayscale"] = grayscale_a
-    a = UnlabeledDataset(dir_a, transform_properties)
+    a = UnlabeledDataset(transform_properties, dir_a)
     transform_properties["grayscale"] = grayscale_b
-    b = UnlabeledDataset(dir_b, transform_properties)
+    b = UnlabeledDataset(transform_properties, dir_b)
 
     # Transform datasets into dataloaders.
     a = DataLoader(
