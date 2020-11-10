@@ -96,7 +96,7 @@ test-drive-evaluation:
     # The drive.test is used to evaluate how the car drives.
     # With automatic_drive:=true the path of the car is predetermined and thus the correctness
     # of the evaluation can be tested.
-  - python3 -m simulation.utils.drive_test.run --config simulation/utils/drive_test/test/example_config.yaml
+  - python3 -m simulation.utils.drive_test.run --config simulation/utils/drive_test/test/ci.yaml
 
 test-documentation:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
