@@ -6,35 +6,35 @@ default_language_version:
 repos:
   # Hooks that modify code
 - repo: https://github.com/ambv/black
-  rev: stable
+  rev: master
   hooks:
   - id: black
 - repo: https://github.com/asottile/seed-isort-config
-  rev: v1.9.3
+  rev: master
   hooks:
   - id: seed-isort-config
-- repo: https://github.com/pre-commit/mirrors-isort
-  rev: v5.5.2
+- repo: https://github.com/PyCQA/isort
+  rev: master
   hooks:
   - id: isort
 - repo: https://github.com/myint/docformatter
-  rev: v1.3.1
+  rev: master
   hooks:
   - id: docformatter
     args: [-i, --wrap-summaries, '92', --wrap-descriptions, '92']
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v3.2.0  # Use the ref you want to point at
+  rev: master
   hooks:
   - id: trailing-whitespace
 - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-  rev: 0.1.0  # or specific tag
+  rev: master
   hooks:
   - id: yamlfmt
     args: [--mapping, '2', --sequence, '2', --offset, '0', --width, '92', --implicit_start, --preserve-quotes]
 
   # Hooks for validation
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v3.2.0  # Use the ref you want to point at
+  rev: master
   hooks:
   - id: check-yaml
     args: [--allow-multiple-documents, --unsafe] # Use unsafe to allow custom tags (e.g. !degrees) in ROS parameter files
@@ -63,6 +63,6 @@ repos:
     - post-checkout
     always_run: true
 - repo: https://gitlab.com/smop/pre-commit-hooks
-  rev: v1.0.0
+  rev: master
   hooks:
   - id: check-gitlab-ci
