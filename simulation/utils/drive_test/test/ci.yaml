@@ -69,3 +69,5 @@ tests:
 - desc: Road with blocked_area (don't drive around)
   road: ci_roads/blocked_area
   expected_result_state: 3
+- desc: Zebra Crossing
+  road: ci_roads/zebra_crossing
