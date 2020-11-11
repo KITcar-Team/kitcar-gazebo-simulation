@@ -10,7 +10,8 @@ import random
 from dataclasses import dataclass, field
 from typing import List, Tuple
 
-from simulation.utils.geometry import Pose, Transform
+from simulation.utils.geometry import Point, Pose, Transform, Vector
+from simulation.utils.road.sections.bezier_curve import CubicBezier
 from simulation.utils.road.sections.road_section import RoadSection
 
 
@@ -70,6 +71,31 @@ class Road:
             section.prev_length = self.length
         self.length = self.length + section.middle_line.length
         self.sections.append(section)
+
+    def close_loop(self, p_curvature: float = 2):
+        """Append a road section that connects the last section to the beginning.
+
+        The road's beginning and it's end are connected using a cubic bezier curve.
+
+        Args:
+            p_curvature: Scale the curvature of the resulting loop.
+        """
+
+        # Global position of the end of the road
+        end_pose_global, _ = self.sections[-1].get_ending()
+
+        # Inverse of the end == start pose in local coordinates
+        start_pose = Pose(Transform(end_pose_global).inverse)
+
+        approximate_radius = abs(start_pose.position) / p_curvature
+
+        section = CubicBezier(
+            p1=Point(approximate_radius, 0),
+            p2=start_pose.position
+            - Vector(approximate_radius, 0).rotated(start_pose.orientation),
+            p3=start_pose.position,
+        )
+        self.append(section)
 
 
 DEFAULT_ROAD_DIR = os.path.join(

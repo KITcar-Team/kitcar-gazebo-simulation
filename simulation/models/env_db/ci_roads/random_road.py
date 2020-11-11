@@ -86,7 +86,7 @@ def get_random_obstacle(
     )
 
 
-for _ in range(50):
+for _ in range(20):
     road.append(
         random.choices(
             [
@@ -134,3 +134,4 @@ for _ in range(50):
             k=1,
         )[0]
     )
+road.close_loop()
