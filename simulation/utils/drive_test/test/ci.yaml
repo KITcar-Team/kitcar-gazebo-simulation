@@ -1,0 +1,73 @@
+# This is example config file used for simulalation.utils.drive_test.run
+# You can execute this script with:
+# python3 -m simulation.utils.drive_test.run --config $PATH_TO_CONFIG
+
+# A list of columns which should be shown as a result.
+# Every parameter listed in 'tests' can also be a table column howver "conclusion" is a special one: It shows
+# must_succeed on the left and the expeded result on the right of the column.
+table_header:
+- desc
+- road
+- time_limit
+- result
+- conclusion
+
+# The max width a column is allowed to have
+# (To turn this off: set it to 0)
+table_column_max_width: 30
+
+# Defaults get applied to every test
+default_args:
+  mission_mode: 2
+  gui: false
+  time_limit: 300
+  automatic_drive: true
+  must_succeed: true
+
+# A list of tests which should be executed
+tests:
+- desc: Curvy road
+  road: ci_roads/curves
+- desc: Curvy road (drive on the left lane.)
+  road: ci_roads/curves
+  path_file: ${PATH_FILES}/left_lane.yaml
+  expected_result_state: 3
+- desc: Curvy road (drive off road.)
+  road: ci_roads/curves
+  path_file: ${PATH_FILES}/off_road.yaml
+  expected_result_state: 3
+- desc: Intersection straight
+  road: ci_roads/intersection
+  environment:
+    INTERSECTION_RULE: 0
+    INTERSECTION_TURN: 0
+- desc: Intersection left
+  road: ci_roads/intersection
+  environment:
+    INTERSECTION_RULE: 0
+    INTERSECTION_TURN: 1
+- desc: Intersection right
+  road: ci_roads/intersection
+  environment:
+    INTERSECTION_RULE: 0
+    INTERSECTION_TURN: 2
+- desc: Intersection straight (should yield)
+  road: ci_roads/intersection
+  expected_result_state: 3
+  environment:
+    INTERSECTION_RULE: 1
+    INTERSECTION_TURN: 0
+- desc: Intersection straight (should stop)
+  road: ci_roads/intersection
+  expected_result_state: 3
+  environment:
+    INTERSECTION_RULE: 2
+    INTERSECTION_TURN: 0
+- desc: Road with blocked_area
+  road: ci_roads/blocked_area
+  path_file: ${PATH_FILES}/blocked_area.yaml
+- desc: Road with blocked_area (don't drive around)
+  road: ci_roads/blocked_area
+  expected_result_state: 3
+- desc: Zebra Crossing
+  road: ci_roads/zebra_crossing
