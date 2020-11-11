@@ -16,14 +16,14 @@ from simulation.utils.machine_learning.cycle_gan.models.generator import create_
 from simulation.utils.machine_learning.cycle_gan.models.wcycle_gan import (
     WassersteinCycleGANModel,
 )
-from simulation.utils.machine_learning.data import UnlabeledDataLoader
+from simulation.utils.machine_learning.data import DataLoader
 from simulation.utils.machine_learning.data.image_operations import save_images
 from simulation.utils.machine_learning.models.helper import get_norm_layer, init_net
 from simulation.utils.machine_learning.models.resnet_generator import ResnetGenerator
 
 
 def test_on_dataset(
-    dataset: UnlabeledDataLoader,
+    dataset: DataLoader,
     generators: Tuple[nn.Module, nn.Module],
     class_names: Tuple[str, str],
     destination: str,
