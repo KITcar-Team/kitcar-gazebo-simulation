@@ -189,37 +189,38 @@ cml-cyclegan:
       export TAG_CI_IMAGE=focal
       export TAG_CI_IMAGE_DOCS=docs
       export TAG_CI_IMAGE_ML=machine_learning
-      export TAG_DEFAULT_IMAGE=focal
       export TAG_DEFAULT_IMAGE_CI=ci
       export TAG_KITCAR_ROS_IMAGE=focal
     else
       export TAG_CI_IMAGE=focal_${CI_COMMIT_REF_NAME}
       export TAG_CI_IMAGE_DOCS=docs_${CI_COMMIT_REF_NAME}
       export TAG_CI_IMAGE_ML=machine_learning_${CI_COMMIT_REF_NAME}
-      export TAG_DEFAULT_IMAGE=focal_${CI_COMMIT_REF_NAME}
       export TAG_DEFAULT_IMAGE_CI=ci_${CI_COMMIT_REF_NAME}
       export TAG_KITCAR_ROS_IMAGE=focal_${CI_COMMIT_REF_NAME}
     fi
-  - apk add --no-cache docker-compose
-  script:
+  - apk add --no-cache docker-compose git
   - docker --version
   - docker info
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    # Clone kitcar-rosbag
+  - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-rosbag.git
+    $KITCAR_REPO_PATH/kitcar-rosbag
     # Test building the ci image
   - cd simulation/docker/ci
-  - /bin/sh build.sh base $TAG_CI_IMAGE
+    # The argument NO_PARENT_NEEDED is passed to build.sh just to pass any value,
+    # the docker-compose just ignores it.
+  - /bin/sh build.sh base $TAG_CI_IMAGE NO_PARENT_NEEDED $KITCAR_REPO_PATH $KITCAR_REPO_PATH/kitcar-rosbag
   - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE
   - /bin/sh build.sh machine_learning $TAG_CI_IMAGE_ML $TAG_CI_IMAGE
   - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_ML
   - /bin/sh build.sh docs $TAG_CI_IMAGE_DOCS $TAG_CI_IMAGE_ML
   - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_DOCS
-    # Test building the default image
+      # Test building the default image
   - cd ../default
   - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE_CI $KITCAR_REPO_PATH
   - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:$TAG_DEFAULT_IMAGE_CI
-  - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE /home/kitcar/
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:$TAG_DEFAULT_IMAGE
-    # Test building the kitcar_ros_ci image
+   # Test building the kitcar_ros_ci image
   - cd ../kitcar_ros_ci
   - /bin/sh build.sh $CI_REGISTRY $TAG_DEFAULT_IMAGE_CI $TAG_KITCAR_ROS_IMAGE
   - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/kitcar_ros_ci:$TAG_KITCAR_ROS_IMAGE
