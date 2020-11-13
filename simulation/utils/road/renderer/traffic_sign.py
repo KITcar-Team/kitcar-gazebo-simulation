@@ -24,7 +24,7 @@ def model(x, y, z, orientation, name, mesh, collision_box_position, collision_bo
           <geometry>
             <mesh>
                 <uri>file://meshes/{mesh}.dae</uri>
-                <scale>0.001 0.001 0.001</scale>
+                <scale>1 1 1</scale>
             </mesh>
           </geometry>
         </visual>

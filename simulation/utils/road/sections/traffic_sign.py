@@ -19,59 +19,49 @@ class SignTuple:
 
 @dataclass
 class TrafficSign(RoadElementRect):
-    ZONE_10_START = SignTuple("10zone_start")
-    ZONE_20_START = SignTuple("20zone_start")
-    ZONE_30_START = SignTuple("30zone_start")
-    ZONE_40_START = SignTuple("40zone_start")
-    ZONE_50_START = SignTuple("50zone_start")
-    ZONE_60_START = SignTuple("60zone_start")
-    ZONE_70_START = SignTuple("70zone_start")
-    ZONE_80_START = SignTuple("80zone_start")
-    ZONE_90_START = SignTuple("90zone_start")
-    ZONE_10_END = SignTuple("10zone_end")
-    ZONE_20_END = SignTuple("20zone_end")
-    ZONE_40_END = SignTuple("40zone_end")
-    ZONE_50_END = SignTuple("50zone_end")
-    ZONE_60_END = SignTuple("60zone_end")
-    ZONE_70_END = SignTuple("70zone_end")
-    ZONE_80_END = SignTuple("80zone_end")
-    ZONE_90_END = SignTuple("90zone_end")
-    RAMP_END = SignTuple("Steigung_Ende")
-    RAMP_START = SignTuple("Steigung_Start")
-    YIELD = SignTuple("VorfahrtGewaehren")
-    STOP = SignTuple("Stopschild")
-    BARRED_AREA = SignTuple("Barred_area")
-    TURN_LEFT = SignTuple("Links_abbiegen")
-    TURN_RIGHT = SignTuple("Rechts_abbiegen")
-    STVO_222 = SignTuple(
-        "VorbeifahrtRechts_pedestrian",
-        (0.11, 0.15, 0.15),
-        (-0.055, 0, 0.075),
-    )
-    PRIORITY = SignTuple("Vorfahrt")
-    STVO_350_10 = SignTuple(
-        "PedestrianCrossing",
-    )
-    CURVE_LEFT = SignTuple(
-        "Abbiegeschild_links",
-        (0.09, 0.1, 0.11),
-        (-0.045, 0, 0.055),
-    )
-    CURVE_LEFT_LARGE = SignTuple(
-        "Abbiegeschild_gross_links",
-        (0.09, 0.3, 0.11),
-        (-0.045, 0, 0.055),
-    )
-    CURVE_RIGHT = SignTuple(
-        "Abbiegeschild_rechts",
-        (0.09, 0.1, 0.11),
-        (-0.045, 0, 0.055),
-    )
-    CURVE_RIGHT_LARGE = SignTuple(
-        "Abbiegeschild_gross_links",
-        (0.09, 0.3, 0.11),
-        (-0.045, 0, 0.055),
-    )
+    ZONE_10_START = SignTuple(mesh="speed_limit_zone_10_start_sign")
+    ZONE_20_START = SignTuple(mesh="speed_limit_zone_20_start_sign")
+    ZONE_30_START = SignTuple(mesh="speed_limit_zone_30_start_sign")
+    ZONE_40_START = SignTuple(mesh="speed_limit_zone_40_start_sign")
+    ZONE_50_START = SignTuple(mesh="speed_limit_zone_50_start_sign")
+    ZONE_60_START = SignTuple(mesh="speed_limit_zone_60_start_sign")
+    ZONE_70_START = SignTuple(mesh="speed_limit_zone_70_start_sign")
+    ZONE_80_START = SignTuple(mesh="speed_limit_zone_80_start_sign")
+    ZONE_90_START = SignTuple(mesh="speed_limit_zone_90_start_sign")
+    ZONE_10_END = SignTuple(mesh="speed_limit_zone_10_end_sign")
+    ZONE_20_END = SignTuple(mesh="speed_limit_zone_20_end_sign")
+    ZONE_30_END = SignTuple(mesh="speed_limit_zone_30_end_sign")
+    ZONE_40_END = SignTuple(mesh="speed_limit_zone_40_end_sign")
+    ZONE_50_END = SignTuple(mesh="speed_limit_zone_50_end_sign")
+    ZONE_60_END = SignTuple(mesh="speed_limit_zone_60_end_sign")
+    ZONE_70_END = SignTuple(mesh="speed_limit_zone_70_end_sign")
+    ZONE_80_END = SignTuple(mesh="speed_limit_zone_80_end_sign")
+    ZONE_90_END = SignTuple(mesh="speed_limit_zone_90_end_sign")
+
+    RAMP_START = SignTuple(mesh="uphill_grade_sign")
+    RAMP_END = SignTuple(mesh="downhill_grade_sign")
+
+    PRIORITY = SignTuple(mesh="priority_sign")
+    YIELD = SignTuple(mesh="yield_sign")
+    STOP = SignTuple(mesh="stop_sign")
+
+    ONCOMING_TRAFFIC = SignTuple(mesh="oncoming_traffic_sign")
+    NO_OVERTAKING_START = SignTuple(mesh="no_overtaking_start_sign")
+    NO_OVERTAKING_END = SignTuple(mesh="no_overtaking_end_sign")
+
+    TURN_RIGHT = SignTuple(mesh="turn_right_sign")
+    TURN_LEFT = SignTuple(mesh="turn_left_sign")
+    PASS_RIGHT = SignTuple(mesh="pass_right_sign")
+    PASS_LEFT = SignTuple(mesh="pass_left_sign")
+    SHARP_TURN_RIGHT_SMALL = SignTuple(mesh="sharp_turn_right_small_sign")
+    SHARP_TURN_RIGHT = SignTuple(mesh="sharp_turn_right_sign")
+    SHARP_TURN_LEFT_SMALL = SignTuple(mesh="sharp_turn_left_small_sign")
+    SHARP_TURN_LEFT = SignTuple(mesh="sharp_turn_left_sign")
+
+    ZEBRA_CROSSING = SignTuple(mesh="zebra_crossing_sign")
+    PARKING = SignTuple(mesh="parking_sign")
+    EXPRESSWAY_START = SignTuple(mesh="expressway_start_sign")
+    EXPRESSWAY_END = SignTuple(mesh="expressway_end_sign")
 
     kind: SignTuple = None
 
