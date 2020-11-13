@@ -1,11 +1,12 @@
 """ZebraCrossing."""
 
 from dataclasses import dataclass
+from typing import List
 
 import simulation.utils.road.sections.type as road_section_type
 from simulation.utils.geometry import Point, Polygon
 from simulation.utils.road.config import Config
-from simulation.utils.road.sections import StraightRoad, SurfaceMarkingRect
+from simulation.utils.road.sections import StraightRoad, SurfaceMarkingRect, TrafficSign
 
 
 @dataclass
@@ -44,3 +45,22 @@ class ZebraCrossing(StraightRoad):
             ]
         )
         return self.transform * poly
+
+    @property
+    def traffic_signs(self) -> List[TrafficSign]:
+        """List[TrafficSign]: All traffic signs within this section of the road."""
+        traffic_signs = super().traffic_signs.copy()
+
+        traffic_signs.append(
+            TrafficSign(
+                kind=TrafficSign.ZEBRA_CROSSING,
+                center=self.transform * Point(-0.4, -Config.road_width - 0.1),
+                angle=self.transform.get_angle(),
+                normalize_x=False,
+            )
+        )
+        return traffic_signs
+
+    @traffic_signs.setter
+    def traffic_signs(self, signs: List[TrafficSign]):
+        self._traffic_signs = signs

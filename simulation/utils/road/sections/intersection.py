@@ -518,7 +518,6 @@ class Intersection(RoadSection):
                 TrafficSign(
                     kind=TrafficSign.TURN_LEFT,
                     center=Point(self.cp_sign_south(Config.get_turn_sign_dist())),
-                    angle=math.pi,
                 )
             )
             if self.rule != Intersection.YIELD:
@@ -527,7 +526,7 @@ class Intersection(RoadSection):
                     TrafficSign(
                         kind=TrafficSign.TURN_RIGHT,
                         center=Point(self.cp_sign_west(Config.get_turn_sign_dist())),
-                        angle=0.5 * math.pi + self._alpha,
+                        angle=self._alpha - 0.5 * math.pi,
                     )
                 )
         elif self.turn == Intersection.RIGHT:
@@ -536,7 +535,6 @@ class Intersection(RoadSection):
                 TrafficSign(
                     kind=TrafficSign.TURN_RIGHT,
                     center=Point(self.cp_sign_south(Config.get_turn_sign_dist())),
-                    angle=math.pi,
                 )
             )
             if self.rule != Intersection.YIELD:
@@ -545,7 +543,7 @@ class Intersection(RoadSection):
                     TrafficSign(
                         kind=TrafficSign.TURN_LEFT,
                         center=Point(self.cp_sign_east(Config.get_turn_sign_dist())),
-                        angle=-0.5 * math.pi + self._alpha,
+                        angle=self._alpha + 0.5 * math.pi,
                     )
                 )
 
@@ -560,13 +558,13 @@ class Intersection(RoadSection):
                 TrafficSign(
                     kind=type_map[self.rule],
                     center=Point(self.cp_sign_south(Config.get_prio_sign_dist(1))),
-                    angle=math.pi,
                 )
             )
             signs.append(
                 TrafficSign(
                     kind=type_map[self.rule],
                     center=Point(self.cp_sign_north(Config.get_prio_sign_dist(1))),
+                    angle=math.pi,
                 )
             )
 
@@ -586,14 +584,14 @@ class Intersection(RoadSection):
                 TrafficSign(
                     kind=type_map_opposite[self.rule],
                     center=Point(self.cp_sign_west(Config.get_prio_sign_dist(1))),
-                    angle=0.5 * math.pi + self._alpha,
+                    angle=self._alpha - 0.5 * math.pi,
                 )
             )
             signs.append(
                 TrafficSign(
                     kind=type_map_opposite[self.rule],
                     center=Point(self.cp_sign_east(Config.get_prio_sign_dist(1))),
-                    angle=-0.5 * math.pi + self._alpha,
+                    angle=self._alpha + 0.5 * math.pi,
                 )
             )
 
@@ -622,7 +620,7 @@ class Intersection(RoadSection):
                     depth=Config.TURN_SF_MARK_LENGTH,
                 )
             )
-            if self.rule != Intersection.YIELD:
+            if (self.rule != Intersection.YIELD) and (self.rule != Intersection.STOP):
                 opposite_marking = (
                     SurfaceMarkingRect.RIGHT_TURN_MARKING
                     if self.turn == Intersection.LEFT
@@ -636,7 +634,6 @@ class Intersection(RoadSection):
                     if self.turn == Intersection.LEFT
                     else self.cp_surface_east()
                 )
-                # roadmarking "turn right" in west
                 markings.append(
                     SurfaceMarkingRect(
                         kind=opposite_marking,
