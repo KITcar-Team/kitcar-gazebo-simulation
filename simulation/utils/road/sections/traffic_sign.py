@@ -10,8 +10,12 @@ from . import ID
 class SignTuple:
     mesh: str
     id_: int = None
-    collision_box_size: Tuple[float, float, float] = (0.11, 0.15, 0.29)
-    collision_box_position: Tuple[float, float, float] = (-0.055, 0, 0.145)
+    large_sign_collision_box_size = (0.015, 0.15, 0.3)
+    large_sign_collision_box_position = (0, 0, 0.15)
+    small_sign_collision_box_size = (0.015, 0.1, 0.275)
+    small_sign_collision_box_position = (0, 0, 0.1375)
+    collision_box_size: Tuple[float, float, float] = large_sign_collision_box_size
+    collision_box_position: Tuple[float, float, float] = large_sign_collision_box_position
 
     def __post_init__(self):
         self.id_ = ID.register(ns=100)
@@ -41,22 +45,70 @@ class TrafficSign(RoadElementRect):
     RAMP_START = SignTuple(mesh="uphill_grade_sign")
     RAMP_END = SignTuple(mesh="downhill_grade_sign")
 
-    PRIORITY = SignTuple(mesh="priority_sign")
+    PRIORITY = SignTuple(
+        mesh="priority_sign",
+        collision_box_size=SignTuple.small_sign_collision_box_size,
+        collision_box_position=SignTuple.small_sign_collision_box_position,
+    )
     YIELD = SignTuple(mesh="yield_sign")
     STOP = SignTuple(mesh="stop_sign")
 
-    ONCOMING_TRAFFIC = SignTuple(mesh="oncoming_traffic_sign")
-    NO_OVERTAKING_START = SignTuple(mesh="no_overtaking_start_sign")
-    NO_OVERTAKING_END = SignTuple(mesh="no_overtaking_end_sign")
+    ONCOMING_TRAFFIC = SignTuple(
+        mesh="oncoming_traffic_sign",
+        collision_box_size=SignTuple.small_sign_collision_box_size,
+        collision_box_position=SignTuple.small_sign_collision_box_position,
+    )
+    NO_OVERTAKING_START = SignTuple(
+        mesh="no_overtaking_start_sign",
+        collision_box_size=SignTuple.small_sign_collision_box_size,
+        collision_box_position=SignTuple.small_sign_collision_box_position,
+    )
+    NO_OVERTAKING_END = SignTuple(
+        mesh="no_overtaking_end_sign",
+        collision_box_size=SignTuple.small_sign_collision_box_size,
+        collision_box_position=SignTuple.small_sign_collision_box_position,
+    )
 
-    TURN_RIGHT = SignTuple(mesh="turn_right_sign")
-    TURN_LEFT = SignTuple(mesh="turn_left_sign")
-    PASS_RIGHT = SignTuple(mesh="pass_right_sign")
-    PASS_LEFT = SignTuple(mesh="pass_left_sign")
-    SHARP_TURN_RIGHT_SMALL = SignTuple(mesh="sharp_turn_right_small_sign")
-    SHARP_TURN_RIGHT = SignTuple(mesh="sharp_turn_right_sign")
-    SHARP_TURN_LEFT_SMALL = SignTuple(mesh="sharp_turn_left_small_sign")
-    SHARP_TURN_LEFT = SignTuple(mesh="sharp_turn_left_sign")
+    TURN_RIGHT = SignTuple(
+        mesh="turn_right_sign",
+        collision_box_size=SignTuple.small_sign_collision_box_size,
+        collision_box_position=SignTuple.small_sign_collision_box_position,
+    )
+    TURN_LEFT = SignTuple(
+        mesh="turn_left_sign",
+        collision_box_size=SignTuple.small_sign_collision_box_size,
+        collision_box_position=SignTuple.small_sign_collision_box_position,
+    )
+    PASS_RIGHT = SignTuple(
+        mesh="pass_right_sign",
+        collision_box_size=(0.015, 0.1, 0.125),
+        collision_box_position=(0, 0, 0.0625),
+    )
+    PASS_LEFT = SignTuple(
+        mesh="pass_left_sign",
+        collision_box_size=(0.015, 0.1, 0.125),
+        collision_box_position=(0, 0, 0.0625),
+    )
+    SHARP_TURN_RIGHT_SMALL = SignTuple(
+        mesh="sharp_turn_right_small_sign",
+        collision_box_size=(0.015, 0.1, 0.125),
+        collision_box_position=(0, 0, 0.0625),
+    )
+    SHARP_TURN_RIGHT = SignTuple(
+        mesh="sharp_turn_right_sign",
+        collision_box_size=(0.015, 0.3, 0.125),
+        collision_box_position=(0, 0, 0.0625),
+    )
+    SHARP_TURN_LEFT_SMALL = SignTuple(
+        mesh="sharp_turn_left_small_sign",
+        collision_box_size=(0.015, 0.1, 0.125),
+        collision_box_position=(0, 0, 0.0625),
+    )
+    SHARP_TURN_LEFT = SignTuple(
+        mesh="sharp_turn_left_sign",
+        collision_box_size=(0.015, 0.3, 0.125),
+        collision_box_position=(0, 0, 0.0625),
+    )
 
     ZEBRA_CROSSING = SignTuple(mesh="zebra_crossing_sign")
     PARKING = SignTuple(mesh="parking_sign")
