@@ -14,6 +14,7 @@ from simulation.utils.road.sections import (
     StaticObstacle,
     StraightRoad,
     SurfaceMarkingRect,
+    TrafficSign,
 )
 from simulation.utils.road.sections.road_section import MarkedLine
 
@@ -364,3 +365,23 @@ class ParkingArea(_ParkingArea):
         for lot in self.right_lots:
             lines.extend(lot.lines)
         return lines
+
+    @property
+    def traffic_signs(self) -> List[TrafficSign]:
+        """List[TrafficSign]: All traffic signs within this section of the road."""
+        traffic_signs = super().traffic_signs.copy()
+
+        if len(self.right_lots) + len(self.left_lots) > 0:
+            traffic_signs.append(
+                TrafficSign(
+                    kind=TrafficSign.PARKING,
+                    center=self.transform * Point(0, -Config.road_width - 0.1),
+                    angle=self.transform.get_angle(),
+                    normalize_x=False,
+                )
+            )
+        return traffic_signs
+
+    @traffic_signs.setter
+    def traffic_signs(self, signs: List[TrafficSign]):
+        self._traffic_signs = signs

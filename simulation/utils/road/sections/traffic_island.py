@@ -39,7 +39,7 @@ class TrafficIsland(RoadSection):
     """Length of the bezier curve area at start and end of island."""
     curvature: float = 0.4
     """Define where along the curve area the control points are located."""
-    zebra_marking_type: str = ZEBRA
+    zebra_marking_type: int = ZEBRA
     """Type of zebra marking type. Can be LINES or ZEBRA."""
     _sign_distance: float = 0.30
     """Distance of the directions signs from the mid island part."""
@@ -223,9 +223,9 @@ class TrafficIsland(RoadSection):
         )
         traffic_signs.append(
             TrafficSign(
-                kind=TrafficSign.STVO_222,
+                kind=TrafficSign.PASS_RIGHT,
                 center=traffic_sign_start_point,
-                angle=self.transform.get_angle() - math.pi / 2,
+                angle=self.transform.get_angle(),
                 normalize_x=False,
             )
         )
@@ -234,12 +234,27 @@ class TrafficIsland(RoadSection):
         )
         traffic_signs.append(
             TrafficSign(
-                kind=TrafficSign.STVO_222,
+                kind=TrafficSign.PASS_RIGHT,
                 center=traffic_sign_end_point,
-                angle=self.transform.get_angle() + math.pi / 2,
+                angle=self.transform.get_angle() + math.pi,
                 normalize_x=False,
             )
         )
+        if self.zebra_marking_type == self.ZEBRA:
+            vector = Vector(
+                self.right_line.interpolate(
+                    self.right_line.project(traffic_sign_start_point)
+                )
+            )
+            point = vector + Vector(0, -0.1).rotated(self.transform.get_angle())
+            traffic_signs.append(
+                TrafficSign(
+                    kind=TrafficSign.ZEBRA_CROSSING,
+                    center=point,
+                    angle=self.transform.get_angle(),
+                    normalize_x=False,
+                )
+            )
         return traffic_signs
 
     @traffic_signs.setter
