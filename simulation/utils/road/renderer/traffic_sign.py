@@ -17,28 +17,28 @@ def draw(name: str, sign: TrafficSign):
 def model(x, y, z, orientation, name, mesh, collision_box_position, collision_box_size):
     return """
     <model name='{name}'>
-      <static>1</static>
-      <link name='link'>
+    <static>1</static>
+    <link name='link'>
         <visual name='visual'>
-          <cast_shadows>1</cast_shadows>
-          <geometry>
+        <cast_shadows>1</cast_shadows>
+        <geometry>
             <mesh>
                 <uri>file://meshes/{mesh}.dae</uri>
-                <scale>0.001 0.001 0.001</scale>
+                <scale>1 1 1</scale>
             </mesh>
-          </geometry>
+        </geometry>
         </visual>
         <collision name='collision'>
-            <pose>{collision_box_position} 0 0 0</pose>
+            <pose>{box_position_x} {box_position_y} {box_position_z} 0 0 0</pose>
             <geometry>
                 <box>
-                  <size>{collision_box_size}</size>
+                <size>{box_size_x} {box_size_y} {box_size_z}</size>
                 </box>
             </geometry>
         </collision>
         <self_collide>0</self_collide>
-      </link>
-      <pose frame=''>{x} {y} {z} {angle} 0 {orientation}</pose>
+    </link>
+    <pose frame=''>{x} {y} {z} {angle} 0 {orientation}</pose>
     </model>
     """.format(
         x=x,
@@ -48,6 +48,10 @@ def model(x, y, z, orientation, name, mesh, collision_box_position, collision_bo
         name=name,
         mesh=mesh,
         angle=0,
-        collision_box_position=collision_box_position,
-        collision_box_size=collision_box_size,
+        box_position_x=collision_box_position[0],
+        box_position_y=collision_box_position[1],
+        box_position_z=collision_box_position[2],
+        box_size_x=collision_box_size[0],
+        box_size_y=collision_box_size[1],
+        box_size_z=collision_box_size[2],
     )
