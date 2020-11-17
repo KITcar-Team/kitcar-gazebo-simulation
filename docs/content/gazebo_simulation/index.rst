@@ -117,6 +117,8 @@ It can be manually started by passing the parameter *control_sim_rate:=true* or 
 ModelPluginLinkNode
 ----------------------
 
+.. _model_plugin_link:
+
 The :ref:`model_plugin_link_node` is a \
 `Gazebo model plugin <http://gazebosim.org/tutorials?tut=plugins_model&cat=write_plugin>`_
 that allows to interact with models in Gazebo easily.
