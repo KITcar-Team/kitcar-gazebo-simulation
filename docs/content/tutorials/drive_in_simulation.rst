@@ -63,4 +63,40 @@ of how the pieces are connected:
 
 In a nutshell, this is how the car can drive within the simulation!
 
+Without kitcar-ros
+------------------
 
+The schematic above is great to get an overview, but it is not enough to fully understand how kitcar-ros is integrated.
+Firstly, all processes that are required to connect the car's code with the simulation are defined in :ref:`simulation_brain_link`.
+The nodes used there are specifically designed for KITcar's code and must be adjusted to work with other code.
+
+The two important questions are:
+
+#. How to prepare the sensor data for the code that usually runs on other hardware?
+#. How to realistically move the simulated car?
+
+The answers to these questions are heavily dependent on the physical car.
+
+1. Preparing the Car and Sensors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the code requires only a camera image (or other sensor data that Gazebo can simulate), that's great.
+:ref:`models` describes how the car model is defined and generated.
+Otherwise, it might be required to write utility nodes that subscribe to Gazebo's output and
+modify it the data. The :ref:`sensors` are such nodes.
+
+2. Move the Car
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This part is probably more complicated.
+If there's already a dynamic simulation capable of calculating the car's position and
+velocity available, that's great.
+A simple utility node that publishes the car's position and velocity, as described in
+:ref:`model_plugin_link`, is enough to let the car drive in Gazebo.
+
+For kitcar-ros, the :ref:`vehicle_simulation_link_node` propagates KITcar's vehicle
+simulation to Gazebo.
+
+Otherwise, a dynamic simulation must be created.
+A simple idea is to just give the car's desired speed to Gazebo.
+It will then integrate the speed over time and calculate the position on it's own.
