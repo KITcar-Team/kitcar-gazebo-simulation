@@ -129,10 +129,9 @@ build-documentation:
     - docs/_build/html/*
     expire_in: 2 day
 
-cml-cyclegan:
+.cml-cyclegan-template:
   stage: deploy
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
-  when: manual
   variables:
     INIT_INPUT: 1\nyy
   tags:
@@ -168,6 +167,19 @@ cml-cyclegan:
     --gitlab-uploads --md --title 'Loss values' >> report.md
     # Send report.md as comment
   - cml-send-comment report.md
+
+cml-cyclegan-master:
+  extends: .cml-cyclegan-template
+  # Always run on master
+  only:
+  - master
+
+cml-cyclegan:
+  extends: .cml-cyclegan-template
+  # Allow to manually run cml
+  except:
+  - master
+  when: manual
 
 # Build and deploy the CI docker image to the gitlab registry
 # This is done everytime the master branch is updated
