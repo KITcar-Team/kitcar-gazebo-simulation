@@ -54,7 +54,7 @@ the sensors specifications are extracted from the **car_specs**
 ROS package within KITcar_brain.
 
 Gazebo allows to define models using the `urdf <http://wiki.ros.org/urdf>`_ standard.
-However, defining a model consisting of multiple parts and sensors is repetetive.
+However, defining a model consisting of multiple parts and sensors is repetitive.
 So instead of writing the **urdf** by hand, there's a Python script that generates it!
 
 .. admonition:: Generate Dr. Drift
@@ -264,4 +264,4 @@ It can be used instead of **KITcar_brain**.
       roslaunch gazebo_simulation automatic_drive.launch
 
 The speed of the car can be modified by passing *speed:=...* as a launch parameter.
-(Or by modifying the parameter with **rosparam** at runtime.)
+(Or by modifying the parameter with **rosparam** at run-time.)

@@ -49,7 +49,7 @@ Dynamics
 
 .. _vehicle_simulation_link_node:
 
-The car needs to be moved, when `KITcar_brain` decides to start driving. Instead of reinventing the wheel, the contol team's(`Regelungsteam`) vehicle simulation is used to simulate driving behavior.
+The car needs to be moved, when `KITcar_brain` decides to start driving. Instead of reinventing the wheel, the control team's(`Regelungsteam`) vehicle simulation is used to simulate driving behavior.
 To do so, the command
 
 .. code-block::
@@ -66,5 +66,5 @@ See :mod:`simulation.src.simulation_brain_link.src.vehicle_simulation_link.node`
 
 Coordinate Frames
 ------------------
-`Dr. Drift` usually has multiple coordinate frames, such as `vehicle`, `ir_ahead`, and `world` which are all subjective from the car's perpective. However, the simulation has a need for an objective coordinate frame which allows to evaluate the simulated position. To allow for conversions between the vehicles coordinate frames and the simulated frame, a transformation is published by the :mod:`simulation.src.simulation_brain_link.src.vehicle_simulation_link`.
+`Dr. Drift` usually has multiple coordinate frames, such as `vehicle`, `ir_ahead`, and `world` which are all subjective from the car's perspective. However, the simulation has a need for an objective coordinate frame which allows to evaluate the simulated position. To allow for conversions between the vehicles coordinate frames and the simulated frame, a transformation is published by the :mod:`simulation.src.simulation_brain_link.src.vehicle_simulation_link`.
 
