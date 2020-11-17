@@ -31,7 +31,7 @@ tool that can generate CaroloCup_ roads and simulate a car driving on the genera
 
 *View of the Gazebo user interface displaying the default_road.*
 
-ROS_ topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the bevahior of the car.
+ROS_ topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the behavior of the car.
 
 .. raw:: html
 
