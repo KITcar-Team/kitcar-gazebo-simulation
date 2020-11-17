@@ -1,6 +1,6 @@
 better-apidoc>=0.3.1
 docutils>=0.16
-graphviz==0.13.2
+graphviz>=0.13.2
 Sphinx>=3
 sphinx_rtd_theme
 sphinxcontrib-programoutput
