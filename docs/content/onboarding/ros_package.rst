@@ -10,7 +10,7 @@ They all share a basic structure that will be explained through the
 
 .. _wiki: https://wiki.kitcar-team.de/doku.php?id=onboarding:allgemein:ros_einfuehrung
 
-.. Create the onboarding tree and hide ending and beginning of ouput with head and tail
+.. Create the onboarding tree and hide ending and beginning of output with head and tail
    command
 .. program-output::
    cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation/ && tree -a -I __pycache__ --dirsfirst simulation/src/simulation_onboarding | head -n -2
@@ -68,7 +68,7 @@ example here:
 Parameter directory
 *******************
 
-Each node has its own subdirectory inside the ``param`` directory.
+Each node has its own sub-directory inside the ``param`` directory.
 In there is always a file called ``topics.yaml``.
 It defines the topics which are published from the node.
 Here is the ``topics.yaml``:
@@ -113,8 +113,8 @@ Source directory
 ****************
 
 The ``src`` directory is the heart of every ROS package. It contains the actual Python code
-defining ROS nodes. Each node is defined within a subdirectory *(== python package)* within
-``src``. Inside this subdirectory, you can find the node and sometimes additional Python
+defining ROS nodes. Each node is defined within a sub-directory *(== python package)* within
+``src``. Inside this sub-directory, you can find the node and sometimes additional Python
 modules that add functionality to it. In this example, the onboarding node is defined in the
 module ``node.py`` within the ``src/onboarding`` directory.
 

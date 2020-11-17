@@ -23,7 +23,7 @@ you will find the line
    <plugin name="model_plugin_link" filename="libmodel_plugin_link.so"/>
 
 
-which equipes the *model_plugin_link*.
+which equips the *model_plugin_link*.
 
 The *model_plugin_link* is defined in :ref:`gazebo_simulation`.
 When attached to a model it listens to topics through which the pose and \

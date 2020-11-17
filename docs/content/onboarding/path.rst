@@ -86,7 +86,7 @@ Another neat feature of lines is \
 :py:func:`simulation.utils.geometry.line.Line.interpolate_pose`.
 It allows you to approximate the pose at any point on the line.
 E.g. if you know that the car travels on the :py:attr:`half_circle` \
-and you know that it has travelled 1 meter so far, \
+and you know that it has traveled 1 meter so far, \
 you can get the approximate position and orientation as a pose:
 
 >>> half_circle.interpolate_pose(arc_length = 1)
@@ -138,7 +138,7 @@ you are prepared to tackle the last, but also the hardest task of the Onboarding
 .. hint::
 
    We are aware, that this last task is not easy.
-   Here are a few hints that you can, but not don't have to use:
+   Here are a few hints that you can, but don't have to use:
 
    * Take a look at the individual sections that you've used to create the road.
      Try to figure out, what the middle line of the individual road section would be
