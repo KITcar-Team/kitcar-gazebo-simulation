@@ -5,6 +5,7 @@
   <arg name="road" />
   <!-- include_brain is false by default.-->
   <arg name="include_brain" default="false" />
+  <arg name="include_vehicle_simulation" default="false" />
 
   <!-- Use <include> to include other launch files. In this case the simulation master.launch file is included; it starts a Gazebo-world and by default also the KITcar_brain. KITcar_brain is the software which controls our vehicle! -->
   <include file="$(find gazebo_simulation)/launch/master.launch">
@@ -12,6 +13,7 @@
     <arg name="road" value="$(arg road)" />
     <!-- The include_brain argument is passed to tell the master.launch file if KITcar_brain should be launch as well. -->
     <arg name="include_brain" value="$(arg include_brain)" />
+    <arg name="include_vehicle_simulation" value="$(arg include_vehicle_simulation)" />
   </include>
 
   <!-- Launch onboarding node -->

@@ -90,7 +90,7 @@ you will see a new line in the terminal the node is running::
 
 .. tip::
 
-   Many ROS commands are easy to use with autocompletion.
+   Many ROS commands are easy to use with auto-completion.
    E.g. instead of typing the complete command,
    you can just type **rostopic pub /** and hit **<TAB>** three times.
 
