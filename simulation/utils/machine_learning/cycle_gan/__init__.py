@@ -44,7 +44,7 @@ A new model can be added by running with dvc commit.
        dvc checkout
 
 *This is only a short summary of how dvc works, a better explanation can be found here:*
-`DVC Tutorial <https://git.kitcar-team.de/onboarding/dvc-tutorial>`_
+`DVC Tutorial <https://dvc.org/doc/start>`_
 
 Training
 --------
