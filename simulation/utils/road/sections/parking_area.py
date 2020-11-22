@@ -29,7 +29,7 @@ class _ParkingSpot:
     BLOCKED = 2
     """Possible value of :attr:`kind`."""
 
-    width: float = 0.4
+    width: float = 0.35
     """Width of parking spot."""
     _depth: float = field(default=0, init=False)
     """Depth of parking spot."""
