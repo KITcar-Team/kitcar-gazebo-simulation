@@ -158,7 +158,7 @@ class Parking(ParkingState):
             check for failure state before
             returning this state.
         """
-        if input_msg == SpeakerMsg.SPEED_HALTED:
+        if input_msg == SpeakerMsg.SPEED_0:
             return state_machine.successfully_parked
         if input_msg == SpeakerMsg.RIGHT_LANE:
             return state_machine.failure_in_right
