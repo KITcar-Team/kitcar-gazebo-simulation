@@ -4,6 +4,7 @@
 !/.ci
 !/onboarding_simple.py
 !/default_road.py
+!/default_freeride_road.py
 !/base_world
 !/fast_world
 
