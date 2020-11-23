@@ -139,8 +139,7 @@ class Intersection(RoadSection):
     @property
     def v(self):
         return Vector(
-            Config.road_width * self.cos,
-            Config.road_width * math.sin(self._alpha),
+            Config.road_width * self.cos, Config.road_width * math.sin(self._alpha)
         )
 
     @property
@@ -161,10 +160,7 @@ class Intersection(RoadSection):
 
     @property
     def ls(self):
-        return Vector(
-            0,
-            (-1 * self.u + (-1 + self.sin) / (self.cos * self.cos) * self.v).y,
-        )
+        return Vector(0, (-1 * self.u + (-1 + self.sin) / (self.cos * self.cos) * self.v).y)
 
     @property
     def rl(self):
@@ -193,8 +189,7 @@ class Intersection(RoadSection):
 
     def cp_surface_south(self):
         return Vector(self.z - self.x + 0.5 * self.u) - Vector(
-            Config.get_surface_mark_dist() + Config.TURN_SF_MARK_LENGTH / 2,
-            0,
+            Config.get_surface_mark_dist() + Config.TURN_SF_MARK_LENGTH / 2, 0
         )
 
     def cp_sign_west(self, sign_dist):
