@@ -11,6 +11,8 @@
 
   <!-- Expect correct behavior (msg/Referee.msg/COMPLETED) by default.-->
   <arg name="expected_result_state" default="2" />
+  <arg name="expected_parking_successes" default="0" />
+  <arg name="expect_exact_parking_successes" default="false" />
 
   <!-- Whether a rosbag of the drive should be recorded and where it's stored. -->
   <arg name="record_rosbag" default="false"/>
@@ -42,6 +44,8 @@
   <test test-name="drive_test" pkg="simulation_evaluation" time-limit="$(arg time_limit)" type="drive_test">
     <param name="mission_mode" value="$(arg mission_mode)"/>
     <param name="expected_result_state" value="$(arg expected_result_state)"/>
+    <param name="expected_parking_successes" value="$(arg expected_parking_successes)"/>
+    <param name="expect_exact_parking_successes" value="$(arg expect_exact_parking_successes)"/>
     <rosparam file="$(find simulation_evaluation)/param/drive/topics.yaml" command="load" ns="topics" />
     <rosparam file="$(find simulation_evaluation)/param/referee/topics.yaml" command="load" ns="topics/referee" />
     <rosparam file="$(find simulation_evaluation)/param/state_machine/topics.yaml" command="load" ns="topics/state_machine" />
