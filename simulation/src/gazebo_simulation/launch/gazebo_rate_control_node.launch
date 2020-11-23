@@ -2,10 +2,15 @@
 <launch>
   <arg name="max_update_rate" default="1000"/>
   <arg name="min_update_rate" default="50"/>
+  <!-- This will pause the simulation whenever an image is published to wait for the lane detection! -->
+  <arg name="use_sync" default="true"/>
 
   <node name="gazebo_rate_control_node" ns="gazebo_simulation" pkg="gazebo_simulation" type="gazebo_rate_control_node" output="screen">
     <rosparam file="$(find gazebo_simulation)/param/gazebo_rate_control/default.yaml" command="load"/>
     <rosparam file="$(find gazebo_simulation)/param/gazebo_rate_control/topics.yaml" command="load" ns="topics"/>
+    <param name="update_rate/max" value="$(arg max_update_rate)"/>
+    <param name="update_rate/min" value="$(arg min_update_rate)"/>
+    <param name="use_sync" value="$(arg use_sync)"/>
   </node>
 
 </launch>
