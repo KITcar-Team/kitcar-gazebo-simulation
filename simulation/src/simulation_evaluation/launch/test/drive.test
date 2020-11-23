@@ -5,8 +5,8 @@
   <arg name="gui" default="false"/>
   <arg name="mission_mode" default="1"/>
   <arg name="time_limit" default="120"/>
-  <arg name="sim_rate_min" default="50"/>
-  <arg name="sim_rate_max" default="1000"/>
+  <arg name="sim_rate_min" default="200"/>
+  <arg name="sim_rate_max" default="2000"/>
 
   <arg name="automatic_drive" default="false"/>
   <arg name="path_file" default="$(find gazebo_simulation)/param/automatic_drive/path.yaml" />
