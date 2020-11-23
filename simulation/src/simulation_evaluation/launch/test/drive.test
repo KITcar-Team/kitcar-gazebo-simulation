@@ -5,6 +5,8 @@
   <arg name="gui" default="false"/>
   <arg name="mission_mode" default="1"/>
   <arg name="time_limit" default="120"/>
+  <arg name="sim_rate_min" default="50"/>
+  <arg name="sim_rate_max" default="1000"/>
 
   <arg name="automatic_drive" default="false"/>
   <arg name="path_file" default="$(find gazebo_simulation)/param/automatic_drive/path.yaml" />
@@ -25,6 +27,8 @@
     <arg name="evaluate" value="true"/>
     <arg name="control_sim_rate" value="true"/>
     <arg name="force_reload_road" value="true"/>
+    <arg name="sim_rate_min" default="$(arg sim_rate_min)"/>
+    <arg name="sim_rate_max" default="$(arg sim_rate_max)"/>
 
     <arg if="$(arg automatic_drive)" name="include_brain" value="false" />
     <arg if="$(arg automatic_drive)" name="include_vehicle_simulation" value="false" />

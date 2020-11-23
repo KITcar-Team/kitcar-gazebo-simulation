@@ -1,5 +1,7 @@
 <!-- Just for highlighting -->
 <launch>
+  <arg name="max_update_rate" default="1000"/>
+  <arg name="min_update_rate" default="50"/>
 
   <node name="gazebo_rate_control_node" ns="gazebo_simulation" pkg="gazebo_simulation" type="gazebo_rate_control_node" output="screen">
     <rosparam file="$(find gazebo_simulation)/param/gazebo_rate_control/default.yaml" command="load"/>
