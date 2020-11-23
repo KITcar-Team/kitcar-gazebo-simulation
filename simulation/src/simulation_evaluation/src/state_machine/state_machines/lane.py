@@ -30,11 +30,11 @@ class LaneStateMachine(StateMachine):
     """End state when driving of the road"""
     right = Right()  # noqa: F821
     """The car is in the right lane."""
-    left: "ActiveState" = Left()  # noqa: F821
+    left: "State" = Left()  # noqa: F821
     """The car is in the left lane."""
-    parking_right: "ActiveState" = ParkingRight()  # noqa: F821
+    parking_right: "State" = ParkingRight()  # noqa: F821
     """The car is parking on the right side."""
-    parking_left: "ActiveState" = ParkingLeft()  # noqa: F821
+    parking_left: "State" = ParkingLeft()  # noqa: F821
     """The car is parking on the left side."""
 
     def __init__(self, callback: Callable[[], None]):

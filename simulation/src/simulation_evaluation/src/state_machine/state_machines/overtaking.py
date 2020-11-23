@@ -18,11 +18,11 @@ from .state_machine import StateMachine
 class OvertakingStateMachine(StateMachine):
     """Keep track of overtaking obstacles."""
 
-    off: "ActiveState" = Off()  # noqa: F821
+    off: "State" = Off()  # noqa: F821
     """Default state"""
-    right: "ActiveState" = Right()  # noqa: F821
+    right: "State" = Right()  # noqa: F821
     """The car is inside the the overtaking zone and on the right line"""
-    left: "ActiveState" = Left()  # noqa: F821
+    left: "State" = Left()  # noqa: F821
     """The car is inside the the overtaking zone and on the left line"""
 
     def __init__(self, callback: Callable[[], None]):

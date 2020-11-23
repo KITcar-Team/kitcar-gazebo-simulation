@@ -23,17 +23,17 @@ from .state_machine import StateMachine
 class ParkingStateMachine(StateMachine):
     """Keep track of parking."""
 
-    off: "ActiveState" = Off()  # noqa: F821
+    off: "State" = Off()  # noqa: F821
     """Default state"""
-    in_parking_zone: "ActiveState" = InParkingZone()  # noqa: F821
+    in_parking_zone: "State" = InParkingZone()  # noqa: F821
     """The car is inside a parking zone"""
-    parking_attempt: "ActiveState" = ParkingAttempt()  # noqa: F821
+    parking_attempt: "State" = ParkingAttempt()  # noqa: F821
     """The car starts an attempt to park in"""
-    parking: "ActiveState" = Parking()  # noqa: F821
+    parking: "State" = Parking()  # noqa: F821
     """The car drives into a parking space"""
-    successfully_parked: "ActiveState" = SuccessfullyParked()  # noqa: F821
+    successfully_parked: "State" = SuccessfullyParked()  # noqa: F821
     """The car successfully parkes inside a parking space"""
-    parking_out: "ActiveState" = ParkingOut()  # noqa: F821
+    parking_out: "State" = ParkingOut()  # noqa: F821
     """The car drives out of the parkin space"""
     failure_in_right: "State" = FailureInRightLane()  # noqa: F821
     """End state when the car drives in the right lane when it's not allowed to"""

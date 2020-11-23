@@ -22,11 +22,11 @@ __copyright__ = "KITcar"
 class PriorityStateMachine(StateMachine):
     """Keep track of stoping and halting in front of stop or halt lines."""
 
-    off: "ActiveState" = Off()  # noqa: F821
+    off: "State" = Off()  # noqa: F821
     """Default state"""
-    in_stop_zone: "ActiveState" = InStopZone()  # noqa: F821
+    in_stop_zone: "State" = InStopZone()  # noqa: F821
     """The car is inside a stop zone"""
-    in_halt_zone: "ActiveState" = InHaltZone()  # noqa: F821
+    in_halt_zone: "State" = InHaltZone()  # noqa: F821
     """The car is inside a halt zone"""
     successfully_stopped: "State" = SuccessfullyStopped()  # noqa: F821
     """The car successfully stopes in the stop zone"""

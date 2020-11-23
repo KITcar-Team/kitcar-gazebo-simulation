@@ -19,11 +19,11 @@ from .state_machine import StateMachine
 class ProgressStateMachine(StateMachine):
     """Keep track if the car has started, is driving or has finished the drive."""
 
-    before_start: "ActiveState" = BeforeStart()  # noqa: F821
+    before_start: "State" = BeforeStart()  # noqa: F821
     """The car stands in front of the start line"""
-    running: "ActiveState" = Running()  # noqa: F821
+    running: "State" = Running()  # noqa: F821
     """The car has started to drive"""
-    finished: "ActiveState" = Finished()  # noqa: F821
+    finished: "State" = Finished()  # noqa: F821
     """The car finished the drive"""
 
     def __init__(self, callback: Callable[[], None]):
