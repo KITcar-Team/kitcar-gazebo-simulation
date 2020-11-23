@@ -111,6 +111,7 @@ class Referee:
         self.observation = initial_observation
 
         self.state = RefereeMsg.READY
+        self._parked = False
 
     def update(self, time: float, distance: float):
         """Update the referee's observation.
@@ -135,11 +136,10 @@ class Referee:
             return
 
         # Get successful parking
-        if (
-            self.parking.state == StateMsg.PARKING_SUCCESS
-            and self.parking.previous_state != StateMsg.PARKING_SUCCESS
-        ):
-            self.parking.state = StateMsg.PARKING_SUCCESS
+        if self.parking.state == StateMsg.PARKING_SUCCESS:
+            self._parked = True
+        if self._parked and self.parking.state != StateMsg.PARKING_SUCCESS:
+            self._parked = False
             self.observation.multiplicator += 1.0
             self.observation.parking_successes += 1
             print("PARKING COMPLETED SUCCESSFULLY (RECEIVED IN REFEREE)")
@@ -180,3 +180,4 @@ class Referee:
         reset_connector(self.progress, StateMsg.PROGRESS_BEFORE_START)
 
         self.state = RefereeMsg.READY
+        self._parked = False
