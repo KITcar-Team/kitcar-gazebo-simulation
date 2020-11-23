@@ -15,3 +15,8 @@ update_rate:
     up: 0.01  # factor controlling the increase of the update rate
     down: 0.002  # factor controlling the decrease of the update rate
     rate: 30  # Rate with which the update_rate is changed
+
+sync:
+  timeout: 0.0167
+  source_topic: "/camera/image_raw"
+  topic: "/perception/lane_detection/road_lane_left"
