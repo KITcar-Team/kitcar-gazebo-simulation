@@ -35,13 +35,23 @@ class DriveTest(unittest.TestCase):
 
         prev_states, last_states = node.last_state_machine_transition
         failure_msg = (
-            f"Drive finished in state: {node.state},"
-            f"but should be {node.param.expected_result_state}\n"
+            f"Drive finished in state: {node.state} "
+            f"(expected: {node.param.expected_result_state})\n,"
+            f"the car parked {node.parking_successes} times "
+            f"(expected: {node.param.expected_parking_successes})\n,"
             f"The state machines went from being in the states\n"
             f"{prev_states} to \n{last_states}."
         )
 
         self.assertEqual(node.state, node.param.expected_result_state, failure_msg)
+        if node.param.expect_exact_parking_successes:
+            self.assertEqual(
+                node.parking_successes, node.param.expected_parking_successes, failure_msg
+            )
+        else:
+            self.assertGreaterEqual(
+                node.parking_successes, node.param.expected_parking_successes, failure_msg
+            )
 
 
 if __name__ == "__main__":

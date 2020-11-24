@@ -5,12 +5,16 @@
   <arg name="gui" default="false"/>
   <arg name="mission_mode" default="1"/>
   <arg name="time_limit" default="120"/>
+  <arg name="sim_rate_min" default="200"/>
+  <arg name="sim_rate_max" default="2000"/>
 
   <arg name="automatic_drive" default="false"/>
   <arg name="path_file" default="$(find gazebo_simulation)/param/automatic_drive/path.yaml" />
 
   <!-- Expect correct behavior (msg/Referee.msg/COMPLETED) by default.-->
   <arg name="expected_result_state" default="2" />
+  <arg name="expected_parking_successes" default="0" />
+  <arg name="expect_exact_parking_successes" default="false" />
 
   <!-- Whether a rosbag of the drive should be recorded and where it's stored. -->
   <arg name="record_rosbag" default="false"/>
@@ -23,6 +27,8 @@
     <arg name="evaluate" value="true"/>
     <arg name="control_sim_rate" value="true"/>
     <arg name="force_reload_road" value="true"/>
+    <arg name="sim_rate_min" default="$(arg sim_rate_min)"/>
+    <arg name="sim_rate_max" default="$(arg sim_rate_max)"/>
 
     <arg if="$(arg automatic_drive)" name="include_brain" value="false" />
     <arg if="$(arg automatic_drive)" name="include_vehicle_simulation" value="false" />
@@ -42,6 +48,8 @@
   <test test-name="drive_test" pkg="simulation_evaluation" time-limit="$(arg time_limit)" type="drive_test">
     <param name="mission_mode" value="$(arg mission_mode)"/>
     <param name="expected_result_state" value="$(arg expected_result_state)"/>
+    <param name="expected_parking_successes" value="$(arg expected_parking_successes)"/>
+    <param name="expect_exact_parking_successes" value="$(arg expect_exact_parking_successes)"/>
     <rosparam file="$(find simulation_evaluation)/param/drive/topics.yaml" command="load" ns="topics" />
     <rosparam file="$(find simulation_evaluation)/param/referee/topics.yaml" command="load" ns="topics/referee" />
     <rosparam file="$(find simulation_evaluation)/param/state_machine/topics.yaml" command="load" ns="topics/state_machine" />

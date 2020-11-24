@@ -10,11 +10,13 @@ targets:
 # Restrictions on how much the gazebo update rate can be changed
 # Prevent stopping the simulation
 update_rate:
-  min: 50
-  max: 1500
-
   # Parameters for adjusting the gazebo update rate
   control:
     up: 0.01  # factor controlling the increase of the update rate
     down: 0.002  # factor controlling the decrease of the update rate
     rate: 30  # Rate with which the update_rate is changed
+
+sync:
+  timeout: 0.0167
+  source_topic: "/camera/image_raw"
+  topic: "/perception/lane_detection/road_lane_left"

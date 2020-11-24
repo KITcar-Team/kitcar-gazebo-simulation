@@ -26,6 +26,7 @@ class DriveTestNode(NodeBase):
         self._previous_state_machine_msg = None
         self._state_machine_msg = None
         self.state = -1
+        self.parking_successes = -1
 
         if run:
             self.run()
@@ -117,6 +118,7 @@ class DriveTestNode(NodeBase):
             # Drive is over: save result and shutdown!
 
             self.state = msg.state
+            self.parking_successes = msg.parking_successes
             self.last_state_machine_transition = (
                 self._previous_state_machine_msg,
                 self._state_machine_msg,
