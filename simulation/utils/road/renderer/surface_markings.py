@@ -2,16 +2,13 @@ import math
 import os
 from typing import List
 
-from gi import require_version
-from gi.repository import Rsvg  # noqa: 402
+import cairo
 
 import simulation.utils.road.renderer.utils as utils  # no
 from simulation.utils.geometry import Line, Point, Polygon, Vector
 from simulation.utils.road.config import Config
 from simulation.utils.road.sections import SurfaceMarking
 from simulation.utils.road.sections.road_section import MarkedLine, RoadSection
-
-require_version("Rsvg", "2.0")
 
 
 def draw(ctx, surface_marking: SurfaceMarking):
@@ -23,12 +20,12 @@ def draw(ctx, surface_marking: SurfaceMarking):
     ):
         ctx.translate(surface_marking.center.x, surface_marking.center.y)
         ctx.rotate(surface_marking.orientation)
-        # Translate to left upper corner of svg
+        # Translate to left upper corner of png
         ctx.translate(
             surface_marking.depth / 2,
             -surface_marking.width / 2,
         )
-        # Then rotate by 90 degrees because svgs have the wrong direction!
+        # Then rotate by 90 degrees to align png properly!
         ctx.rotate(math.pi / 2)
         image_file = os.path.join(
             os.environ.get("KITCAR_REPO_PATH"),
@@ -36,15 +33,18 @@ def draw(ctx, surface_marking: SurfaceMarking):
             "simulation",
             "models",
             "meshes",
-            "Fahrbahnmarkierung_Pfeil_"
+            "surface_marking_turn_"
             + (
-                "L" if surface_marking.kind != SurfaceMarking.LEFT_TURN_MARKING else "R"
-            )  # turn arrows are mirrored in rendering process
-            + ".svg",
+                "left"
+                if surface_marking.kind != SurfaceMarking.LEFT_TURN_MARKING
+                else "right"
+            )
+            + ".png",
         )
-        svg = Rsvg.Handle().new_from_file(image_file)
+        img = cairo.ImageSurface.create_from_png(image_file)
         ctx.scale(0.001, 0.001)
-        svg.render_cairo(ctx)
+        ctx.set_source_surface(img, 0, 0)
+        ctx.paint()
 
     if (
         surface_marking.kind == SurfaceMarking.GIVE_WAY_LINE
