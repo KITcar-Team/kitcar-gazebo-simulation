@@ -58,6 +58,7 @@ to share knowledge and ensure common standards within the code.
    tutorials/rosbags.rst
    tutorials/datasets.rst
    tutorials/cycle_gan.rst
+   tutorials/drive_test.rst
 
 
 .. toctree::

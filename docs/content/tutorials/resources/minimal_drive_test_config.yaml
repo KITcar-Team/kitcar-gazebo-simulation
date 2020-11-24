@@ -1,0 +1,20 @@
+table_header:
+- desc
+- road
+- time_limit
+- conclusion
+
+table_column_max_width: 0
+
+# Defaults get applied to every test
+default_args:
+  mission_mode: 1
+  gui: true
+  time_limit: 300
+
+tests:
+- desc: Curvy road.
+  road: ci_roads/curves
+- desc: Obstacle road.
+  road: ci_roads/obstacles
+
