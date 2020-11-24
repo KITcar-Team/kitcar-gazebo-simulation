@@ -71,3 +71,13 @@ tests:
   expected_result_state: 3
 - desc: Zebra Crossing
   road: ci_roads/zebra_crossing
+- desc: Parking
+  road: ci_roads/parking
+  path_file: ${PATH_FILES}/parking.yaml
+  expected_parking_successes: 1
+- desc: Parking. Don't stop for parking.
+  road: ci_roads/parking
+  path_file: ${PATH_FILES}/parking_no_stop.yaml
+  # Failed parking attempt is a mistake!
+  expected_result_state: 3
+

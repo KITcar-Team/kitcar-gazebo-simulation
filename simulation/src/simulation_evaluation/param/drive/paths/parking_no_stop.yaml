@@ -1,0 +1,10 @@
+# Path specification to drive off road.
+path:
+- start: 0.4
+  offset: -0.2
+- start: 4
+  offset: -0.55
+- start: 4.1
+  offset: -0.2
+- start: 6
+  offset: -0.2
