@@ -13,8 +13,6 @@ gcc
 libignition-math6
 libcairo2-dev
 pkg-config
-gir1.2-gtk-3.0
-gir1.2-rsvg-2.0
 tree
 doxygen
 ffmpeg
