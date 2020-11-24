@@ -2,7 +2,7 @@ import functools
 import math
 import random
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 import geometry_msgs.msg
 import rospy
@@ -111,12 +111,16 @@ class AutomaticDriveNode(NodeBase):
         )
 
     @functools.cached_property
-    def driving_line(self) -> Line:
-        """Line: Line where car drives."""
+    def driving_line(self) -> Tuple[Line, List[List[float]]]:
+        """Tuple[Line, List[List[float]]]: Line where car drives.
+
+        And points to stop at.
+        """
 
         path = Line()
+        stops = []
 
-        def append(offset, segment):
+        def append(offset, segment, stop):
             nonlocal path
 
             if offset > 0:
@@ -125,6 +129,8 @@ class AutomaticDriveNode(NodeBase):
                 segment = segment.parallel_offset(-offset, "right")
 
             path += segment
+            if stop > 0:
+                stops.append([path.length, stop])
 
         if self.param.randomize_path:
             # Stitch a line together from varied offsets along the middle line
@@ -149,6 +155,7 @@ class AutomaticDriveNode(NodeBase):
 
             current_start = param_path[0]["start"]
             current_offset = param_path[0]["offset"]
+            current_stop = 0
 
             param_path.remove(param_path[0])
 
@@ -158,43 +165,55 @@ class AutomaticDriveNode(NodeBase):
                 before_end_line = Line.cut(self.middle_line, end_arc_length)[0]
                 current_segment = Line.cut(before_end_line, current_start)[1]
 
-                append(current_offset, current_segment)
+                append(current_offset, current_segment, current_stop)
 
                 current_offset = obj["offset"]
                 current_start = obj["start"]
+                current_stop = obj.get("stop", 0)
 
             current_segment = Line.cut(self.middle_line, current_start)[1]
 
-            append(current_offset, current_segment)
+            append(current_offset, current_segment, 0)
 
-        return path
+        return path, stops
 
     def update(self):
         """Calculate and publish new car state information."""
         # Update the driving state
         current_time = rospy.Time.now().to_sec()
-        self._driving_state.distance_driven += (
-            current_time - self._driving_state.time
-        ) * self.param.speed
+        current_speed = self.param.speed
+        d_time = current_time - self._driving_state.time
+
+        # Check if the car needs to stop
+        remaining_stops = self.driving_line[1]
+        if len(remaining_stops) > 0:
+            if remaining_stops[0][0] < self._driving_state.distance_driven:
+                remaining_stops[0][1] -= d_time
+                if remaining_stops[0][1] > 0:
+                    current_speed = 0
+                else:
+                    del remaining_stops[0]
+
+        self._driving_state.distance_driven += d_time * current_speed
 
         if (
             not self.param.loop
-            and self._driving_state.distance_driven > self.driving_line.length
+            and self._driving_state.distance_driven > self.driving_line[0].length
         ):
             rospy.signal_shutdown("Finished driving along the road.")
             return
-        self._driving_state.distance_driven %= self.driving_line.length
+        self._driving_state.distance_driven %= self.driving_line[0].length
         self._driving_state.time = current_time
 
         rospy.logdebug(f"Current driving state: {self._driving_state}")
 
         # Calculate position, speed, and yaw
-        position = self.driving_line.interpolate(self._driving_state.distance_driven)
+        position = self.driving_line[0].interpolate(self._driving_state.distance_driven)
 
         # Depending on the align_with_middle_line parameter, the car is always parallel
         # to the middle line or to the driving line.
         alignment_line = (
-            self.middle_line if self.param.align_with_middle_line else self.driving_line
+            self.middle_line if self.param.align_with_middle_line else self.driving_line[0]
         )
 
         # Always let the car face into the direction of the middle line.
@@ -203,13 +222,13 @@ class AutomaticDriveNode(NodeBase):
             alignment_line.interpolate_direction(alignment_line.project(position)),
         )
 
-        speed = Vector(self.param.speed, 0)  # Ignore y component of speed
+        speed = Vector(current_speed, 0)  # Ignore y component of speed
         # Yaw rate = curvature * speed
         yaw_rate = (
             alignment_line.interpolate_curvature(
                 min(self._driving_state.distance_driven, alignment_line.length)
             )
-            * self.param.speed
+            * current_speed
         )
 
         # Publish up to date messages!

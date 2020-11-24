@@ -56,6 +56,9 @@ Use this launch file to start the complete simulation.-->
        Normally doing this is a bad idea. However, inside of Docker containers Gazebo does not update correctly.
        Setting this argument to true starts the gazebo_rate_control_node. -->
   <arg name="control_sim_rate" default="false" />
+  <!-- Only works when using control sim rate! -->
+  <arg name="sim_rate_max" default="1000" />
+  <arg name="sim_rate_min" default="50" />
   <!-- Indicate whether to launch the label camera which uses the groundtruth to add labels to every camera image.
   -->
   <arg name="label_camera" default="false" />
@@ -164,7 +167,10 @@ Use this launch file to start the complete simulation.-->
     <arg name="use_clock_frequency" default="$(arg gz_use_clock_frequency)"/>
     <arg name="pub_clock_frequency" default="$(arg gz_pub_clock_frequency)"/>
   </include>
-  <include if="$(arg control_sim_rate)" file="$(find gazebo_simulation)/launch/gazebo_rate_control_node.launch" />
+  <include if="$(arg control_sim_rate)" file="$(find gazebo_simulation)/launch/gazebo_rate_control_node.launch">
+    <arg name="max_update_rate" default="$(arg sim_rate_max)"/>
+    <arg name="min_update_rate" default="$(arg sim_rate_min)"/>
+  </include>
   <include if="$(arg label_camera)" file="$(find simulation_groundtruth)/launch/label_camera_node.launch" />
 
 </launch>

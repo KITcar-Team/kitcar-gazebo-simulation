@@ -10,6 +10,7 @@ from gazebo_msgs.srv import (
     SetPhysicsProperties,
     SetPhysicsPropertiesRequest,
 )
+from std_srvs.srv import Empty as EmptySrv
 
 from simulation.utils.ros_base.node_base import NodeBase
 
@@ -44,6 +45,19 @@ class GazeboRateControlNode(NodeBase):
         self.get_physics = rospy.ServiceProxy(
             self.param.topics.get_physics, GetPhysicsProperties, persistent=True
         )
+        if self.param.use_sync:
+            self.published_subscriber = rospy.Subscriber(
+                self.param.sync.source_topic,
+                rospy.AnyMsg,
+                callback=self.receive_sync_source,
+                queue_size=1,
+            )
+            self.pause_physics_proxy = rospy.ServiceProxy(
+                self.param.topics.pause_gazebo, EmptySrv
+            )
+            self.unpause_physics_proxy = rospy.ServiceProxy(
+                self.param.topics.unpause_gazebo, EmptySrv
+            )
 
         self.rater = rostopic.ROSTopicHz(5)
 
@@ -70,6 +84,10 @@ class GazeboRateControlNode(NodeBase):
         for sub in self.subscribers.values():
             sub.unregister()
         self.subscribers.clear()
+        if self.param.use_sync:
+            self.published_subscriber.unregister()
+            self.pause_physics_proxy.close()
+            self.unpause_physics_proxy.close()
 
         self.set_physics.close()
         self.get_physics.close()
@@ -123,6 +141,23 @@ class GazeboRateControlNode(NodeBase):
         new_properties.max_update_rate = update_rate
 
         self.set_physics(new_properties)
+
+    def receive_sync_source(self, _):
+        """Attempt to synchronize specified source topic and topic.
+
+        The basic idea is that some run time dependent components (messages) should be
+        published closely after another. This synchronization (pausing) ensures the same
+        behavior in the simulation.
+        """
+        try:
+            self.pause_physics_proxy()
+            rospy.wait_for_message(
+                self.param.sync.topic, rospy.AnyMsg, self.param.sync.timeout
+            )
+        except rospy.exceptions.ROSException:
+            pass
+        finally:
+            self.unpause_physics_proxy()
 
     def update(self):
         """Adjust Gazebos update rate to meet desired output frequency of the target
