@@ -109,7 +109,7 @@ class VisualBoundingBox:
 
     def draw(
         self,
-        img: np.ndarray1,
+        img: np.ndarray,
     ):
         """Draw the bounding box into the given image."""
         x1, y1, x2, y2 = self.bounds
