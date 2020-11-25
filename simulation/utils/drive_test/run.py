@@ -8,6 +8,8 @@ from .drive_test_cmd import DriveTestCmd
 
 
 def make_multiline(string: str, max_width: int):
+    if max_width == 0:
+        return string
     return "".join(
         [char + ("\n" if (i + 1) % max_width == 0 else "") for i, char in enumerate(string)]
     )
@@ -66,10 +68,10 @@ class AutomatedDriveTest:
         # Read parameters specified inside table_header
         self.table_data = [data["table_header"]]
 
-        self.max_string_width = data["table_column_max_width"]
+        self.max_string_width = data.get("table_column_max_width", 0)
 
         # Get global tests parameters
-        default_args = data["default_args"]
+        default_args = data.get("default_args", {})
 
         # Loop over all tests in yaml
         # and parse paremeters to DriveTestCmd
@@ -106,8 +108,6 @@ class AutomatedDriveTest:
             for header_elem in self.table_data[0]:
                 if header_elem == "desc":
                     item = make_multiline(str(job.desc), self.max_string_width)
-                elif header_elem == "result":
-                    item = SUCCESS if job.success else FAILED
                 elif header_elem == "conclusion":
                     must_succeed = SUCCESS if job.must_succeed else None
                     result = SUCCESS if job.success else FAILED
