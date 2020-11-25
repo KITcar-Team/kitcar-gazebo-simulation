@@ -59,7 +59,7 @@ case "$option" in
 
     # Install apt packages
     echo -e "\nStart installing apt packages from \e[2minit/packages_$UBUNTU_VERSION.txt\e[22m (requires sudo priviliges)"
-    sudo apt-get update && sudo xargs --arg-file=$INIT_DIR/packages_$UBUNTU_VERSION.txt apt-get install -y
+    sudo apt update && sudo xargs --arg-file=$INIT_DIR/packages_$UBUNTU_VERSION.txt apt install -y
 
     # Install python packages
     pip_install_reqs requirements.txt

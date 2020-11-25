@@ -5,7 +5,7 @@
 # Thats usually necessary for Gazebo to work.
 
 # Install necessary packages
-sudo apt-get update && apt-get install -y \
+sudo apt update && apt install -y \
 dbus dbus-x11 libasound2 libasound2-plugins alsa-utils \
 alsa-oss pulseaudio pulseaudio-utils \
 xvfb
