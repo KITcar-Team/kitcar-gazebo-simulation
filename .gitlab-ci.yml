@@ -2,7 +2,6 @@ image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:focal
 
 variables:
   GIT_STRATEGY: clone
-  GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar/
   INIT_INPUT: 1\nyn   # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
@@ -30,6 +29,8 @@ stages:
 # build kitcar-ros and simulation
 build-code:
   stage: build
+  variables:
+    GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   script:
   - cd  simulation
   - catkin_make
@@ -41,6 +42,8 @@ build-code:
 
 lint:
   stage: build
+  variables:
+    GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   script:
   # Check if all files are correctly formatted and comply to our formatting rules.
   - pre-commit run --all-files
@@ -50,6 +53,8 @@ lint:
 # Run module test in utils packages
 test-python-packages:
   stage: test
+  variables:
+    GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   script:
   - python3 -m simulation.utils.geometry.test
   - python3 simulation/utils/ros_base/test/parameter_object_test.py
@@ -67,6 +72,7 @@ test-machine-learning-package:
   stage: test
   variables:
     INIT_INPUT: 1\nyy
+    GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   script:
   - python3 -m simulation.utils.machine_learning.models.test
   - python3 -m simulation.utils.machine_learning.cycle_gan.models.test
@@ -103,7 +109,6 @@ test-documentation:
   stage: test
   variables:
     INIT_INPUT: 1\nyy
-    GIT_LFS_SKIP_SMUDGE: '0'  #  Pull git lfs
   script:
     # Test if the onboarding documentation is correct
   - python3 docs/content/tutorials/road_examples/example.py
@@ -119,7 +124,6 @@ build-documentation:
   stage: deploy
   variables:
     INIT_INPUT: 1\nyy
-    GIT_LFS_SKIP_SMUDGE: '0'  #  Pull git lfs
   script:
     # Build the documentation
   - cd docs
@@ -134,6 +138,7 @@ build-documentation:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
   variables:
     INIT_INPUT: 1\nyy
+    GIT_LFS_SKIP_SMUDGE: '1'  # Don't pull Git LFS
   tags:
   - workstation
   script:
@@ -192,7 +197,6 @@ cml-cyclegan:
   - docker:19.03.11-dind
   variables:
     # Ensure that lfs files are available in resulting images!
-    GIT_LFS_SKIP_SMUDGE: '0'  #  Pull Git LFS
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ''
   before_script:
