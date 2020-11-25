@@ -1,6 +1,6 @@
 # This is example config file used for simulalation.utils.drive_test.run
 # You can execute this script with:
-# python3 -m simulation.utils.drive_test.run --config $PATH_TO_CONFIG
+# python3 -m simulation.utils.drive_test.run --config PATH_TO_CONFIG
 
 # A list of columns which should be shown as a result.
 # Every parameter listed in 'tests' can also be a table column howver "conclusion" is a special one: It shows
