@@ -9,7 +9,6 @@ table_header:
 - desc
 - road
 - time_limit
-- result
 - conclusion
 
 # The max width a column is allowed to have
