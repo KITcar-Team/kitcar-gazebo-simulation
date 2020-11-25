@@ -1,0 +1,36 @@
+table_header:
+- desc
+- road
+- time_limit
+- conclusion
+
+table_column_max_width: 40
+
+# Defaults get applied to every test
+default_args:
+  time_limit: 300
+  mission_mode: 2
+  gui: true
+  road: ci_roads/double_intersection
+  must_succeed: true
+
+tests:
+# First turn right
+- desc: Right&right intersections.
+  environment:
+    FIRST_TURN: right
+    SECOND_TURN: right
+- desc: Right&left intersections.
+  environment:
+    FIRST_TURN: right
+    SECOND_TURN: left
+
+# First turn left
+- desc: Left&right intersections.
+  environment:
+    FIRST_TURN: left
+    SECOND_TURN: right
+- desc: Left&left intersections.
+  environment:
+    FIRST_TURN: left
+    SECOND_TURN: left
