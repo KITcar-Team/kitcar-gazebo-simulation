@@ -8,7 +8,7 @@ COPY packages.txt /packages.txt
 RUN mkdir -p /home/kitcar && mv /builds/kitcar /home/
 
 # Install packages from packages file.
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive xargs --arg-file=/packages.txt apt-get install -y
+RUN apt update && DEBIAN_FRONTEND=noninteractive xargs --arg-file=/packages.txt apt install -y
 
 # Reduce image size by removing apt cache
 RUN rm -rf /var/lib/apt/lists/*
