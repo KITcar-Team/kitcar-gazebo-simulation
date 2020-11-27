@@ -190,11 +190,11 @@ cml-cyclegan:
 # This is done everytime the master branch is updated
 .docker-images-template:
   stage: deploy
-  image: docker:19.03.11
+  image: docker:19.03.13
   tags:
   - docker
   services:
-  - docker:19.03.11-dind
+  - docker:19.03.13-dind
   variables:
     # Ensure that lfs files are available in resulting images!
     DOCKER_HOST: tcp://docker:2375
