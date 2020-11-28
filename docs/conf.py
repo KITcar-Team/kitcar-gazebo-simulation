@@ -146,6 +146,9 @@ html_extra_path = [
     "content/talks/ci_tests/resources/drive_test_failure.mp4",
     "content/talks/ci_tests/resources/speaker_output.mp4",
     "content/tutorials/resources/parking_drive_test.mp4",
+    "content/tutorials/resources/birds_view_default_road.mp4",
+    "content/tutorials/resources/gan_default_road.mp4",
+    "content/tutorials/resources/camera_default_road.mp4",
 ]
 
 # List of patterns, relative to source directory, that match files and
