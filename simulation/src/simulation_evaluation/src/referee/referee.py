@@ -98,6 +98,7 @@ class Referee:
         overtaking: StateMachineConnector,
         parking: StateMachineConnector,
         priority: StateMachineConnector,
+        speed: StateMachineConnector,
         initial_observation: Observation = None,
     ):
         self.lane = lane
@@ -105,6 +106,7 @@ class Referee:
         self.overtaking = overtaking
         self.parking = parking
         self.priority = priority
+        self.speed = speed
 
         if initial_observation is None:
             initial_observation = Observation()
@@ -153,6 +155,7 @@ class Referee:
             or self.parking.state < 0
             or self.overtaking.state < 0
             or self.priority.state < 0
+            or self.speed.state < 0
             # If the car is not in the right lane, it must be overtaking or parking!
             or (
                 self.lane.state != StateMsg.RIGHT_LANE
@@ -178,6 +181,7 @@ class Referee:
         reset_connector(self.parking, StateMsg.PARKING_BEFORE_START)
         reset_connector(self.priority, StateMsg.PRIORITY_BEFORE_START)
         reset_connector(self.progress, StateMsg.PROGRESS_BEFORE_START)
+        reset_connector(self.speed, StateMsg.SPEED_UNLIMITED_ZONE)
 
         self.state = RefereeMsg.READY
         self._parked = False

@@ -16,6 +16,7 @@ from .state_machines.priority import PriorityStateMachine
 
 # StateMachines
 from .state_machines.progress import ProgressStateMachine
+from .state_machines.speed import SpeedStateMachine
 from .state_machines.state_machine import StateMachine
 
 
@@ -106,6 +107,7 @@ class StateMachineNode(NodeBase):
         definitions.append((OvertakingStateMachine, t.overtaking.get, t.overtaking.set))
         definitions.append((ParkingStateMachine, t.parking.get, t.parking.set))
         definitions.append((PriorityStateMachine, t.priority.get, t.priority.set))
+        definitions.append((SpeedStateMachine, t.speed.get, t.speed.set))
 
         state_machine_classes, topics, topics_set = zip(*definitions)
 

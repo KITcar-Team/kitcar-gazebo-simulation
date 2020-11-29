@@ -5,7 +5,7 @@
   <arg name="rate" value="240" />
   <arg name="time_limit" value="200" />
   <arg name="sleep_time" value="0.1" />
-  <arg name="speed" value="1" />
+  <arg name="speed" value="30" />
   <arg name="seed" value="KITCAR" />
   <arg name="pkg" default="gazebo_simulation" />
   <arg name="car_name" default="unit_box" />

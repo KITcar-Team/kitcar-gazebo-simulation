@@ -213,6 +213,20 @@ See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.
 
       roslaunch simulation_evaluation state_machine_node.launch
 
+SpeedStateMachine
+""""""""""""""""""""
+
+This state machine keeps track of how fast the car is going and
+whether it is keeping to the speed limits.
+
+See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.speed` for implementation details.
+
+.. figure:: graphs/speed.svg
+   :scale: 10 %
+   :align: center
+   :alt: Graph of SpeedStateMachine
+
+   Graph of SpeedStateMachine
 
 .. _referee_node:
 

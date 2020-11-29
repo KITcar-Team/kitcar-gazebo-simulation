@@ -45,6 +45,9 @@ class RefereeNode(NodeBase):
         self.priority_handler = self._connect_state_machine(
             self.param.topics.state_machine.priority
         )
+        self.speed_handler = self._connect_state_machine(
+            self.param.topics.state_machine.speed
+        )
 
         self.referee = Referee(
             lane=self.lane_handler[2],
@@ -52,6 +55,7 @@ class RefereeNode(NodeBase):
             overtaking=self.overtaking_handler[2],
             parking=self.parking_handler[2],
             priority=self.priority_handler[2],
+            speed=self.speed_handler[2],
         )
 
         self.broadcast_subscriber = rospy.Subscriber(
@@ -78,6 +82,7 @@ class RefereeNode(NodeBase):
         stop_handler(self.overtaking_handler)
         stop_handler(self.parking_handler)
         stop_handler(self.priority_handler)
+        stop_handler(self.speed_handler)
 
         super().stop()
 
@@ -112,10 +117,7 @@ class RefereeNode(NodeBase):
         """Update referee output with new broadcast msg."""
 
         # Update referee with current states
-        output = self.referee.update(
-            rospy.Time.now().to_sec(),
-            broadcast.distance,
-        )
+        output = self.referee.update(rospy.Time.now().to_sec(), broadcast.distance)
 
         if output:
             rospy.logdebug(output)

@@ -2,7 +2,7 @@
   <arg name="tolerance" value="0.01"/>
   <arg name="time_limit" value="120"/>
   <arg name="sleep_time" value="0.5"/>
-  <arg name="speed" value="0.1"/>
+  <arg name="speed" value="3"/>
   <arg name="seed" value="KITCAR"/>
 
   <arg name="pkg" default="gazebo_simulation"/>

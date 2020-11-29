@@ -79,4 +79,14 @@ tests:
   path_file: ${PATH_FILES}/parking_no_stop.yaml
   # Failed parking attempt is a mistake!
   expected_result_state: 3
-
+- desc: Road with speed limits
+  road: ci_roads/speed
+  path_file: ${PATH_FILES}/speed_50_30.yaml
+  environment:
+    SPEED_LIMIT: 30
+- desc: Road with speed limits
+  road: ci_roads/speed
+  path_file: ${PATH_FILES}/speed_30_70.yaml
+  expected_result_state: 3
+  environment:
+    SPEED_LIMIT: 50
