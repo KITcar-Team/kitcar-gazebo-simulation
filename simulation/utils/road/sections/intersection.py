@@ -102,8 +102,8 @@ class Intersection(RoadSection):
 
         self._size = self.size / 2
 
-        self.traffic_signs.extend(self._get_intersection_traffic_signs())
-        self.surface_markings.extend(self._get_intersection_surface_markings())
+        self.traffic_signs += self._get_intersection_traffic_signs()
+        self.surface_markings += self._get_intersection_surface_markings()
 
         # Check if size is large enough
         assert (-1 * self.w + self.v).y > (-1 * self.u).y and self.z.x > (self.x - self.u).x
@@ -139,7 +139,8 @@ class Intersection(RoadSection):
     @property
     def v(self):
         return Vector(
-            Config.road_width * self.cos, Config.road_width * math.sin(self._alpha)
+            Config.road_width * self.cos,
+            Config.road_width * math.sin(self._alpha),
         )
 
     @property

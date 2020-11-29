@@ -22,14 +22,14 @@ class ZebraCrossing(StraightRoad):
     length: float = 0.45
 
     def __post_init__(self):
-        self.surface_markings.append(
+        self.surface_markings += [
             SurfaceMarkingRect(
                 center=Point(self.length / 2, 0),
                 depth=self.length,
                 width=2 * Config.road_width,
                 kind=SurfaceMarkingRect.ZEBRA_CROSSING,
             )
-        )
+        ]
         self.middle_line_marking = self.MISSING_LINE_MARKING
         super().__post_init__()
 
@@ -49,7 +49,7 @@ class ZebraCrossing(StraightRoad):
     @property
     def traffic_signs(self) -> List[TrafficSign]:
         """List[TrafficSign]: All traffic signs within this section of the road."""
-        traffic_signs = super().traffic_signs.copy()
+        traffic_signs = super().traffic_signs
 
         traffic_signs.append(
             TrafficSign(

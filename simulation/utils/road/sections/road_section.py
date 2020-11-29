@@ -119,7 +119,7 @@ class RoadSection(_RoadSection):
         """List[StaticObstacle]: All obstacles within this section of the road."""
         for obstacle in self._obstacles:
             obstacle.set_transform(self.middle_line)
-        return self._obstacles
+        return self._obstacles.copy()
 
     @obstacles.setter
     def obstacles(self, obs: List[StaticObstacle]):
@@ -133,7 +133,7 @@ class RoadSection(_RoadSection):
         ]
         for sign in itertools.chain(self._traffic_signs, speed_limits_traffic_signs):
             sign.set_transform(self.middle_line)
-        return self._traffic_signs.copy() + speed_limits_traffic_signs
+        return self._traffic_signs + speed_limits_traffic_signs
 
     @traffic_signs.setter
     def traffic_signs(self, signs: List[TrafficSign]):
@@ -147,7 +147,7 @@ class RoadSection(_RoadSection):
         ]
         for marking in itertools.chain(self._surface_markings, speed_limits_marks):
             marking.set_transform(self.middle_line)
-        return self._surface_markings.copy() + speed_limits_marks
+        return self._surface_markings + speed_limits_marks
 
     @surface_markings.setter
     def surface_markings(self, markings: List[SurfaceMarking]):
@@ -155,7 +155,7 @@ class RoadSection(_RoadSection):
 
     @property
     def speed_limits(self) -> List[SpeedLimit]:
-        return self._speed_limits
+        return self._speed_limits.copy()
 
     @speed_limits.setter
     def speed_limits(self, speed_limits: List[SpeedLimit]):
