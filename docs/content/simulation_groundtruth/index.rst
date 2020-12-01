@@ -94,7 +94,7 @@ Additionally, there are some optimizations:
    the previously rendered tiles are reused.
 
 Obstacles and traffic signs must be created as well.
-After the renderer has created it's groundplane,
+After the renderer has created it's ground plane,
 :py:class:`simulation.src.simulation_groundtruth.src.groundtruth.object_controller.ObjectController`
 spawns all obstacles and traffic signs.
 
