@@ -10,7 +10,7 @@ and simulate a car driving on the generated roads.
 
    View of the Gazebo user interface displaying the default_road.
 
-ROS topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the bevahior of the car.
+ROS topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the behavior of the car.
 
 .. figure:: docs/content/tutorials/resources/simulation_camera.gif
    :width: 400
@@ -122,11 +122,29 @@ Data Version Control (DVC)
 Datasets, machine learning models and similar are stored within a DVC container.
 DVC is designed to bring version control to the world of machine learning and large datasets.
 It integrates well with git.
-If you have set up your credentials as described in `our WIKI <https://wiki.kitcar-team.de/doku.php?id=externe_tools:dvc>`_ , you can download all our datasets (very large, approx. 10 Gb) just execute::
+If you have set up your credentials as described in `our WIKI <https://wiki.kitcar-team.de/doku.php?id=externe_tools:dvc>`_ ,
+you can download all our datasets (very large, approx. 10 Gb) just execute::
 
    dvc pull
 
 This is only necessary if you want to train or test our neural networks.
+
+**If you are not part of KITcar, you cannot download our datasets.**
+However, you can either setup your DVC server or simply use DVC locally.
+See `DVC.org <https://dvc.org>`_ for more details.
+Our pipelines used to train and test models or extract datasets from the simulation will
+still work.
+
+kitcar-rosbag
+-------------
+
+*This is only required by some scripts to record rosbags in the simulation.*
+
+* **KITcar internal**. Clone `kitcar-rosbag` in the same directory as `kitcar-ros`. ::
+
+   git clone git@git.kitcar-team.de:kitcar/kitcar-rosbag.git $KITCAR_REPO_PATH/kitcar-rosbag
+
+  Then follow the installation steps there.
 
 
 Test

@@ -18,19 +18,41 @@ Welcome to KITcar's Simulation
 This is the documentation of **kitcar-gazebo-simulation**; a ROS_ and Gazebo_ based simulation \
 tool that can generate CaroloCup_ roads and simulate a car driving on the generated roads.
 
-.. figure:: tutorials/resources/simulation_video.gif
-
-   View of the Gazebo user interface displaying the default_road.
-
-ROS_ topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the bevahior of the car.
-
-.. figure:: tutorials/resources/simulation_camera.gif
-
-   Front Camera Output of the Car.
-
 .. note::
 
-   There's currently no dynamics simulation. The position or speed of the car must be provided externally.
+   There's currently no dynamics simulation. The position or speed of the car must be calculated externally.
+
+.. raw:: html
+
+   <video width="100%" class="video-background" autoplay loop muted playsinline>
+     <source src="birds_view_default_road.mp4" type="video/mp4">
+   Your browser does not support the video tag.
+   </video>
+
+*View of the Gazebo user interface displaying the default_road.*
+
+ROS_ topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the behavior of the car.
+
+.. raw:: html
+
+   <video width="100%" class="video-background" autoplay loop muted playsinline>
+     <source src="camera_default_road.mp4" type="video/mp4">
+   Your browser does not support the video tag.
+   </video>
+
+*Front Camera Output of the Car.*
+
+Additionally, we provide a generative adversarial network that is trained to modify the simulated camera image to look more realistic.
+
+
+.. raw:: html
+
+   <video width="100%" class="video-background" autoplay loop muted playsinline>
+     <source src="gan_default_road.mp4" type="video/mp4">
+   Your browser does not support the video tag.
+   </video>
+
+*Front Camera Output of the Car with the Neural Network turned on.*
 
 Public parts of the source code are available on Github.
 The project was originally inspired by the drive_sim_road_generation_ \

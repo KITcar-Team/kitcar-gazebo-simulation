@@ -180,7 +180,7 @@ See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.
 PriorityStateMachine
 """"""""""""""""""""
 
-This state machine keeps track of the car correctly stoping or halting in front of stop or halt lines.
+This state machine keeps track of the car correctly stopping or halting in front of stop or halt lines.
 
 See :mod:`simulation.src.simulation_evaluation.src.state_machine.state_machines.priority` for implementation details.
 
