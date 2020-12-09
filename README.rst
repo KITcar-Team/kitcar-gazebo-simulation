@@ -110,14 +110,6 @@ Build
 Then build `kitcar-gazebo-repository` by calling `catkin_make` in the simulation folder \
 of this repository.
 
-Git Lfs
--------
-
-Images and other binary files used within Gazebo are tracked using `Git LFS <https://git-lfs.github.com/>`_, \
-to download them locally, you need to pull them::
-
-   git lfs pull
-
 Data Version Control (DVC)
 --------------------------
 
