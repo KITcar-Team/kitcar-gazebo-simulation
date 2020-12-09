@@ -5,24 +5,17 @@ kitcar-gazebo-simulation
 A ROS_ and Gazebo_ based simulation tool that can generate CaroloCup_ roads \
 and simulate a car driving on the generated roads.
 
-.. figure:: docs/content/tutorials/resources/birds_view_default_road.gif
+.. figure:: docs/content/tutorials/resources/simulation_video.gif
    :width: 400
 
    View of the Gazebo user interface displaying the default_road.
 
 ROS topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the behavior of the car.
 
-.. figure:: docs/content/tutorials/resources/camera_default_road.gif
+.. figure:: docs/content/tutorials/resources/simulation_camera.gif
    :width: 400
 
    Front Camera Output of the Car.
-
-Additionally, we provide a generative adversarial network that can be trained to modify the simulated camera image to look more realistic.
-
-.. figure:: docs/content/tutorials/resources/gan_default_road.gif
-   :width: 400
-
-   Front Camera Output of the Car with the Neural Network turned on.
 
 The documentation is available at https://public-doc.kitcar-team.de/kitcar-gazebo-simulation.
 
@@ -116,20 +109,6 @@ Build
 
 Then build `kitcar-gazebo-repository` by calling `catkin_make` in the simulation folder \
 of this repository.
-
-Git Lfs
--------
-
-Images and other binary files used within Gazebo are tracked using `Git LFS <https://git-lfs.github.com/>`_, \
-to download them locally, you need to pull them::
-
-   git lfs pull
-
-For installing our fonts on your system you need to run::
-
-   sudo mkdir -p /usr/local/share/fonts/kitcar/
-   sudo cp -a "$KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/models/fonts/." /usr/local/share/fonts/kitcar/
-
 
 Data Version Control (DVC)
 --------------------------
