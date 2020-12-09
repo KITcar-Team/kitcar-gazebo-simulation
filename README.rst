@@ -116,6 +116,12 @@ to download them locally, you need to pull them::
 
    git lfs pull
 
+For installing our fonts on your system you need to run::
+
+   sudo mkdir -p /usr/local/share/fonts/kitcar/
+   sudo cp -a "$KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/models/fonts/." /usr/local/share/fonts/kitcar/
+
+
 Data Version Control (DVC)
 --------------------------
 
