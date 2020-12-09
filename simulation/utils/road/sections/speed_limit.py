@@ -30,7 +30,7 @@ class SpeedLimit:
         """SurfaceMarking: The surface marking for this speed limit."""
         return SurfaceMarkingRect(
             center=Point(self.x_position, -Config.road_width / 2),
-            width=0.2,
+            width=0.25,
             depth=0.4,
             kind=getattr(
                 SurfaceMarkingRect,
