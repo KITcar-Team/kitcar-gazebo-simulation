@@ -2,4 +2,4 @@
     remote = storage
 ['remote "storage"']
     url = s3://kitcar-gazebo-simulation
-    endpointurl = https://dvc.kitcar-team.de
+    endpointurl = https://dvc.YOUR-REMOTE.de
