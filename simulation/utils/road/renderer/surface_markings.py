@@ -113,7 +113,7 @@ def draw_speed_limit(
     ctx.scale(0.7245, 1.8506)  # scale text to match rule book
 
     # Set font options
-    ctx.select_font_face("DIN 1451 Std", cairo.FONT_SLANT_NORMAL)
+    ctx.select_font_face("OpenDinSchriftenEngshrift", cairo.FONT_SLANT_NORMAL)
     ctx.set_font_size(0.4)
     ctx.text_path(str(limit))
     ctx.set_line_width(0.01)
