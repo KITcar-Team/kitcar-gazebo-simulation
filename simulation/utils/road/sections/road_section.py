@@ -1,5 +1,5 @@
 """The RoadSection is parent to all other RoadSection classes."""
-
+import itertools
 import math
 from dataclasses import dataclass, field
 from typing import List, Tuple
@@ -7,6 +7,7 @@ from typing import List, Tuple
 from simulation.utils.geometry import Line, Polygon, Pose, Transform
 from simulation.utils.road.config import Config
 from simulation.utils.road.sections import StaticObstacle, SurfaceMarking, TrafficSign
+from simulation.utils.road.sections.speed_limit import SpeedLimit
 
 
 class MarkedLine(Line):
@@ -61,6 +62,8 @@ class _RoadSection:
     """Traffic signs in the road section."""
     surface_markings: List[SurfaceMarking] = field(default_factory=list)
     """Surface markings in the road section."""
+    speed_limits: List[SpeedLimit] = field(default_factory=list)
+    """Speed limits in the road section."""
 
     def __post_init__(self):
         assert (
@@ -116,7 +119,7 @@ class RoadSection(_RoadSection):
         """List[StaticObstacle]: All obstacles within this section of the road."""
         for obstacle in self._obstacles:
             obstacle.set_transform(self.middle_line)
-        return self._obstacles
+        return self._obstacles.copy()
 
     @obstacles.setter
     def obstacles(self, obs: List[StaticObstacle]):
@@ -125,9 +128,12 @@ class RoadSection(_RoadSection):
     @property
     def traffic_signs(self) -> List[TrafficSign]:
         """List[TrafficSign]: All traffic signs within this section of the road."""
-        for sign in self._traffic_signs:
+        speed_limits_traffic_signs = [
+            speed_limit.traffic_sign for speed_limit in self.speed_limits
+        ]
+        for sign in itertools.chain(self._traffic_signs, speed_limits_traffic_signs):
             sign.set_transform(self.middle_line)
-        return self._traffic_signs
+        return self._traffic_signs + speed_limits_traffic_signs
 
     @traffic_signs.setter
     def traffic_signs(self, signs: List[TrafficSign]):
@@ -136,13 +142,24 @@ class RoadSection(_RoadSection):
     @property
     def surface_markings(self) -> List[SurfaceMarking]:
         """List[SurfaceMarking]: All surface markings within this section of the road."""
-        for marking in self._surface_markings:
+        speed_limits_marks = [
+            speed_limit.surface_marking for speed_limit in self.speed_limits
+        ]
+        for marking in itertools.chain(self._surface_markings, speed_limits_marks):
             marking.set_transform(self.middle_line)
-        return self._surface_markings
+        return self._surface_markings + speed_limits_marks
 
     @surface_markings.setter
     def surface_markings(self, markings: List[SurfaceMarking]):
         self._surface_markings = markings
+
+    @property
+    def speed_limits(self) -> List[SpeedLimit]:
+        return self._speed_limits.copy()
+
+    @speed_limits.setter
+    def speed_limits(self, speed_limits: List[SpeedLimit]):
+        self._speed_limits = speed_limits
 
     def get_bounding_box(self) -> Polygon:
         """Get a polygon around the road section.

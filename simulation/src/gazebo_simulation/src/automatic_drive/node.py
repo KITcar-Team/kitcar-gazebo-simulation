@@ -152,6 +152,7 @@ class AutomaticDriveNode(NodeBase):
                 x += max_step * random.random()
         else:
             param_path: List[Dict[str, float]] = self.param.path
+            param_path = [obj for obj in param_path if "offset" in obj]
 
             current_start = param_path[0]["start"]
             current_offset = param_path[0]["offset"]
@@ -177,12 +178,34 @@ class AutomaticDriveNode(NodeBase):
 
         return path, stops
 
+    @functools.cached_property
+    def speeds(self):
+        out = []
+        speed_params = [obj for obj in self.param.path if "speed" in obj]
+        for param in speed_params:
+            path_length = self.middle_line.project(
+                self.driving_line[0].interpolate(param["start"])
+            )
+            out.append([path_length, int(param["speed"])])
+        return out
+
     def update(self):
         """Calculate and publish new car state information."""
         # Update the driving state
         current_time = rospy.Time.now().to_sec()
         current_speed = self.param.speed
         d_time = current_time - self._driving_state.time
+
+        if (
+            len(self.speeds) > 1
+            and self.speeds[1][0] <= self._driving_state.distance_driven
+        ):
+            # If we reach a new speed zone we delete the old one
+            del self.speeds[0]
+
+        # Set the current speed
+        current_speed = self.speeds[0][1] if len(self.speeds) > 0 else self.param.speed
+        current_speed /= 36  # km/h to m/s and model car scale of 1/10
 
         # Check if the car needs to stop
         remaining_stops = self.driving_line[1]

@@ -217,7 +217,7 @@ class TrafficIsland(RoadSection):
     @property
     def traffic_signs(self) -> List[TrafficSign]:
         """List[TrafficSign]: All traffic signs within this section of the road."""
-        traffic_signs = super().traffic_signs.copy()
+        traffic_signs = RoadSection.traffic_signs.fget(self)
         traffic_sign_start_point = self.transform * Point(
             self.curve_area_length - self._sign_distance, 0
         )
@@ -264,7 +264,7 @@ class TrafficIsland(RoadSection):
     @property
     def surface_markings(self) -> List[SurfaceMarking]:
         """List[SurfaceMarking]: All surface markings within this section of the road."""
-        sf_marks = super().surface_markings.copy()
+        sf_marks = RoadSection.surface_markings.fget(self)
 
         right_poly = self.transform * Polygon(
             [

@@ -57,6 +57,7 @@ class SpeedSpeaker(Speaker):
         msg = SpeakerMsg()
 
         speed = self.car_speed * self.speed_factor
+        speed -= 1  # Speed Threshold
 
         if speed < self.stop_threshold:  # Car is not moving
             stop_time = current_time - self.speed_time

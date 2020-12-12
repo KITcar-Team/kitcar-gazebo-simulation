@@ -1,0 +1,7 @@
+# Path specification to drive onto the left lane.
+path:
+- start: 0.2
+  offset: -0.2
+  speed: 50
+- start: 1.7
+  speed: 30

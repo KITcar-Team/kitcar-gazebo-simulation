@@ -15,3 +15,6 @@ parking:
 priority:
   get: /simulation/state_machine/priority/get/
   set: /simulation/state_machine/priority/set/
+speed:
+  get: /simulation/state_machine/speed/get/
+  set: /simulation/state_machine/speed/set/

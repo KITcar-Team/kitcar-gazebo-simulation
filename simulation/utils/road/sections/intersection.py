@@ -102,8 +102,8 @@ class Intersection(RoadSection):
 
         self._size = self.size / 2
 
-        self.traffic_signs.extend(self._get_intersection_traffic_signs())
-        self.surface_markings.extend(self._get_intersection_surface_markings())
+        self.traffic_signs += self._get_intersection_traffic_signs()
+        self.surface_markings += self._get_intersection_surface_markings()
 
         # Check if size is large enough
         assert (-1 * self.w + self.v).y > (-1 * self.u).y and self.z.x > (self.x - self.u).x
@@ -161,10 +161,7 @@ class Intersection(RoadSection):
 
     @property
     def ls(self):
-        return Vector(
-            0,
-            (-1 * self.u + (-1 + self.sin) / (self.cos * self.cos) * self.v).y,
-        )
+        return Vector(0, (-1 * self.u + (-1 + self.sin) / (self.cos * self.cos) * self.v).y)
 
     @property
     def rl(self):
@@ -193,8 +190,7 @@ class Intersection(RoadSection):
 
     def cp_surface_south(self):
         return Vector(self.z - self.x + 0.5 * self.u) - Vector(
-            Config.get_surface_mark_dist() + Config.TURN_SF_MARK_LENGTH / 2,
-            0,
+            Config.get_surface_mark_dist() + Config.TURN_SF_MARK_LENGTH / 2, 0
         )
 
     def cp_sign_west(self, sign_dist):

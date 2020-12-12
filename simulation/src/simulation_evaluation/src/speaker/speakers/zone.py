@@ -158,6 +158,42 @@ class ZoneSpeaker(Speaker):
         """Intervals in which the car is supposed to halt (in front of intersections)."""
         return self._intersection_yield_zones(groundtruth_srv.IntersectionSrvResponse.YIELD)
 
+    @functools.cached_property
+    def speed_zones(self) -> List[Tuple[float, int]]:
+        surface_markings = [
+            self.get_surface_markings_in_section(sec.id) for sec in self.sections
+        ]
+        surface_markings = [marking for sublist in surface_markings for marking in sublist]
+
+        result = []
+        result.append((0, SpeakerMsg.SPEED_UNLIMITED_ZONE))
+        for marking in surface_markings:
+            if (
+                SurfaceMarking.ZONE_10_START[0]
+                <= marking.id_
+                <= SurfaceMarking.ZONE_90_START[0]
+            ):
+                limit = 10 * (marking.id_ - SurfaceMarking.ZONE_10_START[0] + 1)
+                result.append(
+                    (
+                        self.get_interval_for_polygon(marking.frame)[0],
+                        getattr(SpeakerMsg, f"SPEED_{limit}_ZONE"),
+                    )
+                )
+            if (
+                SurfaceMarking.ZONE_10_END[0]
+                <= marking.id_
+                <= SurfaceMarking.ZONE_90_END[0]
+            ):
+                result.append(
+                    (
+                        self.get_interval_for_polygon(marking.frame)[0],
+                        SpeakerMsg.SPEED_UNLIMITED_ZONE,
+                    )
+                )
+
+        return sorted(result, key=lambda tup: tup[0])
+
     def _inside_any_interval(self, intervals: List[Tuple[float, float]]) -> bool:
         """Determine if the car is currently in any of the given intervals."""
         beginnings = list(interval[0] for interval in intervals)
@@ -218,5 +254,11 @@ class ZoneSpeaker(Speaker):
             append_msg(SpeakerMsg.STOP_ZONE)
         else:
             append_msg(SpeakerMsg.NO_STOP_ZONE)
+
+        # Speed zone
+        for x, msg in reversed(self.speed_zones):
+            if x + 0.3 < self.arc_length:  # 30cm Threshold
+                append_msg(msg)
+                break
 
         return msgs

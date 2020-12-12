@@ -1,0 +1,12 @@
+Open Din Schrifte Engschrift
+Paulo Silva, jun'09 - OFL license
+
+The idea of this open typeface is being the most close as possible from the Prussian Railways master drawing (public domain license, afaik), and its applications.
+
+This typeface were made using open-source tools, like Fontforge and Inkscape, also for helping their development from using them.
+
+Online references:
+. http://www.magwerk.com/mag.php?magazine=encore&language=en&issue=13&page=34
+. http://www.fontshop.be/upload/0ZC7YPAC.jpg
+. http://en.wikipedia.org/wiki/File:DIN1451board.jpg
+. http://ospublish.constantvzw.org/type/open-din-das-ist-norm

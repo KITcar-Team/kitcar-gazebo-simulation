@@ -76,7 +76,6 @@ class DriveTestNode(NodeBase):
         self.sm_info_subscriber.unregister()
         self.groundtruth_status_subscriber.unregister()
         self.mission_mode_publisher.unregister()
-        self.renderer_reload_publisher.unregister()
 
     def receive_groundtruth_update(self, msg: GroundtruthStatus):
         """Receive GroundtruthStatus message.

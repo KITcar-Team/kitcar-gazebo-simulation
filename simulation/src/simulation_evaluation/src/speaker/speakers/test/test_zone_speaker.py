@@ -152,6 +152,7 @@ class ModuleTest(unittest.TestCase):
             (20 + self.yield_distance[1], 30 + self.yield_distance[0]),
             (30 + self.yield_distance[1], 100),
         }
+        msg_options[SpeakerMsg.SPEED_UNLIMITED_ZONE] = {(0, 100)}
 
         msg_expects = {
             (SpeakerMsg.START_ZONE, SpeakerMsg.DRIVING_ZONE, SpeakerMsg.END_ZONE),
