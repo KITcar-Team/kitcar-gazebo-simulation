@@ -7,6 +7,10 @@ COPY packages.txt /packages.txt
 # The files are copied back into /builds within the CI!
 RUN mkdir -p /home/kitcar && mv /builds/kitcar /home/
 
+# Install fonts
+RUN mkdir -p /usr/local/share/fonts/kitcar/
+RUN cp -a "/home/kitcar/kitcar-gazebo-simulation/simulation/models/fonts/." /usr/local/share/fonts/kitcar/
+
 # Install packages from packages file.
 RUN apt update && DEBIAN_FRONTEND=noninteractive xargs --arg-file=/packages.txt apt install -y
 
