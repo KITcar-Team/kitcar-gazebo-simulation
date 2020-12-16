@@ -89,9 +89,9 @@ class Intersection(RoadSection):
     """Angle between intersecting roads [radian]."""
     closing: str = None
     """Closed direction (T-intersection)."""
-    turn: str = STRAIGHT
+    turn: int = STRAIGHT
     """Direction in which road continues."""
-    rule: str = EQUAL
+    rule: int = EQUAL
     """Priority rule at intersection."""
     size: float = 1.8
     """Size of intersection (from one side to the other)."""

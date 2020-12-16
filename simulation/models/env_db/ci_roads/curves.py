@@ -7,7 +7,7 @@ from simulation.utils.road.sections import LeftCircularArc, RightCircularArc, St
 
 def angle():
     # Plus 36 degrees to ensure that each section with radius 1
-    # is atleast 10 centimeters long.
+    # is at least 10 centimeters long.
     # Otherwise estimating the curvature becomes tricky.
     return math.radians(random.random() * 180 + 36)
 

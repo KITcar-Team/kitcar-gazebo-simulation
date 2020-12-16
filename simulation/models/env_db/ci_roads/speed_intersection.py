@@ -1,0 +1,13 @@
+import math
+import os
+
+from simulation.utils.road.road import Road
+from simulation.utils.road.sections import Intersection, StraightRoad
+from simulation.utils.road.sections.speed_limit import SpeedLimit
+
+speed_limit = int(os.environ.get("SPEED_LIMIT", 30))
+
+road = Road()
+road.append(StraightRoad(length=4))
+road.append(Intersection(turn=Intersection.RIGHT, angle=math.radians(90)))
+road.append(StraightRoad(length=4, speed_limits=[SpeedLimit(0, speed_limit)]))
