@@ -35,7 +35,7 @@ road.append(
                     ParkingSpot(
                         kind=ParkingSpot.OCCUPIED,
                         width=0.7,
-                        obstacle=ParkingObstacle(x=0.2, y=-0.2, width=0.3, depth=0.4),
+                        obstacle=ParkingObstacle(x=0.15, y=-0.2, width=0.3, depth=0.25),
                     ),
                     ParkingSpot(kind=ParkingSpot.BLOCKED),
                 ],
