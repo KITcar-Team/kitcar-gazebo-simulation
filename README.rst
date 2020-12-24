@@ -5,17 +5,25 @@ kitcar-gazebo-simulation
 A ROS_ and Gazebo_ based simulation tool that can generate CaroloCup_ roads \
 and simulate a car driving on the generated roads.
 
-.. figure:: docs/content/tutorials/resources/simulation_video.gif
+.. figure:: docs/content/tutorials/resources/birds_view_default_road.gif
    :width: 400
 
    View of the Gazebo user interface displaying the default_road.
 
 ROS topics allow to easily access sensor data and modify the car's position or speed. Thus, allowing to completely simulate the behavior of the car.
 
-.. figure:: docs/content/tutorials/resources/simulation_camera.gif
+
+.. figure:: docs/content/tutorials/resources/camera_default_road.gif
    :width: 400
 
    Front Camera Output of the Car.
+
+Additionally, we provide a generative adversarial network that can be trained to modify the simulated camera image to look more realistic.
+
+.. figure:: docs/content/tutorials/resources/gan_default_road.gif
+   :width: 400
+
+   Front Camera Output of the Car with the Neural Network turned on.
 
 The documentation is available at https://public-doc.kitcar-team.de/kitcar-gazebo-simulation.
 
@@ -45,8 +53,6 @@ These are some ways to get it:
 * **KITcar internal**. Clone this repository in the same directory as `kitcar-ros`. ::
 
    git clone git@git.kitcar-team.de:kitcar/kitcar-gazebo-simulation.git $KITCAR_REPO_PATH/kitcar-gazebo-simulation
-
-* **KITcar external**. You can clone the repository from `Github <https://github.com/KITcar-Team/kitcar-gazebo-simulation.git>`_.
 
 
 $KITCAR_REPO_PATH
