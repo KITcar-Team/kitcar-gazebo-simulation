@@ -9,7 +9,6 @@ from simulation.utils.road.sections import (
     ParkingLot,
     ParkingObstacle,
     ParkingSpot,
-    SpeedLimit,
     StaticObstacle,
     StraightRoad,
     ZebraCrossing,
@@ -54,17 +53,16 @@ road.append(LeftCircularArc(radius=2, angle=math.pi / 2))
 road.append(Intersection(size=3, turn=Intersection.RIGHT))
 road.append(LeftCircularArc(radius=1.5, angle=math.pi, obstacles=[StaticObstacle()]))
 road.append(Intersection(size=3, turn=Intersection.RIGHT))
-road.append(
+left_arc = road.append(
     LeftCircularArc(
         radius=1.5,
         angle=math.pi / 2,
         left_line_marking=RoadSection.MISSING_LINE_MARKING,
-        speed_limits=[SpeedLimit(0, 30)],
     )
 )
+left_arc.add_speed_limit(arc_length=0, speed=30)
 road.append(ZebraCrossing())
 road.append(StraightRoad(length=1))
-road.append(
-    LeftCircularArc(radius=1.5, angle=math.pi / 2, speed_limits=[SpeedLimit(0, -30)])
-)
+left_arc = road.append(LeftCircularArc(radius=1.5, angle=math.pi / 2))
+left_arc.add_speed_limit(0, -30)
 road.append(StraightRoad(length=0.95))

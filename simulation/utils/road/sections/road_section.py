@@ -4,7 +4,7 @@ import math
 from dataclasses import dataclass, field
 from typing import List, Tuple
 
-from simulation.utils.geometry import Line, Polygon, Pose, Transform
+from simulation.utils.geometry import Line, Point, Polygon, Pose, Transform
 from simulation.utils.road.config import Config
 from simulation.utils.road.sections import StaticObstacle, SurfaceMarking, TrafficSign
 from simulation.utils.road.sections.speed_limit import SpeedLimit
@@ -63,7 +63,7 @@ class RoadSection(Transformable):
     """Traffic signs in the road section."""
     surface_markings: List[SurfaceMarking] = field(default_factory=list)
     """Surface markings in the road section."""
-    speed_limits: List[SpeedLimit] = field(default_factory=list)
+    _speed_limits: List[SpeedLimit] = field(default_factory=list)
     """Speed limits in the road section."""
     TYPE = None
     """Type of the road section."""
@@ -120,6 +120,11 @@ class RoadSection(Transformable):
         )
         return lines
 
+    @property
+    def speed_limits(self) -> List[SpeedLimit]:
+        """Speed limits in the road section."""
+        return self._speed_limits
+
     def get_bounding_box(self) -> Polygon:
         """Get a polygon around the road section.
 
@@ -155,3 +160,52 @@ class RoadSection(Transformable):
         )
 
         return (pose, curvature)
+
+    def add_speed_limit(self, arc_length: float, speed: int):
+        """Add a speed limit to this road section.
+
+        Args:
+            arc_length: Direction along the road to the speed limit.
+            speed: Speed limit. Negative values correspond to the end of a speed limit zone.
+        """
+        speed_limit = SpeedLimit(arc_length, limit=speed)
+        sm = speed_limit.surface_marking
+        ts = speed_limit.traffic_sign
+        sm.set_transform(self.middle_line)
+        ts.set_transform(self.middle_line)
+        self.speed_limits.append(speed_limit)
+        self.surface_markings.append(sm)
+        self.traffic_signs.append(ts)
+
+        return ts
+
+    def add_obstacle(
+        self,
+        arc_length: float = 0.2,
+        y_offset: float = -0.2,
+        angle: float = 0,
+        width: float = 0.2,
+        length: float = 0.3,
+        height: float = 0.25,
+    ):
+        """Add an obstacle to the road.
+
+        Args:
+        arc_length: Direction along the road to the obstacle.
+        y_offset: Offset orthogonal to the middle line.
+        angle: Orientation offset of the obstacle.
+        width: Width of the obstacle.
+        length: Length of the obstacle.
+        height: Heigth of the obstacle.
+        """
+        o = StaticObstacle(
+            _center=Point(arc_length, y_offset),
+            angle=angle,
+            width=width,
+            depth=length,
+            height=height,
+        )
+        o.set_transform(self.middle_line)
+        self.obstacles.append(o)
+
+        return o

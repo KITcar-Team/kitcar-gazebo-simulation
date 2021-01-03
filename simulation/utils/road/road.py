@@ -55,7 +55,7 @@ class Road:
             # Overwrite seed
             random.seed()
 
-    def append(self, section: RoadSection):
+    def append(self, section: RoadSection) -> RoadSection:
         """Append a road section. Determine id of the section.
 
         Args:
@@ -71,6 +71,8 @@ class Road:
             section.prev_length = self.length
         self.length = self.length + section.middle_line.length
         self.sections.append(section)
+
+        return section
 
     def close_loop(self, p_curvature: float = 2):
         """Append a road section that connects the last section to the beginning.
