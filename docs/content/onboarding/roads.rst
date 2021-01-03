@@ -70,17 +70,18 @@ Let’s take a look at ``onboarding_simple.py``:
 Lines 3 to 5 are imports for the abstract road class and the used road sections.
 In line 8 a *Road* called road is constructed and in the following lines different road sections are added to this road:
 
->>> road.append(road_section)
+>>> straight_road = road.append(road_section)
 
 A *StraightRoad* with the default length of 1 m can be added by calling:
 
 >>> StraightRoad()
-StraightRoad(id=0, transform=Transform(translation=Vector(0.0, 0.0, 0.0),rotation=Quaternion(1.0, 0.0, 0.0, 0.0)), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], speed_limits=[], length=1)
+StraightRoad(_Transformable__transform=Transform(translation=Vector(0.0, 0.0, 0.0),rotation=Quaternion(1.0, 0.0, 0.0, 0.0)), id=0, is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], _speed_limits=[], prev_length=0, length=1)
+
 
 If you want to pass a different length add the argument :py:attr:`length` in the constructor. For example a 2 m long *StraightRoad*:
 
 >>> StraightRoad(length=2)
-StraightRoad(id=0, transform=Transform(translation=Vector(0.0, 0.0, 0.0),rotation=Quaternion(1.0, 0.0, 0.0, 0.0)), is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], speed_limits=[], length=2)
+StraightRoad(_Transformable__transform=Transform(translation=Vector(0.0, 0.0, 0.0),rotation=Quaternion(1.0, 0.0, 0.0, 0.0)), id=0, is_start=False, left_line_marking='solid', middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], surface_markings=[], _speed_limits=[], prev_length=0, length=2)
 
 
 In the next section you are going to learn how to start the simulation with a custom road.

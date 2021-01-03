@@ -17,7 +17,7 @@ class Attribute(str):
 
     Example:
         >>> from dataclasses import dataclass
-        >>> from urdf.core import XmlObject, Attribute
+        >>> from simulation.utils.urdf.core import XmlObject, Attribute
         >>> @dataclass
         ... class Example(XmlObject):
         ...     TAG = "example"

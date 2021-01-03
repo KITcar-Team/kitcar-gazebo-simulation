@@ -21,14 +21,13 @@ class StraightRoad(RoadSection):
         >>> from simulation.utils.road.sections import StraightRoad
         >>> from simulation.utils.road.road import Road
         >>> road = Road()
-        >>> road.append(StraightRoad(length=2))
+        >>> straight_road = road.append(StraightRoad(length=2))
         >>> road
-        Road(_name=None, _seed=None, use_seed=True, \
-sections=[StraightRoad(id=0, \
-transform=Transform(translation=Vector(0.0, 0.0, 0.0),\
-rotation=Quaternion(1.0, 0.0, 0.0, 0.0)), is_start=False, left_line_marking='solid', \
+        Road(_name=None, _seed=None, use_seed=True, sections=[StraightRoad(\
+_Transformable__transform=Transform(translation=Vector(0.0, 0.0, 0.0),rotation=\
+Quaternion(1.0, 0.0, 0.0, 0.0)), id=0, is_start=False, left_line_marking='solid', \
 middle_line_marking='dashed', right_line_marking='solid', obstacles=[], traffic_signs=[], \
-surface_markings=[], length=2)], length=2.0)
+surface_markings=[], _speed_limits=[], prev_length=0, length=2)], length=2.0)
     """
 
     TYPE = road_section_type.STRAIGHT_ROAD
