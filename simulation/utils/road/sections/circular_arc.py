@@ -10,7 +10,7 @@ from simulation.utils.road.sections.road_section import RoadSection
 
 
 @dataclass
-class _CircularArc(RoadSection):
+class CircularArc(RoadSection):
     """Road section representing a part of a circle."""
 
     radius: float = None
@@ -69,7 +69,8 @@ class _CircularArc(RoadSection):
         return (pose, curvature)
 
 
-class LeftCircularArc(_CircularArc):
+@dataclass
+class LeftCircularArc(CircularArc):
     """Part of a circle with a positive curvature.
 
     Args:
@@ -80,7 +81,8 @@ class LeftCircularArc(_CircularArc):
     TYPE = road_section_type.LEFT_CIRCULAR_ARC
 
 
-class RightCircularArc(_CircularArc):
+@dataclass
+class RightCircularArc(CircularArc):
     """Part of a circle with a negative curvature.
 
     Args:

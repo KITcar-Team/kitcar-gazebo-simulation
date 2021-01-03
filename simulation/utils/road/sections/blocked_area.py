@@ -2,7 +2,6 @@
 
 import math
 from dataclasses import dataclass
-from typing import List
 
 import simulation.utils.road.sections.type as road_section_type
 from simulation.utils.geometry import Point, Polygon
@@ -24,12 +23,21 @@ class BlockedArea(StraightRoad):
     _opening_angle: float = math.radians(60)
 
     def __post_init__(self):
+        super().__post_init__()
+
         self.surface_markings += [
             SurfaceMarkingPoly(
-                frame=self._poly, kind=SurfaceMarkingPoly.BLOCKED_AREA, normalize_x=False
+                _frame=self._poly, kind=SurfaceMarkingPoly.BLOCKED_AREA, normalize_x=False
             )
         ]
-        super().__post_init__()
+        self.traffic_signs.append(
+            TrafficSign(
+                kind=TrafficSign.ONCOMING_TRAFFIC,
+                _center=self.transform * Point(-0.4, -Config.road_width - 0.1),
+                angle=self.transform.get_angle(),
+                normalize_x=False,
+            )
+        )
 
     @property
     def frame(self) -> Polygon:
@@ -50,22 +58,3 @@ class BlockedArea(StraightRoad):
                 Point(self.length, -Config.road_width),
             ]
         )
-
-    @property
-    def traffic_signs(self) -> List[TrafficSign]:
-        """List[TrafficSign]: All traffic signs within this section of the road."""
-        traffic_signs = super().traffic_signs.copy()
-
-        traffic_signs.append(
-            TrafficSign(
-                kind=TrafficSign.ONCOMING_TRAFFIC,
-                center=self.transform * Point(-0.4, -Config.road_width - 0.1),
-                angle=self.transform.get_angle(),
-                normalize_x=False,
-            )
-        )
-        return traffic_signs
-
-    @traffic_signs.setter
-    def traffic_signs(self, signs: List[TrafficSign]):
-        self._traffic_signs = signs

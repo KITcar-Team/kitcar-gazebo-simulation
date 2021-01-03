@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Tuple
 
-from simulation.utils.road.sections.road_element import RoadElementPoly, RoadElementRect
+from simulation.utils.road.sections.road_element import RoadElement, RoadElementRect
 
 from . import ID
 
@@ -54,7 +54,7 @@ class SurfaceMarking:
 
 
 @dataclass
-class SurfaceMarkingPoly(RoadElementPoly, SurfaceMarking):
+class SurfaceMarkingPoly(RoadElement, SurfaceMarking):
     pass
 
 

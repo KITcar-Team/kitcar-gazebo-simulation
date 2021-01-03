@@ -16,9 +16,8 @@ class ModuleTest(unittest.TestCase):
         SIZE = 2
         RULE = Intersection.EQUAL
 
-        inter = Intersection(
-            angle=ANGLE, size=SIZE, rule=RULE, closing=CLOSING, transform=TF
-        )
+        inter = Intersection(angle=ANGLE, size=SIZE, rule=RULE, closing=CLOSING)
+        inter.set_transform(TF)
         self.assertEqual(inter.__class__.TYPE, road_section_type.INTERSECTION)
 
         left_line_hz = TF * Line(

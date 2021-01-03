@@ -8,6 +8,7 @@ from simulation.utils.geometry import Line, Polygon, Pose, Transform
 from simulation.utils.road.config import Config
 from simulation.utils.road.sections import StaticObstacle, SurfaceMarking, TrafficSign
 from simulation.utils.road.sections.speed_limit import SpeedLimit
+from simulation.utils.road.sections.transformable import Transformable
 
 
 class MarkedLine(Line):
@@ -35,7 +36,9 @@ class MarkedLine(Line):
 
 
 @dataclass
-class _RoadSection:
+class RoadSection(Transformable):
+    """Base class of all road sections."""
+
     SOLID_LINE_MARKING = "solid"
     """Continuous white line."""
     DASHED_LINE_MARKING = "dashed"
@@ -45,8 +48,6 @@ class _RoadSection:
 
     id: int = 0
     """Road section id (consecutive integers by default)."""
-    transform: Transform = None
-    """Transform to origin of the road section."""
     is_start: bool = False
     """Road section is beginning of the road."""
 
@@ -64,23 +65,28 @@ class _RoadSection:
     """Surface markings in the road section."""
     speed_limits: List[SpeedLimit] = field(default_factory=list)
     """Speed limits in the road section."""
+    TYPE = None
+    """Type of the road section."""
+    prev_length: float = 0
+    """Length of Road up to this section."""
 
     def __post_init__(self):
         assert (
             self.__class__.TYPE is not None
         ), "Subclass of RoadSection missing TYPE declaration!"
 
-        if self.transform is None:
-            self.transform = Transform([0, 0], 0)
+        super().__post_init__()
+        self.set_transform(self.transform)
 
-
-class RoadSection(_RoadSection):
-    """Base class of all road sections."""
-
-    TYPE = None
-    """Type of the road section."""
-    prev_length: float = 0
-    """Length of Road up to this section."""
+    def set_transform(self, tf):
+        super().set_transform(tf)
+        for obj in itertools.chain(
+            self.obstacles, self.surface_markings, self.traffic_signs
+        ):
+            if obj.normalize_x:
+                obj.set_transform(self.middle_line)
+            else:
+                obj.set_transform(self.transform)
 
     @property
     def middle_line(self) -> Line:
@@ -113,53 +119,6 @@ class RoadSection(_RoadSection):
             MarkedLine.from_line(self.right_line, self.right_line_marking, self.prev_length)
         )
         return lines
-
-    @property
-    def obstacles(self) -> List[StaticObstacle]:
-        """List[StaticObstacle]: All obstacles within this section of the road."""
-        for obstacle in self._obstacles:
-            obstacle.set_transform(self.middle_line)
-        return self._obstacles.copy()
-
-    @obstacles.setter
-    def obstacles(self, obs: List[StaticObstacle]):
-        self._obstacles = obs
-
-    @property
-    def traffic_signs(self) -> List[TrafficSign]:
-        """List[TrafficSign]: All traffic signs within this section of the road."""
-        speed_limits_traffic_signs = [
-            speed_limit.traffic_sign for speed_limit in self.speed_limits
-        ]
-        for sign in itertools.chain(self._traffic_signs, speed_limits_traffic_signs):
-            sign.set_transform(self.middle_line)
-        return self._traffic_signs + speed_limits_traffic_signs
-
-    @traffic_signs.setter
-    def traffic_signs(self, signs: List[TrafficSign]):
-        self._traffic_signs = signs
-
-    @property
-    def surface_markings(self) -> List[SurfaceMarking]:
-        """List[SurfaceMarking]: All surface markings within this section of the road."""
-        speed_limits_marks = [
-            speed_limit.surface_marking for speed_limit in self.speed_limits
-        ]
-        for marking in itertools.chain(self._surface_markings, speed_limits_marks):
-            marking.set_transform(self.middle_line)
-        return self._surface_markings + speed_limits_marks
-
-    @surface_markings.setter
-    def surface_markings(self, markings: List[SurfaceMarking]):
-        self._surface_markings = markings
-
-    @property
-    def speed_limits(self) -> List[SpeedLimit]:
-        return self._speed_limits.copy()
-
-    @speed_limits.setter
-    def speed_limits(self, speed_limits: List[SpeedLimit]):
-        self._speed_limits = speed_limits
 
     def get_bounding_box(self) -> Polygon:
         """Get a polygon around the road section.

@@ -11,7 +11,8 @@ class ModuleTest(unittest.TestCase):
         TF = Transform([1, 1], 0)
         LENGTH = 2
 
-        zc = ZebraCrossing(length=LENGTH, transform=TF)
+        zc = ZebraCrossing(length=LENGTH)
+        zc.set_transform(TF)
         self.assertEqual(zc.__class__.TYPE, road_section_type.ZEBRA_CROSSING)
         self.assertEqual(
             zc.frame,

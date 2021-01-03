@@ -14,7 +14,8 @@ class ModuleTest(unittest.TestCase):
         WIDTH = 0.3
         OPENING_ANGLE = math.radians(60)
 
-        ba = BlockedArea(length=LENGTH, width=WIDTH, transform=TF)
+        ba = BlockedArea(length=LENGTH, width=WIDTH)
+        ba.set_transform(TF)
         self.assertEqual(ba.__class__.TYPE, road_section_type.BLOCKED_AREA)
         inset = WIDTH / math.tan(OPENING_ANGLE)
         self.assertEqual(
