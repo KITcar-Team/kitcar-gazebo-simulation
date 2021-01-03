@@ -1,4 +1,5 @@
 """The RoadSection is parent to all other RoadSection classes."""
+import functools
 import itertools
 import math
 from dataclasses import dataclass, field
@@ -79,6 +80,9 @@ class RoadSection(Transformable):
         self.set_transform(self.transform)
 
     def set_transform(self, tf):
+        # Invalidate cached middle line
+        if self.__dict__.get("middle_line"):
+            self.__dict__.pop("middle_line")
         super().set_transform(tf)
         for obj in itertools.chain(
             self.obstacles, self.surface_markings, self.traffic_signs
@@ -88,7 +92,7 @@ class RoadSection(Transformable):
             else:
                 obj.set_transform(self.transform)
 
-    @property
+    @functools.cached_property
     def middle_line(self) -> Line:
         """Line: Middle line of the road section."""
         return Line()

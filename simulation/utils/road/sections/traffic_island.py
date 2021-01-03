@@ -1,5 +1,6 @@
 """TrafficIsland."""
 
+import functools
 import math
 from dataclasses import dataclass
 from typing import List
@@ -271,7 +272,7 @@ class TrafficIsland(RoadSection):
             ).simplify()
         )
 
-    @property
+    @functools.cached_property
     def middle_line(self) -> Line:
         """Line: Middle line of the road section.
         Here it is the left middle line.

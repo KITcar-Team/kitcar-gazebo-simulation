@@ -1,5 +1,6 @@
 """Quadratic- and CubicBezierCurves."""
 
+import functools
 from dataclasses import dataclass
 from typing import Sequence, Union
 
@@ -69,7 +70,7 @@ class QuadBezier(BezierCurve):
 
     TYPE = road_section_type.QUAD_BEZIER
 
-    @property
+    @functools.cached_property
     def middle_line(self) -> Line:
         points = []
         t = 0

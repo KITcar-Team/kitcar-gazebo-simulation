@@ -3,6 +3,7 @@
 As any other road sections, line markings can be variied and obstacles created on the road.
 """
 
+import functools
 from dataclasses import dataclass
 
 import simulation.utils.road.sections.type as road_section_type
@@ -39,6 +40,6 @@ surface_markings=[], _speed_limits=[], prev_length=0, length=2)], length=2.0)
         assert self.length > 0, "Invalid: length for StraightRoad is smaller than 0."
         super().__post_init__()
 
-    @property
+    @functools.cached_property
     def middle_line(self) -> Line:
         return self.transform * Line([Point(0, 0), Point(self.length, 0)])

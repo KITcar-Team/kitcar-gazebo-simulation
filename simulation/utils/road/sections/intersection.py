@@ -1,5 +1,6 @@
 """Intersection."""
 
+import functools
 import math
 from dataclasses import dataclass
 from typing import List, Tuple
@@ -342,7 +343,7 @@ class Intersection(RoadSection):
                 )
             return self.transform * Line(points_rl)
 
-    @property
+    @functools.cached_property
     def middle_line(self) -> Line:
         """Line: Middle line of the intersection."""
         if self.turn == Intersection.LEFT:

@@ -1,5 +1,6 @@
 """Left- and RightCircularArc."""
 
+import functools
 import math
 from dataclasses import dataclass
 from typing import Tuple
@@ -24,7 +25,7 @@ class CircularArc(RoadSection):
 
         super().__post_init__()
 
-    @property
+    @functools.cached_property
     def middle_line(self) -> Line:
         RADIAN_STEP = math.pi / 360
         points = []

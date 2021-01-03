@@ -230,6 +230,16 @@ class ParkingArea(StraightRoad):
     """Parking lots on the right side."""
 
     def __post_init__(self):
+        for lot in self.left_lots:
+            lot._side = ParkingLot.LEFT_SIDE
+            if lot.depth is None:
+                lot.depth = ParkingLot.DEFAULT_LEFT_DEPTH
+
+        for lot in self.right_lots:
+            lot._side = ParkingLot.RIGHT_SIDE
+            if lot.depth is None:
+                lot.depth = ParkingLot.DEFAULT_RIGHT_DEPTH
+
         super().__post_init__()
 
         if self.start_line:
@@ -249,16 +259,6 @@ class ParkingArea(StraightRoad):
             for spot in lot.spots:
                 if spot.x_surface_marking is not None:
                     self.surface_markings.append(spot.x_surface_marking)
-
-        for lot in self.left_lots:
-            lot._side = ParkingLot.LEFT_SIDE
-            if lot.depth is None:
-                lot.depth = ParkingLot.DEFAULT_LEFT_DEPTH
-
-        for lot in self.right_lots:
-            lot._side = ParkingLot.RIGHT_SIDE
-            if lot.depth is None:
-                lot.depth = ParkingLot.DEFAULT_RIGHT_DEPTH
 
         for obs in self.parking_obstacles:
             self.obstacles.append(obs)
