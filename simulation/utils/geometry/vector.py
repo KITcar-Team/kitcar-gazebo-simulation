@@ -57,6 +57,11 @@ class Vector(shapely.geometry.point.Point):
             elif len(args[0]) == 2:
                 args = (*args[0], 0)
 
+        with suppress(AttributeError):
+            # Shapely point without z!
+            if not args[0].has_z:
+                args = [args[0].x, args[0].y, 0]
+
         # Attempt default init
         with suppress(Exception):
             super(Vector, self).__init__(*args)
