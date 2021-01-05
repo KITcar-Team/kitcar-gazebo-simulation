@@ -240,6 +240,9 @@ cml-cyclegan:
   - cd ../kitcar_ros_ci
   - /bin/sh build.sh $CI_REGISTRY $TAG_DEFAULT_IMAGE_CI $TAG_KITCAR_ROS_IMAGE
   - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/kitcar_ros_ci:$TAG_KITCAR_ROS_IMAGE
+  after_script:
+  # Clean up
+  - rm -rf $KITCAR_REPO_PATH/kitcar-rosbag
 
 deploy-docker-images-master:
   extends: .docker-images-template
