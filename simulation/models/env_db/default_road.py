@@ -53,16 +53,20 @@ road.append(LeftCircularArc(radius=2, angle=math.pi / 2))
 road.append(Intersection(size=3, turn=Intersection.RIGHT))
 road.append(LeftCircularArc(radius=1.5, angle=math.pi, obstacles=[StaticObstacle()]))
 road.append(Intersection(size=3, turn=Intersection.RIGHT))
-left_arc = road.append(
-    LeftCircularArc(
-        radius=1.5,
-        angle=math.pi / 2,
-        left_line_marking=RoadSection.MISSING_LINE_MARKING,
-    )
+
+left_arc = LeftCircularArc(
+    radius=1.5,
+    angle=math.pi / 2,
+    left_line_marking=RoadSection.MISSING_LINE_MARKING,
 )
 left_arc.add_speed_limit(arc_length=0, speed=30)
+road.append(left_arc)
+
 road.append(ZebraCrossing())
 road.append(StraightRoad(length=1))
-left_arc = road.append(LeftCircularArc(radius=1.5, angle=math.pi / 2))
+
+left_arc = LeftCircularArc(radius=1.5, angle=math.pi / 2)
 left_arc.add_speed_limit(0, -30)
+road.append(left_arc)
+
 road.append(StraightRoad(length=0.95))

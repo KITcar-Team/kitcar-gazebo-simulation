@@ -13,18 +13,17 @@ radius = random.random() * 3 + 1
 
 road = Road()
 road.append(StraightRoad(length=4))
-left_arc = road.append(
-    LeftCircularArc(
-        radius=radius,
-        angle=angle,
-    )
+left_arc = LeftCircularArc(
+    radius=radius,
+    angle=angle,
 )
+
+road.append(left_arc)
 left_arc.add_speed_limit(arc_length=radius * angle / 2, speed=speed_limit_1)
-right_arc = road.append(
-    RightCircularArc(
-        radius=radius,
-        angle=angle,
-    )
+right_arc = RightCircularArc(
+    radius=radius,
+    angle=angle,
 )
+road.append(right_arc)
 right_arc.add_speed_limit(arc_length=radius * angle / 2, speed=speed_limit_2)
 road.append(StraightRoad(length=4))
