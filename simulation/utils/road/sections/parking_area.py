@@ -25,9 +25,9 @@ class ParkingSpot(RoadElementRect):
     """Parking spot with a type and optionally an obstacle placed on top.
 
     Args:
-        width (float): Width of the spot.
-        kind (int) = ParkingSpot.FREE: Type of the spot.
-        obstacle (ParkingObstacle) = None: Obstacle within the spot.
+        width: Width of the spot.
+        kind: Type of the spot.
+        obstacle: Obstacle within the spot.
     """
 
     FREE = 0
@@ -37,30 +37,35 @@ class ParkingSpot(RoadElementRect):
     BLOCKED = 2
     """Possible value of :attr:`kind`."""
 
-    width: float = 0.35
-    """Width of parking spot."""
-    _side: str = field(default=None, init=False)
+    _side: str = None
     """Side of the road."""
     kind: str = FREE
     """Classification of the parking spot."""
     obstacle: ParkingObstacle = None
     """Obstacle within the spot."""
-    normalize_x: bool = False
     x_surface_marking: SurfaceMarkingRect = None
 
-    def __post_init__(self):
+    def __init__(
+        self,
+        kind: float = kind,
+        width: float = 0.35,
+        obstacle: ParkingObstacle = obstacle,
+    ):
+        self.kind = kind
+        self.obstacle = obstacle
+        super().__init__(width=width, normalize_x=False)
+
         if self.kind == ParkingSpot.BLOCKED:
             self.x_surface_marking = SurfaceMarkingRect(
+                SurfaceMarkingRect.PARKING_SPOT_X,
+                *self._center.xy,
                 width=self.width,
                 depth=self.depth,
-                kind=SurfaceMarkingRect.PARKING_SPOT_X,
-                _center=self._center,
                 angle=0,
                 normalize_x=False,
             )
 
     def set_transform(self, tf: Transform):
-        self._center = Point(self.depth / 2, -self.width / 2)
         self._frame = Polygon(
             [
                 [0, 0],
@@ -77,7 +82,6 @@ class ParkingSpot(RoadElementRect):
         if self.x_surface_marking is not None:
             self.x_surface_marking.width = self.width
             self.x_surface_marking.depth = self.depth
-            self.x_surface_marking._center = self._center
             self.x_surface_marking._frame = self._frame
             self.x_surface_marking.set_transform(self.transform)
 
@@ -246,11 +250,12 @@ class ParkingArea(StraightRoad):
             # Create a start line.
             self.surface_markings.append(
                 SurfaceMarkingRect(
-                    _center=Point(self.start_line_length / 2, 0),
+                    kind=SurfaceMarkingRect.START_LINE,
+                    arc_length=self.start_line_length / 2,
+                    y=0,
                     normalize_x=False,
                     depth=self.start_line_length,
                     width=2 * Config.road_width,
-                    kind=SurfaceMarkingRect.START_LINE,
                     angle=0,
                 )
             )
@@ -267,7 +272,8 @@ class ParkingArea(StraightRoad):
             self.traffic_signs.append(
                 TrafficSign(
                     kind=TrafficSign.PARKING,
-                    _center=Point(0, -Config.road_width - 0.1),
+                    arc_length=0,
+                    y=-Config.road_width - 0.1,
                     angle=0,
                     normalize_x=False,
                 )

@@ -40,7 +40,7 @@ def _get_stop_line(line1: Line, line2: Line, kind) -> SurfaceMarkingRect:
     angle = line1.interpolate_direction(arc_length=0).argument
 
     return SurfaceMarkingRect(
-        kind=kind, angle=angle, width=width, normalize_x=False, _center=center, depth=0.04
+        kind, *center.xy, angle=angle, width=width, normalize_x=False, depth=0.04
     )
 
 
@@ -512,16 +512,16 @@ class Intersection(RoadSection):
             # sign "turn left" in south
             signs.append(
                 TrafficSign(
-                    kind=TrafficSign.TURN_LEFT,
-                    _center=Point(self.cp_sign_south(Config.get_turn_sign_dist())),
+                    TrafficSign.TURN_LEFT,
+                    *self.cp_sign_south(Config.get_turn_sign_dist()).xy,
                 )
             )
             if self.rule != Intersection.YIELD:
                 # sign "turn right" in west
                 signs.append(
                     TrafficSign(
-                        kind=TrafficSign.TURN_RIGHT,
-                        _center=Point(self.cp_sign_west(Config.get_turn_sign_dist())),
+                        TrafficSign.TURN_RIGHT,
+                        *self.cp_sign_west(Config.get_turn_sign_dist()).xy,
                         angle=self._alpha - 0.5 * math.pi,
                     )
                 )
@@ -529,16 +529,16 @@ class Intersection(RoadSection):
             # sign "turn right" in south
             signs.append(
                 TrafficSign(
-                    kind=TrafficSign.TURN_RIGHT,
-                    _center=Point(self.cp_sign_south(Config.get_turn_sign_dist())),
+                    TrafficSign.TURN_RIGHT,
+                    *self.cp_sign_south(Config.get_turn_sign_dist()).xy,
                 )
             )
             if self.rule != Intersection.YIELD:
                 # sign "turn left" in east
                 signs.append(
                     TrafficSign(
-                        kind=TrafficSign.TURN_LEFT,
-                        _center=Point(self.cp_sign_east(Config.get_turn_sign_dist())),
+                        TrafficSign.TURN_LEFT,
+                        *self.cp_sign_east(Config.get_turn_sign_dist()).xy,
                         angle=self._alpha + 0.5 * math.pi,
                     )
                 )
@@ -552,14 +552,14 @@ class Intersection(RoadSection):
         if self.rule in type_map:
             signs.append(
                 TrafficSign(
-                    kind=type_map[self.rule],
-                    _center=Point(self.cp_sign_south(Config.get_prio_sign_dist(1))),
+                    type_map[self.rule],
+                    *self.cp_sign_south(Config.get_prio_sign_dist(1)).xy,
                 )
             )
             signs.append(
                 TrafficSign(
-                    kind=type_map[self.rule],
-                    _center=Point(self.cp_sign_north(Config.get_prio_sign_dist(1))),
+                    type_map[self.rule],
+                    *self.cp_sign_north(Config.get_prio_sign_dist(1)).xy,
                     angle=math.pi,
                 )
             )
@@ -578,15 +578,15 @@ class Intersection(RoadSection):
         if self.rule in type_map_opposite:
             signs.append(
                 TrafficSign(
-                    kind=type_map_opposite[self.rule],
-                    _center=Point(self.cp_sign_west(Config.get_prio_sign_dist(1))),
+                    type_map_opposite[self.rule],
+                    *self.cp_sign_west(Config.get_prio_sign_dist(1)).xy,
                     angle=self._alpha - 0.5 * math.pi,
                 )
             )
             signs.append(
                 TrafficSign(
-                    kind=type_map_opposite[self.rule],
-                    _center=Point(self.cp_sign_east(Config.get_prio_sign_dist(1))),
+                    type_map_opposite[self.rule],
+                    *self.cp_sign_east(Config.get_prio_sign_dist(1)).xy,
                     angle=self._alpha + 0.5 * math.pi,
                 )
             )
@@ -609,9 +609,9 @@ class Intersection(RoadSection):
             # roadmarking "turn left" in south
             markings.append(
                 SurfaceMarkingRect(
-                    kind=own_marking,
+                    own_marking,
+                    *self.cp_surface_south().xy,
                     angle=0,
-                    _center=Point(self.cp_surface_south()),
                     width=Config.TURN_SF_MARK_WIDTH,
                     depth=Config.TURN_SF_MARK_LENGTH,
                 )
@@ -632,9 +632,9 @@ class Intersection(RoadSection):
                 )
                 markings.append(
                     SurfaceMarkingRect(
-                        kind=opposite_marking,
+                        opposite_marking,
+                        *opposite_center.xy,
                         angle=opposite_angle,
-                        _center=opposite_center,
                         width=Config.TURN_SF_MARK_WIDTH,
                         depth=Config.TURN_SF_MARK_LENGTH,
                     )

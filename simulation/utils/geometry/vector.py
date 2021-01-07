@@ -3,7 +3,7 @@
 import math
 import numbers
 from contextlib import suppress
-from typing import Union
+from typing import Tuple, Union
 from warnings import warn
 
 import geometry_msgs.msg as geometry_msgs
@@ -206,3 +206,8 @@ class Vector(shapely.geometry.point.Point):
 
     def __hash__(self) -> int:
         return hash((self.x, self.y, self.z, self._frame))
+
+    @property
+    def xy(self) -> Tuple[float, float]:
+        """Tuple[float, float]: xy-coordinates as a tuple."""
+        return self.x, self.y

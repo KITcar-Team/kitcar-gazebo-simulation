@@ -1,5 +1,9 @@
+import itertools
 import math
 import unittest
+
+import hypothesis.strategies as st
+from hypothesis import given
 
 import simulation.utils.road.sections.type as road_section_type
 from simulation.utils.geometry import Line, Point, Transform, Vector
@@ -8,6 +12,45 @@ from simulation.utils.road.sections.intersection import Intersection
 
 
 class ModuleTest(unittest.TestCase):
+    def test_init_combinations(self):
+        @given(
+            rule=st.sampled_from(
+                [
+                    Intersection.EQUAL,
+                    Intersection.PRIORITY_STOP,
+                    Intersection.PRIORITY_YIELD,
+                    Intersection.YIELD,
+                    Intersection.STOP,
+                ]
+            ),
+            turn=st.sampled_from(
+                [Intersection.LEFT, Intersection.STRAIGHT, Intersection.RIGHT]
+            ),
+            closing=st.sampled_from(
+                [Intersection.LEFT, Intersection.STRAIGHT, Intersection.RIGHT]
+            ),
+            angle=st.floats(min_value=math.radians(70), max_value=math.radians(110)),
+            size=st.floats(min_value=0.8, max_value=2),
+            tf_x=st.floats(allow_nan=False),
+            tf_y=st.floats(allow_nan=False),
+            tf_rot=st.floats(min_value=0, max_value=2 * math.pi),
+        )
+        def combine(rule, turn, closing, angle, size, tf_x, tf_y, tf_rot):
+            # print(rule, turn, closing, angle, size, tf_x, tf_y, tf_rot)
+            if (
+                turn == closing
+                or size / 2 * math.sin(angle) <= math.sqrt(2) * Config.road_width
+            ):
+                return
+            inter = Intersection(rule=rule, turn=turn, angle=angle, size=size)
+            inter.set_transform(Transform(Point(tf_x, tf_y), tf_rot))
+            for obj in itertools.chain(
+                inter.traffic_signs, inter.surface_markings, inter.obstacles
+            ):
+                obj.frame
+
+        combine()
+
     def test_intersection(self):
         TF = Transform([1, 1], math.pi / 2)
         TF = Transform([0, 0], 0)

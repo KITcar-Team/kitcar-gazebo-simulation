@@ -53,8 +53,8 @@ class TrafficIsland(RoadSection):
         traffic_sign_start_point = Point(self.curve_area_length - self._sign_distance, 0)
         self.traffic_signs.append(
             TrafficSign(
-                kind=TrafficSign.PASS_RIGHT,
-                _center=traffic_sign_start_point,
+                TrafficSign.PASS_RIGHT,
+                *traffic_sign_start_point.xy,
                 angle=0,
                 normalize_x=False,
             )
@@ -64,8 +64,8 @@ class TrafficIsland(RoadSection):
         )
         self.traffic_signs.append(
             TrafficSign(
-                kind=TrafficSign.PASS_RIGHT,
-                _center=traffic_sign_end_point,
+                TrafficSign.PASS_RIGHT,
+                *traffic_sign_end_point.xy,
                 angle=math.pi,
                 normalize_x=False,
             )
@@ -79,8 +79,8 @@ class TrafficIsland(RoadSection):
             point = vector + Vector(0, -0.1)
             self.traffic_signs.append(
                 TrafficSign(
-                    kind=TrafficSign.ZEBRA_CROSSING,
-                    _center=point,
+                    TrafficSign.ZEBRA_CROSSING,
+                    *point.xy,
                     angle=0,
                     normalize_x=False,
                 )

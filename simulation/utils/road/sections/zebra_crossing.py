@@ -23,7 +23,8 @@ class ZebraCrossing(StraightRoad):
     def __post_init__(self):
         self.surface_markings.append(
             SurfaceMarkingRect(
-                _center=Point(self.length / 2, 0),
+                arc_length=self.length / 2,
+                y=0,
                 depth=self.length,
                 width=2 * Config.road_width,
                 kind=SurfaceMarkingRect.ZEBRA_CROSSING,
@@ -32,7 +33,8 @@ class ZebraCrossing(StraightRoad):
         self.traffic_signs.append(
             TrafficSign(
                 kind=TrafficSign.ZEBRA_CROSSING,
-                _center=Point(-0.4, -Config.road_width - 0.1),
+                arc_length=-0.4,
+                y=-Config.road_width - 0.1,
                 angle=0,
                 normalize_x=False,
             )

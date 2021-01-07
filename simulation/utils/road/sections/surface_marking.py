@@ -60,4 +60,23 @@ class SurfaceMarkingPoly(RoadElement, SurfaceMarking):
 
 @dataclass
 class SurfaceMarkingRect(RoadElementRect, SurfaceMarking):
-    pass
+    def __init__(
+        self,
+        kind: Tuple[int, str],
+        arc_length: float,
+        y: float = -0.5,
+        depth: float = 0.4,
+        width: float = 0.4,
+        angle=0,
+        normalize_x: bool = True,
+    ):
+
+        self.kind = kind
+        super().__init__(
+            arc_length=arc_length,
+            y=y,
+            width=width,
+            depth=depth,
+            angle=angle,
+            normalize_x=normalize_x,
+        )

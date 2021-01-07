@@ -32,8 +32,8 @@ class BlockedArea(StraightRoad):
         ]
         self.traffic_signs.append(
             TrafficSign(
-                kind=TrafficSign.ONCOMING_TRAFFIC,
-                _center=self.transform * Point(-0.4, -Config.road_width - 0.1),
+                TrafficSign.ONCOMING_TRAFFIC,
+                *(self.transform * Point(-0.4, -Config.road_width - 0.1)).xy,
                 angle=self.transform.get_angle(),
                 normalize_x=False,
             )

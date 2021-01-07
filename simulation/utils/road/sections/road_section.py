@@ -5,7 +5,7 @@ import math
 from dataclasses import dataclass, field
 from typing import List, Tuple
 
-from simulation.utils.geometry import Line, Point, Polygon, Pose, Transform
+from simulation.utils.geometry import Line, Polygon, Pose, Transform
 from simulation.utils.road.config import Config
 from simulation.utils.road.sections import StaticObstacle, SurfaceMarking, TrafficSign
 from simulation.utils.road.sections.speed_limit import SpeedLimit
@@ -203,7 +203,8 @@ class RoadSection(Transformable):
         height: Heigth of the obstacle.
         """
         o = StaticObstacle(
-            _center=Point(arc_length, y_offset),
+            arc_length=arc_length,
+            y=y_offset,
             angle=angle,
             width=width,
             depth=length,

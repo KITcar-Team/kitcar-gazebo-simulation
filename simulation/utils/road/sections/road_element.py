@@ -14,13 +14,11 @@ from simulation.utils.road.sections.transformable import Transformable
 class RoadElement(Transformable):
     normalize_x: bool = True
     """If true, all x-values are substracted by the lowest x-value."""
-    _center: Point = Point(0, 0)
-    """Center of the object in local coordinates."""
 
     _frame: Polygon = Polygon(
-        [Point(0.3, -0.4), Point(0.5, -0.4), Point(0.5, 0), Point(0.3, 0)]
+        [Point(-0.1, -0.2), Point(0.1, -0.2), Point(0.1, 0.2), Point(-0.1, 0.2)]
     )
-    """Polygon: Frame of the element in global coordinates."""
+    """Polygon: Frame of the element in local coordinates."""
 
     def set_transform(self, obj: Union[Line, Transform]):
         """Calculate the correct transform to this element.
@@ -62,6 +60,7 @@ rotation=Quaternion(0.7071067811865476, 0.0, 0.0, 0.7071067811865475))
 
     @property
     def frame(self) -> Polygon:
+        """Polygon: Frame of the element in global coordinates."""
         tf = (
             Transform([-self._center.x, 0], 0) if self.normalize_x else Transform([0, 0], 0)
         )
@@ -69,7 +68,13 @@ rotation=Quaternion(0.7071067811865476, 0.0, 0.0, 0.7071067811865475))
 
     @property
     def center(self) -> Point:
+        """Point: Center point of the element in global coordinates."""
         return Point(self.frame.centroid)
+
+    @property
+    def _center(self) -> Point:
+        """Point: Center point of the element in local coordinates."""
+        return Point(self._frame.centroid)
 
 
 @dataclass
@@ -77,30 +82,53 @@ class RoadElementRect(RoadElement):
     """Generic element of the road that has a frame.
 
     Examples of road elements are obstacles and traffic signs.
+
+    Args:
+        arc_length: x coordinate of the element along the road.
+        y: y coordinate of the element. (Perpendicular to the road.)
+        width: Width of the element.
+        depth: Depth of the element. Component of the size in the direction of the road.
+        angle: Angle [radian] between the middle line and the element
+            (measured at the center).
     """
 
-    _center: Point = Point(0.4, -0.2)
-    """Center point of the element in local coordinates."""
     width: float = 0.2
     """Width of the element."""
     depth: float = 0.2
-    """Depth of the element.
-
-    Component of the size in the direction of the road.
-    """
+    """Depth (length) of the element."""
     angle: float = 0
     """Angle [radian] between the middle line and the element (measured at the center)."""
 
-    def __post_init__(self):
-        self._frame = Transform(self._center, self.angle) * Polygon(
-            [
-                [-self.depth / 2, self.width / 2],
-                [self.depth / 2, self.width / 2],
-                [self.depth / 2, -self.width / 2],
-                [-self.depth / 2, -self.width / 2],
-            ]
+    def __init__(
+        self,
+        arc_length: float = 0.4,
+        y: float = -0.2,
+        width: float = width,
+        depth: float = depth,
+        angle: float = angle,
+        normalize_x: bool = True,
+    ):
+        """Initialize a retangular road element."""
+        for obj in arc_length, y, width, depth, angle:
+            assert isinstance(obj, float) or isinstance(
+                obj, int
+            ), f"Should be a number but is {obj}"
+
+        self.width = width
+        self.depth = depth
+        self.angle = angle
+        super().__init__(
+            normalize_x=normalize_x,
+            _frame=Transform(Point(arc_length, y), self.angle)
+            * Polygon(
+                [
+                    [-self.depth / 2, self.width / 2],
+                    [self.depth / 2, self.width / 2],
+                    [self.depth / 2, -self.width / 2],
+                    [-self.depth / 2, -self.width / 2],
+                ]
+            ),
         )
-        super().__post_init__()
 
     @property
     def orientation(self) -> float:
