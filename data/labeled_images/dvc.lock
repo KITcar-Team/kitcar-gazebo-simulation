@@ -6,9 +6,14 @@ create_labeled_train_images:
     && fdupes -dN random_roads/ && fdupes -dN random_roads/debug
   deps:
   - path: ../../simulation/models/env_db/ci_roads/random_road.py
-    md5: 67acd0a6fe3c2fd3404155bf02dda0db
+    md5: 77418419322c27bd64724e46a04196fb
+    size: 4119
   - path: ../../simulation/models/meshes
-    md5: 497334a736344f90dee99455cf9eb708.dir
+    md5: 8d7deee7a9c26594f95d9117b4488be3.dir
+    size: 40507629
+    nfiles: 119
   outs:
   - path: random_roads
-    md5: 4eb59e90479a3d12014ac4d5d63ea15c.dir
+    md5: 4a4fe55fbda1a592a9573bcd3c11d096.dir
+    size: 184399425
+    nfiles: 4009

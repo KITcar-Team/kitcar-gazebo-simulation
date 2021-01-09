@@ -51,10 +51,3 @@ stages:
     - configs/test_options.py
     outs:
     - results/dr_drift_256/discriminator_losses.txt
-  stacked_gif_dr_drift_256:
-    cmd: python3 ../data/video_to_gif.py --input_file results/dr_drift_256/stacked.mp4 --output_file
-      results/dr_drift_256/stacked.gif --width 400 --length 10
-    deps:
-    - results/dr_drift_256/stacked.mp4
-    outs:
-    - results/dr_drift_256/stacked.gif
