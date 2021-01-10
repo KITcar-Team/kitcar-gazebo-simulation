@@ -52,7 +52,11 @@ class Vector(shapely.geometry.point.Point):
 
         # Try to add z component
         with suppress(TypeError):
-            if len(args) == 2:
+            if len(args) == 0:
+                # Necessary to load from yaml!
+                # object is initlialized with no args
+                args = (0, 0, 0)
+            elif len(args) == 2:
                 args = (*args, 0)
             elif len(args[0]) == 2:
                 args = (*args[0], 0)
