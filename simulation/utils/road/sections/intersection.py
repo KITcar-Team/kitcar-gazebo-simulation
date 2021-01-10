@@ -96,6 +96,8 @@ class Intersection(RoadSection):
     """Priority rule at intersection."""
     size: float = 1.8
     """Size of intersection (from one side to the other)."""
+    exit_direction: int = None
+    """Optional parameter to overwrite the visible turning direction."""
 
     def __post_init__(self):
         super().__post_init__()
@@ -486,13 +488,18 @@ class Intersection(RoadSection):
         return (Pose(self.transform * Point(0, 0), self.transform.get_angle() + math.pi), 0)
 
     def get_ending(self) -> Tuple[Pose, float]:
-        if self.turn == Intersection.LEFT:
+
+        turn_direction = (
+            self.exit_direction if self.exit_direction is not None else self.turn
+        )
+
+        if turn_direction == Intersection.LEFT:
             end_angle = math.pi / 2 + self._alpha
             end_point = Point(self.z - self.w)
-        elif self.turn == Intersection.RIGHT:
+        elif turn_direction == Intersection.RIGHT:
             end_angle = -math.pi / 2 + self._alpha
             end_point = Point(self.z + self.w)
-        elif self.turn == Intersection.STRAIGHT:
+        elif turn_direction == Intersection.STRAIGHT:
             end_angle = 0
             end_point = Point(2 * self.z)
 
