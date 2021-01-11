@@ -1,7 +1,6 @@
 import math
 import random
 
-from simulation.utils.geometry import Point
 from simulation.utils.road.road import Road
 from simulation.utils.road.sections import (
     BlockedArea,
@@ -37,11 +36,13 @@ def get_random_parking() -> ParkingArea:
                 [
                     ParkingObstacle(
                         width=obs_width,
-                        center=[0.2, -(width - random.random() / 2 * obs_width) / 2],
+                        x=0.2,
+                        y=-(width - random.random() / 2 * obs_width) / 2,
                     ),
                     ParkingObstacle(
                         width=obs_width,
-                        center=[0.2, -(width - random.random() / 2 * obs_width) / 2],
+                        x=0.2,
+                        y=-(width - random.random() / 2 * obs_width) / 2,
                     ),
                     None,
                 ]
@@ -79,7 +80,8 @@ def get_random_obstacle(
         return (r[1] - r[0]) * random.random() + r[0]
 
     return StaticObstacle(
-        center=Point(draw_from(x_range), draw_from(y_range)),
+        arc_length=draw_from(x_range),
+        y=draw_from(y_range),
         width=draw_from(width_range),
         height=draw_from(height_range),
         depth=draw_from(depth_range),

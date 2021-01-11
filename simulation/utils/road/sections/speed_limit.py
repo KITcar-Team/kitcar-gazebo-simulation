@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-from simulation.utils.geometry import Point
 from simulation.utils.road.config import Config
 from simulation.utils.road.sections import SurfaceMarkingRect, TrafficSign
 
@@ -21,15 +20,17 @@ class SpeedLimit:
 
         return TrafficSign(
             kind=kind,
+            arc_length=self.x_position,
+            y=-Config.road_width - 0.1,
             angle=0,
-            center=Point(self.x_position, -Config.road_width - 0.1),
         )
 
     @property
     def surface_marking(self) -> SurfaceMarkingRect:
         """SurfaceMarking: The surface marking for this speed limit."""
         return SurfaceMarkingRect(
-            center=Point(self.x_position, -Config.road_width / 2),
+            arc_length=self.x_position,
+            y=-Config.road_width / 2,
             width=0.25,
             depth=0.4,
             kind=getattr(

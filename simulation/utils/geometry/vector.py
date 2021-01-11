@@ -3,7 +3,7 @@
 import math
 import numbers
 from contextlib import suppress
-from typing import Union
+from typing import Tuple, Union
 from warnings import warn
 
 import geometry_msgs.msg as geometry_msgs
@@ -56,6 +56,11 @@ class Vector(shapely.geometry.point.Point):
                 args = (*args, 0)
             elif len(args[0]) == 2:
                 args = (*args[0], 0)
+
+        with suppress(AttributeError):
+            # Shapely point without z!
+            if not args[0].has_z:
+                args = [args[0].x, args[0].y, 0]
 
         # Attempt default init
         with suppress(Exception):
@@ -201,3 +206,8 @@ class Vector(shapely.geometry.point.Point):
 
     def __hash__(self) -> int:
         return hash((self.x, self.y, self.z, self._frame))
+
+    @property
+    def xy(self) -> Tuple[float, float]:
+        """Tuple[float, float]: xy-coordinates as a tuple."""
+        return self.x, self.y

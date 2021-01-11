@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Tuple
 
-from simulation.utils.road.sections.road_element import RoadElementPoly, RoadElementRect
+from simulation.utils.road.sections.road_element import RoadElement, RoadElementRect
 
 from . import ID
 
@@ -54,10 +54,29 @@ class SurfaceMarking:
 
 
 @dataclass
-class SurfaceMarkingPoly(RoadElementPoly, SurfaceMarking):
+class SurfaceMarkingPoly(RoadElement, SurfaceMarking):
     pass
 
 
 @dataclass
 class SurfaceMarkingRect(RoadElementRect, SurfaceMarking):
-    pass
+    def __init__(
+        self,
+        kind: Tuple[int, str],
+        arc_length: float,
+        y: float = -0.5,
+        depth: float = 0.4,
+        width: float = 0.4,
+        angle=0,
+        normalize_x: bool = True,
+    ):
+
+        self.kind = kind
+        super().__init__(
+            arc_length=arc_length,
+            y=y,
+            width=width,
+            depth=depth,
+            angle=angle,
+            normalize_x=normalize_x,
+        )

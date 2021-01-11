@@ -2,7 +2,6 @@
 
 import math
 
-from simulation.utils.geometry import Point
 from simulation.utils.road.road import Road  # Definition of the road class
 from simulation.utils.road.sections import (
     BlockedArea,
@@ -12,7 +11,6 @@ from simulation.utils.road.sections import (
     ParkingLot,
     ParkingObstacle,
     ParkingSpot,
-    StaticObstacle,
     StraightRoad,
     TrafficIsland,
     ZebraCrossing,
@@ -23,9 +21,8 @@ straight_road = StraightRoad(length=2)
 # - Ending sphinx straight_road -
 
 # - Beginning sphinx straight_road_obs -
-straight_road_obs = StraightRoad(
-    length=2, obstacles=[StaticObstacle(center=Point(1, 0), width=0.2, depth=0.1)]
-)
+straight_road_obs = StraightRoad(length=2)
+straight_road_obs.add_obstacle(arc_length=1, y_offset=0, width=0.2, length=0.1)
 # - Ending sphinx straight_road_obs -
 
 # - Beginning sphinx parking_area -

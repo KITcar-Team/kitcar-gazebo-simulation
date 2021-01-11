@@ -1,4 +1,5 @@
 """The RoadSection is parent to all other RoadSection classes."""
+import functools
 import itertools
 import math
 from dataclasses import dataclass, field
@@ -8,6 +9,7 @@ from simulation.utils.geometry import Line, Polygon, Pose, Transform
 from simulation.utils.road.config import Config
 from simulation.utils.road.sections import StaticObstacle, SurfaceMarking, TrafficSign
 from simulation.utils.road.sections.speed_limit import SpeedLimit
+from simulation.utils.road.sections.transformable import Transformable
 
 
 class MarkedLine(Line):
@@ -35,7 +37,9 @@ class MarkedLine(Line):
 
 
 @dataclass
-class _RoadSection:
+class RoadSection(Transformable):
+    """Base class of all road sections."""
+
     SOLID_LINE_MARKING = "solid"
     """Continuous white line."""
     DASHED_LINE_MARKING = "dashed"
@@ -45,8 +49,6 @@ class _RoadSection:
 
     id: int = 0
     """Road section id (consecutive integers by default)."""
-    transform: Transform = None
-    """Transform to origin of the road section."""
     is_start: bool = False
     """Road section is beginning of the road."""
 
@@ -62,27 +64,35 @@ class _RoadSection:
     """Traffic signs in the road section."""
     surface_markings: List[SurfaceMarking] = field(default_factory=list)
     """Surface markings in the road section."""
-    speed_limits: List[SpeedLimit] = field(default_factory=list)
+    _speed_limits: List[SpeedLimit] = field(default_factory=list)
     """Speed limits in the road section."""
+    TYPE = None
+    """Type of the road section."""
+    prev_length: float = 0
+    """Length of Road up to this section."""
 
     def __post_init__(self):
         assert (
             self.__class__.TYPE is not None
         ), "Subclass of RoadSection missing TYPE declaration!"
 
-        if self.transform is None:
-            self.transform = Transform([0, 0], 0)
+        super().__post_init__()
+        self.set_transform(self.transform)
 
+    def set_transform(self, tf):
+        # Invalidate cached middle line
+        if self.__dict__.get("middle_line"):
+            self.__dict__.pop("middle_line")
+        super().set_transform(tf)
+        for obj in itertools.chain(
+            self.obstacles, self.surface_markings, self.traffic_signs
+        ):
+            if obj.normalize_x:
+                obj.set_transform(self.middle_line)
+            else:
+                obj.set_transform(self.transform)
 
-class RoadSection(_RoadSection):
-    """Base class of all road sections."""
-
-    TYPE = None
-    """Type of the road section."""
-    prev_length: float = 0
-    """Length of Road up to this section."""
-
-    @property
+    @functools.cached_property
     def middle_line(self) -> Line:
         """Line: Middle line of the road section."""
         return Line()
@@ -115,51 +125,9 @@ class RoadSection(_RoadSection):
         return lines
 
     @property
-    def obstacles(self) -> List[StaticObstacle]:
-        """List[StaticObstacle]: All obstacles within this section of the road."""
-        for obstacle in self._obstacles:
-            obstacle.set_transform(self.middle_line)
-        return self._obstacles.copy()
-
-    @obstacles.setter
-    def obstacles(self, obs: List[StaticObstacle]):
-        self._obstacles = obs
-
-    @property
-    def traffic_signs(self) -> List[TrafficSign]:
-        """List[TrafficSign]: All traffic signs within this section of the road."""
-        speed_limits_traffic_signs = [
-            speed_limit.traffic_sign for speed_limit in self.speed_limits
-        ]
-        for sign in itertools.chain(self._traffic_signs, speed_limits_traffic_signs):
-            sign.set_transform(self.middle_line)
-        return self._traffic_signs + speed_limits_traffic_signs
-
-    @traffic_signs.setter
-    def traffic_signs(self, signs: List[TrafficSign]):
-        self._traffic_signs = signs
-
-    @property
-    def surface_markings(self) -> List[SurfaceMarking]:
-        """List[SurfaceMarking]: All surface markings within this section of the road."""
-        speed_limits_marks = [
-            speed_limit.surface_marking for speed_limit in self.speed_limits
-        ]
-        for marking in itertools.chain(self._surface_markings, speed_limits_marks):
-            marking.set_transform(self.middle_line)
-        return self._surface_markings + speed_limits_marks
-
-    @surface_markings.setter
-    def surface_markings(self, markings: List[SurfaceMarking]):
-        self._surface_markings = markings
-
-    @property
     def speed_limits(self) -> List[SpeedLimit]:
-        return self._speed_limits.copy()
-
-    @speed_limits.setter
-    def speed_limits(self, speed_limits: List[SpeedLimit]):
-        self._speed_limits = speed_limits
+        """Speed limits in the road section."""
+        return self._speed_limits
 
     def get_bounding_box(self) -> Polygon:
         """Get a polygon around the road section.
@@ -196,3 +164,53 @@ class RoadSection(_RoadSection):
         )
 
         return (pose, curvature)
+
+    def add_speed_limit(self, arc_length: float, speed: int):
+        """Add a speed limit to this road section.
+
+        Args:
+            arc_length: Direction along the road to the speed limit.
+            speed: Speed limit. Negative values correspond to the end of a speed limit zone.
+        """
+        speed_limit = SpeedLimit(arc_length, limit=speed)
+        sm = speed_limit.surface_marking
+        ts = speed_limit.traffic_sign
+        sm.set_transform(self.middle_line)
+        ts.set_transform(self.middle_line)
+        self.speed_limits.append(speed_limit)
+        self.surface_markings.append(sm)
+        self.traffic_signs.append(ts)
+
+        return ts
+
+    def add_obstacle(
+        self,
+        arc_length: float = 0.2,
+        y_offset: float = -0.2,
+        angle: float = 0,
+        width: float = 0.2,
+        length: float = 0.3,
+        height: float = 0.25,
+    ):
+        """Add an obstacle to the road.
+
+        Args:
+        arc_length: Direction along the road to the obstacle.
+        y_offset: Offset orthogonal to the middle line.
+        angle: Orientation offset of the obstacle.
+        width: Width of the obstacle.
+        length: Length of the obstacle.
+        height: Heigth of the obstacle.
+        """
+        o = StaticObstacle(
+            arc_length=arc_length,
+            y=y_offset,
+            angle=angle,
+            width=width,
+            depth=length,
+            height=height,
+        )
+        o.set_transform(self.middle_line)
+        self.obstacles.append(o)
+
+        return o

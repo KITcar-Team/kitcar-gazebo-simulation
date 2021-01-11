@@ -18,7 +18,8 @@ class ModuleTest(unittest.TestCase):
         RADIUS = 1
         ANGLE = math.pi / 2
 
-        lca = LeftCircularArc(radius=RADIUS, angle=ANGLE, transform=TF)
+        lca = LeftCircularArc(radius=RADIUS, angle=ANGLE)
+        lca.set_transform(TF)
         self.assertEqual(lca.__class__.TYPE, road_section_type.LEFT_CIRCULAR_ARC)
         self.assertAlmostEqual(lca.middle_line.get_points()[0], Point(TF.translation))
         self.assertAlmostEqual(lca.middle_line.get_points()[-1], Point(0, 2))
@@ -29,7 +30,8 @@ class ModuleTest(unittest.TestCase):
         RADIUS = 1
         ANGLE = math.pi / 2
 
-        rca = RightCircularArc(radius=RADIUS, angle=ANGLE, transform=TF)
+        rca = RightCircularArc(radius=RADIUS, angle=ANGLE)
+        rca.set_transform(TF)
         self.assertEqual(rca.__class__.TYPE, road_section_type.RIGHT_CIRCULAR_ARC)
         self.assertAlmostEqual(rca.middle_line.get_points()[0], Point(TF.translation))
         self.assertAlmostEqual(rca.middle_line.get_points()[-1], Point(2, 2))

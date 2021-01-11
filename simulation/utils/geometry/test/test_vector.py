@@ -4,6 +4,7 @@ import unittest
 
 import geometry_msgs.msg as g_msgs
 import numpy as np
+from shapely.geometry import Point as ShapelyPoint
 
 from simulation.utils.geometry.vector import Vector
 
@@ -21,6 +22,7 @@ class ModuleTest(unittest.TestCase):
             (Vector(np.array([1, 2, 4])), [1, 2, 4]),
             (Vector(np.array([1, 2])), [1, 2, 0]),
             (Vector.from_geometry_msg(g_msgs.Vector3(1, 3, 4)), [1, 3, 4]),
+            (Vector(ShapelyPoint(1, 2)), [1, 2, 0]),
         ]
 
         for example in examples:

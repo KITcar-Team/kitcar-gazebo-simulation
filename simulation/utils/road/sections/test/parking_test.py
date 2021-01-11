@@ -42,8 +42,8 @@ class ModuleTest(unittest.TestCase):
             length=LENGTH,
             left_lots=[left_lot],
             right_lots=[right_lot],
-            transform=TF,
         )
+        pa.set_transform(TF)
         self.assertEqual(pa.__class__.TYPE, road_section_type.PARKING_AREA)
 
         # test points for left_border calculated by hand
@@ -61,24 +61,22 @@ class ModuleTest(unittest.TestCase):
         ei = Point(eo.x + LEFT_DEPTH / math.tan(OPENING_ANGLE), Config.road_width)
         self.assertLineAlmostEqual(pa.left_lots[0].border, TF * Line([si, so, eo, ei]))
 
-        # check first parking spot on left side width: 0.4
-        self.assertEqual(
-            pa.left_lots[0].spots[0].frame,
-            TF
-            * Polygon(
-                [Point(so.x, si.y), so, Point(so.x + 0.4, so.y), Point(so.x + 0.4, si.y)]
-            ),
+        f1 = pa.left_lots[0].spots[0].frame
+        f2 = TF * Polygon(
+            [Point(so.x, si.y), so, Point(so.x + 0.4, so.y), Point(so.x + 0.4, si.y)]
         )
+        self.assertEqual(f1, f2)
+        # check first parking spot on left side width: 0.4
         self.assertEqual(pa.left_lots[0].spots[0].kind, ParkingSpot.FREE)
         # check second parking spot on left side width: 0.4
-        self.assertEqual(
-            pa.left_lots[0].spots[1].frame,
-            TF
-            * Polygon(
-                [Point(so.x + 0.4, si.y), Point(so.x + 0.4, so.y), eo, Point(eo.x, ei.y)]
-            ),
+        f1 = pa.left_lots[0].spots[1].frame
+        f2 = TF * Polygon(
+            [Point(so.x + 0.4, si.y), Point(so.x + 0.4, so.y), eo, Point(eo.x, ei.y)]
         )
-        self.assertEqual(pa.left_lots[0].spots[1].kind, ParkingSpot.OCCUPIED)
+        self.assertEqual(f1, f2)
+        k1 = pa.left_lots[0].spots[1].kind
+        k2 = ParkingSpot.OCCUPIED
+        self.assertEqual(k1, k2)
 
         # test points for right_border calculated by hand
         # left_lot start at 1.75, depth 0.3
@@ -93,7 +91,9 @@ class ModuleTest(unittest.TestCase):
         eo = Point(so.x + 0.6, -Config.road_width - RIGHT_DEPTH)
         # end inner
         ei = Point(eo.x + RIGHT_DEPTH / math.tan(OPENING_ANGLE), -Config.road_width)
-        self.assertLineAlmostEqual(pa.right_lots[0].border, TF * Line([si, so, eo, ei]))
+        b1 = pa.right_lots[0].border
+        b2 = TF * Line([si, so, eo, ei])
+        self.assertAlmostEqual(b1, b2)
         # check first parking spot on right side width: 0.6
         # polygon points on right side are reversed
         self.assertEqual(

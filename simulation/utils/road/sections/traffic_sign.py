@@ -115,9 +115,21 @@ class TrafficSign(RoadElementRect):
     EXPRESSWAY_START = SignTuple(mesh="expressway_start_sign")
     EXPRESSWAY_END = SignTuple(mesh="expressway_end_sign")
 
-    kind: SignTuple = None
+    def __init__(
+        self,
+        kind: SignTuple,
+        arc_length: float,
+        y: float = -0.5,
+        angle=0,
+        normalize_x: bool = True,
+    ):
 
-    def __post_init__(self):
-        super().__post_init__()
-
-        assert self.kind is not None, "Kind of the traffic sign not specified."
+        self.kind = kind
+        super().__init__(
+            arc_length=arc_length,
+            y=y,
+            width=kind.collision_box_size[1],
+            depth=kind.collision_box_size[0],
+            angle=angle,
+            normalize_x=normalize_x,
+        )

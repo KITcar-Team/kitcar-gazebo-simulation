@@ -9,7 +9,6 @@ from simulation.utils.road.sections import (
     ParkingLot,
     ParkingObstacle,
     ParkingSpot,
-    SpeedLimit,
     StaticObstacle,
     StraightRoad,
     ZebraCrossing,
@@ -36,7 +35,7 @@ road.append(
                     ParkingSpot(
                         kind=ParkingSpot.OCCUPIED,
                         width=0.7,
-                        obstacle=ParkingObstacle(center=[0.2, -0.2], width=0.3, depth=0.4),
+                        obstacle=ParkingObstacle(x=0.2, y=-0.2, width=0.3, depth=0.4),
                     ),
                     ParkingSpot(kind=ParkingSpot.BLOCKED),
                 ],
@@ -54,17 +53,20 @@ road.append(LeftCircularArc(radius=2, angle=math.pi / 2))
 road.append(Intersection(size=3, turn=Intersection.RIGHT))
 road.append(LeftCircularArc(radius=1.5, angle=math.pi, obstacles=[StaticObstacle()]))
 road.append(Intersection(size=3, turn=Intersection.RIGHT))
-road.append(
-    LeftCircularArc(
-        radius=1.5,
-        angle=math.pi / 2,
-        left_line_marking=RoadSection.MISSING_LINE_MARKING,
-        speed_limits=[SpeedLimit(0, 30)],
-    )
+
+left_arc = LeftCircularArc(
+    radius=1.5,
+    angle=math.pi / 2,
+    left_line_marking=RoadSection.MISSING_LINE_MARKING,
 )
+left_arc.add_speed_limit(arc_length=0, speed=30)
+road.append(left_arc)
+
 road.append(ZebraCrossing())
 road.append(StraightRoad(length=1))
-road.append(
-    LeftCircularArc(radius=1.5, angle=math.pi / 2, speed_limits=[SpeedLimit(0, -30)])
-)
+
+left_arc = LeftCircularArc(radius=1.5, angle=math.pi / 2)
+left_arc.add_speed_limit(0, -30)
+road.append(left_arc)
+
 road.append(StraightRoad(length=0.95))

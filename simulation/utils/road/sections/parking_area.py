@@ -6,21 +6,29 @@ from dataclasses import dataclass, field
 from typing import List
 
 import simulation.utils.road.sections.type as road_section_type
-from simulation.utils.geometry import Line, Point, Polygon, Transform, Vector
+from simulation.utils.geometry import Line, Point, Polygon, Transform
 from simulation.utils.road.config import Config
 from simulation.utils.road.sections import (
     ParkingObstacle,
     RoadSection,
-    StaticObstacle,
     StraightRoad,
     SurfaceMarkingRect,
     TrafficSign,
 )
+from simulation.utils.road.sections.road_element import RoadElementRect
 from simulation.utils.road.sections.road_section import MarkedLine
+from simulation.utils.road.sections.transformable import Transformable
 
 
 @dataclass
-class _ParkingSpot:
+class ParkingSpot(RoadElementRect):
+    """Parking spot with a type and optionally an obstacle placed on top.
+
+    Args:
+        width: Width of the spot.
+        kind: Type of the spot.
+        obstacle: Obstacle within the spot.
+    """
 
     FREE = 0
     """Possible value of :attr:`kind`."""
@@ -29,57 +37,61 @@ class _ParkingSpot:
     BLOCKED = 2
     """Possible value of :attr:`kind`."""
 
-    width: float = 0.35
-    """Width of parking spot."""
-    _depth: float = field(default=0, init=False)
-    """Depth of parking spot."""
-    _side: str = field(default=None, init=False)
+    _side: str = None
     """Side of the road."""
     kind: str = FREE
     """Classification of the parking spot."""
     obstacle: ParkingObstacle = None
     """Obstacle within the spot."""
-    transform: Transform = None
-    """Transform to origin of parking spot.
+    x_surface_marking: SurfaceMarkingRect = None
 
-    The origin is invariant of the side of the road (left, right).
-    It is always in the left corner close to the road,
-    with the x-direction pointing away from the road.
-    """
+    def __init__(
+        self,
+        kind: float = kind,
+        width: float = 0.35,
+        obstacle: ParkingObstacle = obstacle,
+    ):
+        self.kind = kind
+        self.obstacle = obstacle
+        super().__init__(width=width, normalize_x=False)
 
-    def __post_init__(self):
-        # prevents execution when building documentation
-        if self.transform is None:
-            self.transform = Transform([0, 0], 0)
+        if self.kind == ParkingSpot.BLOCKED:
+            self.x_surface_marking = SurfaceMarkingRect(
+                SurfaceMarkingRect.PARKING_SPOT_X,
+                *self._center.xy,
+                width=self.width,
+                depth=self.depth,
+                angle=0,
+                normalize_x=False,
+            )
 
-
-class ParkingSpot(_ParkingSpot):
-    """Parking spot with a type and optionally an obstacle placed on top.
-
-    Args:
-        width (float): Width of the spot.
-        kind (int) = ParkingSpot.FREE: Type of the spot.
-        obstacle (ParkingObstacle) = None: Obstacle within the spot.
-    """
-
-    @property
-    def frame(self) -> Polygon:
-        """Polygon: Frame of the parking spot in global coordinates."""
-        poly = Polygon(
+    def set_transform(self, tf: Transform):
+        self._frame = Polygon(
             [
-                Point(0, 0),
-                Point(self._depth, 0),
-                Point(self._depth, -self.width),
-                Point(0, -self.width),
+                [0, 0],
+                [self.depth, 0],
+                [self.depth, -self.width],
+                [0, -self.width],
             ]
         )
-        return self.transform * poly
+        super().set_transform(tf)
+
+        if self.obstacle is not None:
+            self.obstacle.set_transform(self.transform)
+
+        if self.x_surface_marking is not None:
+            self.x_surface_marking.width = self.width
+            self.x_surface_marking.depth = self.depth
+            self.x_surface_marking._frame = self._frame
+            self.x_surface_marking.set_transform(self.transform)
 
     @property
     def lines(self) -> List[MarkedLine]:
         """List[MarkedLine]: Borderlines for spot if spot is on the left.
 
-        Marking type is always solid."""
+        Marking type is always solid.
+        """
+
         lines = []
         if self._side == ParkingLot.LEFT_SIDE or self.kind == self.BLOCKED:
             spot_points = self.frame.get_points()
@@ -89,20 +101,21 @@ class ParkingSpot(_ParkingSpot):
             lines.append(MarkedLine.from_line(right_border, RoadSection.SOLID_LINE_MARKING))
         return lines
 
-    @property
-    def obstacle(self) -> ParkingObstacle:
-        """ParkingObstacle: Obstacle that is on the spot (if any)."""
-        if self._obstacle is not None:
-            self._obstacle.transform = self.transform
-        return self._obstacle
-
-    @obstacle.setter
-    def obstacle(self, obs):
-        self._obstacle = obs
-
 
 @dataclass
-class _ParkingLot:
+class ParkingLot(Transformable):
+    """Outline of a parking lot (right/left side) and all parking spots contained within.
+
+    The origin is invariant of the side of the road (left, right).
+    It is always in the left corner of the left most parking spot,
+    with the x-direction pointing away from the road.
+
+    Args:
+        start (float): Beginning relative to the start of the section.
+        opening_angle (float): Opening angle of the outside border of the parking lot.
+        depth (float): Depth of the parking spots within the parking lot.
+        spots (List[ParkingSpot]): Parking spots within the lot.
+    """
 
     RIGHT_SIDE = "right"
     """Possible value of :attr:`side`. Parking lot is on the left side of the road."""
@@ -128,96 +141,60 @@ class _ParkingLot:
     If no other value is provided, the default depth of parking lots is 0.5m on the left
     side and 0.3m on the right side.
     """
-    transform: Transform = None
-    """Transform to origin of the parking lot.
 
-    The origin is invariant of the side of the road (left, right).
-    It is always in the left most corner of the left most parking spot
-    close to the road, with the x-direction pointing away from the road.
-    """
+    def set_transform(self, new_tf: Transform):
+        super().set_transform(new_tf)
 
-    def __post_init__(self):
-        # prevents execution when building documentation
-        if self.transform is None:
-            self.transform = Transform([0, 0], 0)
+        if self.depth is None:
+            return
 
+        spot_x = 0
+        """X-Value of left lower border point."""
+        spot_y = 0  # -self.depth / math.tan(self.opening_angle)
+        """Y-Value of left lower border point."""
 
-class ParkingLot(_ParkingLot):
-    """Outline of a parking lot (right/left side) and all parking spots contained within.
+        for spot in (
+            reversed(self.spots) if self._side == ParkingLot.RIGHT_SIDE else self.spots
+        ):
+            # Calculate local spot coordinate system
+            spot.depth = self.depth
+            spot._side = self._side
+            spot.set_transform(self.transform * Transform([spot_x, spot_y], 0))
 
-    Args:
-        start (float): Beginning relative to the start of the section.
-        opening_angle (float): Opening angle of the outside border of the parking lot.
-        depth (float): Depth of the parking spots within the parking lot.
-        spots (List[ParkingSpot]): Parking spots within the lot.
-    """
+            spot_y -= spot.width
 
     @property
     def length(self) -> float:
         """float: Sum of the widths of all parking spots."""
-        return sum(spot.width for spot in self._spots)
-
-    @property
-    def _side_sign(self) -> float:
-        # If the parking lot is on the left side, Y coordinates are mirrored
-        # i.e. multiplied by -1
-        return 1 if self._side == "left" else -1
+        return sum(spot.width for spot in self.spots)
 
     @property
     def border(self) -> Line:
         """Line: Outside border of the parking lot."""
+        if self.depth is None:
+            return Line()
+
+        border_points = [
+            Point(0, self.depth / math.tan(self.opening_angle)),
+            Point(
+                self.depth,
+                0,
+            ),
+            Point(
+                self.depth,
+                -self.length,
+            ),
+            Point(
+                0,
+                -self.depth / math.tan(self.opening_angle) - self.length,
+            ),
+        ]
         border = Line(
-            [
-                Point(self.start, self._side_sign * Config.road_width),
-                Point(
-                    self.start + self.depth / math.tan(self.opening_angle),
-                    self._side_sign * (self.depth + Config.road_width),
-                ),
-                Point(
-                    self.start + self.depth / math.tan(self.opening_angle) + self.length,
-                    self._side_sign * (self.depth + Config.road_width),
-                ),
-                Point(
-                    self.start
-                    + self.length
-                    + 2 * self.depth / math.tan(self.opening_angle),
-                    self._side_sign * Config.road_width,
-                ),
-            ]
+            reversed(border_points)
+            if self._side == ParkingLot.RIGHT_SIDE
+            else border_points
         )
         return self.transform * border
-
-    @property
-    def spots(self) -> List[ParkingSpot]:
-        """List[ParkingSpot]: All spots in the parking lot."""
-        spot_x = self.start + self.depth / math.tan(self.opening_angle)
-        """X-Value of left upper border point."""
-        spot_y = self._side_sign * Config.road_width
-        """Y-Value of left lower border point."""
-
-        for spot in self._spots:
-            angle = self.transform.get_angle()
-            # Calculate local spot coordinate system
-            # Local coordinate system is left on the right side of the road
-            if self._side == "right":
-                # Add math.pi if on right side
-                angle += math.pi * 3 / 2
-                origin = Vector(spot_x + spot.width, spot_y)
-            else:
-                angle += math.pi / 2
-                origin = Vector(spot_x, spot_y)
-
-            spot.transform = Transform(self.transform * origin, angle)
-            spot._depth = self.depth
-            spot._side = self._side
-
-            spot_x += spot.width
-
-        return self._spots
-
-    @spots.setter
-    def spots(self, spts):
-        self._spots = spts
 
     @property
     def obstacles(self) -> List[ParkingObstacle]:
@@ -235,7 +212,15 @@ class ParkingLot(_ParkingLot):
 
 
 @dataclass
-class _ParkingArea(StraightRoad):
+class ParkingArea(StraightRoad):
+    """Part of the road with parking lots and a start line.
+
+    Args:
+        left_lots (List[ParkingLot]): Parking lots on the left side.
+        right_lots (List[ParkingLot]): Parking lots on the right side.
+        start_line (bool): Indicate whether the parking area starts with a start line.
+        start_line_length (float): Manually set the length of the start line.
+    """
 
     TYPE = road_section_type.PARKING_AREA
 
@@ -248,52 +233,78 @@ class _ParkingArea(StraightRoad):
     right_lots: List[ParkingLot] = field(default_factory=list)
     """Parking lots on the right side."""
 
+    def __post_init__(self):
+        for lot in self.left_lots:
+            lot._side = ParkingLot.LEFT_SIDE
+            if lot.depth is None:
+                lot.depth = ParkingLot.DEFAULT_LEFT_DEPTH
 
-class ParkingArea(_ParkingArea):
-    """Part of the road with parking lots and a start line.
+        for lot in self.right_lots:
+            lot._side = ParkingLot.RIGHT_SIDE
+            if lot.depth is None:
+                lot.depth = ParkingLot.DEFAULT_RIGHT_DEPTH
 
-    Args:
-        left_lots (List[ParkingLot]): Parking lots on the left side.
-        right_lots (List[ParkingLot]): Parking lots on the right side.
-        start_line (bool): Indicate whether the parking area starts with a start line.
-        start_line_length (float): Manually set the length of the start line.
-    """
+        super().__post_init__()
 
-    @property
-    def surface_markings(self) -> List[SurfaceMarkingRect]:
-        markings = []
         if self.start_line:
             # Create a start line.
-            markings.append(
+            self.surface_markings.append(
                 SurfaceMarkingRect(
-                    center=self.transform * Point(self.start_line_length / 2, 0),
+                    kind=SurfaceMarkingRect.START_LINE,
+                    arc_length=self.start_line_length / 2,
+                    y=0,
                     normalize_x=False,
                     depth=self.start_line_length,
                     width=2 * Config.road_width,
-                    kind=SurfaceMarkingRect.START_LINE,
-                    angle=self.transform.get_angle(),
+                    angle=0,
                 )
             )
 
         for lot in itertools.chain(self.left_lots, self.right_lots):
             for spot in lot.spots:
-                if spot.kind == ParkingSpot.BLOCKED:
-                    c = spot.frame.centroid
-                    markings.append(
-                        SurfaceMarkingRect(
-                            width=spot.width,
-                            depth=spot._depth,
-                            kind=SurfaceMarkingRect.PARKING_SPOT_X,
-                            center=Point(c.x, c.y),
-                            angle=spot.transform.get_angle(),
-                            normalize_x=False,
-                        )
-                    )
-        return super().surface_markings + markings
+                if spot.x_surface_marking is not None:
+                    self.surface_markings.append(spot.x_surface_marking)
 
-    @surface_markings.setter
-    def surface_markings(self, markings: List[SurfaceMarkingRect]):
-        self._surface_markings = markings
+        for obs in self.parking_obstacles:
+            self.obstacles.append(obs)
+
+        if len(self.right_lots) + len(self.left_lots) > 0:
+            self.traffic_signs.append(
+                TrafficSign(
+                    kind=TrafficSign.PARKING,
+                    arc_length=0,
+                    y=-Config.road_width - 0.1,
+                    angle=0,
+                    normalize_x=False,
+                )
+            )
+
+    def set_transform(self, new_tf: Transform):
+        super().set_transform(new_tf)
+        for lot in self.left_lots:
+            # Set transform to first spot
+            lot.set_transform(
+                self.transform
+                * Transform(
+                    [
+                        lot.start + lot.depth / math.tan(lot.opening_angle),
+                        Config.road_width,
+                    ],
+                    math.pi / 2,
+                )
+            )
+        for lot in self.right_lots:
+            # Set transform to last spot
+            lot.set_transform(
+                self.transform
+                * Transform(
+                    [
+                        lot.start + lot.length + lot.depth / math.tan(lot.opening_angle),
+                        -Config.road_width,
+                    ],
+                    -math.pi / 2,
+                )
+            )
 
     def get_bounding_box(self) -> Polygon:
         """Get a polygon around the road section.
@@ -310,34 +321,6 @@ class ParkingArea(_ParkingArea):
         return Polygon(self.middle_line.buffer(1.5 * (biggest_depth + Config.road_width)))
 
     @property
-    def left_lots(self) -> List[ParkingLot]:
-        """List[ParkingLot]: Parking lots on the left side."""
-        for lot in self._left_lots:
-            lot.transform = self.transform
-            lot._side = ParkingLot.LEFT_SIDE
-            if lot.depth is None:
-                lot.depth = ParkingLot.DEFAULT_LEFT_DEPTH
-        return self._left_lots
-
-    @left_lots.setter
-    def left_lots(self, ll: List[ParkingLot]):
-        self._left_lots = ll
-
-    @property
-    def right_lots(self) -> List[ParkingLot]:
-        """List[ParkingLot]: Parking lots on the right side."""
-        for lot in self._right_lots:
-            lot.transform = self.transform
-            lot._side = ParkingLot.RIGHT_SIDE
-            if lot.depth is None:
-                lot.depth = ParkingLot.DEFAULT_RIGHT_DEPTH
-        return self._right_lots
-
-    @right_lots.setter
-    def right_lots(self, rl: List[ParkingLot]):
-        self._right_lots = rl
-
-    @property
     def parking_obstacles(self) -> List[ParkingObstacle]:
         """List[ParkingObstacle]: All obstacles on parking spots."""
         return sum(
@@ -345,43 +328,10 @@ class ParkingArea(_ParkingArea):
         )
 
     @property
-    def obstacles(self) -> List[StaticObstacle]:
-        """List[StaticObstacle]: All obstacles within this section of the road."""
-        for obstacle in self._obstacles:
-            obstacle.set_transform(self.middle_line)
-        return self._obstacles + self.parking_obstacles
-
-    @obstacles.setter
-    def obstacles(self, obs: List[StaticObstacle]):
-        self._obstacles = obs
-
-    @property
     def lines(self) -> List[MarkedLine]:
         """List[MarkedLine]: All borderlines with their marking type."""
         lines = []
         lines.extend(super().lines)
-        for lot in self.left_lots:
-            lines.extend(lot.lines)
-        for lot in self.right_lots:
+        for lot in itertools.chain(self.left_lots, self.right_lots):
             lines.extend(lot.lines)
         return lines
-
-    @property
-    def traffic_signs(self) -> List[TrafficSign]:
-        """List[TrafficSign]: All traffic signs within this section of the road."""
-        traffic_signs = super().traffic_signs.copy()
-
-        if len(self.right_lots) + len(self.left_lots) > 0:
-            traffic_signs.append(
-                TrafficSign(
-                    kind=TrafficSign.PARKING,
-                    center=self.transform * Point(0, -Config.road_width - 0.1),
-                    angle=self.transform.get_angle(),
-                    normalize_x=False,
-                )
-            )
-        return traffic_signs
-
-    @traffic_signs.setter
-    def traffic_signs(self, signs: List[TrafficSign]):
-        self._traffic_signs = signs

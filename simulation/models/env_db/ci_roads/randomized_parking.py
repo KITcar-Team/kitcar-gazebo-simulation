@@ -51,7 +51,8 @@ def get_random_spot(on_right_side: bool, kind: int, min_width: float = 0.3) -> P
         obs_width = (random.random() / 2 + 0.5) * width
         obstacle = ParkingObstacle(
             width=obs_width,
-            center=[0.2, -(width - (0.5 - random.random()) * obs_width / 2) / 2],
+            x=0.2,
+            y=-(width - (0.5 - random.random()) * obs_width / 2) / 2,
         )
 
     return ParkingSpot(width=width, kind=kind, obstacle=obstacle)

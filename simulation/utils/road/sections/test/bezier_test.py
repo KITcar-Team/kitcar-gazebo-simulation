@@ -20,7 +20,8 @@ class ModuleTest(unittest.TestCase):
         POINTS = [Point(5, 0), Point(2, 5)]
 
         # simple quad bezier
-        qb = QuadBezier(p1=POINTS[0], p2=POINTS[1], transform=TF)
+        qb = QuadBezier(p1=POINTS[0], p2=POINTS[1])
+        qb.set_transform(TF)
         self.assertEqual(qb.__class__.TYPE, road_section_type.QUAD_BEZIER)
         self.assertPointAlmostEqual(qb.middle_line.get_points()[0], TF * Point(0, 0))
         self.assertPointAlmostEqual(qb.middle_line.get_points()[-1], TF * POINTS[1])
@@ -37,7 +38,8 @@ class ModuleTest(unittest.TestCase):
         TF = Transform([1, 1], math.pi / 2)
         POINTS = [Point(5, 0), Point(2, 5), Point(5, 5)]
 
-        cb = CubicBezier(p1=POINTS[0], p2=POINTS[1], p3=POINTS[2], transform=TF)
+        cb = CubicBezier(p1=POINTS[0], p2=POINTS[1], p3=POINTS[2])
+        cb.set_transform(TF)
         self.assertEqual(cb.__class__.TYPE, road_section_type.CUBIC_BEZIER)
         bezier_points = cb.middle_line.get_points()
         self.assertPointAlmostEqual(bezier_points[0], TF * Point(0, 0))

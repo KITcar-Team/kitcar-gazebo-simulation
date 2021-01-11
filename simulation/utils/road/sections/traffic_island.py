@@ -1,5 +1,6 @@
 """TrafficIsland."""
 
+import functools
 import math
 from dataclasses import dataclass
 from typing import List
@@ -7,7 +8,7 @@ from typing import List
 import simulation.utils.road.sections.type as road_section_type
 from simulation.utils.geometry import Line, Point, Polygon, Vector
 from simulation.utils.road.config import Config
-from simulation.utils.road.sections import SurfaceMarking, SurfaceMarkingPoly, TrafficSign
+from simulation.utils.road.sections import SurfaceMarkingPoly, TrafficSign
 from simulation.utils.road.sections.bezier_curve import add_quad_bezier_points
 from simulation.utils.road.sections.road_section import MarkedLine, RoadSection
 
@@ -48,6 +49,102 @@ class TrafficIsland(RoadSection):
         super().__post_init__()
         self.p_offset = self.curve_area_length * self.curvature
         """Offset for the bezier control points of the curve area."""
+
+        traffic_sign_start_point = Point(self.curve_area_length - self._sign_distance, 0)
+        self.traffic_signs.append(
+            TrafficSign(
+                TrafficSign.PASS_RIGHT,
+                *traffic_sign_start_point.xy,
+                angle=0,
+                normalize_x=False,
+            )
+        )
+        traffic_sign_end_point = Point(
+            self.length - self.curve_area_length + self._sign_distance, 0
+        )
+        self.traffic_signs.append(
+            TrafficSign(
+                TrafficSign.PASS_RIGHT,
+                *traffic_sign_end_point.xy,
+                angle=math.pi,
+                normalize_x=False,
+            )
+        )
+        if self.zebra_marking_type == self.ZEBRA:
+            vector = Vector(
+                self.right_line.interpolate(
+                    self.right_line.project(traffic_sign_start_point)
+                )
+            )
+            point = vector + Vector(0, -0.1)
+            self.traffic_signs.append(
+                TrafficSign(
+                    TrafficSign.ZEBRA_CROSSING,
+                    *point.xy,
+                    angle=0,
+                    normalize_x=False,
+                )
+            )
+
+        right_poly = Polygon(
+            [
+                self.right_zebra_start,
+                self.right_zebra_end,
+                self.middle_r_zebra_end,
+                self.middle_r_zebra_start,
+            ]
+        )
+        left_poly = Polygon(
+            [
+                self.left_zebra_start,
+                self.left_zebra_end,
+                self.middle_l_zebra_end,
+                self.middle_l_zebra_start,
+            ]
+        )
+        if self.zebra_marking_type == self.LINES:
+            kind = SurfaceMarkingPoly.ZEBRA_LINES
+        else:
+            kind = SurfaceMarkingPoly.ZEBRA_CROSSING
+
+        self.surface_markings.append(
+            SurfaceMarkingPoly(_frame=right_poly, kind=kind, normalize_x=False)
+        )
+        self.surface_markings.append(
+            SurfaceMarkingPoly(_frame=left_poly, kind=kind, normalize_x=False)
+        )
+        blocked_start_poly = Polygon(
+            [
+                self.middle_l_zebra_start,
+                *reversed(self.bezier_points_mid_l_start),
+                self.middle_start,
+                *self.bezier_points_mid_r_start,
+                self.middle_r_zebra_start,
+            ]
+        )
+        blocked_end_poly = Polygon(
+            [
+                self.middle_r_zebra_end,
+                *self.bezier_points_mid_r_end,
+                self.middle_end,
+                *reversed(self.bezier_points_mid_l_end),
+                self.middle_l_zebra_end,
+            ]
+        )
+        self.surface_markings.append(
+            SurfaceMarkingPoly(
+                _frame=blocked_start_poly,
+                kind=SurfaceMarkingPoly.TRAFFIC_ISLAND_BLOCKED,
+                normalize_x=False,
+            )
+        )
+        self.surface_markings.append(
+            SurfaceMarkingPoly(
+                _frame=blocked_end_poly,
+                kind=SurfaceMarkingPoly.TRAFFIC_ISLAND_BLOCKED,
+                normalize_x=False,
+            )
+        )
 
     @property
     def length(self) -> float:
@@ -175,7 +272,7 @@ class TrafficIsland(RoadSection):
             ).simplify()
         )
 
-    @property
+    @functools.cached_property
     def middle_line(self) -> Line:
         """Line: Middle line of the road section.
         Here it is the left middle line.
@@ -213,116 +310,3 @@ class TrafficIsland(RoadSection):
             )
         )
         return lines
-
-    @property
-    def traffic_signs(self) -> List[TrafficSign]:
-        """List[TrafficSign]: All traffic signs within this section of the road."""
-        traffic_signs = RoadSection.traffic_signs.fget(self)
-        traffic_sign_start_point = self.transform * Point(
-            self.curve_area_length - self._sign_distance, 0
-        )
-        traffic_signs.append(
-            TrafficSign(
-                kind=TrafficSign.PASS_RIGHT,
-                center=traffic_sign_start_point,
-                angle=self.transform.get_angle(),
-                normalize_x=False,
-            )
-        )
-        traffic_sign_end_point = self.transform * Point(
-            self.length - self.curve_area_length + self._sign_distance, 0
-        )
-        traffic_signs.append(
-            TrafficSign(
-                kind=TrafficSign.PASS_RIGHT,
-                center=traffic_sign_end_point,
-                angle=self.transform.get_angle() + math.pi,
-                normalize_x=False,
-            )
-        )
-        if self.zebra_marking_type == self.ZEBRA:
-            vector = Vector(
-                self.right_line.interpolate(
-                    self.right_line.project(traffic_sign_start_point)
-                )
-            )
-            point = vector + Vector(0, -0.1).rotated(self.transform.get_angle())
-            traffic_signs.append(
-                TrafficSign(
-                    kind=TrafficSign.ZEBRA_CROSSING,
-                    center=point,
-                    angle=self.transform.get_angle(),
-                    normalize_x=False,
-                )
-            )
-        return traffic_signs
-
-    @traffic_signs.setter
-    def traffic_signs(self, signs: List[TrafficSign]):
-        self._traffic_signs = signs
-
-    @property
-    def surface_markings(self) -> List[SurfaceMarking]:
-        """List[SurfaceMarking]: All surface markings within this section of the road."""
-        sf_marks = RoadSection.surface_markings.fget(self)
-
-        right_poly = self.transform * Polygon(
-            [
-                self.right_zebra_start,
-                self.right_zebra_end,
-                self.middle_r_zebra_end,
-                self.middle_r_zebra_start,
-            ]
-        )
-        left_poly = self.transform * Polygon(
-            [
-                self.left_zebra_start,
-                self.left_zebra_end,
-                self.middle_l_zebra_end,
-                self.middle_l_zebra_start,
-            ]
-        )
-        if self.zebra_marking_type == self.LINES:
-            kind = SurfaceMarkingPoly.ZEBRA_LINES
-        else:
-            kind = SurfaceMarkingPoly.ZEBRA_CROSSING
-
-        sf_marks.append(SurfaceMarkingPoly(frame=right_poly, kind=kind, normalize_x=False))
-        sf_marks.append(SurfaceMarkingPoly(frame=left_poly, kind=kind, normalize_x=False))
-        blocked_start_poly = self.transform * Polygon(
-            [
-                self.middle_l_zebra_start,
-                *reversed(self.bezier_points_mid_l_start),
-                self.middle_start,
-                *self.bezier_points_mid_r_start,
-                self.middle_r_zebra_start,
-            ]
-        )
-        blocked_end_poly = self.transform * Polygon(
-            [
-                self.middle_r_zebra_end,
-                *self.bezier_points_mid_r_end,
-                self.middle_end,
-                *reversed(self.bezier_points_mid_l_end),
-                self.middle_l_zebra_end,
-            ]
-        )
-        sf_marks.append(
-            SurfaceMarkingPoly(
-                frame=blocked_start_poly,
-                kind=SurfaceMarkingPoly.TRAFFIC_ISLAND_BLOCKED,
-                normalize_x=False,
-            )
-        )
-        sf_marks.append(
-            SurfaceMarkingPoly(
-                frame=blocked_end_poly,
-                kind=SurfaceMarkingPoly.TRAFFIC_ISLAND_BLOCKED,
-                normalize_x=False,
-            )
-        )
-        return sf_marks
-
-    @surface_markings.setter
-    def surface_markings(self, markings: List[SurfaceMarking]):
-        self._surface_markings = markings

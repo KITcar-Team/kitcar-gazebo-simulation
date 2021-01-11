@@ -12,7 +12,8 @@ class ModuleTest(unittest.TestCase):
         LENGTH = 4
         MIDDLE_LINE = Line([[1, 1], [1, 5]])
 
-        sr = StraightRoad(length=LENGTH, transform=TF)
+        sr = StraightRoad(length=LENGTH)
+        sr.set_transform(TF)
         self.assertEqual(sr.__class__.TYPE, road_section_type.STRAIGHT_ROAD)
         self.assertEqual(sr.middle_line, MIDDLE_LINE)
 

@@ -48,7 +48,7 @@ class ModuleTest(unittest.TestCase):
         # Assume the obstacle class itself works!
         # Simply test if the transforms etc. are set correctly.
 
-        obstacle = StaticObstacle(center=Point(1.5, -0.2), width=0.2, depth=1)
+        obstacle = StaticObstacle(arc_length=1.5, y=-0.2, width=0.2, depth=1)
         rs = DummyRoadSection(obstacles=[obstacle])
         returned_obs = rs.obstacles[0]
         self.assertEqual(returned_obs.transform, Transform([0, 1.5], math.pi / 2))
