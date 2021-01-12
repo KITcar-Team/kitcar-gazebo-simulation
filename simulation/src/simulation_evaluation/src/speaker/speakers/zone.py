@@ -257,7 +257,7 @@ class ZoneSpeaker(Speaker):
 
         # Speed zone
         for x, msg in reversed(self.speed_zones):
-            if x + 0.3 < self.arc_length:  # 30cm Threshold
+            if x + 0.5 < self.arc_length:  # 50cm Threshold
                 append_msg(msg)
                 break
 
