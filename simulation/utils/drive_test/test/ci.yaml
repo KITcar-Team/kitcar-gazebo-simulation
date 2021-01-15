@@ -22,6 +22,8 @@ default_args:
   time_limit: 300
   automatic_drive: true
   must_succeed: true
+  record_rosbag: "true"
+  rosbag_path: ${KITCAR_REPO_PATH}kitcar-gazebo-simulation/rosbags
 
 # A list of tests which should be executed
 tests:

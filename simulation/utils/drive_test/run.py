@@ -85,8 +85,7 @@ class AutomatedDriveTest:
         for job in self.pipeline:
             print(f"Starting {job.get_cmd()}")
             print("Waiting for the test to finish...")
-            job.status, output = job.run()
-            job.success = job.status == 0
+            output = job.run()
 
             # Print log to console after job finishes
             # TODO: Print log while job is running
