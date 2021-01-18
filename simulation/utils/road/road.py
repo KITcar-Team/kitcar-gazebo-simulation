@@ -10,8 +10,7 @@ import random
 from dataclasses import dataclass, field
 from typing import List, Tuple
 
-from simulation.utils.geometry import Point, Pose, Transform, Vector
-from simulation.utils.road.sections.bezier_curve import CubicBezier
+from simulation.utils.geometry import Pose, Transform
 from simulation.utils.road.sections.road_section import RoadSection
 
 
@@ -84,16 +83,11 @@ class Road:
         # Global position of the end of the road
         end_pose_global, _ = self.sections[-1].get_ending()
 
-        # Inverse of the end == start pose in local coordinates
-        start_pose = Pose(Transform(end_pose_global).inverse)
+        # Distance to start / p_curvature
+        approximate_radius = abs(end_pose_global.position) / p_curvature
 
-        approximate_radius = abs(start_pose.position) / p_curvature
-
-        section = CubicBezier(
-            p1=Point(approximate_radius, 0),
-            p2=start_pose.position
-            - Vector(approximate_radius, 0).rotated(start_pose.orientation),
-            p3=start_pose.position,
+        section = RoadSection.fit_ending(
+            end_pose_global, Pose([0, 0], 0), approximate_radius
         )
         self.append(section)
 

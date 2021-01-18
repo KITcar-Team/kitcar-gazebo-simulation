@@ -51,6 +51,7 @@ from simulation.utils.road.sections.zebra_crossing import ZebraCrossing  # noqa:
 from simulation.utils.road.sections.blocked_area import BlockedArea  # noqa: 402
 from simulation.utils.road.sections.traffic_island import TrafficIsland  # noqa: 402
 from simulation.utils.road.sections.speed_limit import SpeedLimit  # noqa: 402
+from simulation.utils.road.sections.custom_section import CustomSection  # noqa: 402
 
 __all__ = [
     "QuadBezier",
@@ -72,4 +73,5 @@ __all__ = [
     "BlockedArea",
     "TrafficIsland",
     "SpeedLimit",
+    "CustomSection",
 ]
