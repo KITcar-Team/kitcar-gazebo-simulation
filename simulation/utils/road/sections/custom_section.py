@@ -27,7 +27,8 @@ class CustomSection(RoadSection, InitOptions, SaveOptions):
         """Save the section as a yaml file."""
 
         custom_dict = dict(self.__dict__)
-        del custom_dict["transform"]
+        if "transform" in custom_dict:
+            del custom_dict["transform"]
         super().save_as_yaml(file_path, custom_dict, dumper=yaml.Dumper)
 
     @classmethod

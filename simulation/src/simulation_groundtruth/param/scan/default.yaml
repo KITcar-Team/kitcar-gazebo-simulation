@@ -1,0 +1,4 @@
+# Minimal distance between middle line points to reduce total amount of points
+min_point_distance: 0.1
+# Update rate of middle line points
+rate: 30

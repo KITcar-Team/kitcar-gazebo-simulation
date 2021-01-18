@@ -1,0 +1,12 @@
+#! /usr/bin/env python3
+import os
+from contextlib import suppress
+
+import rospy
+
+from simulation.src.simulation_groundtruth.src.scan.node import ScanNode
+
+if __name__ == "__main__":
+    # Start the node
+    with suppress(rospy.ROSInterruptException):
+        ScanNode(log_level=rospy.DEBUG if os.environ.get("DEBUG") else rospy.INFO)
