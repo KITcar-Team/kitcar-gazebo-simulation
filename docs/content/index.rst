@@ -81,6 +81,7 @@ to share knowledge and ensure common standards within the code.
    tutorials/datasets.rst
    tutorials/cycle_gan.rst
    tutorials/drive_test.rst
+   tutorials/scan.rst
 
 
 .. toctree::
