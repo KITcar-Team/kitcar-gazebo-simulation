@@ -138,7 +138,7 @@ class Tile:
             <enable_wind>0</enable_wind>
             <kinematic>0</kinematic>
           </link>
-          <pose frame=''>{self.transform.translation.x} {self.transform.translation.y}
+          <pose>{self.transform.translation.x} {self.transform.translation.y}
             0 0 -0 0</pose>
         </model>
         """
