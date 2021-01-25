@@ -39,17 +39,17 @@ class InitOptions:
         }  # Select all elements in kwargs, that are also arguments of the init function
         return cls(**kwargs)
 
-    def _from_yaml(cls, file_path: str):
+    def _from_yaml(cls, file_path: str, loader: yaml.Loader = yaml.SafeLoader):
         """Helper method to allow passing a custom `cls` instead of being forced to use the
         classmethod syntax."""
         # Extract information from yaml file as a dict
         with open(file_path) as file:
-            specs_dict = yaml.load(file, Loader=yaml.SafeLoader)
+            specs_dict = yaml.load(file, Loader=loader)
         # Select only the information that the class wants
         return cls.from_dict(**specs_dict)
 
     @classmethod
-    def from_yaml(cls, file_path: str):
+    def from_yaml(cls, file_path: str, loader: yaml.Loader = yaml.SafeLoader):
         """Load instance from a yaml file.
 
         Only fields that are defined within the __init__ are loaded.
@@ -57,4 +57,4 @@ class InitOptions:
         Args:
             file_path: Location of the yaml file.
         """
-        return InitOptions._from_yaml(cls, file_path)
+        return InitOptions._from_yaml(cls, file_path, loader)

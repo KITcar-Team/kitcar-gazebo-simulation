@@ -5,7 +5,7 @@ import math
 from dataclasses import dataclass, field
 from typing import List, Tuple
 
-from simulation.utils.geometry import Line, Polygon, Pose, Transform
+from simulation.utils.geometry import Line, Point, Polygon, Pose, Transform, Vector
 from simulation.utils.road.config import Config
 from simulation.utils.road.sections import StaticObstacle, SurfaceMarking, TrafficSign
 from simulation.utils.road.sections.speed_limit import SpeedLimit
@@ -214,3 +214,26 @@ class RoadSection(Transformable):
         self.obstacles.append(o)
 
         return o
+
+    @classmethod
+    def fit_ending(
+        _, current_ending: Pose, desired_ending: Pose, control_point_distance=0.4
+    ) -> "RoadSection":
+        """Add a cubic bezier curve to adjust the current ending to equal a desired ending.
+
+        Args:
+            current_ending: Current ending of the last section.
+            desired_ending: Ending that the last section should have.
+            control_point_distance: Distance to the bezier curve's control points.
+        """
+        from .bezier_curve import CubicBezier  # Import here to prevent cyclic dependency!
+
+        current_tf = Transform(current_ending.position, current_ending.orientation)
+        d_pose = current_tf.inverse * desired_ending
+        cb = CubicBezier(
+            p1=Point(control_point_distance, 0),
+            p2=d_pose.position
+            - Vector(control_point_distance, 0).rotated(d_pose.orientation),
+            p3=d_pose.position,
+        )
+        return cb

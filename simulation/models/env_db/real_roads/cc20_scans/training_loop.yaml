@@ -1,0 +1,205 @@
+_obstacles: []
+_speed_limits: []
+_surface_markings: []
+_traffic_signs: []
+id: 0
+is_start: false
+left_line_marking: solid
+middle_line_marking: dashed
+middle_line_points:
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDASpJl6jS6PwAAAAAA8Gc9AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAgbHkprprRPwAgw+v+b1e/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBgnFKVdF3ZPwDArb+V51a/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAAWL2qgczfPwBAS3vBDGC/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDQCsTYcy3kPwBgLlb+l40/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAQlsnED8/oPwCAjQmnAUe/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBIOB0qgArsPwAohRw7RYm/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDQoTeHmnPvPwAyb7hlHpa/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICkuhqMaMfxPwC8Nv7acZ6/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICYgZlkVdDzPwDwb8HcF6O/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIA4DgHw7gT2PwCm5mqIdqa/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIB8Sj1x71/4PwA7VKmchaq/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICgDtb2q+T6P4Dlzu4+VrG/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBcpB/lZjn9PwC0GvsyDbi/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAID04jGqzHf/PwCbLp4GwMC/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIB+UV1OS88AQABooGKj2ce/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBAV8h48MABQICsadDJ1M+/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDIT72LEKICQADT48wWaNS/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAkjxaqU74DQCDUFIe+Idu/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICgAVrMtqAEQED8hNQDoOC/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDyZly8XnIFQMAQmpYKneO/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIA4BXjXJzgGQKCJ9rJa/Oa/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDo3oxMBdYGQCCGh4dBnOq/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICM6unRdVkHQNDCvTgKX+6/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBKPbQltQoIQJBKFQdeiPK/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIC4DnM8SFoIQIgFcxkEtvS/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBCGXg3eaMIQNADuH355fa/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDMZm26ttcIQNAb1Ej5Hvm/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAa8TC3wdUIQPjUFJWS0/y/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDovW9ciK4IQPDOF/AGDv+/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICA1R/lE3EIQMB4z0wMpADAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDozCX0DCMIQMj3hlajuwHAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICcZNFN+ccHQBixYoQe2wLAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIC8/9PmrFEHQLAU4viX3wPAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAAdC+K27oGQIA0hXxgzQTAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAGCUoWrRoGQHxTAEs5rQXAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICWLg6QgWEFQLyx396JgwbAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICWB73oG4wEQACNhZn2TgfAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIB0hxzjrr8DQLTDxLaYBgjAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICYFDykvucCQPzQSXEgrwjAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIA+8a67tPQBQMhjPEEGPAnAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAqkKioq+sAQAzFb3MBqwnAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICEidjC6bH/P1jUEvKmDQrAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAIihH5eGP9P5g4mdVjdArAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDwDXDGBSf7P7iqc/vVwArAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBAmB/vLOj4PxiUUd+k7grAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAAKzGnODn1P3yXoXGv6QrAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBMPFbgOv/yPygkursqwQrAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAYBIJHzcrwP7i1bL4sdgrAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAohXY3/DbtP+D6NlV8JArAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAAnuEtJ1DmP0jGfrqjgAnAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDY7UnCgGriP7QyaFsy6wjAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICAqdzCo1bdPzhvFZqmOgjAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBw46k8gwrWP4yOMegchwfAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBg20hKlajOP4B+1ovaxwbAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBAGJjkGKTCP3zCXrIs6wXAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDAIfJsJsuwP1DRNFtZ8gTAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAABMZ0rk1yv7AdniU+2wPAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIAAAR6eenWyv7i+sa6BqQLAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAICAnaZ3s4zBvxyUTBsLVAHAAAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDgMTAtAK3IvziadTb7vv+/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDAlSo6lWHOv3jz1cFZmPy/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIBgNlon/ErRv4B5A5iGVPm/AAAAAAAAAAA=
+- !!python/object/apply:simulation.utils.geometry.point.Point
+  state: !!binary |
+    AQEAAIDAiNqOXqDSv+DYg0247PW/AAAAAAAAAAA=
+right_line_marking: solid
