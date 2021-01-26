@@ -46,6 +46,14 @@ class RoadSection(Transformable):
     """Dashed white line."""
     MISSING_LINE_MARKING = "missing"
     """No line at all."""
+    DOUBLE_SOLID_LINE_MARKING = "double_solid"
+    """Double solid line."""
+    DOUBLE_DASHED_LINE_MARKING = "double_dashed"
+    """Double dashed line."""
+    DASHED_SOLID_LINE_MARKING = "dashed_solid"
+    """Double line, left dashed, right solid"""
+    SOLID_DASHED_LINE_MARKING = "solid_dashed"
+    """Double line, left solid, right dashed"""
 
     id: int = 0
     """Road section id (consecutive integers by default)."""
