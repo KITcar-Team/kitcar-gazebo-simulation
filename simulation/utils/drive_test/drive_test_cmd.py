@@ -1,6 +1,7 @@
 import os
 import shutil
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Dict
 
 from simulation.utils.basics.ros_cmd import ROSCmd
@@ -40,6 +41,8 @@ class DriveTestCmd(ROSCmd):
             self.rosbag_path = ros_args["rosbag_path"]
             ros_args["rosbag_path"] = os.path.join(self.rosbag_path, "rosbag")
             self.keep_rosbag = ros_args.get("keep_rosbag", False)
+            # Ensure rosbags path exists
+            Path(self.rosbag_path).mkdir(parents=True, exist_ok=True)
 
         self.desc = desc
         self.must_succeed = must_succeed
@@ -61,7 +64,8 @@ class DriveTestCmd(ROSCmd):
 
         # if successful and we are allowed to delete, then delete rosbag
         if self.success and not self.keep_rosbag:
-            (new_dir,) = dirs_after - dirs_before
-            shutil.rmtree(os.path.join(self.rosbag_path, new_dir))
+            new_dirs = dirs_after - dirs_before
+            assert len(new_dirs) == 1, "Rosbag was not correctly recorded."
+            shutil.rmtree(os.path.join(self.rosbag_path, new_dirs.pop()))
 
         return output
