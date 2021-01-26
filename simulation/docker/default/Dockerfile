@@ -1,6 +1,9 @@
 ARG PARENT_TAG=focal
 FROM git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${PARENT_TAG}
-ARG KITCAR_REPO_PATH=/home/kitcar/
+ARG KITCAR_REPO_PATH=/builds/kitcar
+ARG TMP_KITCAR_REPO_PATH=/home/kitcar
+
+RUN rm -rf ${KITCAR_REPO_PATH} && mv ${TMP_KITCAR_REPO_PATH} ${KITCAR_REPO_PATH}
 
 # Update bashrc
 RUN echo "export KITCAR_REPO_PATH=${KITCAR_REPO_PATH}" >> ~/.bashrc
