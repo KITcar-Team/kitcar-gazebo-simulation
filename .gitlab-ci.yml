@@ -102,7 +102,18 @@ test-drive-evaluation:
     # The drive.test is used to evaluate how the car drives.
     # With automatic_drive:=true the path of the car is predetermined and thus the correctness
     # of the evaluation can be tested.
+  - mv /home/kitcar/kitcar-rosbag $KITCAR_REPO_PATH
+  - ls $KITCAR_REPO_PATH
+  - source $KITCAR_REPO_PATH/kitcar-rosbag/devel/setup.bash --extend
+  - mkdir rosbags
   - python3 -m simulation.utils.drive_test.run --config simulation/utils/drive_test/test/ci.yaml
+  artifacts:
+    when: always
+    paths:
+    - rosbags
+    expire_in: 1 week
+  after_script:
+  - rm -r $KITCAR_REPO_PATH/kitcar-rosbag
 
 test-documentation:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
