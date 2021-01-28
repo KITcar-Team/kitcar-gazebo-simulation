@@ -9,32 +9,26 @@ check_for_ubuntu_version(){
 }
 
 check_ubuntu_version(){
-if check_for_ubuntu_version focal;
+  if check_for_ubuntu_version focal
   then
     echo focal
-    return 0
-  elif check_for_ubuntu_version bionic;
-  then
-    echo bionic
     return 0
   else
     echo
     return 1
-fi
+  fi
 }
 
 pip_install_reqs(){
     # Install python packages
     echo -e "\nStart installing python packages from \e[2minit/$1\e[22m"
-    case "$UBUNTU_VERSION" in
-      "focal") # Ubuntu 20.04
-        pip3 install --upgrade --upgrade-strategy eager --no-warn-script-location -r $INIT_DIR/$1;;
-      "bionic")
-        pip3 install --upgrade --upgrade-strategy eager -r $INIT_DIR/$1;;
-      *)
-        echo -e "\n\e[31mERROR: You are not using the correct version of Ubuntu (bionic or focal)!\e[39m" ;
+    if [ "focal" == "$UBUNTU_VERSION" ]
+    then
+        pip3 install --upgrade --upgrade-strategy eager --no-warn-script-location -r $INIT_DIR/$1
+    else
+        echo -e "\n\e[31mERROR: You are not using the correct version of Ubuntu (focal)!\e[39m" ;
         exit;
-    esac
+    fi
 }
 
 case "$option" in
