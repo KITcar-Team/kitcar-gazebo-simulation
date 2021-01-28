@@ -4,35 +4,38 @@ create_simulated_images:
     kitcar7 kitcar8 kitcar9 kitcar10 kitcar11 kitcar12 kitcar13 kitcar14 kitcar15
     kitcar16 kitcar17 kitcar18 kitcar19 kitcar20 kitcar21 kitcar22 kitcar23 kitcar24
     kitcar25 kitcar26 kitcar27 kitcar28 kitcar29 kitcar30 kitcar31 kitcar32 kitcar33
-    kitcar34 kitcar35 kitcar36 kitcar37 kitcar38 kitcar39 kitcar40 --output_dir random_roads
-    --image_topic /camera/image_raw && fdupes -dN random_roads/
+    kitcar34 kitcar35 kitcar36 kitcar37 kitcar38 kitcar39 kitcar40 kitcar41 kitcar42
+    kitcar43 kitcar44 kitcar45 kitcar46 kitcar47 kitcar48 kitcar49 kitcar40 kitcar51
+    kitcar52 kitcar53 kitcar54 kitcar55 kitcar56 kitcar57 kitcar58 kitcar59 kitcar60
+    kitcar61 --output_dir random_roads --image_topic /camera/image_raw && fdupes -dN
+    random_roads/
   deps:
   - path: ../../simulation/models/env_db/ci_roads/random_road.py
-    md5: 77418419322c27bd64724e46a04196fb
-    size: 4119
+    md5: fbf15bc4b3a4ac19b79bfb35506bd837
+    size: 4120
   - path: ../../simulation/models/meshes
     md5: 8d7deee7a9c26594f95d9117b4488be3.dir
     size: 40507629
     nfiles: 119
   outs:
   - path: random_roads
-    md5: f49e2d59b677f92a302e1061e5d5c2de.dir
-    size: 2173964458
-    nfiles: 62387
+    md5: 49784d9563b820f59dc0eb24e7e7bc6d.dir
+    size: 3198359392
+    nfiles: 92897
 create_test_images:
   cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images
     --road ci_roads/random_road --seed TEST --output_dir test_images --randomize_path
     0 --image_topic /camera/image_raw && fdupes -dN test_images/
   deps:
   - path: ../../simulation/models/env_db/ci_roads/random_road.py
-    md5: 77418419322c27bd64724e46a04196fb
-    size: 4119
+    md5: fbf15bc4b3a4ac19b79bfb35506bd837
+    size: 4120
   - path: ../../simulation/models/meshes
     md5: 8d7deee7a9c26594f95d9117b4488be3.dir
     size: 40507629
     nfiles: 119
   outs:
   - path: test_images
-    md5: b1caead1700a1b5d555f9a88f53fdffb.dir
-    size: 104829005
-    nfiles: 2582
+    md5: 04e7355130bb85e7e425d4db1f123c21.dir
+    size: 78721010
+    nfiles: 1907

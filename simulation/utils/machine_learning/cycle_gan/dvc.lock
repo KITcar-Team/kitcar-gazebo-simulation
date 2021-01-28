@@ -6,9 +6,9 @@ test_dr_drift_256:
     size: 2229459338
     nfiles: 5014
   - path: ./../../../../data/simulated_images/test_images
-    md5: b1caead1700a1b5d555f9a88f53fdffb.dir
-    size: 104829005
-    nfiles: 2582
+    md5: 04e7355130bb85e7e425d4db1f123c21.dir
+    size: 78721010
+    nfiles: 1907
   - path: checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
     md5: 8e2d0e1334966ee8036070bf623a737d
     size: 11397319
@@ -16,8 +16,8 @@ test_dr_drift_256:
     md5: ed27e477dd4c6c0b699c70507c4d6f65
     size: 11397321
   - path: configs
-    md5: 10e717d13be90d4ce99f22c00a458c2d.dir
-    size: 11449
+    md5: f8ee2672047e33d7a178a9b3d598863a.dir
+    size: 10332
     nfiles: 4
   outs:
   - path: results/dr_drift_256/images
@@ -66,12 +66,12 @@ train_dr_drift_256:
     size: 3836296520
     nfiles: 8210
   - path: ./../../../../data/simulated_images/random_roads
-    md5: f49e2d59b677f92a302e1061e5d5c2de.dir
-    size: 2173964458
-    nfiles: 62387
+    md5: 49784d9563b820f59dc0eb24e7e7bc6d.dir
+    size: 3198359392
+    nfiles: 92897
   - path: configs
-    md5: 10e717d13be90d4ce99f22c00a458c2d.dir
-    size: 10314
+    md5: f8ee2672047e33d7a178a9b3d598863a.dir
+    size: 10332
     nfiles: 4
   outs:
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
@@ -103,9 +103,9 @@ test_discriminators_dr_drift_256:
     size: 2229459338
     nfiles: 5014
   - path: ./../../../../data/simulated_images/test_images
-    md5: b1caead1700a1b5d555f9a88f53fdffb.dir
-    size: 104829005
-    nfiles: 2582
+    md5: 04e7355130bb85e7e425d4db1f123c21.dir
+    size: 78721010
+    nfiles: 1907
   - path: checkpoints/dr_drift_256/latest_net_d_a.pth
     md5: e09d1c03d76f65b7e0ce57abc9c4dd66
     size: 2774020
@@ -125,8 +125,8 @@ test_discriminators_dr_drift_256:
     md5: b730072b5038b0bf246434aae8bea418
     size: 687
   - path: test_discriminators.py
-    md5: 86af08d3ddb6aab01d68509cf2a44594
-    size: 5278
+    md5: c0a59ad21f54728b94ee9ac2306a1969
+    size: 5350
   outs:
   - path: results/dr_drift_256/discriminator_losses.txt
     md5: 36f6a30c223756a65b0c56ccdcb22ce9
