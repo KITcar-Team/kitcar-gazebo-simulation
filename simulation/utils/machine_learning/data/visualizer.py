@@ -204,7 +204,7 @@ class Visualizer:
         minutes, seconds = divmod(remainder, 60)
         message = (
             f"(epoch: {epoch}, iters: {iters}, time: {t_comp:.3f},"
-            f"ETA: {hours:.0f}:{minutes:.0f}:{seconds:.0f} hh:mm:ss) "
+            f"ETA: {hours:02.0f}:{minutes:02.0f}:{seconds:02.0f} hh:mm:ss) "
         )
         for k, v in losses.items():
             message += "%s: %.3f " % (k, v)

@@ -219,7 +219,7 @@ if __name__ == "__main__":
                     total_epochs * dataset_size - total_iters
                 ) * time_per_iteration
                 visualizer.print_current_losses(
-                    epoch, epoch_iter, losses, time_per_iteration, estimated_time
+                    epoch + 1, epoch_iter, losses, time_per_iteration, estimated_time
                 )
                 visualizer.plot_current_losses(
                     epoch, float(epoch_iter) / dataset_size, losses
@@ -236,6 +236,6 @@ if __name__ == "__main__":
         print(f"Saved the model at the end of epoch {epoch}")
 
         print(
-            f"End of epoch {epoch} / {total_epochs} \t"
+            f"End of epoch {epoch + 1} / {total_epochs} \t"
             f"Time Taken: {time.time()-epoch_start_time} sec"
         )
