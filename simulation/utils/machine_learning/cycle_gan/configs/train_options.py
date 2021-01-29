@@ -5,8 +5,6 @@ from .base_options import BaseOptions
 
 class TrainOptions(BaseOptions):
     dataset_a: List[str] = [
-        "./../../../../data/real_images/maschinen_halle",
-        "./../../../../data/real_images/maschinen_halle_no_obstacles",
         "./../../../../data/real_images/beg_2019",
     ]
     """Path to images of domain A (real images). Can be a list of folders."""
@@ -22,13 +20,13 @@ class TrainOptions(BaseOptions):
     """# threads for loading data"""
     save_freq: int = 100
     """Frequency of saving the current models"""
-    print_freq: int = 10
+    print_freq: int = 5
     """Frequency of showing training results on console"""
     beta1: float = 0.5
     """Momentum term of adam"""
-    batch_size: int = 1
+    batch_size: int = 3
     """Input batch size"""
-    lr: float = 0.000005
+    lr: float = 0.0005
     """Initial learning rate for adam"""
     lr_decay_iters: int = 1
     """Multiply by a gamma every lr_decay_iters iterations"""
@@ -36,9 +34,9 @@ class TrainOptions(BaseOptions):
     """Learning rate policy. [linear | step | plateau | cosine]"""
     lr_step_factor: float = 0.1
     """Multiplication factor at every step in the step scheduler"""
-    n_epochs: int = 10
+    n_epochs: int = 0
     """Number of epochs with the initial learning rate"""
-    n_epochs_decay: int = 0
+    n_epochs_decay: int = 10
     """Number of epochs to linearly decay learning rate to zero"""
     no_flip: bool = False
     """Flip 50% of all training images vertically"""

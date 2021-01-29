@@ -1,56 +1,4 @@
-test_dr_drift_256:
-  cmd: python3 test.py
-  deps:
-  - path: ./../../../../data/real_images/maschinen_halle_parking
-    md5: 7415bfcca62c3c7e76cfb72eb59f8988.dir
-    size: 2229459338
-    nfiles: 5014
-  - path: ./../../../../data/simulated_images/test_images
-    md5: 04e7355130bb85e7e425d4db1f123c21.dir
-    size: 78721010
-    nfiles: 1907
-  - path: checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
-    md5: 8e2d0e1334966ee8036070bf623a737d
-    size: 11397319
-  - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
-    md5: ed27e477dd4c6c0b699c70507c4d6f65
-    size: 11397321
-  - path: configs
-    md5: f8ee2672047e33d7a178a9b3d598863a.dir
-    size: 10332
-    nfiles: 4
-  outs:
-  - path: results/dr_drift_256/images
-    md5: c66020e745183cbd691911d5b905f400.dir
-    size: 1001040863
-    nfiles: 30384
-make_video_dr_drift_256:
-  cmd: python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
-    results/dr_drift_256/images/fake_a/%d.png --output_file results/dr_drift_256/fake_a.mp4
-    && python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
-    results/dr_drift_256/images/real_b/%d.png --output_file results/dr_drift_256/real_b.mp4
-    && ffmpeg -y -i results/dr_drift_256/real_b.mp4 -i results/dr_drift_256/fake_a.mp4
-    -filter_complex vstack=inputs=2 results/dr_drift_256/stacked.mp4
-  deps:
-  - path: results/dr_drift_256/images/fake_a
-    md5: c6b88057d32a61a0438b96360b8db836.dir
-    size: 129614740
-    nfiles: 2582
-  - path: results/dr_drift_256/images/real_b
-    md5: 4e9ee5a22dd5413434613cca8dfa6e12.dir
-    size: 34691179
-    nfiles: 2582
-  outs:
-  - path: results/dr_drift_256/fake_a.mp4
-    md5: 6cd2bc1d3b1d6621f0379be1f3956a8c
-    size: 8032023
-  - path: results/dr_drift_256/real_b.mp4
-    md5: d5ff164fd5046616da7c9772b0d95e08
-    size: 2318276
-  - path: results/dr_drift_256/stacked.mp4
-    md5: 3ef4ed7edd2c935a44006847dd0d3df7
-    size: 19936636
-train_dr_drift_256:
+train_dr_drift:
   cmd: python3 train.py
   deps:
   - path: ./../../../../data/real_images/beg_2019
@@ -69,33 +17,32 @@ train_dr_drift_256:
     md5: 49784d9563b820f59dc0eb24e7e7bc6d.dir
     size: 3198359392
     nfiles: 92897
-  - path: configs
-    md5: f8ee2672047e33d7a178a9b3d598863a.dir
-    size: 10332
-    nfiles: 4
+  - path: configs/base_options.py
+    md5: 1dcce659da154e4fec3fd85fc39b0636
+    size: 3267
+  - path: configs/train_options.py
+    md5: 0ca40176e7cc428416846e3d316351a6
+    size: 2206
   outs:
-  - path: checkpoints/dr_drift_256/latest_net_d_a.pth
-    md5: e09d1c03d76f65b7e0ce57abc9c4dd66
-  - path: checkpoints/dr_drift_256/latest_net_d_b.pth
-    md5: e9256884dddf7b82e57a5cf150141db7
-  - path: checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
-    md5: 8e2d0e1334966ee8036070bf623a737d
-  - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
-    md5: ed27e477dd4c6c0b699c70507c4d6f65
-  - path: checkpoints/dr_drift_256/loss.png
-    md5: fda0442d25b0651c3adc6db385303e03
-  - path: checkpoints/dr_drift_256/loss_log.txt
-    md5: 8fc457d6eb28e9574b9e7656a7364833
-stacked_gif_dr_drift_256:
-  cmd: python3 ../data/video_to_gif.py --input_file results/dr_drift_256/stacked.mp4
-    --output_file results/dr_drift_256/stacked.gif --width 400 --length 10
-  deps:
-  - path: results/dr_drift_256/stacked.mp4
-    md5: 76fd557643f5f2c59283268121f2400b
-  outs:
-  - path: results/dr_drift_256/stacked.gif
-    md5: 55188b85977013369631918f82082e33
-test_discriminators_dr_drift_256:
+  - path: checkpoints/dr_drift/latest_net_d_a.pth
+    md5: ad90c2cd2e4e5724d2ab60d4b891efc4
+    size: 2774020
+  - path: checkpoints/dr_drift/latest_net_d_b.pth
+    md5: 53b0ed5f2f23fb9091b0ec85bbf3d017
+    size: 2774020
+  - path: checkpoints/dr_drift/latest_net_g_a_to_b.pth
+    md5: 83504a1a0777d9fbe689cae6d48d8797
+    size: 16717943
+  - path: checkpoints/dr_drift/latest_net_g_b_to_a.pth
+    md5: c44bcb616c4af1df0bcf7e86ce2fe7c2
+    size: 16717942
+  - path: checkpoints/dr_drift/loss.png
+    md5: 88620d547092d19cacff1734d5b3c822
+    size: 90760
+  - path: checkpoints/dr_drift/loss_log.txt
+    md5: 6dcfa1888c383b83bd7e7f995dd7b11d
+    size: 592870
+test_discriminators_dr_drift:
   cmd: python3 test_discriminators.py
   deps:
   - path: ./../../../../data/real_images/maschinen_halle_parking
@@ -103,24 +50,24 @@ test_discriminators_dr_drift_256:
     size: 2229459338
     nfiles: 5014
   - path: ./../../../../data/simulated_images/test_images
-    md5: 04e7355130bb85e7e425d4db1f123c21.dir
-    size: 78721010
-    nfiles: 1907
-  - path: checkpoints/dr_drift_256/latest_net_d_a.pth
-    md5: e09d1c03d76f65b7e0ce57abc9c4dd66
+    md5: 6c372785ded570b6681f2dcdddb45a38.dir
+    size: 20584296
+    nfiles: 582
+  - path: checkpoints/dr_drift/latest_net_d_a.pth
+    md5: ad90c2cd2e4e5724d2ab60d4b891efc4
     size: 2774020
-  - path: checkpoints/dr_drift_256/latest_net_d_b.pth
-    md5: e9256884dddf7b82e57a5cf150141db7
+  - path: checkpoints/dr_drift/latest_net_d_b.pth
+    md5: 53b0ed5f2f23fb9091b0ec85bbf3d017
     size: 2774020
-  - path: checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
-    md5: 8e2d0e1334966ee8036070bf623a737d
-    size: 11397319
-  - path: checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
-    md5: ed27e477dd4c6c0b699c70507c4d6f65
-    size: 11397321
+  - path: checkpoints/dr_drift/latest_net_g_a_to_b.pth
+    md5: 83504a1a0777d9fbe689cae6d48d8797
+    size: 16717943
+  - path: checkpoints/dr_drift/latest_net_g_b_to_a.pth
+    md5: c44bcb616c4af1df0bcf7e86ce2fe7c2
+    size: 16717942
   - path: configs/base_options.py
-    md5: c051abacd5f7822cee102e3c9ad63495
-    size: 3253
+    md5: 1dcce659da154e4fec3fd85fc39b0636
+    size: 3267
   - path: configs/test_options.py
     md5: b730072b5038b0bf246434aae8bea418
     size: 687
@@ -128,6 +75,60 @@ test_discriminators_dr_drift_256:
     md5: c0a59ad21f54728b94ee9ac2306a1969
     size: 5350
   outs:
-  - path: results/dr_drift_256/discriminator_losses.txt
-    md5: 36f6a30c223756a65b0c56ccdcb22ce9
-    size: 37
+  - path: results/dr_drift/discriminator_losses.txt
+    md5: 31fb9d97b6c7e6c92e6b5d9b5ddd84e5
+    size: 36
+test_dr_drift:
+  cmd: python3 test.py
+  deps:
+  - path: ./../../../../data/real_images/maschinen_halle_parking
+    md5: 7415bfcca62c3c7e76cfb72eb59f8988.dir
+    size: 2229459338
+    nfiles: 5014
+  - path: ./../../../../data/simulated_images/test_images
+    md5: 6c372785ded570b6681f2dcdddb45a38.dir
+    size: 20584296
+    nfiles: 582
+  - path: checkpoints/dr_drift/latest_net_g_a_to_b.pth
+    md5: 83504a1a0777d9fbe689cae6d48d8797
+    size: 16717943
+  - path: checkpoints/dr_drift/latest_net_g_b_to_a.pth
+    md5: c44bcb616c4af1df0bcf7e86ce2fe7c2
+    size: 16717942
+  - path: configs/base_options.py
+    md5: 1dcce659da154e4fec3fd85fc39b0636
+    size: 3267
+  - path: configs/test_options.py
+    md5: b730072b5038b0bf246434aae8bea418
+    size: 687
+  outs:
+  - path: results/dr_drift/images
+    md5: 50da960342c0211a509940ee83ec542a.dir
+    size: 2763681594
+    nfiles: 22384
+make_video_dr_drift:
+  cmd: python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
+    results/dr_drift/images/fake_a/%d.png --output_file results/dr_drift/fake_a.mp4
+    && python3 -m simulation.utils.machine_learning.data.images_to_video --image_pattern
+    results/dr_drift/images/real_b/%d.png --output_file results/dr_drift/real_b.mp4
+    && ffmpeg -y -i results/dr_drift/real_b.mp4 -i results/dr_drift/fake_a.mp4 -filter_complex
+    vstack=inputs=2 results/dr_drift/stacked.mp4
+  deps:
+  - path: results/dr_drift/images/fake_a
+    md5: 4f36a14f59b3382d394cb178a44c1438.dir
+    size: 97633408
+    nfiles: 582
+  - path: results/dr_drift/images/real_b
+    md5: 1216e9472ed41d9669255af77b466e21.dir
+    size: 18067639
+    nfiles: 582
+  outs:
+  - path: results/dr_drift/fake_a.mp4
+    md5: e3893b04605511c4de4591f8ceee1372
+    size: 1881735
+  - path: results/dr_drift/real_b.mp4
+    md5: 5e2451b3aa8d891df42e0abf618bacd6
+    size: 550213
+  - path: results/dr_drift/stacked.mp4
+    md5: 83775686d837e4bd992548d92ae75aa6
+    size: 4756402

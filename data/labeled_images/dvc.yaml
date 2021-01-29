@@ -16,7 +16,7 @@ stages:
     deps:
     - random_roads
     - ../../simulation/utils/machine_learning/cycle_gan/ros_connector.py
-    - ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
-    - ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
+    - ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_a_to_b.pth
+    - ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_b_to_a.pth
     outs:
     - gan_random_roads
