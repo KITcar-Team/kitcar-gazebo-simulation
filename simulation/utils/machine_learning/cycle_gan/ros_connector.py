@@ -1,3 +1,4 @@
+import argparse
 import os
 import pathlib
 
@@ -114,3 +115,35 @@ class RosConnector:
 
         # Return as mono8 encoding
         return result
+
+
+if __name__ == "__main__":
+    """Run GAN over all files in folder."""
+    parser = argparse.ArgumentParser(description="Extract images from a ROS bag.")
+    parser.add_argument("--input_dir", help="Directory with input images.")
+    parser.add_argument("--output_dir", help="Directory for output images.")
+    parser.add_argument(
+        "--gan_type",
+        type=str,
+        default="default",
+        help="Decide whether to use Wasserstein gan or default gan [default, wgan]",
+    )
+    args = parser.parse_args()
+    GAN = RosConnector(args.gan_type)
+
+    files = [
+        file
+        for file in os.listdir(args.input_dir)
+        if os.path.isfile(os.path.join(args.input_dir, file))
+        and file.lower().endswith((".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".gif"))
+    ]
+    os.makedirs(args.output_dir, exist_ok=True)
+
+    for i, file in enumerate(files):
+        input_file_path = os.path.join(args.input_dir, file)
+        output_file_path = os.path.join(args.output_dir, file)
+
+        translated_image = GAN(np.array(Image.open(input_file_path)))
+        cv2.imwrite(output_file_path, translated_image)
+
+        print(f"Processing: {100 * i / len(files):.2f}%")

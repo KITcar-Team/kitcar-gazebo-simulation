@@ -17,3 +17,25 @@ create_labeled_train_images:
     md5: e3a5b705b181feb88dbfee07d29e3d73.dir
     size: 199017884
     nfiles: 3913
+apply_cycle_gan_to_random_roads_labeled:
+  cmd: python3 -m simulation.utils.machine_learning.cycle_gan.ros_connector --input_dir
+    random_roads/ --output_dir gan_random_roads && cp random_roads/labels.yaml gan_random_roads
+  deps:
+  - path: ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/latest_net_g_a_to_b.pth
+    md5: 8e2d0e1334966ee8036070bf623a737d
+    size: 11397319
+  - path: ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/latest_net_g_b_to_a.pth
+    md5: ed27e477dd4c6c0b699c70507c4d6f65
+    size: 11397321
+  - path: ../../simulation/utils/machine_learning/cycle_gan/ros_connector.py
+    md5: 01b9643bf9574e11cb74e4a417cbf7b2
+    size: 4964
+  - path: random_roads
+    md5: ca2c1cbf1eab1828db72119a5a0e7898.dir
+    size: 281260388
+    nfiles: 6365
+  outs:
+  - path: gan_random_roads
+    md5: 8a57b1ce22e6fe6f58c30b2ed4ca3315.dir
+    size: 740223443
+    nfiles: 4101
