@@ -4,7 +4,10 @@ from typing import List, Tuple
 
 
 def images_to_video(
-    image_pattern: str, output_file: str, scale: Tuple[int, int] = (1280, 650)
+    image_pattern: str,
+    output_file: str,
+    use_glob: bool = False,
+    scale: Tuple[int, int] = (1280, 650),
 ) -> None:
     """This function takes images and put them into a video.
 
@@ -16,6 +19,8 @@ def images_to_video(
             to format 1280x650
     """
     cmd = "ffmpeg -y "
+    if use_glob:
+        cmd += "-pattern_type glob "
     cmd += f'-i "{image_pattern}" '
     cmd += "-codec:v libx264 -preset veryslow -pix_fmt yuv420p -crf 28 "
 
