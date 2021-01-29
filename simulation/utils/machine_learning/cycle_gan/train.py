@@ -211,7 +211,7 @@ if __name__ == "__main__":
 
             stats = model.do_iteration(*batch)
 
-            if total_iters % opt.print_freq == 0:
+            if total_iters % (opt.print_freq * opt.batch_size) == 0:
                 losses = stats.get_losses()
                 visuals = stats.get_visuals()
                 time_per_iteration = (time.time() - iter_start_time) / opt.batch_size
@@ -225,6 +225,11 @@ if __name__ == "__main__":
                     epoch, float(epoch_iter) / dataset_size, losses
                 )
                 visualizer.display_current_results(visuals)
+
+            if total_iters % (opt.save_freq * opt.batch_size) == 0:
+                model.networks.save(
+                    os.path.join(os.path.join(opt.checkpoints_dir, opt.name), "latest_net_")
+                )
 
         # update learning rates in the beginning of every epoch.
         model.update_learning_rate()
