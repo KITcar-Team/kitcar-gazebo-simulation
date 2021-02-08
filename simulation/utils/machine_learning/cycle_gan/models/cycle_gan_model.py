@@ -161,6 +161,9 @@ class CycleGANModel(BaseModel):
         )
         loss_g.backward()
         self.optimizer_g.step()  # update G_A and G_B's weights
+        self.metric = (
+            loss_g.item()
+        )  # set the generator loss as metric for plateau lr-policy
 
         # D_A and D_B
         set_requires_grad([self.networks.d_a, self.networks.d_b], True)

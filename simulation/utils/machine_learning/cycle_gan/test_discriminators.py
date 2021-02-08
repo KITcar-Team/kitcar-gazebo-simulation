@@ -151,6 +151,7 @@ if __name__ == "__main__":
     print(f"AVG-Loss Discriminator A: {sum_loss_a / dataset_size}")
     print(f"AVG-Loss Discriminator B: {sum_loss_b / dataset_size}")
 
+    os.makedirs(os.path.join(opt.results_dir, opt.name), exist_ok=True)
     file_path = os.path.join(opt.results_dir, opt.name, "discriminator_losses.txt")
     with open(file_path, "w") as file:
         file.write(f"{sum_loss_a / dataset_size},{sum_loss_b / dataset_size}")

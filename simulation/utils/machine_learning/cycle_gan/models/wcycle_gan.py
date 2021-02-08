@@ -148,8 +148,10 @@ class WassersteinCycleGANModel(BaseModel):
             + loss_idt_b
         )
         loss_g.backward()
-
         self.optimizer_g.step()  # update G_A and G_B's weights
+        self.metric = (
+            loss_g.item()
+        )  # set the generator loss as metric for plateau lr-policy
 
         return CycleGANStats(
             real_a,

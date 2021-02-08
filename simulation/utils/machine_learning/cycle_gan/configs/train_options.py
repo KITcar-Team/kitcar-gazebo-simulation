@@ -20,6 +20,8 @@ class TrainOptions(BaseOptions):
     """Enable or disable training mode"""
     num_threads: int = 8
     """# threads for loading data"""
+    save_freq: int = 100
+    """Frequency of saving the current models"""
     print_freq: int = 10
     """Frequency of showing training results on console"""
     beta1: float = 0.5

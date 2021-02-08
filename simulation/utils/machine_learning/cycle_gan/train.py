@@ -25,7 +25,7 @@ from simulation.utils.machine_learning.models.helper import get_norm_layer, init
 from simulation.utils.machine_learning.models.resnet_generator import ResnetGenerator
 from simulation.utils.machine_learning.models.wasserstein_critic import WassersteinCritic
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # noqa C901
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--gan_type",
@@ -159,83 +159,94 @@ if __name__ == "__main__":
         model.pre_training()
 
     print(f"Start training using {'Wasserstein-CycleGAN' if opt.is_wgan else 'CycleGAN'}")
+    try:
+        for epoch in range(total_epochs):  # outer loop for all epochs
+            epoch_start_time = time.time()  # timer for entire epoch
+            epoch_iter = 0  # the number of training iterations in current epoch
 
-    for epoch in range(total_epochs):  # outer loop for all epochs
-        epoch_start_time = time.time()  # timer for entire epoch
-        epoch_iter = 0  # the number of training iterations in current epoch
-
-        # batch generator
-        if opt.is_wgan:
-            generator_input_gen = ml_data.unpaired_sample_generator(
-                dataset_a, dataset_b, n_samples=dataset_size // opt.batch_size
-            )
-            critic_gen = ml_data.unpaired_sample_generator(dataset_a, dataset_b)
-
-            def wgan_generator():
-                with suppress(StopIteration):
-                    while True:
-                        (a, _), (b, _) = next(generator_input_gen)
-                        a = a.to(device)
-                        b = b.to(device)
-                        critic_batches = []
-                        for _ in range(opt.wgan_n_critic):
-                            (a_critic, _), (b_critic, _) = next(critic_gen)
-                            a_critic = a_critic.to(device)
-                            b_critic = b_critic.to(device)
-                            critic_batches.append((a_critic, b_critic))
-                        yield a, b, critic_batches
-
-            batch_generator = wgan_generator()
-        else:
-            generator_input_gen = ml_data.unpaired_sample_generator(
-                dataset_a, dataset_b, n_samples=dataset_size // opt.batch_size
-            )
-
-            def gan_generator():
-                with suppress(StopIteration):
-                    while True:
-                        (a, _), (b, _) = next(generator_input_gen)
-                        a = a.to(device)
-                        b = b.to(device)
-                        yield a, b
-
-            batch_generator = gan_generator()
-
-        # Get random permutations of items from both datasets
-        for batch in iter(batch_generator):
-
-            iter_start_time = time.time()  # timer for computation per iteration
-
-            total_iters += opt.batch_size
-            epoch_iter += opt.batch_size
-
-            stats = model.do_iteration(*batch)
-
-            if total_iters % opt.print_freq == 0:
-                losses = stats.get_losses()
-                visuals = stats.get_visuals()
-                time_per_iteration = (time.time() - iter_start_time) / opt.batch_size
-                estimated_time = (
-                    total_epochs * dataset_size - total_iters
-                ) * time_per_iteration
-                visualizer.print_current_losses(
-                    epoch, epoch_iter, losses, time_per_iteration, estimated_time
+            # batch generator
+            if opt.is_wgan:
+                generator_input_gen = ml_data.unpaired_sample_generator(
+                    dataset_a, dataset_b, n_samples=dataset_size // opt.batch_size
                 )
-                visualizer.plot_current_losses(
-                    epoch, float(epoch_iter) / dataset_size, losses
+                critic_gen = ml_data.unpaired_sample_generator(dataset_a, dataset_b)
+
+                def wgan_generator():
+                    with suppress(StopIteration):
+                        while True:
+                            (a, _), (b, _) = next(generator_input_gen)
+                            a = a.to(device)
+                            b = b.to(device)
+                            critic_batches = []
+                            for _ in range(opt.wgan_n_critic):
+                                (a_critic, _), (b_critic, _) = next(critic_gen)
+                                a_critic = a_critic.to(device)
+                                b_critic = b_critic.to(device)
+                                critic_batches.append((a_critic, b_critic))
+                            yield a, b, critic_batches
+
+                batch_generator = wgan_generator()
+            else:
+                generator_input_gen = ml_data.unpaired_sample_generator(
+                    dataset_a, dataset_b, n_samples=dataset_size // opt.batch_size
                 )
-                visualizer.display_current_results(visuals)
 
-        # update learning rates in the beginning of every epoch.
-        model.update_learning_rate()
+                def gan_generator():
+                    with suppress(StopIteration):
+                        while True:
+                            (a, _), (b, _) = next(generator_input_gen)
+                            a = a.to(device)
+                            b = b.to(device)
+                            yield a, b
 
-        path = os.path.join(opt.checkpoints_dir, opt.name)
-        model.networks.save(os.path.join(path, "latest_net_"))
-        model.networks.save(os.path.join(path, f"{epoch}_net_"))
-        visualizer.save_losses_as_image(os.path.join(path, "loss.png"))
-        print(f"Saved the model at the end of epoch {epoch}")
+                batch_generator = gan_generator()
 
-        print(
-            f"End of epoch {epoch} / {total_epochs} \t"
-            f"Time Taken: {time.time()-epoch_start_time} sec"
+            # Get random permutations of items from both datasets
+            for batch in iter(batch_generator):
+
+                iter_start_time = time.time()  # timer for computation per iteration
+
+                total_iters += opt.batch_size
+                epoch_iter += opt.batch_size
+
+                stats = model.do_iteration(*batch)
+
+                if total_iters % (opt.print_freq * opt.batch_size) == 0:
+                    losses = stats.get_losses()
+                    visuals = stats.get_visuals()
+                    time_per_iteration = (time.time() - iter_start_time) / opt.batch_size
+                    estimated_time = (
+                        total_epochs * dataset_size - total_iters
+                    ) * time_per_iteration
+                    visualizer.print_current_losses(
+                        epoch + 1, epoch_iter, losses, time_per_iteration, estimated_time
+                    )
+                    visualizer.plot_current_losses(
+                        epoch, float(epoch_iter) / dataset_size, losses
+                    )
+                    visualizer.display_current_results(visuals)
+
+                if total_iters % (opt.save_freq * opt.batch_size) == 0:
+                    model.networks.save(
+                        os.path.join(
+                            os.path.join(opt.checkpoints_dir, opt.name), "latest_net_"
+                        )
+                    )
+
+            # update learning rates in the beginning of every epoch.
+            model.update_learning_rate()
+
+            path = os.path.join(opt.checkpoints_dir, opt.name)
+            model.networks.save(os.path.join(path, "latest_net_"))
+            model.networks.save(os.path.join(path, f"{epoch}_net_"))
+            visualizer.save_losses_as_image(os.path.join(path, "loss.png"))
+            print(f"Saved the model at the end of epoch {epoch}")
+
+            print(
+                f"End of epoch {epoch + 1} / {total_epochs} \t"
+                f"Time Taken: {time.time()-epoch_start_time} sec"
+            )
+    except KeyboardInterrupt:
+        model.networks.save(
+            os.path.join(os.path.join(opt.checkpoints_dir, opt.name), "interrupted_")
         )
