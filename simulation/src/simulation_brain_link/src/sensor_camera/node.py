@@ -25,11 +25,11 @@ class SensorCameraNode(NodeBase):
             # Import the ros connector here because it requires the "torch" package.
             # The torch package is quite heavy and should only be necessary if the
             # neural network is used.
-            from simulation.utils.machine_learning.cycle_gan.ros_connector import (
-                RosConnector,
+            from simulation.utils.machine_learning.cycle_gan.image_translator import (
+                ImageTranslator,
             )
 
-            self.gan_connector = RosConnector(self.param.use_wasserstein_gan)
+            self.gan_translator = ImageTranslator(self.param.use_wasserstein_gan)
 
         self.run()
 
@@ -70,7 +70,7 @@ class SensorCameraNode(NodeBase):
         ]
 
         if self.param.apply_gan:
-            new_img = self.gan_connector(new_img)
+            new_img = self.gan_translator(new_img)
 
         out_msg = br.cv2_to_imgmsg(new_img, encoding="mono8")
         out_msg.header = img_msg.header

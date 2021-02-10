@@ -18,11 +18,11 @@ from .models.cycle_gan_model import CycleGANModel
 from .models.wcycle_gan import WassersteinCycleGANModel
 
 
-class RosConnector:
+class ImageTranslator:
     """Implementation of a simple ROS interface to translate simulated to "real" images."""
 
     def __init__(self, use_wasserstein=True):
-        """Initialize the RosConnector class.
+        """Initialize the ImageTranslator class.
 
         Use default test options but could be via command-line. Load and setup the model
         """
@@ -129,7 +129,7 @@ if __name__ == "__main__":
         help="Decide whether to use Wasserstein gan or default gan [default, wgan]",
     )
     args = parser.parse_args()
-    GAN = RosConnector(args.gan_type)
+    GAN = ImageTranslator(args.gan_type)
 
     files = [
         file
