@@ -62,7 +62,8 @@ repos:
     stages:
     - post-checkout
     always_run: true
-- repo: https://gitlab.com/smop/pre-commit-hooks
+- repo: https://github.com/kadrach/pre-commit-gitlabci-lint
   rev: master
   hooks:
-  - id: check-gitlab-ci
+  - id: gitlabci-lint
+    args: ["https://git.kitcar-team.de"]
