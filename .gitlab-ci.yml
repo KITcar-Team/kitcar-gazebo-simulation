@@ -99,15 +99,18 @@ test-drive-evaluation:
   - workstation
   variables:
     PATH_FILES: $KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/src/simulation_evaluation/param/drive/paths
+  parallel: 3
   script:
     # The drive.test is used to evaluate how the car drives.
     # With automatic_drive:=true the path of the car is predetermined and thus the correctness
     # of the evaluation can be tested.
+  - echo $CI_NODE_INDEX/$CI_NODE_TOTAL
   - mv /home/kitcar/kitcar-rosbag $KITCAR_REPO_PATH
   - ls $KITCAR_REPO_PATH
   - source $KITCAR_REPO_PATH/kitcar-rosbag/devel/setup.bash --extend
   - mkdir rosbags
   - python3 -m simulation.utils.drive_test.run --config simulation/utils/drive_test/test/ci.yaml
+    --runner_index $CI_NODE_INDEX --total_runners $CI_NODE_TOTAL
   artifacts:
     when: always
     paths:
