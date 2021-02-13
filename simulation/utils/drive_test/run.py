@@ -16,14 +16,10 @@ def make_multiline(string: str, max_width: int):
 
 
 class Color:
-    """Adds color to string for stdout.
+    """Adds color to string for stdout."""
 
-    Attributes:
-        success: Adds green to the text
-        failure: Adds red to the text
-    """
-
-    def ansi(color_code: int) -> Callable[[str], str]:  # pylint: disable=no-self-argument
+    @staticmethod
+    def ansi(color_code: int) -> Callable[[str], str]:
         """Returns a callable function to which a string can be parsed. The string will be
         colored in the color of the ansi color code.
 
@@ -48,8 +44,10 @@ class Color:
 
         return colorize
 
-    success = ansi(92)
-    failure = ansi(91)
+    success = ansi.__func__(92)
+    """Adds green to the text"""
+    failure = ansi.__func__(91)
+    """Adds red to the text"""
 
 
 class AutomatedDriveTest:
