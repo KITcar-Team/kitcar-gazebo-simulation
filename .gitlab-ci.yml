@@ -73,6 +73,7 @@ test-machine-learning-package:
   variables:
     INIT_INPUT: 1\nyy
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
+    CUDA_VISIBLE_DEVICES: ""   # Don't use CUDA in CI
   script:
   - python3 -m simulation.utils.machine_learning.models.test
   - python3 -m simulation.utils.machine_learning.cycle_gan.models.test
@@ -150,6 +151,7 @@ build-documentation:
   variables:
     INIT_INPUT: 1\nyy
     GIT_LFS_SKIP_SMUDGE: '1'  # Don't pull Git LFS
+    CUDA_VISIBLE_DEVICES: ""   # Don't use CUDA in CI
   tags:
   - workstation
   script:
