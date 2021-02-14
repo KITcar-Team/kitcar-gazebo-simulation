@@ -103,9 +103,7 @@ def draw_speed_limit(
     )  # Translate to the center point of the surface marking
     ctx.rotate(surface_marking.orientation)
 
-    ctx.translate(
-        -surface_marking.depth / 2, surface_marking.width / 2
-    )  # Translate to the corner
+    ctx.translate(0, surface_marking.width / 2)  # Translate to the middle
 
     # Position text and scale it
     ctx.rotate(-math.pi / 2)  # rotate by 90deg
