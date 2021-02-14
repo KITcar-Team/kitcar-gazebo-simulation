@@ -56,13 +56,13 @@ def test_init_weights():
     """Check if :py:func:`init_weights` runs without errors."""
     module = nn.Linear(10, 10)
 
-    helper.init_net(module, init_type="normal")
-    helper.init_net(module, init_type="xavier")
-    helper.init_net(module, init_type="kaiming")
-    helper.init_net(module, init_type="orthogonal")
+    helper.init_net(module, init_type="normal", device=torch.device("cpu"))
+    helper.init_net(module, init_type="xavier", device=torch.device("cpu"))
+    helper.init_net(module, init_type="kaiming", device=torch.device("cpu"))
+    helper.init_net(module, init_type="orthogonal", device=torch.device("cpu"))
 
     try:
-        helper.init_net(module, init_type="any_other_string")
+        helper.init_net(module, init_type="any_other_string", device=torch.device("cpu"))
         raise AssertionError("init_weights should have failed due to wrong input.")
     except NotImplementedError:
         pass
