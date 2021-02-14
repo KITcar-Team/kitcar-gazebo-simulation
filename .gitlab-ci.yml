@@ -1,5 +1,3 @@
-image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:focal
-
 variables:
   GIT_STRATEGY: clone
   CAR_NAME: dr_drift
@@ -7,17 +5,23 @@ variables:
   INIT_INPUT: 1\nyn   # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
   DISPLAY: ":1.0"
 
-before_script:
+default:
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:focal
+  retry:
+    max: 2
+    when:
+    - runner_system_failure
+    - stuck_or_timeout_failure
+    - unknown_failure
+  before_script:
   # Run the container start script to enable the pulseaudio & xserver
-- bash init/docker_start_script.sh
-
+  - bash init/docker_start_script.sh
   # Print out python version for debugging
-- python3 -V
-
+  - python3 -V
   # Install packages and requirements
-- printf $INIT_INPUT | ./init/init.sh || true
-
-- source init/bashrc || true
+  - printf $INIT_INPUT | ./init/init.sh || true
+  # Source bashrc
+  - source init/bashrc || true
 
 stages:
 - build
