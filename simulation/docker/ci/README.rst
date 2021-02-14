@@ -28,4 +28,3 @@ For that purposes the parent's image must be passed when building **docs** or **
 The dependency graph is: **base** -> **machine_learning** -> **docs**.
 (Because the machine learning packages are required when building the documentation. However, the
 NodeJS is not actually required, but is installed to simplify the dependencies.)
-

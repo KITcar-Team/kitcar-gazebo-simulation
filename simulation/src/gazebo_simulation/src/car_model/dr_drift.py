@@ -161,7 +161,6 @@ def load_dr_drift(
     # Load time of flight sensors positions from coordinate systems definition
     with open(
         coordinate_systems_path,
-        "r",
     ) as file:
         co_system_dict = yaml.load(file, Loader=yaml.SafeLoader)
 

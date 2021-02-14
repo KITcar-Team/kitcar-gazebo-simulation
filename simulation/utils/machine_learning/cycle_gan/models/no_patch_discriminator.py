@@ -18,7 +18,7 @@ class NoPatchDiscriminator(nn.Module):
             n_layers_d (int): the number of convolution blocks
             use_sigmoid (bool): sigmoid activation at the end
         """
-        super(NoPatchDiscriminator, self).__init__()
+        super().__init__()
 
         self.use_sigmoid = use_sigmoid
 

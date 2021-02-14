@@ -183,7 +183,7 @@ class Tile:
         sha_256.update(surface.get_data())
         hash = sha_256.hexdigest()
 
-        self.id = "tile-{0}".format(hash)
+        self.id = f"tile-{hash}"
 
         dir = os.path.join(roads_path, self.road_folder_name, self.id)
         if not os.path.exists(dir):

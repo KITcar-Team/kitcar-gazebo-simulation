@@ -31,4 +31,3 @@ target_link_libraries(sensor_camera_deprecated_nodelet
 )
 target_link_libraries(sensor_camera_deprecated ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${common_LIBRARIES})
 target_link_libraries(sensor_camera_deprecated_nodelet ${catkin_LIBRARIES} ${common_LIBRARIES} ${OpenCV_LIBRARIES})
-

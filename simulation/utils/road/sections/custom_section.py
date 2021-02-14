@@ -34,7 +34,7 @@ class CustomSection(RoadSection, InitOptions, SaveOptions):
     @classmethod
     def from_yaml(cls, file_path: str):
         """Load from a yaml file."""
-        return super(CustomSection, cls).from_yaml(file_path, loader=yaml.Loader)
+        return super().from_yaml(file_path, loader=yaml.Loader)
 
     def split_by(
         self, sections: List[Tuple[int, RoadSection]], x_buffer=1

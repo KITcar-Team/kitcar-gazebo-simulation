@@ -32,7 +32,7 @@ class DoubleChildClass(BaseClass, SecondBaseClass):
     """Simple child class inheriting from BaseClass and SecondBaseClass."""
 
     def short_desc(self) -> str:
-        return "Child of " + super(DoubleChildClass, self).short_desc()
+        return "Child of " + super().short_desc()
 
 
 class A:

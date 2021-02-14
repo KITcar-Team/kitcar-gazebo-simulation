@@ -7,4 +7,3 @@ Issue: *TODO: ticket number, ex: #42*
 
 ## Test cases
 *TODO: added unit, integration tests? how to VERIFY the feature works?*
-

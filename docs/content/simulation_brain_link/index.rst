@@ -67,4 +67,3 @@ See :mod:`simulation.src.simulation_brain_link.src.vehicle_simulation_link.node`
 Coordinate Frames
 ------------------
 `Dr. Drift` usually has multiple coordinate frames, such as `vehicle`, `ir_ahead`, and `world` which are all subjective from the car's perspective. However, the simulation has a need for an objective coordinate frame which allows to evaluate the simulated position. To allow for conversions between the vehicles coordinate frames and the simulated frame, a transformation is published by the :mod:`simulation.src.simulation_brain_link.src.vehicle_simulation_link`.
-

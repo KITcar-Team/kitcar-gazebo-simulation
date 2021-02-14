@@ -49,7 +49,7 @@ class BoundingBox:
 
         pixels = []
         for p in vehicle_points:
-            hom_vec = np.ones((4))
+            hom_vec = np.ones(4)
             hom_vec[:3] = p.to_numpy()
             pixel_vec = np.dot(BoundingBox.vehicle_pixel_matrix, hom_vec).T
 

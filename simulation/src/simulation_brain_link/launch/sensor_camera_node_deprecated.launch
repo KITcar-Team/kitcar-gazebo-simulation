@@ -12,4 +12,3 @@
    <param name="start_activated" value="$(arg start_activated)" />
   </node>
 </launch>
-

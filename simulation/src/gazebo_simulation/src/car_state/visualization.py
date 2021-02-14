@@ -18,7 +18,7 @@ class CarStateVisualizationNode(NodeBase):
 
     def __init__(self):
         """Initialize the node."""
-        super(CarStateVisualizationNode, self).__init__(name="car_state_visualization_node")
+        super().__init__(name="car_state_visualization_node")
 
         self.run()
 

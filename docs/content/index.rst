@@ -131,5 +131,3 @@ This is the **KITcar Simulation**'s Onboarding:
 .. toctree::
 
    onboarding/index
-
-

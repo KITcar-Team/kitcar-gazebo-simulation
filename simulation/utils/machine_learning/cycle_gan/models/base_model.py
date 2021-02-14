@@ -280,7 +280,7 @@ class BaseModel(ABC, InitOptions):
                 scheduler.step()
 
         lr = self.optimizer_g.param_groups[0]["lr"]
-        print("learning rate %.7f -> %.7f" % (old_lr, lr))
+        print(f"learning rate {old_lr:.7f} -> {lr:.7f}")
 
     @abc.abstractmethod
     def do_iteration(

@@ -97,5 +97,3 @@ class I(E, H)
 
  The **method resolution order** defines which base class comes next when looking for attributes and functions.
 Python uses the `C3 <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.19.3910&rep=rep1&type=pdf>`_ algorithm to linearize the dependency graph.
-
-

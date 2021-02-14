@@ -120,7 +120,7 @@ class Line(shapely.geometry.linestring.LineString):
 
         # Try to initialize from list of Point or geometry_msgs/Point
         with suppress(NotImplementedError, AttributeError):
-            super(Line, self).__init__([[p.x, p.y, p.z] for p in args[0]])
+            super().__init__([[p.x, p.y, p.z] for p in args[0]])
             return
 
         # None of the initializations worked

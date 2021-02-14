@@ -39,13 +39,13 @@ class Point(Vector):
     def __sub__(self, p):
         if not type(p) is Vector:
             raise InvalidPointOperationError("A point can only be modified by a vector.")
-        return super(Point, self).__sub__(p)
+        return super().__sub__(p)
 
     @validate_and_maintain_frames
     def __add__(self, p):
         if not type(p) is Vector:
             raise InvalidPointOperationError("A point can only be modified by a vector.")
-        return super(Point, self).__add__(p)
+        return super().__add__(p)
 
     @validate_and_maintain_frames
     def __rmul__(self, obj: Transform):

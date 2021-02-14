@@ -174,5 +174,3 @@ Use this launch file to start the complete simulation.-->
   <include if="$(arg label_camera)" file="$(find simulation_groundtruth)/launch/label_camera_node.launch" />
 
 </launch>
-
-

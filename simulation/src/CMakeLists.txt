@@ -132,4 +132,3 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   set_target_properties(gtest PROPERTIES COMPILE_FLAGS "-Wno-suggest-override -Wno-error -Wno-zero-as-null-pointer-constant -Wno-useless-cast")
   set_target_properties(gtest_main PROPERTIES COMPILE_FLAGS "-Wno-suggest-override -Wno-error -Wno-zero-as-null-pointer-constant -Wno-useless-cast")
 endif()
-

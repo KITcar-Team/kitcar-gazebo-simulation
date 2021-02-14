@@ -31,7 +31,7 @@ class UnetGenerator(nn.Module):
             norm_layer (nn.Module): normalization layer
             use_dropout (bool): Use dropout or not
         """
-        super(UnetGenerator, self).__init__()
+        super().__init__()
         # construct unet structure
         unet_block = UnetSkipConnectionBlock(
             ngf * 8,

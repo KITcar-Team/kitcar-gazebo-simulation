@@ -14,7 +14,7 @@ class SimulationRendererPlugin(Plugin):
     """Basic rqt plugin that allows to start/stop a reload in the renderer."""
 
     def __init__(self, context):
-        super(SimulationRendererPlugin, self).__init__(context)
+        super().__init__(context)
 
         self._widget = QWidget()
 
@@ -58,7 +58,7 @@ class SimulationRendererPlugin(Plugin):
             "groundtruth",
             "topics.yaml",
         )
-        with open(topic_file, "r") as file:
+        with open(topic_file) as file:
             return yaml.safe_load(file)
 
     def receive_groundtruth_status(self, msg):

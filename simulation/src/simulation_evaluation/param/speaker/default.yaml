@@ -18,4 +18,3 @@ speed:
   stop_threshold: 1  # [Adjusted km/h] If car is slower the speaker will think it stopped
   halt_time: 0.9  # [s] Duration for which the car must stop for the speaker to accept that it halted
   stop_time: 2.9  # [s] Duration for which the car must stop for the speaker to accept that it stopped
-
