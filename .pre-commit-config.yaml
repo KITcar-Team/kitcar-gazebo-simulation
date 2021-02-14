@@ -22,10 +22,6 @@ repos:
   hooks:
   - id: docformatter
     args: [-i, --wrap-summaries, '92', --wrap-descriptions, '92']
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: master
-  hooks:
-  - id: trailing-whitespace
 - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
   rev: master
   hooks:
@@ -36,12 +32,15 @@ repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: master
   hooks:
-  - id: check-yaml
-    args: [--allow-multiple-documents, --unsafe] # Use unsafe to allow custom tags (e.g. !degrees) in ROS parameter files
-  - id: check-executables-have-shebangs
+  - id: check-byte-order-marker
   - id: check-case-conflict
-  - id: debug-statements
-  - id: check-xml
+  - id: check-json
+  - id: check-yaml
+    args: ["--unsafe"]
+  - id: end-of-file-fixer
+  - id: trailing-whitespace
+  - id: mixed-line-ending
+  - id: check-ast
 - repo: https://gitlab.com/pycqa/flake8
   rev: master
   hooks:
@@ -67,3 +66,8 @@ repos:
   hooks:
   - id: gitlabci-lint
     args: ["https://git.kitcar-team.de"]
+- repo: https://github.com/asottile/pyupgrade
+  rev: v2.10.0
+  hooks:
+  - id: pyupgrade
+    args: [--py38-plus]
