@@ -24,6 +24,8 @@ default_args:
   must_succeed: true
   record_rosbag: "true"
   rosbag_path: ${KITCAR_REPO_PATH}kitcar-gazebo-simulation/rosbags
+  sim_rate_min: 1000
+  sim_rate_max: 3000
 
 # A list of tests which should be executed
 tests:
