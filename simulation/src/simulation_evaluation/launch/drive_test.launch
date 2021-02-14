@@ -5,6 +5,8 @@
   <arg name="gui" default="false"/>
   <arg name="mission_mode" default="1"/>
   <arg name="time_limit" default="120"/>
+  <arg name="sim_rate_min" default="50"/>
+  <arg name="sim_rate_max" default="1000"/>
 
   <include file="$(find gazebo_simulation)/launch/master.launch">
     <arg name="road" value="$(arg road)"/>
@@ -13,6 +15,8 @@
     <arg name="evaluate" value="true"/>
     <arg name="control_sim_rate" value="true"/>
     <arg name="force_reload_road" value="true"/>
+    <arg name="sim_rate_min" default="$(arg sim_rate_min)"/>
+    <arg name="sim_rate_max" default="$(arg sim_rate_max)"/>
   </include>
 
   <node name="drive_test_node" ns="simulation_evaluation" pkg="simulation_evaluation" type="drive_test_node" output="screen">
