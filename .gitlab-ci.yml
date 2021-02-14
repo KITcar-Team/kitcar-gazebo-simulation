@@ -53,6 +53,7 @@ lint:
 # Run module test in utils packages
 test-python-packages:
   stage: test
+  needs: ["build-code"]
   variables:
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   script:
@@ -70,6 +71,7 @@ test-python-packages:
 test-machine-learning-package:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
   stage: test
+  needs: ["build-code"]
   variables:
     INIT_INPUT: 1\nyy
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
@@ -86,6 +88,7 @@ test-machine-learning-package:
 
 test-ros-packages:
   stage: test
+  needs: ["build-code"]
   script:
   - cd simulation
   - catkin_make run_tests -j1
@@ -94,6 +97,7 @@ test-ros-packages:
 # Run tests to ensure that the evaluation pipeline is working
 test-drive-evaluation:
   stage: test
+  needs: ["build-code"]
   tags:
     # Always require to use the workstation to ensure enough computational power
   - workstation
@@ -122,6 +126,7 @@ test-drive-evaluation:
 test-documentation:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
   stage: test
+  needs: ["build-code"]
   variables:
     INIT_INPUT: 1\nyy
   script:
@@ -137,6 +142,7 @@ test-documentation:
 build-documentation:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
   stage: deploy
+  needs: ["test-documentation", "build-code"]
   variables:
     INIT_INPUT: 1\nyy
   script:
@@ -151,6 +157,7 @@ build-documentation:
 .cml-cyclegan-template:
   stage: deploy
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  needs: []
   variables:
     INIT_INPUT: 1\nyy
     GIT_LFS_SKIP_SMUDGE: '1'  # Don't pull Git LFS
@@ -200,6 +207,7 @@ cml-cyclegan:
 .docker-images-template:
   stage: deploy
   image: docker:19.03.13
+  needs: ["build-code"]
   tags:
   - docker
   services:
