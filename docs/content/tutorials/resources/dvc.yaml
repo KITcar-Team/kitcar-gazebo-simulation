@@ -1,0 +1,8 @@
+stages:
+  gan_default_road:
+    cmd: cp ../../../../simulation/utils/machine_learning/cycle_gan/results/dr_drift/fake_a.mp4
+      gan_default_road.mp4 && ffmpeg -y -i gan_default_road.mp4 -vf scale=400:-1 -loop 0 gan_default_road.gif
+    deps:
+    - ../../../../simulation/utils/machine_learning/cycle_gan/results/dr_drift/fake_a.mp4
+    outs:
+    - gan_default_road.mp4
