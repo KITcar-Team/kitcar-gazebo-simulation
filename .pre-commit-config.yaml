@@ -45,22 +45,6 @@ repos:
   rev: master
   hooks:
   - id: flake8
-- repo: https://github.com/iterative/dvc
-  rev: master
-  hooks:
-  - id: dvc-pre-commit
-    language_version: python3
-    stages:
-    - commit
-  - id: dvc-pre-push
-    language_version: python3
-    stages:
-    - push
-  - id: dvc-post-checkout
-    language_version: python3
-    stages:
-    - post-checkout
-    always_run: true
 - repo: https://github.com/kadrach/pre-commit-gitlabci-lint
   rev: master
   hooks:
