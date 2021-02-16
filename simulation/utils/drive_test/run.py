@@ -1,6 +1,7 @@
 import argparse
-from typing import Callable
+from typing import Callable, Optional
 
+import numpy as np
 from envyaml import EnvYAML
 from tabulate import tabulate
 
@@ -53,7 +54,9 @@ class Color:
 class AutomatedDriveTest:
     """Automated Drive Testing."""
 
-    def __init__(self, config: str):
+    def __init__(
+        self, config: str, runner_index: Optional[int], total_runners: Optional[int]
+    ):
         """Load config.
 
         Args:
@@ -71,10 +74,16 @@ class AutomatedDriveTest:
         # Get global tests parameters
         default_args = data.get("default_args", {})
 
-        # Loop over all tests in yaml
-        # and parse paremeters to DriveTestCmd
+        jobs = (
+            data["tests"]
+            if runner_index is None or total_runners is None
+            else np.array_split(data["tests"], int(total_runners))[int(runner_index) - 1]
+        )
+
+        # Loop over all jobs
+        # and parse parameters to DriveTestCmd
         # Join args and default args.
-        self.pipeline = [DriveTestCmd(**{**default_args, **args}) for args in data["tests"]]
+        self.pipeline = [DriveTestCmd(**{**default_args, **args}) for args in jobs]
 
     def execute(self):
         """Execute tests inside self.pipeline."""
@@ -153,9 +162,19 @@ if __name__ == "__main__":
         required=True,
         help="Path to the config file.",
     )
+    parser.add_argument(
+        "--runner_index",
+        required=False,
+        default=None,
+        help="Select jobs only for specific runner.",
+    )
+    parser.add_argument(
+        "--total_runners", required=False, default=None, help="How many runners to use."
+    )
     args = parser.parse_args()
 
-    test = AutomatedDriveTest(args.config)
+    test = AutomatedDriveTest(args.config, args.runner_index, args.total_runners)
+    test = AutomatedDriveTest(args.config, args.runner_index, args.total_runners)
     test.execute()
     test.show_results()
     test.check()

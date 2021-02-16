@@ -1,5 +1,3 @@
-image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:focal
-
 variables:
   GIT_STRATEGY: clone
   CAR_NAME: dr_drift
@@ -7,17 +5,23 @@ variables:
   INIT_INPUT: 1\nyn   # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
   DISPLAY: ":1.0"
 
-before_script:
+default:
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:focal
+  retry:
+    max: 2
+    when:
+    - runner_system_failure
+    - stuck_or_timeout_failure
+    - unknown_failure
+  before_script:
   # Run the container start script to enable the pulseaudio & xserver
-- bash init/docker_start_script.sh
-
+  - bash init/docker_start_script.sh
   # Print out python version for debugging
-- python3 -V
-
+  - python3 -V
   # Install packages and requirements
-- printf $INIT_INPUT | ./init/init.sh || true
-
-- source init/bashrc || true
+  - printf $INIT_INPUT | ./init/init.sh || true
+  # Source bashrc
+  - source init/bashrc || true
 
 stages:
 - build
@@ -53,6 +57,7 @@ lint:
 # Run module test in utils packages
 test-python-packages:
   stage: test
+  needs: ["build-code"]
   variables:
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   script:
@@ -70,6 +75,7 @@ test-python-packages:
 test-machine-learning-package:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
   stage: test
+  needs: ["build-code"]
   variables:
     INIT_INPUT: 1\nyy
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
@@ -86,6 +92,7 @@ test-machine-learning-package:
 
 test-ros-packages:
   stage: test
+  needs: ["build-code"]
   script:
   - cd simulation
   - catkin_make run_tests -j1
@@ -94,20 +101,24 @@ test-ros-packages:
 # Run tests to ensure that the evaluation pipeline is working
 test-drive-evaluation:
   stage: test
+  needs: ["build-code"]
   tags:
     # Always require to use the workstation to ensure enough computational power
   - workstation
   variables:
     PATH_FILES: $KITCAR_REPO_PATH/kitcar-gazebo-simulation/simulation/src/simulation_evaluation/param/drive/paths
+  parallel: 3
   script:
     # The drive.test is used to evaluate how the car drives.
     # With automatic_drive:=true the path of the car is predetermined and thus the correctness
     # of the evaluation can be tested.
+  - echo $CI_NODE_INDEX/$CI_NODE_TOTAL
   - mv /home/kitcar/kitcar-rosbag $KITCAR_REPO_PATH
   - ls $KITCAR_REPO_PATH
   - source $KITCAR_REPO_PATH/kitcar-rosbag/devel/setup.bash --extend
   - mkdir rosbags
   - python3 -m simulation.utils.drive_test.run --config simulation/utils/drive_test/test/ci.yaml
+    --runner_index $CI_NODE_INDEX --total_runners $CI_NODE_TOTAL
   artifacts:
     when: always
     paths:
@@ -119,6 +130,7 @@ test-drive-evaluation:
 test-documentation:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
   stage: test
+  needs: ["build-code"]
   variables:
     INIT_INPUT: 1\nyy
   script:
@@ -134,6 +146,7 @@ test-documentation:
 build-documentation:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
   stage: deploy
+  needs: ["test-documentation", "build-code"]
   variables:
     INIT_INPUT: 1\nyy
   script:
@@ -148,6 +161,7 @@ build-documentation:
 .cml-cyclegan-template:
   stage: deploy
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  needs: []
   variables:
     INIT_INPUT: 1\nyy
     GIT_LFS_SKIP_SMUDGE: '1'  # Don't pull Git LFS
@@ -197,6 +211,7 @@ cml-cyclegan:
 .docker-images-template:
   stage: deploy
   image: docker:19.03.13
+  needs: ["build-code"]
   tags:
   - docker
   services:
