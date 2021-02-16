@@ -15,7 +15,7 @@ class SpeedStateMachine(StateMachine):
     failure_ignored_speed_limit: "State" = SpeedLimitIgnored()  # noqa: F821
 
     def __init__(self, callback: Callable[[], None]):
-        super(SpeedStateMachine, self).__init__(
+        super().__init__(
             state_machine=self.__class__,
             initial_state=SpeedStateMachine.speed_no_limit,
             callback=callback,

@@ -103,5 +103,3 @@ If everything is set up correctly, using the generative model is as easy as laun
 
    (The parameters *control_sim_rate and evaluate* are not necessary but ensure the camera image gets
    processed with 60 Hz.)
-
-

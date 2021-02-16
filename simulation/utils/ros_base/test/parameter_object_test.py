@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Test if the Parameter object used in NodeBase behaves as expected."""
 import unittest
 

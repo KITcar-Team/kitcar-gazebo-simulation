@@ -66,5 +66,3 @@ E.g. to generate a dataset for the cycle gan.
   <node if="$(arg record_rosbag)" name="record" type="record.sh" pkg="kitcar_rosbag" args='-o $(arg rosbag_path) -a -x "(.*)/compressed(.*)"' />
 
 </launch>
-
-

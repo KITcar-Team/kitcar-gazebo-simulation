@@ -4,5 +4,3 @@ Issue: *TODO: ticket number, ex: #42 if it exists*
 
 ### Reason
 *TODO: Explain here why it was refactored*
-
-

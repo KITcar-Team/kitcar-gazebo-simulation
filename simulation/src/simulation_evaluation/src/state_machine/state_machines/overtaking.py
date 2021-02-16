@@ -31,7 +31,7 @@ class OvertakingStateMachine(StateMachine):
         Arguments:
             callback: Function which gets executed when the state changes
         """
-        super(OvertakingStateMachine, self).__init__(
+        super().__init__(
             state_machine=self.__class__,
             initial_state=OvertakingStateMachine.off,
             callback=callback,

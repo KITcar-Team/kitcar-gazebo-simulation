@@ -6,64 +6,51 @@ default_language_version:
 repos:
   # Hooks that modify code
 - repo: https://github.com/ambv/black
-  rev: master
+  rev: 20.8b1
   hooks:
   - id: black
 - repo: https://github.com/asottile/seed-isort-config
-  rev: master
+  rev: v2.2.0
   hooks:
   - id: seed-isort-config
 - repo: https://github.com/PyCQA/isort
-  rev: master
+  rev: 5.7.0
   hooks:
   - id: isort
 - repo: https://github.com/myint/docformatter
-  rev: master
+  rev: v1.4
   hooks:
   - id: docformatter
     args: [-i, --wrap-summaries, '92', --wrap-descriptions, '92']
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: master
-  hooks:
-  - id: trailing-whitespace
 - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-  rev: master
+  rev: 0.1.0
   hooks:
   - id: yamlfmt
     args: [--mapping, '2', --sequence, '2', --offset, '0', --width, '92', --implicit_start, --preserve-quotes]
 
   # Hooks for validation
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: master
+  rev: v3.4.0
   hooks:
-  - id: check-yaml
-    args: [--allow-multiple-documents, --unsafe] # Use unsafe to allow custom tags (e.g. !degrees) in ROS parameter files
-  - id: check-executables-have-shebangs
+  - id: check-byte-order-marker
   - id: check-case-conflict
-  - id: debug-statements
-  - id: check-xml
+  - id: check-yaml
+    args: ["--unsafe"]
+  - id: end-of-file-fixer
+  - id: trailing-whitespace
+  - id: mixed-line-ending
+  - id: check-ast
 - repo: https://gitlab.com/pycqa/flake8
-  rev: master
+  rev: 3.8.4
   hooks:
   - id: flake8
-- repo: https://github.com/iterative/dvc
-  rev: master
-  hooks:
-  - id: dvc-pre-commit
-    language_version: python3
-    stages:
-    - commit
-  - id: dvc-pre-push
-    language_version: python3
-    stages:
-    - push
-  - id: dvc-post-checkout
-    language_version: python3
-    stages:
-    - post-checkout
-    always_run: true
 - repo: https://github.com/kadrach/pre-commit-gitlabci-lint
-  rev: master
+  rev: 1baf80b1130b99bf45db64c7f9d2b1af19ab5662
   hooks:
   - id: gitlabci-lint
     args: ["https://git.kitcar-team.de"]
+- repo: https://github.com/asottile/pyupgrade
+  rev: v2.10.0
+  hooks:
+  - id: pyupgrade
+    args: [--py38-plus]

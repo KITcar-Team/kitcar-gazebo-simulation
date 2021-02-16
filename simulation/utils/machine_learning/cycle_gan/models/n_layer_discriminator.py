@@ -25,7 +25,7 @@ class NLayerDiscriminator(nn.Module):
             norm_layer (nn.Module): normalization layer
             use_sigmoid (bool): sigmoid activation at the end
         """
-        super(NLayerDiscriminator, self).__init__()
+        super().__init__()
         if (
             type(norm_layer) == functools.partial
         ):  # no need to use bias as BatchNorm2d has affine parameters

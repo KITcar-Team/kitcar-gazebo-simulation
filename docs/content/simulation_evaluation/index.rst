@@ -316,4 +316,3 @@ The speakers base their interpretation on the groundtruth, \
 queried from simulation.src.simulation_groundtruth.src.groundtruth topics, and the current position and \
 speed of the car published by the \
 :py:mod:`simulation.src.gazebo_simulation.src.car_state.node`.
-

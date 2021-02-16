@@ -46,7 +46,7 @@ class ResnetGenerator(nn.Module, InitOptions):
             dilations: List of dilations for each conv layer.
         """
         assert n_blocks >= 0
-        super(ResnetGenerator, self).__init__()
+        super().__init__()
         if type(norm_layer) == functools.partial:
             use_bias = norm_layer.func == nn.InstanceNorm2d
         else:

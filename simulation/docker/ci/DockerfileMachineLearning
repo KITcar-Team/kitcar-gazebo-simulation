@@ -11,6 +11,3 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash \
 
 # Reduce image size by removing apt cache
 RUN rm -rf /var/lib/apt/lists/*
-
-
-

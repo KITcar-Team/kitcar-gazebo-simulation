@@ -43,7 +43,7 @@ class LaneStateMachine(StateMachine):
         Arguments:
             callback: Function which gets executed when the state changes
         """
-        super(LaneStateMachine, self).__init__(
+        super().__init__(
             state_machine=self.__class__,
             initial_state=LaneStateMachine.right,
             callback=callback,

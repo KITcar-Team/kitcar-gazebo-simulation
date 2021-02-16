@@ -167,7 +167,7 @@ class GazeboRateControlNode(NodeBase):
         # Update target topics every second
         if rospy.Time.now().to_sec() - self._last_target_update > 1:
             # Find available topics
-            all_topics = set(t[0] for t in rospy.get_published_topics())
+            all_topics = {t[0] for t in rospy.get_published_topics()}
             rospy.logdebug(all_topics)
             self.relevant_targets = [
                 target for target in self.param.targets if target["topic"] in all_topics

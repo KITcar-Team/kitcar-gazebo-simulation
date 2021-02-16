@@ -25,7 +25,7 @@ class CarStateNode(NodeBase):
     def __init__(self):
         """initialize the node."""
 
-        super(CarStateNode, self).__init__(name="car_state_node")
+        super().__init__(name="car_state_node")
 
         self.read_car_config()
 

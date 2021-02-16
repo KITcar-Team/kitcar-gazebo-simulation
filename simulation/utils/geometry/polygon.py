@@ -47,18 +47,18 @@ class Polygon(shapely.geometry.polygon.Polygon):
 
         # Try to initialize directly
         with suppress(Exception):
-            super(Polygon, self).__init__(*args)
+            super().__init__(*args)
             return
 
         # Try to initialize from list of points
         with suppress(Exception):
             args = [[p.x, p.y, p.z] for p in args[0]]
-            super(Polygon, self).__init__(args)
+            super().__init__(args)
             return
 
         # Try to initialize from geometry_msgs/Polygon
         with suppress(Exception):
-            super(Polygon, self).__init__([[p.x, p.y, p.z] for p in args[0].points])
+            super().__init__([[p.x, p.y, p.z] for p in args[0].points])
             return
 
         # Try to initialize from two lines

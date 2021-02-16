@@ -107,4 +107,3 @@ With the subscriber receiving messages you can now go ahead and start your next 
    - Update the car's position as if it was driving with the speed that is received from the subscriber. E.g. if you publish the "speed: 5.0" message, the car should drive with 5 m/s.
 
 After completing the task, don't forget to commit and push your results!
-

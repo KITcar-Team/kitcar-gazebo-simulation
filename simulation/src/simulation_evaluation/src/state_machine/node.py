@@ -60,7 +60,7 @@ class StateMachineNode(NodeBase):
 
     def __init__(self):
         """Initialize the node."""
-        super(StateMachineNode, self).__init__(name="state_machine")
+        super().__init__(name="state_machine")
         self.run()
 
     def start(self):

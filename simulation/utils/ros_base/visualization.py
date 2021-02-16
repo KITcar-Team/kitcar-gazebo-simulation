@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Utility functions for visualizing ROS messages in rviz."""
 
 import math

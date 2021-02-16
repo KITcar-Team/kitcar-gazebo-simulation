@@ -207,7 +207,7 @@ class Visualizer:
             f"ETA: {hours:02.0f}:{minutes:02.0f}:{seconds:02.0f} hh:mm:ss) "
         )
         for k, v in losses.items():
-            message += "%s: %.3f " % (k, v)
+            message += f"{k}: {v:.3f} "
 
         print(message)  # print the message
         with open(self.log_name, "a") as log_file:

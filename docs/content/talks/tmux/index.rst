@@ -22,4 +22,3 @@ Who should care?
    .. configure
    basics
    configure
-

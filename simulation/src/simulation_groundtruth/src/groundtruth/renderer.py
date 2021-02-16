@@ -40,7 +40,7 @@ class PreviousRendering:
         """
         file_path = os.path.join(dir, PreviousRendering.DEFAULT_FILE_NAME)
         try:
-            with open(file_path, "r") as file:
+            with open(file_path) as file:
                 prev = yaml.load(file.read(), Loader=yaml.FullLoader)
             assert type(prev) == PreviousRendering, (
                 "Information of previous rendering is corrupt."

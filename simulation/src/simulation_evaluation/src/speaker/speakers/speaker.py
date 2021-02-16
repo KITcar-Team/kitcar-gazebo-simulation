@@ -140,7 +140,7 @@ class Speaker:
 
         return self.sections[idx]
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def get_road_lines(self, section_id: int) -> LineTuple:
         """Request and return the road lines of a single section.
 

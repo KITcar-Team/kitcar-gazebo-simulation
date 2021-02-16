@@ -17,4 +17,3 @@ tests:
   road: ci_roads/curves
 - desc: Obstacle road.
   road: ci_roads/obstacles
-

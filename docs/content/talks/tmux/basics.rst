@@ -89,4 +89,3 @@ bindings).
 
     These were only the commands and shortcuts I find the most important. There are many
     more. Take a look at this `cheatsheet <https://tmuxcheatsheet.com/>`_.
-

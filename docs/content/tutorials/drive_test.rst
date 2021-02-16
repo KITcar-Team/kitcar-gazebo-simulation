@@ -241,5 +241,3 @@ They are by no means a replacement but a great addition to existing component te
    And just like that, it is ensured that the car can handle double intersections
    for right turns and one can easily adapt the config above after fixing left
    turns!
-
-

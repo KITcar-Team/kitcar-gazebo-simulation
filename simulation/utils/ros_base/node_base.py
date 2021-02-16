@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """ROS node base class with a pythonic parameter interface."""
 
 from typing import Any, Callable, Dict

@@ -68,7 +68,7 @@ class Vector(shapely.geometry.point.Point):
 
         # Attempt default init
         with suppress(Exception):
-            super(Vector, self).__init__(*args)
+            super().__init__(*args)
             return
 
         if isinstance(args[0], (geometry_msgs.Vector3, geometry_msgs.Point)):
