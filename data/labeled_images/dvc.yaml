@@ -9,3 +9,14 @@ stages:
     - ../../simulation/models/meshes
     outs:
     - random_roads
+
+  apply_cycle_gan_to_random_roads_labeled:
+    cmd: python3 -m simulation.utils.machine_learning.cycle_gan.image_translator --input_dir random_roads/
+      --output_dir gan_random_roads && cp random_roads/labels.yaml gan_random_roads
+    deps:
+    - random_roads
+    - ../../simulation/utils/machine_learning/cycle_gan/image_translator.py
+    - ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_a_to_b.pth
+    - ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_b_to_a.pth
+    outs:
+    - gan_random_roads

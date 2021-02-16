@@ -8,13 +8,14 @@ class BaseOptions:
     """Choose which activation to use."""
     checkpoints_dir: str = "./checkpoints"
     """models are saved here"""
-    conv_layers_in_block: int = 2
+    conv_layers_in_block: int = 3
     """specify number of convolution layers per resnet block"""
-    crop_size: int = 256
+    crop_size: int = 512
     """then crop to this size"""
     dilations: List[int] = [
         1,
         2,
+        4,
     ]
     """dilation for individual conv layers in every resnet block"""
     epoch: Union[int, str] = "latest"
@@ -25,19 +26,19 @@ class BaseOptions:
     """network initialization [normal | xavier | kaiming | orthogonal]"""
     input_nc: int = 1
     """# of input image channels: 3 for RGB and 1 for grayscale"""
-    lambda_idt_a: float = 5
+    lambda_idt_a: float = 0.5
     """weight for loss identity of domain A"""
-    lambda_idt_b: float = 5
+    lambda_idt_b: float = 0.5
     """weight for loss identity of domain B"""
     lambda_cycle: float = 10
     """weight for cycle loss"""
-    load_size: int = 256
+    load_size: int = 512
     """scale images to this size"""
     mask: str = "resources/mask.png"
     """Path to a mask overlaid over all images"""
-    n_layers_d: int = 3
+    n_layers_d: int = 4
     """number of layers in the discriminator network"""
-    name: str = "dr_drift_256"
+    name: str = "dr_drift"
     """name of the experiment. It decides where to store samples and models"""
     ndf: int = 32
     """# of discriminator filters in the first conv layer"""
@@ -67,7 +68,7 @@ class BaseOptions:
     """Standard deviation of noise added to the cycle input. Mean is 0. """
     pool_size: int = 75
     """the size of image buffer that stores previously generated images"""
-    max_dataset_size: int = -1
+    max_dataset_size: int = 15000
     """maximum amount of images to load; -1 means infinity"""
     is_wgan: bool = False
     """Decide whether to use wasserstein cycle gan or standard cycle gan"""

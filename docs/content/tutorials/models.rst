@@ -86,7 +86,7 @@ pretrained weights of the network are stored in DVC and can be downloaded with
 
 .. prompt:: bash
 
-   dvc pull simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift_256/latest_net_g_b.pth
+   dvc pull simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_b.pth
 
 . See :ref:`installation` for instructions to set up DVC and make sure that the machine learning pip3 packages
 have been installed by selecting to do so when running the ``init/init.sh`` script.

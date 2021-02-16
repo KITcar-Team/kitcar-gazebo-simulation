@@ -14,11 +14,11 @@ stages:
     outs:
     - random_roads
   create_test_images:
-    cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images --road ci_roads/random_road
-      --seed TEST --output_dir test_images --randomize_path 0 --image_topic /camera/image_raw
-      && fdupes -dN test_images/ # Remove duplicates
+    cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images --road default_road
+      --randomize_path False --output_dir test_images --image_topic /camera/image_raw && fdupes
+      -dN test_images/ # Remove duplicates
     deps:
-    - ../../simulation/models/env_db/ci_roads/random_road.py
+    - ../../simulation/models/env_db/default_road.py
     - ../../simulation/models/meshes
     outs:
     - test_images

@@ -17,3 +17,25 @@ create_labeled_train_images:
     md5: e3a5b705b181feb88dbfee07d29e3d73.dir
     size: 199017884
     nfiles: 3913
+apply_cycle_gan_to_random_roads_labeled:
+  cmd: python3 -m simulation.utils.machine_learning.cycle_gan.image_translator --input_dir
+    random_roads/ --output_dir gan_random_roads && cp random_roads/labels.yaml gan_random_roads
+  deps:
+  - path: ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_a_to_b.pth
+    md5: 83504a1a0777d9fbe689cae6d48d8797
+    size: 16717943
+  - path: ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_b_to_a.pth
+    md5: c44bcb616c4af1df0bcf7e86ce2fe7c2
+    size: 16717942
+  - path: ../../simulation/utils/machine_learning/cycle_gan/image_translator.py
+    md5: 1d54f8ba0483ed0b5d808a1273304a56
+    size: 4973
+  - path: random_roads
+    md5: e3a5b705b181feb88dbfee07d29e3d73.dir
+    size: 199017884
+    nfiles: 3913
+  outs:
+  - path: gan_random_roads
+    md5: f3efa0fc0f2ac29b232a13f560d3cab3.dir
+    size: 495416602
+    nfiles: 2311

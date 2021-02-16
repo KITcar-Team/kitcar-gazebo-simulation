@@ -24,18 +24,18 @@ create_simulated_images:
     nfiles: 92897
 create_test_images:
   cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images
-    --road ci_roads/random_road --seed TEST --output_dir test_images --randomize_path
-    0 --image_topic /camera/image_raw && fdupes -dN test_images/
+    --road default_road --randomize_path False --output_dir test_images --image_topic
+    /camera/image_raw && fdupes -dN test_images/
   deps:
-  - path: ../../simulation/models/env_db/ci_roads/random_road.py
-    md5: fbf15bc4b3a4ac19b79bfb35506bd837
-    size: 4120
+  - path: ../../simulation/models/env_db/default_road.py
+    md5: 616e878c2b50ec0ada599db89dbe3960
+    size: 2055
   - path: ../../simulation/models/meshes
     md5: 8d7deee7a9c26594f95d9117b4488be3.dir
     size: 40507629
     nfiles: 119
   outs:
   - path: test_images
-    md5: 04e7355130bb85e7e425d4db1f123c21.dir
-    size: 78721010
-    nfiles: 1907
+    md5: 6c372785ded570b6681f2dcdddb45a38.dir
+    size: 20584296
+    nfiles: 582

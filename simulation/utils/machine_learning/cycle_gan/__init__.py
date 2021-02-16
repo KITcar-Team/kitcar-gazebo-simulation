@@ -76,8 +76,8 @@ There are two ways to test a model.
 
 For testing purposes there are the following DVC stages:
 
-    - test_dr_drift_256
-    - make_video_dr_drift_256
+    - test_dr_drift
+    - make_video_dr_drift
 
 A DVC stage is executed with the following command:
 
@@ -85,17 +85,17 @@ A DVC stage is executed with the following command:
 
    dvc repro -s NAME_OF_STAGE
 
-**test_dr_drift_256**:
+**test_dr_drift**:
 Tests the model by loading the last checkpoints from the folder
-checkpoints/dr_drift_256 and creates the results folder with the test results
+checkpoints/dr_drift and creates the results folder with the test results
 
-**make_video_dr_drift_256**:
+**make_video_dr_drift**:
 Takes the results from the results folder and cuts 3 videos together.
 One with the pictures from the simulation,
 another one with the "translated" images
 and one where the two videos were stacked on top of each other others.
 
-**stacked_gif_dr_drift_256**:
+**stacked_gif_dr_drift**:
 Converts the stacked video into a short gif.
 
 **Without DVC stages**
@@ -112,5 +112,5 @@ The resulting images can be cut into a video with the script
 
 With CML in the pipeline, each new model is automatically tested
 and the results are presented in a report under the commit or merge request.
-This requires that the model be named "dr_drift_256".
+This requires that the model be named "dr_drift".
 """
