@@ -134,6 +134,8 @@ test-documentation:
   variables:
     INIT_INPUT: 1\nyy
   script:
+  # Download gan video for documentation
+  - dvc pull docs/content/tutorials/resources/gan_default_road.mp4
     # Test if the onboarding documentation is correct
   - python3 docs/content/tutorials/road_examples/example.py
   - cd docs
@@ -150,6 +152,8 @@ build-documentation:
   variables:
     INIT_INPUT: 1\nyy
   script:
+    # Download gan video for documentation
+  - dvc pull docs/content/tutorials/resources/gan_default_road.mp4
     # Build the documentation
   - cd docs
   - make html
