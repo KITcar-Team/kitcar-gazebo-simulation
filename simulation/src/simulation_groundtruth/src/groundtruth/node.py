@@ -111,7 +111,7 @@ class GroundtruthNode(NodeBase):
 
     def _load_road(self) -> road_module.Road:
         """Load road sections from current road."""
-        seed = (
+        seed = str(
             self.param.seed
             if self.param.seed != "__no_value__"
             else self.param.default_seed
@@ -351,7 +351,7 @@ class GroundtruthNode(NodeBase):
         self, status=None, processed_tiles=None, number_of_tiles=None
     ):
         self._groundtruth_status.road = self.param.road
-        self._groundtruth_status.seed = self.param.seed
+        self._groundtruth_status.seed = str(self.param.seed)
 
         if status is not None:
             self._groundtruth_status.status = status
