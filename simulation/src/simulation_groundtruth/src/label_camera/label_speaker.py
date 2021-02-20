@@ -59,7 +59,9 @@ class LabelSpeaker(Speaker):
         return self._extract_bounding_boxes(self.get_surface_markings_in_section)
 
     def _get_visible_signs(self) -> List[BoundingBox]:
-        return self._extract_bounding_boxes(self.get_traffic_signs_in_section)
+        return self._extract_bounding_boxes(
+            self.get_traffic_signs_in_section,
+        )
 
     def speak(
         self, image_size: Tuple[int, int], horizontal_fov: float
@@ -97,8 +99,19 @@ class LabelSpeaker(Speaker):
                 min(bounds[3], image_size[1] - 1),
             )
             # Filter bounding boxes that are behind other boxes.
-            if np.any(boxed_img[bounds[0] : bounds[2] + 1, bounds[1] : bounds[3] + 1]):
+            # More than half is visible
+            if (
+                np.sum(boxed_img[bounds[0] : bounds[2] + 1, bounds[1] : bounds[3] + 1])
+                > (bounds[2] - bounds[0] + 1) * (bounds[3] - bounds[1] + 1) / 2
+            ):
                 visible_bbs.append(bb)
                 boxed_img[bounds[0] : bounds[2] + 1, bounds[1] : bounds[3] + 1] = 0
+
+        visible_bbs = [
+            bb
+            for bb in visible_bbs
+            if bb.class_id // 100 != 1
+            or math.cos(bb.orientation - math.pi) > math.cos(math.radians(80))
+        ]
 
         return visible_bbs

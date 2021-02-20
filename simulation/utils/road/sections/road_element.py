@@ -107,6 +107,8 @@ class RoadElementRect(RoadElement):
         depth: float = depth,
         angle: float = angle,
         normalize_x: bool = True,
+        z: float = 0,
+        height: float = 0,
     ):
         """Initialize a retangular road element."""
         for obj in arc_length, y, width, depth, angle:
@@ -117,9 +119,10 @@ class RoadElementRect(RoadElement):
         self.width = width
         self.depth = depth
         self.angle = angle
+        self.height = height
         super().__init__(
             normalize_x=normalize_x,
-            _frame=Transform(Point(arc_length, y), self.angle)
+            _frame=Transform(Point(arc_length, y, z), self.angle)
             * Polygon(
                 [
                     [-self.depth / 2, self.width / 2],

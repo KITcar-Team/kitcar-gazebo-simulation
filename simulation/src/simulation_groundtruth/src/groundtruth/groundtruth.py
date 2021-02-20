@@ -187,6 +187,6 @@ class Groundtruth:
             msg.frame = sign.frame.to_geometry_msg()
             msg.type = sign.kind.id_
             msg.desc = sign.kind.mesh
-            msg.height = sign.kind.collision_box_size[2]
+            msg.height = sign.height
             msgs.append(msg)
         return msgs

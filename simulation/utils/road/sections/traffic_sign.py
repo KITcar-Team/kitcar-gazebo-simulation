@@ -132,4 +132,6 @@ class TrafficSign(RoadElementRect):
             depth=kind.collision_box_size[0],
             angle=angle,
             normalize_x=normalize_x,
+            z=self.kind.collision_box_position[2],
+            height=self.kind.collision_box_size[2] - self.kind.collision_box_position[2],
         )
