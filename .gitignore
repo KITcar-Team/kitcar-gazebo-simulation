@@ -5,6 +5,9 @@
 .project
 .pydevproject
 cmake_install.cmake
+.coverage
+coverage.xml
+htmlcov/
 build/
 bin/
 lib/

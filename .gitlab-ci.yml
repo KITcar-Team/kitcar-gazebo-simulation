@@ -60,16 +60,21 @@ test-python-packages:
   variables:
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   script:
-  - python3 -m simulation.utils.geometry.test
-  - python3 simulation/utils/ros_base/test/parameter_object_test.py
+  - coverage run -m simulation.utils.geometry.test
+  - coverage run -a -m simulation.utils.ros_base.test.parameter_object_test
 
-  - python3 -m simulation.utils.road.sections.test
+  - coverage run -a -m simulation.utils.road.sections.test
 
-  - python3 -m simulation.src.simulation_evaluation.src.speaker.speakers.test
-  - python3 -m simulation.src.simulation_evaluation.src.state_machine.test
+  - coverage run -a -m simulation.src.simulation_evaluation.src.speaker.speakers.test
+  - coverage run -a -m simulation.src.simulation_evaluation.src.state_machine.test
 
     # Test the urdf package
-  - python3 simulation/utils/urdf/test/test_core.py
+  - coverage run -a -m simulation.utils.urdf.test.test_core
+  - coverage report
+  - coverage xml
+  artifacts:
+    reports:
+      cobertura: coverage.xml
 
 test-machine-learning-package:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
@@ -80,14 +85,19 @@ test-machine-learning-package:
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
     CUDA_VISIBLE_DEVICES: ""   # Don't use CUDA in CI
   script:
-  - python3 -m simulation.utils.machine_learning.models.test
-  - python3 -m simulation.utils.machine_learning.cycle_gan.models.test
-  - python3 -m simulation.utils.machine_learning.data.test
+  - coverage run -m simulation.utils.machine_learning.models.test
+  - coverage run -a -m simulation.utils.machine_learning.cycle_gan.models.test
+  - coverage run -a -m simulation.utils.machine_learning.data.test
+  - coverage report
+  - coverage xml
     # Test if the camera publishes images with the cycle gan turned on
   - dvc pull simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_b_to_a.pth
   - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
   - rostest simulation_brain_link sensor_camera.test apply_gan:=true use_wasserstein_gan:=false
   - rostest simulation_brain_link sensor_camera.test apply_gan:=true use_wasserstein_gan:=true
+  artifacts:
+    reports:
+      cobertura: coverage.xml
 
 test-ros-packages:
   stage: test
