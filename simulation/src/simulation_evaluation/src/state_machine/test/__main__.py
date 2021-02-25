@@ -4,6 +4,7 @@ Whenever this module is executed, all of the tests included below are run.
 """
 
 # Create test suite
+import sys
 import unittest
 
 from . import test_lane_state_machine as lane
@@ -28,5 +29,4 @@ append_test_cases(progress)
 runner = unittest.TextTestRunner()
 result = runner.run(suite)
 
-if len(result.errors) > 0:
-    exit(1)
+sys.exit(0 if result.wasSuccessful() else 1)
