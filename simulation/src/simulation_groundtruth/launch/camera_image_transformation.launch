@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="camera_mouse_left_topic" default="/camera/image_raw_mouse_left" />
+  <arg name="coordinate_topic" default="/simulation/rqt_on_mouse_click/world" />
+  <node name="camera_image_transformation" ns="simulation_groundtruth" pkg="simulation_groundtruth" type="camera_image_transformation" output="screen">
+    <param name="topics/camera_mouse_left" value="$(arg camera_mouse_left_topic)" />
+    <param name="topics/coordinates" value="$(arg coordinate_topic)" />
+  </node>
+</launch>
