@@ -1,0 +1,13 @@
+#! /usr/bin/env python3
+from contextlib import suppress
+
+import rospy
+
+from simulation.src.simulation_groundtruth.src.camera_image_transformation.node import (
+    CameraImageTransformation,
+)
+
+if __name__ == "__main__":
+    # Start the node
+    with suppress(rospy.ROSInterruptException):
+        CameraImageTransformation()

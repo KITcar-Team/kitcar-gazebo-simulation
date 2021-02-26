@@ -116,6 +116,15 @@ class CameraSpecs(InitOptions):
         return self.A @ self.M
 
     @property
+    def H(self) -> np.matrix:
+        """np.matrix: Matrix H.
+
+        Transformation matrix from ground vehicle coordinates to pixels.
+        """
+        # self.A * self.M (but without 3rd column)
+        return self.A @ np.concatenate([self.M[:, :2], self.M[:, 3:]], axis=1)
+
+    @property
     def t_vehicle(self) -> np.ndarray:
         """np.ndarray: Translation vector to the camera in vehicle coordinates."""
         return np.linalg.inv(self.R) @ np.array([self.t1, self.t2, self.t3])
