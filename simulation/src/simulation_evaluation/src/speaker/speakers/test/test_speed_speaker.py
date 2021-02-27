@@ -21,7 +21,7 @@ class ModuleTest(unittest.TestCase):
         speeds.append((0, (0, 4), SpeakerMsg.SPEED_STOPPED))
         speeds.append((0, (0, 0), SpeakerMsg.SPEED_0))
         speeds.append((3, (0, 0), SpeakerMsg.SPEED_1_10))
-        speeds.append((11, (0, 0), SpeakerMsg.SPEED_11_20))
+        speeds.append((13, (0, 0), SpeakerMsg.SPEED_11_20))
         speeds.append((25, (0, 0), SpeakerMsg.SPEED_21_30))
         speeds.append((32, (0, 0), SpeakerMsg.SPEED_31_40))
         speeds.append((44, (0, 0), SpeakerMsg.SPEED_41_50))

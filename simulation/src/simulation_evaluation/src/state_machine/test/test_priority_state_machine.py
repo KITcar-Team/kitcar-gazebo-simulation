@@ -29,7 +29,7 @@ class ModuleTest(Test):
             PriorityStateMachine.successfully_stopped,
             PriorityStateMachine.off,
             PriorityStateMachine.in_halt_zone,
-            PriorityStateMachine.off,
+            PriorityStateMachine.successfully_stopped,
         ]
 
         self.state_machine_assert_on_input(
@@ -60,8 +60,8 @@ class ModuleTest(Test):
             PriorityStateMachine.off,
             PriorityStateMachine.in_halt_zone,
             PriorityStateMachine.in_halt_zone,
-            PriorityStateMachine.off,
-            PriorityStateMachine.off,
+            PriorityStateMachine.successfully_stopped,
+            PriorityStateMachine.successfully_stopped,
         ]
 
         self.state_machine_assert_on_input(
@@ -92,8 +92,8 @@ class ModuleTest(Test):
             PriorityStateMachine.off,
             PriorityStateMachine.in_halt_zone,
             PriorityStateMachine.in_halt_zone,
-            PriorityStateMachine.off,
-            PriorityStateMachine.off,
+            PriorityStateMachine.successfully_stopped,
+            PriorityStateMachine.successfully_stopped,
         ]
 
         self.state_machine_assert_on_input(
