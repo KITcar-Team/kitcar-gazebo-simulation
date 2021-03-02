@@ -169,12 +169,21 @@ build-documentation:
   variables:
     INIT_INPUT: 1\nyy
     GIT_LFS_SKIP_SMUDGE: '1'  # Don't pull Git LFS
-    CUDA_VISIBLE_DEVICES: ""   # Don't use CUDA in CI
+  tags:
+  - gpu
   script:
-    # pull from server
-  - dvc pull simulation/utils/machine_learning/cycle_gan/results/dr_drift/stacked.mp4
-  - dvc pull simulation/utils/machine_learning/cycle_gan/results/dr_drift/discriminator_losses.txt
-  - dvc pull simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/loss.png
+  - pip3 install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+  - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
+  - dvc pull data/real_images/maschinen_halle_parking
+  - dvc pull data/simulated_images/test_images
+  - cd simulation/utils/machine_learning/cycle_gan
+    # pull cache from server and checkout
+  - dvc pull dvc.yaml --run-cache
+    # Test current model, make videos and commit to dvc
+  - dvc repro test_dr_drift -s
+  - dvc repro test_discriminators_dr_drift -s
+  - dvc repro make_video_dr_drift -s
+  - cd ../../../../
     # Create content for the report.md
   - echo "# Dr Drift" >> report.md
   - echo "## Test Generators" >> report.md
