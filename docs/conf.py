@@ -77,7 +77,7 @@ def setup(app):
 # -- Project information -----------------------------------------------------
 
 project = "KITcar Simulation"
-copyright = "2020, KITcar"
+copyright = "2021, KITcar"
 author = "KITcar"
 
 # The master toctree document.
