@@ -9,16 +9,18 @@ from simulation.utils.road.sections import RightCircularArc, StraightRoad, Traff
 
 SIZE = int(os.environ.get("SIZE", 1))
 EDGES = int(os.environ.get("EDGES", 9))
-road = Road()
+
 signs_dict = TrafficSign.__dict__
-signs_ = SIZE * [signs_dict[s] for s in signs_dict if not s.startswith("__")]
-random.shuffle(signs_)
-signs_list = np.array_split(signs_, EDGES)
-right = False
+signs = SIZE * [signs_dict[s] for s in signs_dict if not s.startswith("__")]
+random.shuffle(signs)
+signs_list = np.array_split(signs, EDGES)
+
+straight_length = len(signs_list[0])
 y = 0.5
-largest_road = max(len(signs) for signs in signs_list)
+
+road = Road()
 for s, signs in enumerate(signs_list):
-    straight = StraightRoad(length=3 * largest_road)
+    straight = StraightRoad(length=3 * straight_length)
     for i, sign in enumerate(signs):
         y *= -1
         straight.traffic_signs.append(
