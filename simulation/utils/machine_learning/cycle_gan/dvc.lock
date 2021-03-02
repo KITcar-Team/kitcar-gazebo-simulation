@@ -5,14 +5,6 @@ train_dr_drift:
     md5: 06f320661f9dffefa1cfc99731f84c91.dir
     size: 706133071
     nfiles: 1599
-  - path: ./../../../../data/real_images/maschinen_halle
-    md5: 22104c26ee673a71eefbc3452dc394b4.dir
-    size: 3023746499
-    nfiles: 6475
-  - path: ./../../../../data/real_images/maschinen_halle_no_obstacles
-    md5: 981c3d3a603118ade9afa92b7f60cd00.dir
-    size: 3836296520
-    nfiles: 8210
   - path: ./../../../../data/simulated_images/random_roads
     md5: 49784d9563b820f59dc0eb24e7e7bc6d.dir
     size: 3198359392
