@@ -37,7 +37,11 @@ class LabeledDataset(BaseDataset, InitOptions, SaveOptions):
 
     @property
     def available_files(self) -> List[str]:
-        return [os.path.basename(file) for file in find_images(self._base_path)]
+        return [
+            os.path.basename(file)
+            for file in find_images(self._base_path)
+            if os.path.exists(file) and "debug" not in file
+        ]
 
     def __getitem__(self, index) -> Tuple[Union[np.ndarray, Tensor], List[Any]]:
         """Return an image and it's label.
@@ -86,3 +90,9 @@ class LabeledDataset(BaseDataset, InitOptions, SaveOptions):
         instance = cls._from_yaml(cls, file)
         instance._base_path = os.path.dirname(file)
         return instance
+
+    @classmethod
+    def filter_file(cls, file):
+        lds = LabeledDataset.from_yaml(file)
+        lds.filter_labels()
+        lds.save_as_yaml(file)
