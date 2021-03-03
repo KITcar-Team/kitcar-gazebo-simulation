@@ -1,9 +1,10 @@
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Sequence, Tuple
+from typing import Any, Dict, List, Sequence, Tuple, Union
 
-import numpy
+import numpy as np
 from PIL import Image
+from torch import Tensor
 
 from simulation.utils.basics.init_options import InitOptions
 from simulation.utils.basics.save_options import SaveOptions
@@ -38,7 +39,7 @@ class LabeledDataset(BaseDataset, InitOptions, SaveOptions):
     def available_files(self) -> List[str]:
         return [os.path.basename(file) for file in find_images(self._base_path)]
 
-    def __getitem__(self, index) -> Tuple[numpy.ndarray, str]:
+    def __getitem__(self, index) -> Tuple[Union[np.ndarray, Tensor], List[Any]]:
         """Return an image and it's label.
 
         Args:
