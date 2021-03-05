@@ -121,9 +121,15 @@ if __name__ == "__main__":
     parser.add_argument("--gui", help="Launch gui.", default=False)
     parser.add_argument("--road", help="Name of the road.", default="ci_roads/random_road")
     parser.add_argument(
-        "--seed", help="Seed(s) passed when generating the road.", default=[None], nargs="+"
+        "--seed",
+        help="Seed(s) passed when generating the road.",
+        default=[None],
+        nargs="+",
+        type=str,
     )
-    parser.add_argument("--max_duration", help="Maximum recording time.", default=120)
+    parser.add_argument(
+        "--max_duration", help="Maximum recording time.", type=int, default=120
+    )
     parser.add_argument(
         "--label_camera",
         help="Start the label camera as well.",
@@ -134,6 +140,25 @@ if __name__ == "__main__":
         "--control_sim_rate",
         help="Whether to control the sim rate.",
         action="store_true",
+    )
+
+    parser.add_argument(
+        "--apply_gan",
+        help="Whether to use the GAN generator.",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "--factor_keep_pixels",
+        help="Factor of original image that is kept when applying GAN.",
+        type=float,
+        default=0,
+    )
+    parser.add_argument(
+        "--factor_keep_colored_pixels",
+        help="Factor of colored pixels in original image that is kept when applying GAN.",
+        type=float,
+        default=0,
     )
 
     kwargs = {k: v for k, v in parser.parse_args()._get_kwargs()}

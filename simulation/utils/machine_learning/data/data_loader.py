@@ -1,4 +1,9 @@
+from typing import Union
+
 import torch
+
+from .labeled_dataset import LabeledDataset
+from .unlabeled_dataset import UnlabeledDataset
 
 
 class DataLoader:
@@ -6,7 +11,7 @@ class DataLoader:
 
     def __init__(
         self,
-        dataset,
+        dataset: Union[UnlabeledDataset, LabeledDataset],
         max_dataset_size: int,
         batch_size: int = 1,
         num_threads: int = 1,
