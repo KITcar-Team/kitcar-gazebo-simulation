@@ -70,8 +70,8 @@ def run(cmd, max_duration: float = 120, node_name="automatic_drive"):
     # Kill all nodes
     os.system("rosnode kill -a")
     # Kill gazebo
-    os.system("killall -9 gzserver")
-    os.system("killall -9 gzclient")
+    os.system("pkill -9 gzserver")
+    os.system("pkill -9 gzclient")
     # And the roslaunch process
     if ros_process.returncode is None:
         os.kill(ros_process.pid, 15)
