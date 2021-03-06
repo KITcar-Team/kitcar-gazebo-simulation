@@ -3,8 +3,6 @@ stages:
     cmd: python3 train.py
     deps:
     - ./../../../../data/real_images/beg_2019
-    - ./../../../../data/real_images/maschinen_halle
-    - ./../../../../data/real_images/maschinen_halle_no_obstacles
     - ./../../../../data/simulated_images/random_roads
     - configs/base_options.py
     - configs/train_options.py
