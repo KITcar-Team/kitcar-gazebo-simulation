@@ -172,7 +172,6 @@ build-documentation:
   tags:
   - gpu
   script:
-  - pip3 install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
   - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
   - dvc pull data/real_images/maschinen_halle_parking
   - dvc pull data/simulated_images/test_images
