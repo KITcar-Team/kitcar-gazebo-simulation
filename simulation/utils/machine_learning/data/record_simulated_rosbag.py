@@ -28,7 +28,13 @@ def is_node_running(node_name: str) -> bool:
         return False
 
 
-def run(cmd, max_duration: float = 120, node_name="automatic_drive"):
+def run(
+    cmd,
+    max_duration: float = 120,
+    node_name="automatic_drive",
+    show_stdout=True,
+    show_stderr=True,
+):
     """Run ROS cmd in background and stop when automatic drive node shuts down."""
 
     # Ros cmd
@@ -45,11 +51,12 @@ def run(cmd, max_duration: float = 120, node_name="automatic_drive"):
                 output = output.decode().strip()  # Turn into nice string
                 print(output)
 
-    out_thread = threading.Thread(target=read, args=[ros_process.stdout])
-    err_thread = threading.Thread(target=read, args=[ros_process.stderr])
-
-    out_thread.start()
-    err_thread.start()
+    if show_stdout:
+        out_thread = threading.Thread(target=read, args=[ros_process.stdout])
+        out_thread.start()
+    if show_stderr:
+        err_thread = threading.Thread(target=read, args=[ros_process.stderr])
+        err_thread.start()
 
     start = time.time()
     node_started = False
@@ -91,10 +98,17 @@ def main(**kwargs):
     seeds = kwargs["seed"]
     del kwargs["seed"]
 
+    # Unpack seeds
+    show_stderr = kwargs["show_stderr"]
+    del kwargs["show_stderr"]
+
+    show_stdout = kwargs["show_stdout"]
+    del kwargs["show_stdout"]
+
     cmds = [ros_cmd(seed=seed, **kwargs) for seed in seeds]
 
     for cmd in cmds:
-        run(cmd, max_duration)
+        run(cmd, max_duration, show_stderr=show_stderr, show_stdout=show_stdout)
         time.sleep(1)  # Give some time to shut down
 
 

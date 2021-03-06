@@ -112,6 +112,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "--label_file", help="File path where to store the labels.", required=False
     )
+    parser.add_argument(
+        "--show_stdout",
+        help="Whether or not to print stdout.",
+        default=False,
+        action="store_true",
+    )
+    parser.add_argument(
+        "--show_stderr",
+        help="Whether or not to print stderr.",
+        default=False,
+        action="store_true",
+    )
 
     kwargs = {k: v for k, v in parser.parse_args()._get_kwargs()}
 
