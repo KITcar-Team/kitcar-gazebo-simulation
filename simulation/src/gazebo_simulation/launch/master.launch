@@ -75,6 +75,11 @@ Use this launch file to start the complete simulation.-->
    -->
   <arg name="apply_gan" default="false" />
   <arg name="use_wasserstein_gan" default="true" />
+  <!-- Indicate whether (colored) input pixels should be preserved when applying the GAN.
+      Useful to prevent the network from perturbing traffic signs too much.
+   -->
+  <arg name="factor_keep_pixels" default="0" />
+  <arg name="factor_keep_colored_pixels" default="0" />
   <!--
        Gazebo
   -->
@@ -117,6 +122,8 @@ Use this launch file to start the complete simulation.-->
     <arg name="set_pose" value="$(arg link_pose)" />
     <arg name="set_twist" value="$(arg link_twist)" />
     <arg name="apply_gan" value="$(arg apply_gan)" />
+    <arg name="factor_keep_pixels" value="$(arg factor_keep_pixels)" />
+    <arg name="factor_keep_colored_pixels" value="$(arg factor_keep_colored_pixels)" />
     <arg name="use_wasserstein_gan" value="$(arg use_wasserstein_gan)" />
     <arg name="include_vehicle_simulation" value="$(arg include_vehicle_simulation)" />
     <arg name="include_mission_mode_plugin" value="$(arg include_mission_mode_plugin)" />

@@ -2,11 +2,15 @@
 <launch>
   <arg name="apply_gan" default="false" />
   <arg name="use_wasserstein_gan" default="true" />
+  <arg name="factor_keep_pixels" default="0" />
+  <arg name="factor_keep_colored_pixels" default="0" />
 
   <node name="sensor_camera_node" ns="simulation_brain_link" pkg="simulation_brain_link" type="sensor_camera_node" output="screen">
     <rosparam file="$(find simulation_brain_link)/param/sensor_camera/topics.yaml" command="load" ns="topics" />
     <rosparam file="$(find simulation_brain_link)/param/sensor_camera/default.yaml" command="load" />
 
+    <param name="factor_keep_pixels" value="$(arg factor_keep_pixels)" />
+    <param name="factor_keep_colored_pixels" value="$(arg factor_keep_colored_pixels)" />
     <param name="apply_gan" value="$(arg apply_gan)" />
     <param name="use_wasserstein_gan" value="$(arg use_wasserstein_gan)" />
   </node>

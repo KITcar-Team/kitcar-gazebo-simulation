@@ -1,5 +1,6 @@
 """Prepare Gazebo’s camera image for kitcar-ros."""
 
+import cv2
 import rospy
 from cv_bridge.core import CvBridge
 from sensor_msgs.msg import Image as ImageMsg
@@ -70,7 +71,13 @@ class SensorCameraNode(NodeBase):
         ]
 
         if self.param.apply_gan:
-            new_img = self.gan_translator(new_img)
+            new_img = self.gan_translator(
+                new_img,
+                f_keep_pixels=self.param.factor_keep_pixels,
+                f_keep_colored_pixels=self.param.factor_keep_colored_pixels,
+            )
+        else:
+            new_img = cv2.cvtColor(new_img, cv2.COLOR_BGR2GRAY)
 
         out_msg = br.cv2_to_imgmsg(new_img, encoding="mono8")
         out_msg.header = img_msg.header

@@ -22,6 +22,8 @@ E.g. to generate a dataset for the cycle gan.
   <arg name="control_sim_rate" default="false" />
 
   <arg name="apply_gan" default="false" />
+  <arg name="factor_keep_pixels" default="0" />
+  <arg name="factor_keep_colored_pixels" default="0" />
   <!--
       Automatic Drive
   -->
@@ -47,7 +49,11 @@ E.g. to generate a dataset for the cycle gan.
     <arg name="gui" value="$(arg gui)"/>
     <arg name="control_sim_rate" value="$(arg control_sim_rate)"/>
     <arg name="evaluate" value="$(arg evaluate)"/>
+
     <arg name="apply_gan" value="$(arg apply_gan)"/>
+    <arg name="factor_keep_pixels" value="$(arg factor_keep_pixels)"/>
+    <arg name="factor_keep_colored_pixels" value="$(arg factor_keep_colored_pixels)"/>
+
     <arg name="label_camera" value="$(arg label_camera)"/>
 
     <arg name="include_automatic_drive" value="$(arg automatic_drive)"/>

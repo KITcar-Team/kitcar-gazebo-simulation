@@ -6,6 +6,8 @@
   <arg name="car_name" default="dr_drift" />
 
   <arg name="apply_gan" default="false" />
+  <arg name="factor_keep_pixels" default="0" />
+  <arg name="factor_keep_colored_pixels" default="0" />
   <arg name="use_wasserstein_gan" default="true" />
 
   <arg name="set_twist" default="true" />
@@ -40,6 +42,8 @@
 
   <include file="$(find simulation_brain_link)/launch/sensor_camera_node.launch">
     <arg name="apply_gan" value="$(arg apply_gan)"/>
+    <arg name="factor_keep_pixels" value="$(arg factor_keep_pixels)"/>
+    <arg name="factor_keep_colored_pixels" value="$(arg factor_keep_colored_pixels)"/>
     <arg name="use_wasserstein_gan" value="$(arg use_wasserstein_gan)"/>
   </include>
 
