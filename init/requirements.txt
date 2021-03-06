@@ -1,6 +1,7 @@
 cachetools>=4.0.0
 catkin-pkg>=0.4.16
 numpy>=1.18.2
+scipy
 pycairo>=1.18.1
 pyquaternion>=0.9.5
 PyYAML
