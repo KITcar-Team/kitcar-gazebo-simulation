@@ -1,7 +1,7 @@
 stages:
   create_labeled_images_random:
     cmd: |
-      bash ./labeled_images.sh 20 "random_roads" ci_roads/random_road
+      bash ./labeled_images.sh 10 "random_roads" ci_roads/random_road
     deps:
     - ../../simulation/models/env_db/ci_roads/random_road.py
     - ../../simulation/models/meshes
@@ -10,7 +10,7 @@ stages:
     - random_roads
   create_gan_labeled_images_random:
     cmd: |
-      bash ./gan_labeled_images.sh "0.1 0.3 0.4 0.5 0.7" "0.1 0.3 0.5 0.7" "random_roads_gan" ci_roads/random_road
+      bash ./gan_labeled_images.sh "0.2 0.5 0.8" "0.1 0.5 0.9" "random_roads_gan" ci_roads/random_road
     deps:
     - ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_b_to_a.pth
     - ../../simulation/models/env_db/ci_roads/random_road.py
