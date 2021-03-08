@@ -1,4 +1,4 @@
-capture_format: L8
+capture_format: RGB8
 focal_length_x: 382.192834
 focal_length_y: 382.192834
 image_topic: /simulation/sensors/raw/camera

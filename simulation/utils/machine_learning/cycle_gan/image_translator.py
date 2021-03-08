@@ -81,23 +81,29 @@ class ImageTranslator:
         )
         self.model.eval()
 
-    def __call__(self, image: np.ndarray) -> np.ndarray:
+    def __call__(
+        self,
+        image: np.ndarray,
+        f_keep_pixels: float = 0,
+        f_keep_colored_pixels: float = 0,
+    ) -> np.ndarray:
         """Translate an image to a "fake real" image by using the loaded model.
 
         Args:
             image: Image to be translated to "fake real"
+            f_keep_pixels: Factor of original pixels that are kept
+            f_keep_colored_pixels: Factor of colored pixels that are kept
 
         Returns:
             Translated image.
         """
         # Store shape
-        h, w = image.shape
+        h, w, c = image.shape
 
-        # Convert to PIL
-        image = Image.fromarray(image)
+        img_np = image
 
         # Apply transformations
-        image: torch.Tensor = self.transform(image)
+        image: torch.Tensor = self.transform(Image.fromarray(image))
         image = image.to(self.device)
 
         # Copy the numpy array because it's not writeable otherwise
@@ -113,8 +119,22 @@ class ImageTranslator:
         # Resize to the size the input image has
         result = cv2.resize(result, dsize=(w, h), interpolation=cv2.INTER_LINEAR)
 
-        # Return as mono8 encoding
-        return result
+        if f_keep_pixels > 0:
+            grey_img = cv2.cvtColor(img_np, cv2.COLOR_BGR2GRAY)
+            colored_pxls = f_keep_pixels * np.ones((h, w))
+
+            result = (1 - f_keep_pixels) * result + f_keep_pixels * grey_img
+
+        if f_keep_colored_pixels > 0:
+            grey_img = cv2.cvtColor(img_np, cv2.COLOR_BGR2GRAY)
+            colored_pxls = f_keep_colored_pixels * np.ones((h, w))
+            colored_pxls[img_np[:, :, 0] == img_np[:, :, 1]] = 0
+
+            result = (
+                np.ones_like(colored_pxls) - colored_pxls
+            ) * result + colored_pxls * grey_img
+
+        return result.astype(np.uint8)
 
 
 if __name__ == "__main__":
@@ -143,7 +163,10 @@ if __name__ == "__main__":
         input_file_path = os.path.join(args.input_dir, file)
         output_file_path = os.path.join(args.output_dir, file)
 
-        translated_image = GAN(np.array(Image.open(input_file_path)))
+        img_np = np.array(Image.open(input_file_path))
+        img_np = cv2.cvtColor(img_np, cv2.COLOR_GRAY2BGR)
+
+        translated_image = GAN(img_np)
         cv2.imwrite(output_file_path, translated_image)
 
         print(f"Processing: {100 * i / len(files):.2f}%")
