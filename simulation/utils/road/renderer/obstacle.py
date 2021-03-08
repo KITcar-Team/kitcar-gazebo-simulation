@@ -14,7 +14,7 @@ def draw(name, obst):
 def obstacle_model(name, x, y, length, width, height, orientation):
     return """
     <model name='{name}'>
-      <pose frame=''>{x} {y} {z} 0 0 {orientation}</pose>
+      <pose>{x} {y} {z} 0 0 {orientation}</pose>
       <link name='link'>
         <inertial>
           <mass>1</mass>

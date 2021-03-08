@@ -38,7 +38,7 @@ def model(x, y, z, orientation, name, mesh, collision_box_position, collision_bo
         </collision>
         <self_collide>0</self_collide>
     </link>
-    <pose frame=''>{x} {y} {z} {angle} 0 {orientation}</pose>
+    <pose>{x} {y} {z} {angle} 0 {orientation}</pose>
     </model>
     """.format(
         x=x,

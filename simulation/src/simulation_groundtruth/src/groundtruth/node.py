@@ -317,7 +317,7 @@ class GroundtruthNode(NodeBase):
         Args:
             model_xml: XML String that defines the model. (Without sdf declaration!)
         """
-        self.spawn_publisher.publish(f'<sdf version="1.6">{model_xml}</sdf>')
+        self.spawn_publisher.publish(f'<sdf version="1.7">{model_xml}</sdf>')
 
     def _remove_model(self, name):
         """Remove a model from Gazebo.
