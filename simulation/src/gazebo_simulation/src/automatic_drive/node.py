@@ -176,7 +176,7 @@ class AutomaticDriveNode(NodeBase):
 
             append(current_offset, current_segment, 0)
 
-        return path, stops
+        return path.simplify(0.05).smooth(0.1), stops
 
     @functools.cached_property
     def speeds(self):

@@ -28,7 +28,13 @@ def is_node_running(node_name: str) -> bool:
         return False
 
 
-def run(cmd, max_duration: float = 120, node_name="automatic_drive"):
+def run(
+    cmd,
+    max_duration: float = 120,
+    node_name="automatic_drive",
+    show_stdout=True,
+    show_stderr=True,
+):
     """Run ROS cmd in background and stop when automatic drive node shuts down."""
 
     # Ros cmd
@@ -45,11 +51,12 @@ def run(cmd, max_duration: float = 120, node_name="automatic_drive"):
                 output = output.decode().strip()  # Turn into nice string
                 print(output)
 
-    out_thread = threading.Thread(target=read, args=[ros_process.stdout])
-    err_thread = threading.Thread(target=read, args=[ros_process.stderr])
-
-    out_thread.start()
-    err_thread.start()
+    if show_stdout:
+        out_thread = threading.Thread(target=read, args=[ros_process.stdout])
+        out_thread.start()
+    if show_stderr:
+        err_thread = threading.Thread(target=read, args=[ros_process.stderr])
+        err_thread.start()
 
     start = time.time()
     node_started = False
@@ -70,8 +77,8 @@ def run(cmd, max_duration: float = 120, node_name="automatic_drive"):
     # Kill all nodes
     os.system("rosnode kill -a")
     # Kill gazebo
-    os.system("killall -9 gzserver")
-    os.system("killall -9 gzclient")
+    os.system("pkill -9 gzserver")
+    os.system("pkill -9 gzclient")
     # And the roslaunch process
     if ros_process.returncode is None:
         os.kill(ros_process.pid, 15)
@@ -91,10 +98,17 @@ def main(**kwargs):
     seeds = kwargs["seed"]
     del kwargs["seed"]
 
+    # Unpack seeds
+    show_stderr = kwargs["show_stderr"]
+    del kwargs["show_stderr"]
+
+    show_stdout = kwargs["show_stdout"]
+    del kwargs["show_stdout"]
+
     cmds = [ros_cmd(seed=seed, **kwargs) for seed in seeds]
 
     for cmd in cmds:
-        run(cmd, max_duration)
+        run(cmd, max_duration, show_stderr=show_stderr, show_stdout=show_stdout)
         time.sleep(1)  # Give some time to shut down
 
 
@@ -121,9 +135,15 @@ if __name__ == "__main__":
     parser.add_argument("--gui", help="Launch gui.", default=False)
     parser.add_argument("--road", help="Name of the road.", default="ci_roads/random_road")
     parser.add_argument(
-        "--seed", help="Seed(s) passed when generating the road.", default=[None], nargs="+"
+        "--seed",
+        help="Seed(s) passed when generating the road.",
+        default=[None],
+        nargs="+",
+        type=str,
     )
-    parser.add_argument("--max_duration", help="Maximum recording time.", default=120)
+    parser.add_argument(
+        "--max_duration", help="Maximum recording time.", type=int, default=120
+    )
     parser.add_argument(
         "--label_camera",
         help="Start the label camera as well.",
@@ -134,6 +154,25 @@ if __name__ == "__main__":
         "--control_sim_rate",
         help="Whether to control the sim rate.",
         action="store_true",
+    )
+
+    parser.add_argument(
+        "--apply_gan",
+        help="Whether to use the GAN generator.",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "--factor_keep_pixels",
+        help="Factor of original image that is kept when applying GAN.",
+        type=float,
+        default=0,
+    )
+    parser.add_argument(
+        "--factor_keep_colored_pixels",
+        help="Factor of colored pixels in original image that is kept when applying GAN.",
+        type=float,
+        default=0,
     )
 
     kwargs = {k: v for k, v in parser.parse_args()._get_kwargs()}

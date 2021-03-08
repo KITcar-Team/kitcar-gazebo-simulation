@@ -7,6 +7,7 @@ import geometry_msgs.msg as geometry_msgs
 import numpy as np
 import shapely.affinity as affinity
 import shapely.geometry  # Base class
+from scipy.ndimage import filters
 
 from simulation.utils.geometry.point import Point
 from simulation.utils.geometry.pose import Pose
@@ -168,6 +169,19 @@ class Line(shapely.geometry.linestring.LineString):
     def simplify(self, tolerance=0.001):
         coords = super().simplify(tolerance).coords
         return self.__class__(coords)
+
+    @validate_and_maintain_frames
+    def smooth(self, smooth_sigma=0.01):
+        """Use a gauss filter to smooth out the LineString coordinates.
+
+        https://programtalk.com/vs2/python/13539/label_centerlines/src_create_centerlines.py/
+        """
+        smooth_x = np.array(filters.gaussian_filter1d(self.xy[0], smooth_sigma))
+        smooth_y = np.array(filters.gaussian_filter1d(self.xy[1], smooth_sigma))
+        smoothed_coords = np.hstack((smooth_x, smooth_y))
+        smoothed_coords = zip(smooth_x, smooth_y)
+        linestring_smoothed = Line(smoothed_coords)
+        return linestring_smoothed
 
     @ensure_valid_arc_length()
     @validate_and_maintain_frames

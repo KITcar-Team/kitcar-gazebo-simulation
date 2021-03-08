@@ -39,7 +39,7 @@ class ROSCmd:
 
         return cmd
 
-    def run(self) -> Tuple[int, str]:
+    def run(self, capture_output=True, shell=True, text=True) -> Tuple[int, str]:
         """Prepare and run the command.
 
         Returns:
@@ -49,6 +49,8 @@ class ROSCmd:
         for var, val in self.env_vars.items():
             os.environ[var] = str(val)
 
-        process = subprocess.run(self.get_cmd(), capture_output=True, shell=True, text=True)
+        process = subprocess.run(
+            self.get_cmd(), capture_output=capture_output, shell=shell, text=text
+        )
 
         return process.returncode, process.stdout

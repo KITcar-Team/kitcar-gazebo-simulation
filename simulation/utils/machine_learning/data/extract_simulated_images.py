@@ -76,6 +76,24 @@ if __name__ == "__main__":
         action="store_true",
     )
     parser.add_argument(
+        "--apply_gan",
+        help="Apply gan when running the simulation.",
+        default=False,
+        action="store_true",
+    )
+    parser.add_argument(
+        "--factor_keep_pixels",
+        help="Factor of original image that is kept when applying GAN.",
+        type=float,
+        default=0,
+    )
+    parser.add_argument(
+        "--factor_keep_colored_pixels",
+        help="Factor of colored pixels in original image that is kept when applying GAN.",
+        type=float,
+        default=0,
+    )
+    parser.add_argument(
         "--seed", help="Seed(s) passed when generating the road.", default=[None], nargs="+"
     )
     parser.add_argument("--max_duration", help="Maximum recording time.", default=120)
@@ -93,6 +111,18 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--label_file", help="File path where to store the labels.", required=False
+    )
+    parser.add_argument(
+        "--show_stdout",
+        help="Whether or not to print stdout.",
+        default=False,
+        action="store_true",
+    )
+    parser.add_argument(
+        "--show_stderr",
+        help="Whether or not to print stderr.",
+        default=False,
+        action="store_true",
     )
 
     kwargs = {k: v for k, v in parser.parse_args()._get_kwargs()}

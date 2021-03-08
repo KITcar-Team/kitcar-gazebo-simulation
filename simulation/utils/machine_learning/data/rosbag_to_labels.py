@@ -33,22 +33,25 @@ def rosbag_to_labels(bag_path: str, output_file: str, label_topic: str) -> None:
         print(f"Extract labels from {bag_file}.")
         bag = rosbag.Bag(bag_file, "r")
 
-        for topic, msg, t in bag.read_messages(topics=[label_topic]):
-            msg: ImageLabelsMsg = msg
+        try:
+            for topic, msg, t in bag.read_messages(topics=[label_topic]):
+                msg: ImageLabelsMsg = msg
 
-            # Create image name from bag name
-            img_name = (
-                f"{bag.filename.split('/')[-1].split('.')[0]}"
-                f"_frame{msg.img_header.seq:06}.png"
-            )
-            labeled_dataset.labels[img_name] = []  # Add empty entry to labels
-            for bb in msg.bounding_boxes:
-                labeled_dataset.append_label(
-                    key=img_name,
-                    label=[img_name] + [getattr(bb, field) for field in bb_msg_fields],
+                # Create image name from bag name
+                img_name = (
+                    f"{bag.filename.split('/')[-1].split('.')[0]}"
+                    f"_frame{msg.img_header.seq:06}.png"
                 )
+                labeled_dataset.labels[img_name] = []  # Add empty entry to labels
+                for bb in msg.bounding_boxes:
+                    labeled_dataset.append_label(
+                        key=img_name,
+                        label=[img_name] + [getattr(bb, field) for field in bb_msg_fields],
+                    )
 
-                labeled_dataset.classes[bb.class_id] = bb.class_description
+                    labeled_dataset.classes[bb.class_id] = bb.class_description
+        except Exception as e:
+            print(f"Exception occured when reading bag file: {e}. Skipping.")
 
         bag.close()
 
