@@ -173,11 +173,11 @@ build-documentation:
   - gpu
   script:
   - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
-  - dvc pull data/real_images/maschinen_halle_parking
-  - dvc pull data/simulated_images/test_images
+  - dvc pull data/real_images/maschinen_halle_parking -j 8
+  - dvc pull data/simulated_images/test_images -j 8
   - cd simulation/utils/machine_learning/cycle_gan
     # pull cache from server and checkout
-  - dvc pull dvc.yaml --run-cache
+  - dvc pull dvc.yaml -j 8
     # Test current model, make videos and commit to dvc
   - dvc repro test_dr_drift -s
   - dvc repro test_discriminators_dr_drift -s
