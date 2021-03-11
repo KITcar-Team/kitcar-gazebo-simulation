@@ -45,7 +45,7 @@ repos:
   hooks:
   - id: flake8
 - repo: https://github.com/kadrach/pre-commit-gitlabci-lint
-  rev: 1baf80b1130b99bf45db64c7f9d2b1af19ab5662
+  rev: 22d0495c9894e8b27cc37c2ed5d9a6b46385a44c
   hooks:
   - id: gitlabci-lint
     args: ["https://git.kitcar-team.de"]
