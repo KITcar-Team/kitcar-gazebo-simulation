@@ -1,9 +1,11 @@
+import itertools
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Sequence, Tuple
+from typing import Any, Dict, List, Sequence, Tuple, Union
 
-import numpy
+import numpy as np
 from PIL import Image
+from torch import Tensor
 
 from simulation.utils.basics.init_options import InitOptions
 from simulation.utils.basics.save_options import SaveOptions
@@ -36,9 +38,13 @@ class LabeledDataset(BaseDataset, InitOptions, SaveOptions):
 
     @property
     def available_files(self) -> List[str]:
-        return [os.path.basename(file) for file in find_images(self._base_path)]
+        return [
+            os.path.basename(file)
+            for file in find_images(self._base_path)
+            if os.path.exists(file) and "debug" not in file
+        ]
 
-    def __getitem__(self, index) -> Tuple[numpy.ndarray, str]:
+    def __getitem__(self, index) -> Tuple[Union[np.ndarray, Tensor], List[Any]]:
         """Return an image and it's label.
 
         Args:
@@ -80,8 +86,36 @@ class LabeledDataset(BaseDataset, InitOptions, SaveOptions):
         super().save_as_yaml(file_path)
         self._base_path = bp
 
+    def make_ids_continuous(self):
+        """Reformat dataset to have continuous class ids."""
+        ids = sorted(self.classes.keys())
+        for new_id, old_id in enumerate(ids):
+            self.replace_id(old_id, new_id)
+
+    def replace_id(self, search_id: int, replace_id: int):
+        """Replace an id (search) with another id (replace) in the whole dataset.
+
+        Args:
+            search_id: The id being searched for.
+            replace_id: The replacement id that replaces the search ids
+        """
+        # Replace in classes dict
+        self.classes[replace_id] = self.classes.pop(search_id)
+
+        # Replace in labels dict
+        index = self.attributes.index("class_id")
+        for label in itertools.chain(*self.labels.values()):
+            if label[index] == search_id:
+                label[index] = replace_id
+
     @classmethod
     def from_yaml(cls, file):
         instance = cls._from_yaml(cls, file)
         instance._base_path = os.path.dirname(file)
         return instance
+
+    @classmethod
+    def filter_file(cls, file):
+        lds = LabeledDataset.from_yaml(file)
+        lds.filter_labels()
+        lds.save_as_yaml(file)

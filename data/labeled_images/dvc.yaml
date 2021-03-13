@@ -5,7 +5,8 @@ stages:
       kitcar11 kitcar12 kitcar13 kitcar14 kitcar15 kitcar16 kitcar17 kitcar18 kitcar19 kitcar20
       --output_dir random_roads --image_topic /camera/image_raw --label_camera --control_sim_rate
       --label_image_topic /simulation/label_camera/image --label_topic /simulation/label_camera/image_labels
-      --label_file random_roads/labels.yaml && fdupes -dN random_roads/ && fdupes -dN random_roads/debug # Remove duplicates
+      --label_file random_roads/labels.yaml && fdupes -dN random_roads/ && fdupes -dN random_roads/debug
+      && python3 -c 'from simulation.utils.machine_learning.data import LabeledDataset;LabeledDataset.filter_file("random_roads/labels.yaml")'
     deps:
     - ../../simulation/models/env_db/ci_roads/random_road.py
     - ../../simulation/models/meshes

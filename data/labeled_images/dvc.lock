@@ -5,19 +5,20 @@ create_labeled_train_images:
     kitcar16 kitcar17 kitcar18 kitcar19 kitcar20 --output_dir random_roads --image_topic
     /camera/image_raw --label_camera --control_sim_rate --label_image_topic /simulation/label_camera/image
     --label_topic /simulation/label_camera/image_labels --label_file random_roads/labels.yaml
-    && fdupes -dN random_roads/ && fdupes -dN random_roads/debug
+    && fdupes -dN random_roads/ && fdupes -dN random_roads/debug && python3 -c 'from
+    simulation.utils.machine_learning.data import LabeledDataset;LabeledDataset.filter_file("random_roads/labels.yaml")'
   deps:
   - path: ../../simulation/models/env_db/ci_roads/random_road.py
     md5: fbf15bc4b3a4ac19b79bfb35506bd837
     size: 4120
   - path: ../../simulation/models/meshes
-    md5: db8aee54810f3b634d20dc3a68766fb9.dir
-    size: 40507667
+    md5: 1e0f5cd8520ee4baae2311129d50f661.dir
+    size: 40385385
     nfiles: 119
   outs:
   - path: random_roads
-    md5: e3047994954a8f8ab11c5e61db5cfb24.dir
-    size: 1842469144
+    md5: fdf7952cbfd114f347abceeaa7b8a4ac.dir
+    size: 1842424390
     nfiles: 36727
 apply_cycle_gan_to_random_roads_labeled:
   cmd: python3 -m simulation.utils.machine_learning.cycle_gan.image_translator --input_dir
@@ -30,14 +31,14 @@ apply_cycle_gan_to_random_roads_labeled:
     md5: c44bcb616c4af1df0bcf7e86ce2fe7c2
     size: 16717942
   - path: ../../simulation/utils/machine_learning/cycle_gan/image_translator.py
-    md5: 1d54f8ba0483ed0b5d808a1273304a56
-    size: 4973
+    md5: 86a693950d23d09777d9427f6e031e01
+    size: 5855
   - path: random_roads
-    md5: e3047994954a8f8ab11c5e61db5cfb24.dir
-    size: 1842469144
+    md5: fdf7952cbfd114f347abceeaa7b8a4ac.dir
+    size: 1842424390
     nfiles: 36727
   outs:
   - path: gan_random_roads
-    md5: d85fb1f1a5f1162da48f66b4be9d3ffa.dir
-    size: 5015253645
+    md5: 1b948ffc5d22ae31f190eb90425151cd.dir
+    size: 5015208891
     nfiles: 23215
