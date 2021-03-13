@@ -11,8 +11,8 @@ create_labeled_train_images:
     md5: fbf15bc4b3a4ac19b79bfb35506bd837
     size: 4120
   - path: ../../simulation/models/meshes
-    md5: db8aee54810f3b634d20dc3a68766fb9.dir
-    size: 40507667
+    md5: 1e0f5cd8520ee4baae2311129d50f661.dir
+    size: 40385385
     nfiles: 119
   outs:
   - path: random_roads
@@ -30,8 +30,8 @@ apply_cycle_gan_to_random_roads_labeled:
     md5: c44bcb616c4af1df0bcf7e86ce2fe7c2
     size: 16717942
   - path: ../../simulation/utils/machine_learning/cycle_gan/image_translator.py
-    md5: 1d54f8ba0483ed0b5d808a1273304a56
-    size: 4973
+    md5: 86a693950d23d09777d9427f6e031e01
+    size: 5855
   - path: random_roads
     md5: e3047994954a8f8ab11c5e61db5cfb24.dir
     size: 1842469144

@@ -14,8 +14,8 @@ create_simulated_images:
     md5: fbf15bc4b3a4ac19b79bfb35506bd837
     size: 4120
   - path: ../../simulation/models/meshes
-    md5: db8aee54810f3b634d20dc3a68766fb9.dir
-    size: 40507667
+    md5: 1e0f5cd8520ee4baae2311129d50f661.dir
+    size: 40385385
     nfiles: 119
   outs:
   - path: random_roads
@@ -31,8 +31,8 @@ create_test_images:
     md5: 616e878c2b50ec0ada599db89dbe3960
     size: 2055
   - path: ../../simulation/models/meshes
-    md5: db8aee54810f3b634d20dc3a68766fb9.dir
-    size: 40507667
+    md5: 1e0f5cd8520ee4baae2311129d50f661.dir
+    size: 40385385
     nfiles: 119
   outs:
   - path: test_images
