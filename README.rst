@@ -38,7 +38,7 @@ If external files are used, a specific LICENSE-file is provided in the same fold
 Installation
 ============
 
-The simulation has been developed and primarily used on Ubuntu 18.04 and Ubuntu 20.04.
+The simulation has been developed and primarily used on Ubuntu 20.04.
 Other Linux distributions were not tested.
 Additionally, `ROS Installation <http://wiki.ros.org/ROS/Installation>`_ \
 must be installed.
