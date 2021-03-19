@@ -1,25 +1,20 @@
 stages:
-  create_labeled_train_images:
-    cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images --road ci_roads/random_road
-      --seed kitcar1 kitcar2 kitcar3 kitcar4 kitcar5 kitcar6 kitcar7 kitcar8 kitcar9 kitcar10
-      kitcar11 kitcar12 kitcar13 kitcar14 kitcar15 kitcar16 kitcar17 kitcar18 kitcar19 kitcar20
-      --output_dir random_roads --image_topic /camera/image_raw --label_camera --control_sim_rate
-      --label_image_topic /simulation/label_camera/image --label_topic /simulation/label_camera/image_labels
-      --label_file random_roads/labels.yaml && fdupes -dN random_roads/ && fdupes -dN random_roads/debug
-      && python3 -c 'from simulation.utils.machine_learning.data import LabeledDataset;LabeledDataset.filter_file("random_roads/labels.yaml")'
+  create_labeled_images_random:
+    cmd: |
+      bash ./labeled_images.sh 10 "random_roads" ci_roads/random_road
     deps:
     - ../../simulation/models/env_db/ci_roads/random_road.py
     - ../../simulation/models/meshes
+    - ./labeled_images.sh
     outs:
     - random_roads
-
-  apply_cycle_gan_to_random_roads_labeled:
-    cmd: python3 -m simulation.utils.machine_learning.cycle_gan.image_translator --input_dir random_roads/
-      --output_dir gan_random_roads && cp random_roads/labels.yaml gan_random_roads
+  create_gan_labeled_images_random:
+    cmd: |
+      bash ./gan_labeled_images.sh "0.2 0.5 0.8" "0.1 0.5 0.9" "random_roads_gan" ci_roads/random_road
     deps:
-    - random_roads
-    - ../../simulation/utils/machine_learning/cycle_gan/image_translator.py
-    - ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_a_to_b.pth
     - ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_b_to_a.pth
+    - ../../simulation/models/env_db/ci_roads/random_road.py
+    - ../../simulation/models/meshes
+    - ./gan_labeled_images.sh
     outs:
-    - gan_random_roads
+    - random_roads_gan

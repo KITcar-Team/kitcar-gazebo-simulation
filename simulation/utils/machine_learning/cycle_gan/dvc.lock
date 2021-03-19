@@ -6,9 +6,9 @@ train_dr_drift:
     size: 706133071
     nfiles: 1599
   - path: ./../../../../data/simulated_images/random_roads
-    md5: 49784d9563b820f59dc0eb24e7e7bc6d.dir
-    size: 3198359392
-    nfiles: 92897
+    md5: 95082622b0385b89349afd0ddc5970aa.dir
+    size: 5313077332
+    nfiles: 91010
   - path: configs/base_options.py
     md5: 1dcce659da154e4fec3fd85fc39b0636
     size: 3267
@@ -42,9 +42,9 @@ test_discriminators_dr_drift:
     size: 2229459338
     nfiles: 5014
   - path: ./../../../../data/simulated_images/test_images
-    md5: 6c372785ded570b6681f2dcdddb45a38.dir
-    size: 20584296
-    nfiles: 582
+    md5: bfe32ea8f9e3f9b0e0df4f351e554e94.dir
+    size: 29902408
+    nfiles: 845
   - path: checkpoints/dr_drift/latest_net_d_a.pth
     md5: ad90c2cd2e4e5724d2ab60d4b891efc4
     size: 2774020
@@ -78,9 +78,9 @@ test_dr_drift:
     size: 2229459338
     nfiles: 5014
   - path: ./../../../../data/simulated_images/test_images
-    md5: 6c372785ded570b6681f2dcdddb45a38.dir
-    size: 20584296
-    nfiles: 582
+    md5: bfe32ea8f9e3f9b0e0df4f351e554e94.dir
+    size: 29902408
+    nfiles: 845
   - path: checkpoints/dr_drift/latest_net_g_a_to_b.pth
     md5: 83504a1a0777d9fbe689cae6d48d8797
     size: 16717943

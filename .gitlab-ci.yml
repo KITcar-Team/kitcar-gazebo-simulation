@@ -28,7 +28,6 @@ stages:
 - test
 - deploy
 
-
 ######## BUILD STAGE ########
 # build kitcar-ros and simulation
 build-code:
@@ -287,6 +286,83 @@ deploy-docker-images:
   extends: .docker-images-template
   # Allow to manually build the ci image
   # E.g. to test if the Dockerfile is still working
+  except:
+  - master
+  when: manual
+
+.dvc-repro-images:
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  needs: ["build-code"]
+  stage: deploy
+  variables:
+    INIT_INPUT: 1\nyy
+  parallel:
+    matrix:
+    - DATA_FOLDER: [labeled_images, simulated_images]
+  tags:
+  - workstation
+  script:
+  - ./gitlab-ci/setup_cml_bot_git.sh
+
+  # Run ssh-agent (inside the build environment)
+  - eval $(ssh-agent -s)
+  # Add the SSH key stored in CML_BOT_SSH_PRIVATE_KEY variable to the agent store
+  - ssh-add <(echo "$CML_BOT_SSH_PRIVATE_KEY")
+
+  - export NEW_BRANCH_NAME=ci/${CI_COMMIT_BRANCH}_${CI_JOB_ID}
+  - echo ${NEW_BRANCH_NAME}
+
+  - mv /home/kitcar/kitcar-rosbag $KITCAR_REPO_PATH
+  - ls $KITCAR_REPO_PATH
+  - source $KITCAR_REPO_PATH/kitcar-rosbag/devel/setup.bash --extend
+    # Actual script!
+  - dvc pull simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_b_to_a.pth
+  - cd data/${DATA_FOLDER}
+  - dvc pull dvc.yaml -j 8 || true
+  - dvc repro -s
+  - |
+    # Check if lock file has changed
+    if [ $(./../../gitlab-ci/has_file_changed.sh dvc.lock) -eq 1 ]; then
+      git add dvc.lock
+
+      # Push to DVC Remote
+      dvc push -j 8
+
+      # Commit and Push to GitLab
+      COMMIT_MSG="data: Reproduce ${DATA_FOLDER}"
+      ./../../gitlab-ci/commit_and_push_to_branch.sh "${COMMIT_MSG}" "${NEW_BRANCH_NAME}"
+
+      # Create Merge Request
+      ENDPOINT_URL="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests"
+      BODY="{ \
+        \"id\": ${CI_PROJECT_ID}, \
+        \"source_branch\": \"${NEW_BRANCH_NAME}\", \
+        \"target_branch\": \"${CI_COMMIT_BRANCH}\",\
+        \"remove_source_branch\": true, \
+        \"title\": \"${COMMIT_MSG}\", \
+        \"labels\": \"topic::data\", \
+        \"assignee_id\": 600 \
+      }";
+      curl \
+          --request POST "${ENDPOINT_URL}" \
+          --header "PRIVATE-TOKEN: ${AUTO_MERGE_REQUEST}" \
+          --header "Content-Type: application/json" \
+          --data "${BODY}";
+    fi
+  after_script:
+  - rm -r $KITCAR_REPO_PATH/kitcar-rosbag
+  artifacts:
+    paths:
+    - data/labeled_images/dvc.lock
+    - data/simulated_images/dvc.lock
+
+dvc-repro-images-master:
+  extends: .dvc-repro-images
+  only:
+  - master
+
+dvc-repro-images:
+  extends: .dvc-repro-images
   except:
   - master
   when: manual

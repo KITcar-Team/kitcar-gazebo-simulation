@@ -1,0 +1,21 @@
+N=$1
+OUTPUT_DIR=$2
+ROAD=$3
+
+for i in $(seq 1 "$N") ; do
+  python3 -m simulation.utils.machine_learning.data.extract_simulated_images \
+    --road "$ROAD" \
+    --seed "KITCAR$i" \
+    --output_dir "$OUTPUT_DIR" \
+    --image_topic /camera/image_raw \
+    --label_camera \
+    --control_sim_rate \
+    --label_image_topic /simulation/label_camera/image \
+    --label_topic /simulation/label_camera/image_labels \
+    --label_file "$OUTPUT_DIR"/labels.yaml;
+done
+
+# Remove duplicates
+fdupes -dN "$OUTPUT_DIR"/
+fdupes -dN "$OUTPUT_DIR"/debug
+python3 -c "from simulation.utils.machine_learning.data import LabeledDataset;LabeledDataset.filter_file(\"$OUTPUT_DIR/labels.yaml\")"

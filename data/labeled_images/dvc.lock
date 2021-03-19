@@ -1,12 +1,5 @@
-create_labeled_train_images:
-  cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images
-    --road ci_roads/random_road --seed kitcar1 kitcar2 kitcar3 kitcar4 kitcar5 kitcar6
-    kitcar7 kitcar8 kitcar9 kitcar10 kitcar11 kitcar12 kitcar13 kitcar14 kitcar15
-    kitcar16 kitcar17 kitcar18 kitcar19 kitcar20 --output_dir random_roads --image_topic
-    /camera/image_raw --label_camera --control_sim_rate --label_image_topic /simulation/label_camera/image
-    --label_topic /simulation/label_camera/image_labels --label_file random_roads/labels.yaml
-    && fdupes -dN random_roads/ && fdupes -dN random_roads/debug && python3 -c 'from
-    simulation.utils.machine_learning.data import LabeledDataset;LabeledDataset.filter_file("random_roads/labels.yaml")'
+create_labeled_images_random:
+  cmd: "bash ./labeled_images.sh 10 \"random_roads\" ci_roads/random_road\n"
   deps:
   - path: ../../simulation/models/env_db/ci_roads/random_road.py
     md5: fbf15bc4b3a4ac19b79bfb35506bd837
@@ -15,30 +8,33 @@ create_labeled_train_images:
     md5: 1e0f5cd8520ee4baae2311129d50f661.dir
     size: 40385385
     nfiles: 119
+  - path: ./labeled_images.sh
+    md5: 1c47fa3fbcfaa6df4ad4fef55f0b4697
+    size: 674
   outs:
   - path: random_roads
-    md5: fdf7952cbfd114f347abceeaa7b8a4ac.dir
-    size: 1842424390
-    nfiles: 36727
-apply_cycle_gan_to_random_roads_labeled:
-  cmd: python3 -m simulation.utils.machine_learning.cycle_gan.image_translator --input_dir
-    random_roads/ --output_dir gan_random_roads && cp random_roads/labels.yaml gan_random_roads
+    md5: 45422ff54329a5b21f193c42b44929ed.dir
+    size: 1120312227
+    nfiles: 16588
+create_gan_labeled_images_random:
+  cmd: "bash ./gan_labeled_images.sh \"0.2 0.5 0.8\" \"0.1 0.5 0.9\" \"random_roads_gan\"\
+    \ ci_roads/random_road\n"
   deps:
-  - path: ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_a_to_b.pth
-    md5: 83504a1a0777d9fbe689cae6d48d8797
-    size: 16717943
+  - path: ../../simulation/models/env_db/ci_roads/random_road.py
+    md5: fbf15bc4b3a4ac19b79bfb35506bd837
+    size: 4120
+  - path: ../../simulation/models/meshes
+    md5: 1e0f5cd8520ee4baae2311129d50f661.dir
+    size: 40385385
+    nfiles: 119
   - path: ../../simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_b_to_a.pth
     md5: c44bcb616c4af1df0bcf7e86ce2fe7c2
     size: 16717942
-  - path: ../../simulation/utils/machine_learning/cycle_gan/image_translator.py
-    md5: 86a693950d23d09777d9427f6e031e01
-    size: 5855
-  - path: random_roads
-    md5: fdf7952cbfd114f347abceeaa7b8a4ac.dir
-    size: 1842424390
-    nfiles: 36727
+  - path: ./gan_labeled_images.sh
+    md5: 836e9360ae1a9344a095ba37524fb4c6
+    size: 788
   outs:
-  - path: gan_random_roads
-    md5: 1b948ffc5d22ae31f190eb90425151cd.dir
-    size: 5015208891
-    nfiles: 23215
+  - path: random_roads_gan
+    md5: f4a8b6547f4b9a128debae6fcec4af69.dir
+    size: 815084441
+    nfiles: 2771
