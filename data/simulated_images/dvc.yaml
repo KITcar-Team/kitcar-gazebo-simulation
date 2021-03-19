@@ -1,24 +1,17 @@
 stages:
   create_simulated_images:
-    cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images --road ci_roads/random_road
-      --seed kitcar1 kitcar2 kitcar3 kitcar4 kitcar5 kitcar6 kitcar7 kitcar8 kitcar9 kitcar10
-      kitcar11 kitcar12 kitcar13 kitcar14 kitcar15 kitcar16 kitcar17 kitcar18 kitcar19 kitcar20
-      kitcar21 kitcar22 kitcar23 kitcar24 kitcar25 kitcar26 kitcar27 kitcar28 kitcar29 kitcar30
-      kitcar31 kitcar32 kitcar33 kitcar34 kitcar35 kitcar36 kitcar37 kitcar38 kitcar39 kitcar40
-      kitcar41 kitcar42 kitcar43 kitcar44 kitcar45 kitcar46 kitcar47 kitcar48 kitcar49 kitcar40
-      kitcar51 kitcar52 kitcar53 kitcar54 kitcar55 kitcar56 kitcar57 kitcar58 kitcar59 kitcar60
-      kitcar61 --output_dir random_roads --image_topic /camera/image_raw && fdupes -dN random_roads/ # Remove duplicates
+    cmd: bash ./simulated_images.sh kitcar 30 random_roads "--road ci_roads/random_road"
     deps:
     - ../../simulation/models/env_db/ci_roads/random_road.py
     - ../../simulation/models/meshes
+    - ./simulated_images.sh
     outs:
     - random_roads
   create_test_images:
-    cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images --road default_road
-      --randomize_path False --output_dir test_images --image_topic /camera/image_raw && fdupes
-      -dN test_images/ # Remove duplicates
+    cmd: bash ./simulated_images.sh kitcar 1 test_images "--randomize_path False --road default_road"
     deps:
     - ../../simulation/models/env_db/default_road.py
     - ../../simulation/models/meshes
+    - ./simulated_images.sh
     outs:
     - test_images

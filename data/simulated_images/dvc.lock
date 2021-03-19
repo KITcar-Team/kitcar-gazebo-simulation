@@ -1,14 +1,5 @@
 create_simulated_images:
-  cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images
-    --road ci_roads/random_road --seed kitcar1 kitcar2 kitcar3 kitcar4 kitcar5 kitcar6
-    kitcar7 kitcar8 kitcar9 kitcar10 kitcar11 kitcar12 kitcar13 kitcar14 kitcar15
-    kitcar16 kitcar17 kitcar18 kitcar19 kitcar20 kitcar21 kitcar22 kitcar23 kitcar24
-    kitcar25 kitcar26 kitcar27 kitcar28 kitcar29 kitcar30 kitcar31 kitcar32 kitcar33
-    kitcar34 kitcar35 kitcar36 kitcar37 kitcar38 kitcar39 kitcar40 kitcar41 kitcar42
-    kitcar43 kitcar44 kitcar45 kitcar46 kitcar47 kitcar48 kitcar49 kitcar40 kitcar51
-    kitcar52 kitcar53 kitcar54 kitcar55 kitcar56 kitcar57 kitcar58 kitcar59 kitcar60
-    kitcar61 --output_dir random_roads --image_topic /camera/image_raw && fdupes -dN
-    random_roads/
+  cmd: bash ./simulated_images.sh kitcar 30 random_roads "--road ci_roads/random_road"
   deps:
   - path: ../../simulation/models/env_db/ci_roads/random_road.py
     md5: fbf15bc4b3a4ac19b79bfb35506bd837
@@ -17,15 +8,17 @@ create_simulated_images:
     md5: 1e0f5cd8520ee4baae2311129d50f661.dir
     size: 40385385
     nfiles: 119
+  - path: ./simulated_images.sh
+    md5: a78046e7268306b2c44ac025b224249d
+    size: 285
   outs:
   - path: random_roads
-    md5: 49784d9563b820f59dc0eb24e7e7bc6d.dir
-    size: 3198359392
-    nfiles: 92897
+    md5: 95082622b0385b89349afd0ddc5970aa.dir
+    size: 5313077332
+    nfiles: 91010
 create_test_images:
-  cmd: python3 -m simulation.utils.machine_learning.data.extract_simulated_images
-    --road default_road --randomize_path False --output_dir test_images --image_topic
-    /camera/image_raw && fdupes -dN test_images/
+  cmd: bash ./simulated_images.sh kitcar 1 test_images "--randomize_path False --road
+    default_road"
   deps:
   - path: ../../simulation/models/env_db/default_road.py
     md5: 616e878c2b50ec0ada599db89dbe3960
@@ -34,8 +27,11 @@ create_test_images:
     md5: 1e0f5cd8520ee4baae2311129d50f661.dir
     size: 40385385
     nfiles: 119
+  - path: ./simulated_images.sh
+    md5: a78046e7268306b2c44ac025b224249d
+    size: 285
   outs:
   - path: test_images
-    md5: 6c372785ded570b6681f2dcdddb45a38.dir
-    size: 20584296
-    nfiles: 582
+    md5: bfe32ea8f9e3f9b0e0df4f351e554e94.dir
+    size: 29902408
+    nfiles: 845
