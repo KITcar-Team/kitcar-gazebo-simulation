@@ -20,7 +20,11 @@ xvfb
 RUN apt update && DEBIAN_FRONTEND=noninteractive xargs --arg-file=/packages_focal.txt apt install -y
 
 # Install pip packages
-RUN pip3 install --upgrade --upgrade-strategy eager --no-warn-script-location \
+RUN pip3 install \
+    --no-cache-dir \
+    --upgrade \
+    --upgrade-strategy eager \
+    --no-warn-script-location \
     -r /requirements.txt
 
 # Reduce image size by removing apt cache
