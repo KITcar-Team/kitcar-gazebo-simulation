@@ -44,11 +44,6 @@ repos:
   rev: 3.8.4
   hooks:
   - id: flake8
-- repo: https://github.com/kadrach/pre-commit-gitlabci-lint
-  rev: 22d0495c9894e8b27cc37c2ed5d9a6b46385a44c
-  hooks:
-  - id: gitlabci-lint
-    args: ["https://git.kitcar-team.de"]
 - repo: https://github.com/asottile/pyupgrade
   rev: v2.10.0
   hooks:
