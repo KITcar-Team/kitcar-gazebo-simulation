@@ -2,7 +2,7 @@
 
 # Install ssh-agent if not already installed, it is required by Docker.
 # (change apt-get to yum if you use a CentOS-based image)
-which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+command -v ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
 
 # For Docker builds disable host key checking. Be aware that by adding that
 # you are suspectible to man-in-the-middle attacks.
