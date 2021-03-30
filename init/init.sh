@@ -1,7 +1,7 @@
 #!/bin/bash
 # ask for init or cleanup
 echo -e "\e[96mAttention this script installs several packages (apt and pip3)! \e[39m"
-read -p "Do you want to initialize (1) or cleanup (2) kitcar-gazebo-simulation? " option
+read -r -p "Do you want to initialize (1) or cleanup (2) kitcar-gazebo-simulation? " option
 
 check_for_ubuntu_version(){
   grep -qE ".*(UBUNTU|VERSION)_CODENAME.*=.*${1}" /etc/os-release
@@ -24,7 +24,8 @@ pip_install_reqs(){
     echo -e "\nStart installing python packages from \e[2minit/$1\e[22m"
     if [ "focal" == "$UBUNTU_VERSION" ]
     then
-        pip3 install --upgrade --upgrade-strategy eager --no-warn-script-location -r $INIT_DIR/$1
+        # shellcheck disable=SC2086
+        pip3 install --upgrade --upgrade-strategy eager --no-warn-script-location -r "$INIT_DIR"/$1
     else
         echo -e "\n\e[31mERROR: You are not using the correct version of Ubuntu (focal)!\e[39m" ;
         exit;
@@ -46,6 +47,7 @@ case "$option" in
 
     # load changes
     echo "apply changes to current terminal ..."
+    # shellcheck source=/dev/null
     source  ~/.bashrc
 
     UBUNTU_VERSION=$(check_ubuntu_version)
@@ -53,7 +55,7 @@ case "$option" in
 
     # Install apt packages
     echo -e "\nStart installing apt packages from \e[2minit/packages_$UBUNTU_VERSION.txt\e[22m (requires sudo priviliges)"
-    sudo apt update && sudo xargs --arg-file=$INIT_DIR/packages_$UBUNTU_VERSION.txt apt install -y
+    sudo apt update && sudo xargs --arg-file="$INIT_DIR"/packages_"$UBUNTU_VERSION".txt apt install -y
 
     # Install python packages
     pip_install_reqs requirements.txt
@@ -72,10 +74,11 @@ case "$option" in
       pip_install_reqs requirements_machine_learning.txt
     fi
 
+    # shellcheck source=/dev/null
     source ~/.profile
 
     # Install pre-commit hook
-    cd $KITCAR_REPO_PATH/kitcar-gazebo-simulation
+    cd "$KITCAR_REPO_PATH"/kitcar-gazebo-simulation || exit
     pre-commit install
   ;;
 
@@ -85,6 +88,7 @@ case "$option" in
 
     echo "apply changes to current terminal ..."
     # Source init / This fails when the simulation has not been built
+    # shellcheck source=/dev/null
     source  ~/.bashrc
   ;;
 

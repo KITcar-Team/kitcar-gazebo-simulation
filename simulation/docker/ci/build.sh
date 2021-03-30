@@ -1,4 +1,5 @@
 #!/bin/bash
+
 SERVICE=$1
 TAG=$2
 PARENT_TAG=$3
@@ -12,14 +13,14 @@ ln ../../../init/* init/
 
 # Copy kitcar-rosbag into the build context (./)
 # (If not empty)
-if [[ ! -z "$KITCAR_ROSBAGS_PATH" ]]; then cp -r $KITCAR_ROSBAGS_PATH ./kitcar-rosbag; fi
+if [[ -n "$KITCAR_ROSBAGS_PATH" ]]; then cp -r "$KITCAR_ROSBAGS_PATH" ./kitcar-rosbag; fi
 
 # Set env variable used by docker-compose to create the image's tag
 export CI_IMAGE_TAG=$TAG
 export CI_PARENT_TAG=$PARENT_TAG
 # Build the image
-docker-compose build $SERVICE
+docker-compose build "$SERVICE"
 
 # Clean up
 rm -rf init/
-if [[ ! -z "$KITCAR_ROSBAGS_PATH" ]]; then rm -rf kitcar-rosbag; fi
+if [[ -n "$KITCAR_ROSBAGS_PATH" ]]; then rm -rf kitcar-rosbag; fi

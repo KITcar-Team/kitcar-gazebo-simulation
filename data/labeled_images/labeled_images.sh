@@ -1,3 +1,5 @@
+#!/bin/bash
+
 N=$1
 OUTPUT_DIR=$2
 ROAD=$3
