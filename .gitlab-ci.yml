@@ -224,6 +224,7 @@ docker-images:
   allow_failure: true
   tags:
   - docker
+  - contabo
   services:
   - docker:19.03.13-dind
   variables:
