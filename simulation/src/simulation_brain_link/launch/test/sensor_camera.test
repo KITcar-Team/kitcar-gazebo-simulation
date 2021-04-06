@@ -23,7 +23,7 @@
     <arg name="include_mission_mode_plugin" value="$(arg include_mission_mode_plugin)" />
   </include>
   <!-- Start the test -->
-  <test test-name="test_sensor_camera" pkg="simulation_brain_link" time-limit="$(arg time_limit)" type="test_sensor_camera">
+  <test launch-prefix="coverage run -p" test-name="test_sensor_camera" pkg="simulation_brain_link" time-limit="$(arg time_limit)" type="test_sensor_camera">
     <rosparam file="$(find simulation_brain_link)/param/sensor_camera/topics.yaml" command="load" ns="topics" />
     <rosparam file="$(find simulation_brain_link)/param/sensor_camera/default.yaml" command="load" />
   </test>

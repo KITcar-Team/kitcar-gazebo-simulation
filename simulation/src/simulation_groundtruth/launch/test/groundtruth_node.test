@@ -6,7 +6,7 @@
   <arg name="seed" default="KITCAR" />
   <arg name="road" default="KITCAR" />
 
-  <test test-name="test_groundtruth_node" pkg="simulation_groundtruth" time-limit="$(arg time_limit)" type="test_groundtruth_node">
+  <test launch-prefix="coverage run -p" test-name="test_groundtruth_node" pkg="simulation_groundtruth" time-limit="$(arg time_limit)" type="test_groundtruth_node">
     <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load"/>
     <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics"/>
     <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics/car_state" />

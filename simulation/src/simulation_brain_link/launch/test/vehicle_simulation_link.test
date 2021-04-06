@@ -50,7 +50,7 @@
     <arg name="camera_specs_path" value="$(find gazebo_simulation)/param/car_specs/dr_drift/camera.yaml" />
   </include>
 
-  <test test-name="test_vehicle_simulation_link_node" pkg="simulation_brain_link" time-limit="$(arg time_limit)" type="test_vehicle_simulation_link_node">
+  <test launch-prefix="coverage run -p" test-name="test_vehicle_simulation_link_node" pkg="simulation_brain_link" time-limit="$(arg time_limit)" type="test_vehicle_simulation_link_node">
     <param name="car_name" value="$(arg car_name)"/>
     <param name="sleep_time" value="$(arg sleep_time)"/>
     <param name="tolerance" value="$(arg tolerance)"/>

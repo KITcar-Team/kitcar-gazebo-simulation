@@ -70,6 +70,8 @@ test-python-packages:
 
     # Test the urdf package
   - coverage run -a -m simulation.utils.urdf.test.test_core
+
+    # Collect coverage
   - coverage report
   - coverage xml
   artifacts:
@@ -88,13 +90,17 @@ test-machine-learning-package:
   - coverage run -m simulation.utils.machine_learning.models.test
   - coverage run -a -m simulation.utils.machine_learning.cycle_gan.models.test
   - coverage run -a -m simulation.utils.machine_learning.data.test
-  - coverage report
-  - coverage xml
     # Test if the camera publishes images with the cycle gan turned on
   - dvc pull simulation/utils/machine_learning/cycle_gan/checkpoints/dr_drift/latest_net_g_b_to_a.pth
   - git lfs pull --include=simulation/utils/machine_learning/cycle_gan/resources/mask.png
   - rostest simulation_brain_link sensor_camera.test apply_gan:=true use_wasserstein_gan:=false
   - rostest simulation_brain_link sensor_camera.test apply_gan:=true use_wasserstein_gan:=true
+
+    # Collect coverage
+  - mv /root/.ros/.coverage* .
+  - coverage combine -a
+  - coverage report
+  - coverage xml
   artifacts:
     reports:
       cobertura: coverage.xml
@@ -106,6 +112,17 @@ test-ros-packages:
   - cd simulation
   - catkin_make run_tests -j1
   - catkin_test_results    # Ensure that pipeline fails when test fails
+  - cd ..
+
+    # Collect coverage
+  - mv /root/.ros/.coverage* .
+  - coverage combine
+  - coverage report
+  - coverage xml
+  artifacts:
+    reports:
+      cobertura: coverage.xml
+
 
 # Run tests to ensure that the evaluation pipeline is working
 test-drive-evaluation:

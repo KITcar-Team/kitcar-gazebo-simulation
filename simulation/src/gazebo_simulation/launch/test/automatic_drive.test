@@ -21,7 +21,7 @@
     <arg name="path_file" value="$(find gazebo_simulation)/param/automatic_drive/test/path.yaml"/>
   </include>
 
-  <test test-name="test_automatic_drive" pkg="gazebo_simulation" time-limit="$(arg time_limit)" type="test_automatic_drive">
+  <test launch-prefix="coverage run -p" test-name="test_automatic_drive" pkg="gazebo_simulation" time-limit="$(arg time_limit)" type="test_automatic_drive">
     <param name="rate" value="$(arg rate)" />
     <param name="tolerance" value="$(arg tolerance)" />
     <rosparam file="$(find gazebo_simulation)/param/car_state/topics.yaml" command="load" ns="topics" />
