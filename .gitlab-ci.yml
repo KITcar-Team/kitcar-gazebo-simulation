@@ -73,10 +73,11 @@ test-python-packages:
 
     # Collect coverage
   - coverage report
-  - coverage xml
+  - cp .coverage .coverage_py
   artifacts:
-    reports:
-      cobertura: coverage.xml
+    paths:
+    - .coverage_py
+    expire_in: 2 days
 
 test-machine-learning-package:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
@@ -100,10 +101,11 @@ test-machine-learning-package:
   - mv /root/.ros/.coverage* .
   - coverage combine -a
   - coverage report
-  - coverage xml
+  - cp .coverage .coverage_ml
   artifacts:
-    reports:
-      cobertura: coverage.xml
+    paths:
+    - .coverage_ml
+    expire_in: 2 days
 
 test-ros-packages:
   stage: test
@@ -118,10 +120,11 @@ test-ros-packages:
   - mv /root/.ros/.coverage* .
   - coverage combine
   - coverage report
-  - coverage xml
+  - cp .coverage .coverage_ros
   artifacts:
-    reports:
-      cobertura: coverage.xml
+    paths:
+    - .coverage_ros
+    expire_in: 2 days
 
 
 # Run tests to ensure that the evaluation pipeline is working
@@ -191,6 +194,24 @@ build-documentation:
     paths:
     - docs/_build/html/*
     expire_in: 2 day
+
+collect-coverage:
+  stage: deploy
+  needs:
+  - build-code
+  - test-python-packages
+  - test-machine-learning-package
+  - test-ros-packages
+  script:
+  - coverage combine .coverage_py .coverage_ml .coverage_ros
+  - coverage xml
+  - coverage html
+  artifacts:
+    paths:
+    - htmlcov
+    expire_in: 20 days
+    reports:
+      cobertura: coverage.xml
 
 cml-cyclegan:
   stage: deploy
