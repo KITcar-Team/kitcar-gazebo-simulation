@@ -166,6 +166,10 @@ test-documentation:
   - python3 docs/content/tutorials/road_examples/example.py
   - cd docs
   - make doctest
+  - cd ..
+    # Calculate coverage
+  - docstr-coverage simulation/ -F 0
+  - echo "TOTAL $(docstr-coverage simulation/ -p -F 0 | cut -d . -f 1)%"
 
 ######### Documentation ########
 
