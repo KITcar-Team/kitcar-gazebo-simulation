@@ -45,7 +45,7 @@
 
 
   <!-- The expected argument allows for generic tests. Possible values are positive, negative -->
-  <test test-name="drive_test" pkg="simulation_evaluation" time-limit="$(arg time_limit)" type="drive_test">
+  <test launch-prefix="coverage run -p" test-name="drive_test" pkg="simulation_evaluation" time-limit="$(arg time_limit)" type="drive_test">
     <param name="mission_mode" value="$(arg mission_mode)"/>
     <param name="expected_result_state" value="$(arg expected_result_state)"/>
     <param name="expected_parking_successes" value="$(arg expected_parking_successes)"/>

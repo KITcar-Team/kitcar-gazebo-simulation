@@ -1,0 +1,8 @@
+[report]
+include =
+    simulation/*
+omit =
+    */site-packages/*
+    */dist-packages/*
+    simulation/devel/*
+    */test/*

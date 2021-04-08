@@ -37,7 +37,7 @@
     <arg name="pub_clock_frequency" default="$(arg gz_pub_clock_frequency)" />
   </include>
   <!-- Start the test -->
-  <test test-name="test_model_plugin_link" pkg="gazebo_simulation" time-limit="$(arg time_limit)" type="test_model_plugin_link">
+  <test launch-prefix="coverage run -p" test-name="test_model_plugin_link" pkg="gazebo_simulation" time-limit="$(arg time_limit)" type="test_model_plugin_link">
     <param name="car_name" value="$(arg car_name)" />
     <param name="tolerance" value="$(arg tolerance)" />
     <param name="sleep_time" value="$(arg sleep_time)" />

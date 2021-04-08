@@ -30,7 +30,7 @@
     <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/default.yaml" command="load" ns="vehicle_simulation_link" />
   </node>
 
-  <test test-name="test_groundtruth_visualization_node" pkg="simulation_groundtruth" time-limit="$(arg time_limit)" type="test_groundtruth_visualization_node">
+  <test launch-prefix="coverage run -p" test-name="test_groundtruth_visualization_node" pkg="simulation_groundtruth" time-limit="$(arg time_limit)" type="test_groundtruth_visualization_node">
     <rosparam file="$(find simulation_groundtruth)/param/groundtruth/default.yaml" command="load" />
     <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics" />
     <rosparam file="$(find simulation_brain_link)/param/vehicle_simulation_link/default.yaml" command="load" ns="vehicle_simulation_link" />
