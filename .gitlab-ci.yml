@@ -2,11 +2,11 @@ variables:
   GIT_STRATEGY: clone
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar/
-  INIT_INPUT: 1\nyn   # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
+  INIT_INPUT: 1\nnn   # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
   DISPLAY: ":1.0"
 
 default:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:focal
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
   retry:
     max: 2
     when:
@@ -35,7 +35,7 @@ build-code:
   variables:
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   script:
-  - cd  simulation
+  - cd simulation
   - catkin_make
   artifacts:
     paths:
@@ -84,7 +84,7 @@ test-machine-learning-package:
   stage: test
   needs: ["build-code"]
   variables:
-    INIT_INPUT: 1\nyy
+    INIT_INPUT: 1\nnn
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
     CUDA_VISIBLE_DEVICES: ""   # Don't use CUDA in CI
   script:
@@ -160,7 +160,7 @@ test-documentation:
   stage: test
   needs: ["build-code"]
   variables:
-    INIT_INPUT: 1\nyy
+    INIT_INPUT: 1\nyn
   script:
     # Get DVC files
   - dvc pull -R docs
@@ -182,7 +182,7 @@ build-documentation:
   stage: deploy
   needs: ["test-documentation", "build-code"]
   variables:
-    INIT_INPUT: 1\nyy
+    INIT_INPUT: 1\nyn
   script:
     # Get DVC files
   - dvc pull -R docs
@@ -227,7 +227,7 @@ cml-cyclegan:
   - when: manual
   allow_failure: true
   variables:
-    INIT_INPUT: 1\nyy
+    INIT_INPUT: 1\nny
     GIT_LFS_SKIP_SMUDGE: '1'  # Don't pull Git LFS
   tags:
   - gpu
@@ -287,19 +287,18 @@ docker-images:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ''
   before_script:
+  - export IMAGE_URL=$CI_REGISTRY/kitcar/kitcar-gazebo-simulation
   - |
     if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
-      export TAG_CI_IMAGE=focal
-      export TAG_CI_IMAGE_DOCS=docs
-      export TAG_CI_IMAGE_ML=machine_learning
-      export TAG_DEFAULT_IMAGE_CI=ci
-      export TAG_KITCAR_ROS_IMAGE=focal
+      export CI_IMAGE_TAG=latest
+      export CI_IMAGE_TAG_ML=machine_learning
+      export CI_IMAGE_TAG_DOCS=docs
+      export CI_IMAGE_TAG_ROS=latest
     else
-      export TAG_CI_IMAGE=focal_${CI_COMMIT_REF_NAME}
-      export TAG_CI_IMAGE_DOCS=docs_${CI_COMMIT_REF_NAME}
-      export TAG_CI_IMAGE_ML=machine_learning_${CI_COMMIT_REF_NAME}
-      export TAG_DEFAULT_IMAGE_CI=ci_${CI_COMMIT_REF_NAME}
-      export TAG_KITCAR_ROS_IMAGE=focal_${CI_COMMIT_REF_NAME}
+      export CI_IMAGE_TAG=branch_${CI_COMMIT_REF_NAME}
+      export CI_IMAGE_TAG_ML=branch_${CI_COMMIT_REF_NAME}_machine_learning
+      export CI_IMAGE_TAG_DOCS=branch_${CI_COMMIT_REF_NAME}_docs
+      export CI_IMAGE_TAG_ROS=branch_${CI_COMMIT_REF_NAME}
     fi
   - apk add --no-cache docker-compose git
   - docker --version
@@ -309,26 +308,19 @@ docker-images:
     # Clone kitcar-rosbag
   - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-rosbag.git
     $KITCAR_REPO_PATH/kitcar-rosbag
-    # Test building the ci image
-  - cd simulation/docker/ci
-    # The argument NO_PARENT_NEEDED is passed to build.sh just to pass any value,
-    # the docker-compose just ignores it.
-  - /bin/sh build.sh base $TAG_CI_IMAGE NO_PARENT_NEEDED $KITCAR_REPO_PATH/kitcar-rosbag
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE
-  - /bin/sh build.sh machine_learning $TAG_CI_IMAGE_ML $TAG_CI_IMAGE
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_ML
-  - /bin/sh build.sh docs $TAG_CI_IMAGE_DOCS $TAG_CI_IMAGE_ML
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_DOCS
-      # Test building the default image
-  - cd ../default
-  - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE_CI $KITCAR_REPO_PATH
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:$TAG_DEFAULT_IMAGE_CI
-   # Test building the kitcar_ros_ci image
-  - cd ../kitcar_ros_ci
-  - /bin/sh build.sh $CI_REGISTRY $TAG_DEFAULT_IMAGE_CI $TAG_KITCAR_ROS_IMAGE
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/kitcar_ros_ci:$TAG_KITCAR_ROS_IMAGE
+
+    # Copy kitcar-rosbag into the build context (./)
+  - mkdir -p kitcar-rosbag
+  - cp -r $KITCAR_REPO_PATH/kitcar-rosbag/* kitcar-rosbag/
+
+  - cd docker
+
+    # Build Docker images
+  - docker-compose build
+    # Push docker images
+  - docker-compose push
   after_script:
-  # Clean up
+    # Clean up
   - rm -rf $KITCAR_REPO_PATH/kitcar-rosbag
 
 dvc-repro-images:
@@ -342,7 +334,7 @@ dvc-repro-images:
   allow_failure: true
   stage: deploy
   variables:
-    INIT_INPUT: 1\nyy
+    INIT_INPUT: 1\nnn
   parallel:
     matrix:
     - DATA_FOLDER: [labeled_images, simulated_images]

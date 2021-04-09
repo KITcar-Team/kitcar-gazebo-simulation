@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  base:
+    image: ${IMAGE_URL}/ci:${CI_IMAGE_TAG}
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+  machine-learning:
+    image: ${IMAGE_URL}/ci:${CI_IMAGE_TAG_ML}
+    depends_on:
+    - base
+    build:
+      context: ../
+      dockerfile: docker/DockerfileML
+      args:
+        PARENT: ${IMAGE_URL}/ci:${CI_IMAGE_TAG}
+  docs:
+    image: ${IMAGE_URL}/ci:${CI_IMAGE_TAG_DOCS}
+    depends_on:
+    - base
+    build:
+      context: ../
+      dockerfile: docker/DockerfileDocs
+      args:
+        PARENT: ${IMAGE_URL}/ci:${CI_IMAGE_TAG}
+  kitcar-ros:
+    image: ${IMAGE_URL}/kitcar_ros_ci:${CI_IMAGE_TAG_ROS}
+    depends_on:
+    - base
+    build:
+      context: ../
+      dockerfile: docker/DockerfileROS
+      args:
+        PARENT: ${IMAGE_URL}/ci:${CI_IMAGE_TAG}

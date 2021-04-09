@@ -1,5 +1,5 @@
-ARG PARENT_TAG=ci
-FROM git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:${PARENT_TAG}
+ARG PARENT
+FROM ${PARENT}
 
 RUN pip3 install \
     --no-cache-dir \

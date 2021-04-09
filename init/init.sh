@@ -67,7 +67,7 @@ case "$option" in
       pip_install_reqs requirements_documentation.txt
     fi
 
-    read -p "Do you want to install python packages necessary for machine learning? [y/n]" -n 1 -r
+    read -p "Do you want to install the cuda version of PyTorch for training neural networks? [y/n]" -n 1 -r
     echo    # (optional) move to a new line
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
