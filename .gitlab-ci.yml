@@ -126,7 +126,6 @@ test-ros-packages:
     - .coverage_ros
     expire_in: 2 days
 
-
 # Run tests to ensure that the evaluation pipeline is working
 test-drive-evaluation:
   stage: test
@@ -270,7 +269,7 @@ cml-cyclegan:
 # This is done everytime the master branch is updated
 docker-images:
   stage: deploy
-  image: docker:19.03.13
+  image: docker:20.10.5
   needs: ["build-code"]
   rules:
   - if: '$CI_COMMIT_REF_NAME == "master"'
@@ -282,7 +281,7 @@ docker-images:
   - docker
   - contabo
   services:
-  - docker:19.03.13-dind
+  - docker:20.10.5-dind
   variables:
     # Ensure that lfs files are available in resulting images!
     DOCKER_HOST: tcp://docker:2375
