@@ -9,13 +9,13 @@ create_simulated_images:
     size: 40385385
     nfiles: 119
   - path: ./simulated_images.sh
-    md5: a78046e7268306b2c44ac025b224249d
-    size: 285
+    md5: 3c3a5309412b9c6ca322dc72cbdb3574
+    size: 354
   outs:
   - path: random_roads
-    md5: 95082622b0385b89349afd0ddc5970aa.dir
-    size: 5313077332
-    nfiles: 91010
+    md5: 63e0b013a9e7c05501f7a5f2924c7449.dir
+    size: 5059923206
+    nfiles: 86392
 create_test_images:
   cmd: bash ./simulated_images.sh kitcar 1 test_images "--randomize_path False --road
     default_road"
@@ -28,10 +28,10 @@ create_test_images:
     size: 40385385
     nfiles: 119
   - path: ./simulated_images.sh
-    md5: a78046e7268306b2c44ac025b224249d
-    size: 285
+    md5: 3c3a5309412b9c6ca322dc72cbdb3574
+    size: 354
   outs:
   - path: test_images
-    md5: bfe32ea8f9e3f9b0e0df4f351e554e94.dir
-    size: 29902408
-    nfiles: 845
+    md5: 5c56ccecd686447467eec7a7b73d08da.dir
+    size: 94556118
+    nfiles: 1570

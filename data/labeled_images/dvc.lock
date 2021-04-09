@@ -9,13 +9,13 @@ create_labeled_images_random:
     size: 40385385
     nfiles: 119
   - path: ./labeled_images.sh
-    md5: 1c47fa3fbcfaa6df4ad4fef55f0b4697
-    size: 674
+    md5: 8d60860827992a0413cd4fb6949598b8
+    size: 687
   outs:
   - path: random_roads
-    md5: 45422ff54329a5b21f193c42b44929ed.dir
-    size: 1120312227
-    nfiles: 16588
+    md5: 5c642529d8b53997244382920e4ead53.dir
+    size: 1068178909
+    nfiles: 16064
 create_gan_labeled_images_random:
   cmd: "bash ./gan_labeled_images.sh \"0.2 0.5 0.8\" \"0.1 0.5 0.9\" \"random_roads_gan\"\
     \ ci_roads/random_road\n"
