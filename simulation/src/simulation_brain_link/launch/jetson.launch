@@ -1,0 +1,12 @@
+<!-- Running KITcar_brain software needed for the simulation -->
+<launch>
+  <arg name="car_name" default="dr_drift" />
+  <arg name="debug" default="false" />
+  <arg name="debug_max_rate" default="60" />
+
+  <include file="$(find jetson_perception)/launch/traffic_sign_detection.launch">
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="debug_max_rate" value="$(arg debug_max_rate)" />
+  </include>
+
+</launch>

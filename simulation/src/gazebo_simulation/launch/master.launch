@@ -31,6 +31,10 @@ Use this launch file to start the complete simulation.-->
   <arg name="include_car" default="true" />
   <!-- Indicate whether the KITcar_brain is started. -->
   <arg name="include_brain" default="true" />
+  <!-- Indicate whether KITcar_jetson is started. -->
+  <arg name="include_jetson" default="false" />
+  <arg name="jetson_debug" default="false" />
+  <arg name="jetson_debug_max_rate" default="60" />
   <!-- Indicate whether to include the vehicle simulation or automatic_drive.
        The vehicle simulation is used to simulate vehicle's movement based on KITcar_brain's commands.
        If KITcar_brain is not running, automatic_drive can be used to "drive" the vehicle on the road.
@@ -114,6 +118,12 @@ Use this launch file to start the complete simulation.-->
   <include if="$(arg include_brain)" file="$(find simulation_brain_link)/launch/brain.launch">
     <arg name="car_name" value="$(arg car_name)" />
   </include>
+  <!-- Launch KITcar_jetson -->
+  <include if="$(arg include_jetson)" file="$(find simulation_brain_link)/launch/jetson.launch">
+    <arg name="debug" value="$(arg jetson_debug)" />
+    <arg name="debug_max_rate" value="$(arg jetson_debug_max_rate)" />
+  </include>
+
   <!-- Launch nodes to connect gazebo and kitcar brain -->
   <include file="$(find simulation_brain_link)/launch/vehicle_link.launch">
     <arg name="car_name" value="$(arg car_name)" />
