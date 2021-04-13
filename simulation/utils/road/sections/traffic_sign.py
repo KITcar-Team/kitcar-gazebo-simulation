@@ -115,6 +115,10 @@ class TrafficSign(RoadElementRect):
     EXPRESSWAY_START = SignTuple(mesh="expressway_start_sign")
     EXPRESSWAY_END = SignTuple(mesh="expressway_end_sign")
 
+    kind: SignTuple = None
+    visible: bool = True
+    """Indicate whether the traffic sign is visible while driving on the road."""
+
     def __init__(
         self,
         kind: SignTuple,
@@ -122,9 +126,11 @@ class TrafficSign(RoadElementRect):
         y: float = -0.5,
         angle=0,
         normalize_x: bool = True,
+        visible: bool = True,
     ):
 
         self.kind = kind
+        self.visible = visible
         super().__init__(
             arc_length=arc_length,
             y=y,

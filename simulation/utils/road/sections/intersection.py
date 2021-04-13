@@ -530,6 +530,7 @@ class Intersection(RoadSection):
                         TrafficSign.TURN_RIGHT,
                         *self.cp_sign_west(Config.get_turn_sign_dist()).xy,
                         angle=self._alpha - 0.5 * math.pi,
+                        visible=False,
                     )
                 )
         elif self.turn == Intersection.RIGHT:
@@ -547,6 +548,7 @@ class Intersection(RoadSection):
                         TrafficSign.TURN_LEFT,
                         *self.cp_sign_east(Config.get_turn_sign_dist()).xy,
                         angle=self._alpha + 0.5 * math.pi,
+                        visible=False,
                     )
                 )
 
@@ -568,6 +570,7 @@ class Intersection(RoadSection):
                     type_map[self.rule],
                     *self.cp_sign_north(Config.get_prio_sign_dist(1)).xy,
                     angle=math.pi,
+                    visible=False,
                 )
             )
 
@@ -588,6 +591,7 @@ class Intersection(RoadSection):
                     type_map_opposite[self.rule],
                     *self.cp_sign_west(Config.get_prio_sign_dist(1)).xy,
                     angle=self._alpha - 0.5 * math.pi,
+                    visible=False,
                 )
             )
             signs.append(
@@ -595,6 +599,7 @@ class Intersection(RoadSection):
                     type_map_opposite[self.rule],
                     *self.cp_sign_east(Config.get_prio_sign_dist(1)).xy,
                     angle=self._alpha + 0.5 * math.pi,
+                    visible=False,
                 )
             )
 

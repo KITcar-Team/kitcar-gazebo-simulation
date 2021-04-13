@@ -104,7 +104,7 @@ def obstacle_msgs(
     response = groundtruth_srvs.LabeledPolygonSrvResponse()
     response.polygons = list(
         groundtruth_msgs.LabeledPolygon(
-            obtacle.to_geometry_msg(), random.random(), 0, "fake_obstacle"
+            obtacle.to_geometry_msg(), random.random(), False, 0, "fake_obstacle"
         )  # Dummy type 0
         for obtacle in obstacles
     )
@@ -190,6 +190,7 @@ def parking_msgs(
         groundtruth_msgs.LabeledPolygon(
             spot.to_geometry_msg(),
             0,
+            False,
             groundtruth_msgs.Parking.SPOT_FREE,
             "fake_parking_spot",
         )
@@ -203,6 +204,7 @@ def parking_msgs(
         groundtruth_msgs.LabeledPolygon(
             spot.to_geometry_msg(),
             0,
+            False,
             groundtruth_msgs.Parking.SPOT_FREE,
             "fake_parking_spot",
         )
