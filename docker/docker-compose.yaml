@@ -5,13 +5,13 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile
-  machine-learning:
-    image: ${IMAGE_URL}/ci:${CI_IMAGE_TAG_ML}
+  cml:
+    image: ${IMAGE_URL}/ci:${CI_IMAGE_TAG_CML}
     depends_on:
     - base
     build:
       context: ../
-      dockerfile: docker/DockerfileML
+      dockerfile: docker/DockerfileCML
       args:
         PARENT: ${IMAGE_URL}/ci:${CI_IMAGE_TAG}
   docs:

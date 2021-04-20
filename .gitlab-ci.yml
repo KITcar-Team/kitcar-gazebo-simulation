@@ -80,7 +80,7 @@ test-python-packages:
     expire_in: 2 days
 
 test-machine-learning-package:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
   stage: test
   needs: ["build-code"]
   variables:
@@ -218,7 +218,7 @@ collect-coverage:
 
 cml-cyclegan:
   stage: deploy
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:cml
   needs: []
   rules:
   - if: '$CI_COMMIT_REF_NAME == "master"'
@@ -291,12 +291,12 @@ docker-images:
   - |
     if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
       export CI_IMAGE_TAG=latest
-      export CI_IMAGE_TAG_ML=machine_learning
+      export CI_IMAGE_TAG_CML=cml
       export CI_IMAGE_TAG_DOCS=docs
       export CI_IMAGE_TAG_ROS=latest
     else
       export CI_IMAGE_TAG=branch_${CI_COMMIT_REF_NAME}
-      export CI_IMAGE_TAG_ML=branch_${CI_COMMIT_REF_NAME}_machine_learning
+      export CI_IMAGE_TAG_CML=branch_${CI_COMMIT_REF_NAME}_cml
       export CI_IMAGE_TAG_DOCS=branch_${CI_COMMIT_REF_NAME}_docs
       export CI_IMAGE_TAG_ROS=branch_${CI_COMMIT_REF_NAME}
     fi
@@ -324,7 +324,7 @@ docker-images:
   - rm -rf $KITCAR_REPO_PATH/kitcar-rosbag
 
 dvc-repro-images:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
   needs: ["build-code"]
   rules:
   - if: '$CI_COMMIT_REF_NAME == "master"'

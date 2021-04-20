@@ -25,7 +25,8 @@ RUN pip3 install \
     --upgrade \
     --upgrade-strategy eager \
     --no-warn-script-location \
-    -r /requirements.txt
+    -r /requirements.txt \
+    -r /requirements_pytorch_cpu.txt
 
 # Reduce image size by removing apt cache
 RUN rm -rf /var/lib/apt/lists/*

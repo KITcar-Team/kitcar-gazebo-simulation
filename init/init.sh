@@ -71,7 +71,9 @@ case "$option" in
     echo    # (optional) move to a new line
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
-      pip_install_reqs requirements_machine_learning.txt
+      pip_install_reqs requirements_pytorch_cuda.txt
+    else
+      pip_install_reqs requirements_pytorch_cpu.txt
     fi
 
     # shellcheck source=/dev/null
