@@ -14,15 +14,6 @@ services:
       dockerfile: docker/DockerfileCML
       args:
         PARENT: ${IMAGE_URL}/ci:${CI_IMAGE_TAG}
-  docs:
-    image: ${IMAGE_URL}/ci:${CI_IMAGE_TAG_DOCS}
-    depends_on:
-    - base
-    build:
-      context: ../
-      dockerfile: docker/DockerfileDocs
-      args:
-        PARENT: ${IMAGE_URL}/ci:${CI_IMAGE_TAG}
   kitcar-ros:
     image: ${IMAGE_URL}/kitcar_ros_ci:${CI_IMAGE_TAG_ROS}
     depends_on:

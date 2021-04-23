@@ -1,9 +1,0 @@
-ARG PARENT
-FROM ${PARENT}
-
-RUN pip3 install \
-    --no-cache-dir \
-    --upgrade \
-    --upgrade-strategy eager \
-    --no-warn-script-location \
-    -r /requirements_documentation.txt

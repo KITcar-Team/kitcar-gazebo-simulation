@@ -20,7 +20,7 @@ RUN rm -rf ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/simulation/devel ${KITCA
 
 # Run kitcar gazebo's init script
 # This also source gazebo within the bashrc!
-RUN printf '1\nnn' | bash ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/init/init.sh || true
+RUN printf '1\nn' | bash ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/init/init.sh || true
 
 # Build the simulation
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && cd ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/simulation && catkin_make"

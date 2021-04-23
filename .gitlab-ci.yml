@@ -2,7 +2,7 @@ variables:
   GIT_STRATEGY: clone
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar/
-  INIT_INPUT: 1\nnn   # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
+  INIT_INPUT: 1\nn   # Do not install CUDA
   DISPLAY: ":1.0"
 
 default:
@@ -84,7 +84,6 @@ test-machine-learning-package:
   stage: test
   needs: ["build-code"]
   variables:
-    INIT_INPUT: 1\nnn
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
     CUDA_VISIBLE_DEVICES: ""   # Don't use CUDA in CI
   script:
@@ -156,11 +155,9 @@ test-drive-evaluation:
   - rm -r $KITCAR_REPO_PATH/kitcar-rosbag
 
 test-documentation:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
   stage: test
   needs: ["build-code"]
-  variables:
-    INIT_INPUT: 1\nyn
   script:
     # Get DVC files
   - dvc pull -R docs
@@ -178,11 +175,9 @@ test-documentation:
 # Build the sphinx documentation
 # If this is the master branch, the website deployer will also update doc.kitcar-team.de!
 build-documentation:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
   stage: deploy
   needs: ["test-documentation", "build-code"]
-  variables:
-    INIT_INPUT: 1\nyn
   script:
     # Get DVC files
   - dvc pull -R docs
@@ -227,7 +222,7 @@ cml-cyclegan:
   - when: manual
   allow_failure: true
   variables:
-    INIT_INPUT: 1\nny
+    INIT_INPUT: 1\ny   # Install CUDA
     GIT_LFS_SKIP_SMUDGE: '1'  # Don't pull Git LFS
   tags:
   - gpu
@@ -292,12 +287,10 @@ docker-images:
     if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
       export CI_IMAGE_TAG=latest
       export CI_IMAGE_TAG_CML=cml
-      export CI_IMAGE_TAG_DOCS=docs
       export CI_IMAGE_TAG_ROS=latest
     else
       export CI_IMAGE_TAG=branch_${CI_COMMIT_REF_NAME}
       export CI_IMAGE_TAG_CML=branch_${CI_COMMIT_REF_NAME}_cml
-      export CI_IMAGE_TAG_DOCS=branch_${CI_COMMIT_REF_NAME}_docs
       export CI_IMAGE_TAG_ROS=branch_${CI_COMMIT_REF_NAME}
     fi
   - apk add --no-cache docker-compose git
@@ -333,8 +326,6 @@ dvc-repro-images:
   - when: manual
   allow_failure: true
   stage: deploy
-  variables:
-    INIT_INPUT: 1\nnn
   parallel:
     matrix:
     - DATA_FOLDER: [labeled_images, simulated_images]

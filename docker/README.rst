@@ -14,11 +14,9 @@ Depending on the provided `${SERVICE}` different packages are installed:
 * `${SERVICE}=base`: No additional packages.
 * `${SERVICE}=cml`: Pytorch with CUDA and the CML-Bot are installed.
   Both are necessary to train or test neural networks and publish the results using CML.
-* `${SERVICE}=docs`: Additional machine learning and documentation pip packages
-  are installed. Both are necessary to build Sphinx.
 * `${SERVICE}=kitcar-ros`: This image is intended to be used within the kitcar-ros CI pipeline.
   It adds the whole simulation code and installs some more packages,
   which are necessary for running the simulation within the kitcar ros CI.
 
 
-The services **docs**, **cml** and **kitcar-ros** inherit from **base**.
+The services **cml** and **kitcar-ros** inherit from **base**.

@@ -60,13 +60,6 @@ case "$option" in
     # Install python packages
     pip_install_reqs requirements.txt
 
-    read -p "Do you want to install python packages necessary to build the documentation? [y/n]" -n 1 -r
-    echo    # (optional) move to a new line
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-      pip_install_reqs requirements_documentation.txt
-    fi
-
     read -p "Do you want to install the cuda version of PyTorch for training neural networks? [y/n]" -n 1 -r
     echo    # (optional) move to a new line
     if [[ $REPLY =~ ^[Yy]$ ]]
