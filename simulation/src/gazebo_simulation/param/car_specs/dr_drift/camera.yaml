@@ -1,4 +1,4 @@
-capture_format: RGB8
+capture_format: R8G8B8
 focal_length_x: 382.192834
 focal_length_y: 382.192834
 image_topic: /simulation/sensors/raw/camera
@@ -8,13 +8,13 @@ optical_center_y: 138.0
 r11: 0
 r12: -1
 r13: 0
-r21: -0.157063
+r21: -0.155511
 r22: 0
-r23: -0.9875885854094305
-r31: 0.9875885854094305
+r23: -0.9878341606155358
+r31: 0.9878341606155358
 r32: 0
-r33: -0.157063
-t1: 1.72428
-t2: 260.255
-t3: 47.7248
+r33: -0.155511
+t1: -5.1331
+t2: 257.682
+t3: 47.2903
 update_rate: 60

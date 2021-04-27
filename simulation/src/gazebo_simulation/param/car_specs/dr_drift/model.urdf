@@ -17,9 +17,9 @@
       </material>
     </visual>
     <inertial>
-      <inertia ixx="0.02200514" ixy="0" ixz="0" iyx="0" iyy="0.025561743999999994" iyz="0" izx="0" izy="0" izz="0.042523396"/>
+      <inertia ixx="0.013088473895833334" ixy="0" ixz="0" iyx="0" iyy="0.015203912316666665" iyz="0" izx="0" izy="0" izz="0.025292561579166668"/>
       <origin xyz="0.12 0 0.0397" rpy="0 0 0"/>
-      <mass value="4.8"/>
+      <mass value="2.855"/>
     </inertial>
   </link>
   <link name="front_camera_link">
@@ -44,7 +44,7 @@
   <joint name="front_camera_joint" type="fixed">
     <parent link="chassis"/>
     <child link="front_camera_link"/>
-    <origin xyz="-0.006256036655947976 0.0017242800000000001 0.2645206675581313" rpy="0.0 0.15771603452297908 0.0"/>
+    <origin xyz="-0.006642588303756858 -0.0051331 0.26190124401903253" rpy="0.0 0.15614472561323053 0.0"/>
   </joint>
   <gazebo reference="front_camera_link">
     <sensor name="front_camera" type="camera">
@@ -62,7 +62,7 @@
         <image>
           <width>1280</width>
           <height>1024</height>
-          <format>RGB8</format>
+          <format>R8G8B8</format>
         </image>
         <clip>
           <near>0.1</near>
