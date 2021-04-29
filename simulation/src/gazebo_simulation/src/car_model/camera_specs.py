@@ -50,7 +50,7 @@ class CameraSpecs(InitOptions):
     capture_size: Dict[str, float] = field(
         default_factory=partial(dict, {"width": 1280, "height": 1024})
     )
-    capture_format: str = "RGB8"
+    capture_format: str = "R8G8B8"
     clip: Dict[str, float] = field(default_factory=partial(dict, {"near": 0.1, "far": 4}))
 
     output_size: Dict[str, float] = field(

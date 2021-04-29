@@ -72,7 +72,7 @@ The sensor plugin publishes the camera image on the ROS topic \
 
    .. prompt:: bash
 
-      rosrun simulation_brain_link generate_dr_drift
+      rosrun gazebo_simulation generate_dr_drift
 
 Camera Image Augmentation
 -------------------------
