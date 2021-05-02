@@ -1,9 +1,7 @@
 FROM ros:noetic-robot-focal
-# Actual KITCAR_REPO_PATH for which packages are built!
-ARG KITCAR_REPO_PATH=/builds/kitcar
-# Path where the KITCAR_REPO_PATH is stored at the end of the Dockerfile
-# Necessary to prevent gitlab from overwritting it in the ci!
-ARG TMP_KITCAR_REPO_PATH=/home/kitcar
+ARG KITCAR_REPO_PATH=/home/kitcar
+ENV KITCAR_REPO_PATH=${KITCAR_REPO_PATH}
+RUN mkdir -p ${KITCAR_REPO_PATH}
 
 COPY init/* /
 
@@ -39,7 +37,3 @@ RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 COPY kitcar-rosbag $KITCAR_REPO_PATH/kitcar-rosbag
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && cd ${KITCAR_REPO_PATH}/kitcar-rosbag && pip3 install -r requirements.txt && catkin_make"
 RUN echo "source ${KITCAR_REPO_PATH}/kitcar-rosbag/devel/setup.bash --extend" >> ~/.bashrc
-
-# Copy the simulation into a different directory because /builds is removed by gitlab!
-# The files are copied back into /builds within the CI!
-RUN mkdir -p ${TMP_KITCAR_REPO_PATH} && mv ${KITCAR_REPO_PATH}/* ${TMP_KITCAR_REPO_PATH}

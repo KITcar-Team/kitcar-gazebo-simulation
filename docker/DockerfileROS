@@ -1,10 +1,6 @@
 ARG PARENT
 FROM ${PARENT}
-
-ARG KITCAR_REPO_PATH=/builds/kitcar
-ARG TMP_KITCAR_REPO_PATH=/home/kitcar
-
-RUN rm -rf ${KITCAR_REPO_PATH} && mv ${TMP_KITCAR_REPO_PATH} ${KITCAR_REPO_PATH}
+ARG KITCAR_REPO_PATH=/home/kitcar
 
 # Update bashrc
 RUN echo "export KITCAR_REPO_PATH=${KITCAR_REPO_PATH}" >> ~/.bashrc
@@ -15,27 +11,17 @@ COPY / $KITCAR_REPO_PATH/kitcar-gazebo-simulation
 # Remove kitcar-rosbag which was cloned there before building the docker images
 RUN rm -rf $KITCAR_REPO_PATH/kitcar-gazebo-simulation/kitcar-rosbag
 
-# Remove files from possible previous build
+# Rebuild simulation, because location may have changed
 RUN rm -rf ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/simulation/devel ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/simulation/build
-
-# Run kitcar gazebo's init script
-# This also source gazebo within the bashrc!
-RUN printf '1\nn' | bash ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/init/init.sh || true
-
-# Build the simulation
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && cd ${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/simulation && catkin_make"
 
 # Install fonts
 RUN mkdir -p /usr/local/share/fonts/kitcar/
 RUN cp -a "${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/simulation/models/fonts/." /usr/local/share/fonts/kitcar/
 
-# Install packages from packages file.
+# Install packages for kitcar-ros repo.
 COPY docker/ros_packages.txt /ros_packages.txt
 RUN apt update && DEBIAN_FRONTEND=noninteractive xargs --arg-file=/ros_packages.txt apt install -y
 
 # Reduce image size by removing apt cache
 RUN rm -rf /var/lib/apt/lists/*
-
-# Copy the simulation into a different directory because /builds is removed by gitlab!
-# The files are copied back into /builds within the CI!
-RUN rm -rf ${TMP_KITCAR_REPO_PATH} &&  mv ${KITCAR_REPO_PATH} ${TMP_KITCAR_REPO_PATH}

@@ -22,6 +22,7 @@ default:
   - printf $INIT_INPUT | ./init/init.sh || true
   # Source bashrc
   - source init/bashrc || true
+  - source /home/kitcar/kitcar-rosbag/devel/setup.bash --extend
 
 stages:
 - build
@@ -139,10 +140,6 @@ test-drive-evaluation:
     # The drive.test is used to evaluate how the car drives.
     # With automatic_drive:=true the path of the car is predetermined and thus the correctness
     # of the evaluation can be tested.
-  - echo $CI_NODE_INDEX/$CI_NODE_TOTAL
-  - mv /home/kitcar/kitcar-rosbag $KITCAR_REPO_PATH
-  - ls $KITCAR_REPO_PATH
-  - source $KITCAR_REPO_PATH/kitcar-rosbag/devel/setup.bash --extend
   - mkdir rosbags
   - python3 -m simulation.utils.drive_test.run --config simulation/utils/drive_test/test/ci.yaml
     --runner_index $CI_NODE_INDEX --total_runners $CI_NODE_TOTAL
@@ -151,8 +148,6 @@ test-drive-evaluation:
     paths:
     - rosbags
     expire_in: 1 week
-  after_script:
-  - rm -r $KITCAR_REPO_PATH/kitcar-rosbag
 
 test-documentation:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
@@ -300,21 +295,12 @@ docker-images:
   script:
     # Clone kitcar-rosbag
   - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-rosbag.git
-    $KITCAR_REPO_PATH/kitcar-rosbag
-
-    # Copy kitcar-rosbag into the build context (./)
-  - mkdir -p kitcar-rosbag
-  - cp -r $KITCAR_REPO_PATH/kitcar-rosbag/* kitcar-rosbag/
 
   - cd docker
-
     # Build Docker images
   - docker-compose build
     # Push docker images
   - docker-compose push
-  after_script:
-    # Clean up
-  - rm -rf $KITCAR_REPO_PATH/kitcar-rosbag
 
 dvc-repro-images:
   image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
@@ -379,8 +365,6 @@ dvc-repro-images:
           --header "Content-Type: application/json" \
           --data "${BODY}";
     fi
-  after_script:
-  - rm -r $KITCAR_REPO_PATH/kitcar-rosbag
   artifacts:
     paths:
     - data/labeled_images/dvc.lock
