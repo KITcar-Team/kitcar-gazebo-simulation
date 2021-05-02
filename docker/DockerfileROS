@@ -2,10 +2,6 @@ ARG PARENT
 FROM ${PARENT}
 ARG KITCAR_REPO_PATH=/home/kitcar
 
-# Update bashrc
-RUN echo "export KITCAR_REPO_PATH=${KITCAR_REPO_PATH}" >> ~/.bashrc
-RUN echo "export CAR_NAME=dr_drift" >> ~/.bashrc
-
 # Copy kitcar-gazebo-simulation
 COPY / $KITCAR_REPO_PATH/kitcar-gazebo-simulation
 # Remove kitcar-rosbag which was cloned there before building the docker images
