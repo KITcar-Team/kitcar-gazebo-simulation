@@ -17,7 +17,6 @@ RUN cp -a "${KITCAR_REPO_PATH}/kitcar-gazebo-simulation/simulation/models/fonts/
 
 # Install packages for kitcar-ros repo.
 COPY docker/ros_packages.txt /ros_packages.txt
-RUN apt update && DEBIAN_FRONTEND=noninteractive xargs --arg-file=/ros_packages.txt apt install -y
-
-# Reduce image size by removing apt cache
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt update && \
+    DEBIAN_FRONTEND=noninteractive xargs --arg-file=/ros_packages.txt apt install -y && \
+    rm -rf /var/lib/apt/lists/*
