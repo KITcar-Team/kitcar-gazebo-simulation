@@ -196,12 +196,16 @@ build-documentation:
     expire_in: 2 day
 
 collect-coverage:
+  image: python:3.8.9-alpine # No need for a self built image
   stage: deploy
   needs:
   - build-code
   - test-python-packages
   - test-machine-learning-package
   - test-ros-packages
+  before_script:
+    # Install coverage pip package
+  - pip install coverage
   script:
   - coverage combine .coverage_py .coverage_ml .coverage_ros
   - coverage xml
