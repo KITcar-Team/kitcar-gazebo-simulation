@@ -196,7 +196,7 @@ build-documentation:
     expire_in: 2 day
 
 collect-coverage:
-  image: python:3.8.9-alpine # No need for a self built image
+  image: git.kitcar-team.de:4567/kitcar/kitcar-python-utils/ci/python:3.8.9-alpine
   stage: deploy
   needs:
   - build-code
