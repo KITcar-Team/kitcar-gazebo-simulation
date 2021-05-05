@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   message_generation
   std_msgs
-  )
+)
 
 ## System dependencies are found with CMake's conventions
 
@@ -104,7 +104,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  CATKIN_DEPENDS gazebo_ros_pkgs
-  CATKIN_DEPENDS message_runtime
+  CATKIN_DEPENDS message_runtime std_msgs
 #  DEPENDS roscpp gazebo_ros
 )
 
