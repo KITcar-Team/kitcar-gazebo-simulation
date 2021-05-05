@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  base:
+    image: ${IMAGE_URL}/ci:${CI_IMAGE_TAG}
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+  cml:
+    image: ${IMAGE_URL}/ci:${CI_IMAGE_TAG_CML}
+    depends_on:
+    - base
+    build:
+      context: ../
+      dockerfile: docker/DockerfileCML
+      args:
+        PARENT: ${IMAGE_URL}/ci:${CI_IMAGE_TAG}
+  kitcar-ros:
+    image: ${IMAGE_URL}/kitcar_ros_ci:${CI_IMAGE_TAG_ROS}
+    depends_on:
+    - base
+    build:
+      context: ../
+      dockerfile: docker/DockerfileROS
+      args:
+        PARENT: ${IMAGE_URL}/ci:${CI_IMAGE_TAG}

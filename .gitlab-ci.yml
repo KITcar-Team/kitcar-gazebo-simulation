@@ -2,11 +2,11 @@ variables:
   GIT_STRATEGY: clone
   CAR_NAME: dr_drift
   KITCAR_REPO_PATH: /builds/kitcar/
-  INIT_INPUT: 1\nyn   # Omit machine learning and documentation packages by default, as they are only used by a few jobs.
+  INIT_INPUT: 1\nn   # Do not install CUDA
   DISPLAY: ":1.0"
 
 default:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:focal
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
   retry:
     max: 2
     when:
@@ -22,6 +22,7 @@ default:
   - printf $INIT_INPUT | ./init/init.sh || true
   # Source bashrc
   - source init/bashrc || true
+  - source /home/kitcar/kitcar-rosbag/devel/setup.bash --extend
 
 stages:
 - build
@@ -35,7 +36,7 @@ build-code:
   variables:
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   script:
-  - cd  simulation
+  - cd simulation
   - catkin_make
   artifacts:
     paths:
@@ -80,11 +81,10 @@ test-python-packages:
     expire_in: 2 days
 
 test-machine-learning-package:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
   stage: test
   needs: ["build-code"]
   variables:
-    INIT_INPUT: 1\nyy
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
     CUDA_VISIBLE_DEVICES: ""   # Don't use CUDA in CI
   script:
@@ -126,7 +126,6 @@ test-ros-packages:
     - .coverage_ros
     expire_in: 2 days
 
-
 # Run tests to ensure that the evaluation pipeline is working
 test-drive-evaluation:
   stage: test
@@ -141,10 +140,6 @@ test-drive-evaluation:
     # The drive.test is used to evaluate how the car drives.
     # With automatic_drive:=true the path of the car is predetermined and thus the correctness
     # of the evaluation can be tested.
-  - echo $CI_NODE_INDEX/$CI_NODE_TOTAL
-  - mv /home/kitcar/kitcar-rosbag $KITCAR_REPO_PATH
-  - ls $KITCAR_REPO_PATH
-  - source $KITCAR_REPO_PATH/kitcar-rosbag/devel/setup.bash --extend
   - mkdir rosbags
   - python3 -m simulation.utils.drive_test.run --config simulation/utils/drive_test/test/ci.yaml
     --runner_index $CI_NODE_INDEX --total_runners $CI_NODE_TOTAL
@@ -153,15 +148,11 @@ test-drive-evaluation:
     paths:
     - rosbags
     expire_in: 1 week
-  after_script:
-  - rm -r $KITCAR_REPO_PATH/kitcar-rosbag
 
 test-documentation:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
   stage: test
   needs: ["build-code"]
-  variables:
-    INIT_INPUT: 1\nyy
   script:
     # Get DVC files
   - dvc pull -R docs
@@ -179,11 +170,9 @@ test-documentation:
 # Build the sphinx documentation
 # If this is the master branch, the website deployer will also update doc.kitcar-team.de!
 build-documentation:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:docs
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
   stage: deploy
   needs: ["test-documentation", "build-code"]
-  variables:
-    INIT_INPUT: 1\nyy
   script:
     # Get DVC files
   - dvc pull -R docs
@@ -219,7 +208,7 @@ collect-coverage:
 
 cml-cyclegan:
   stage: deploy
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:cml
   needs: []
   rules:
   - if: '$CI_COMMIT_REF_NAME == "master"'
@@ -228,7 +217,7 @@ cml-cyclegan:
   - when: manual
   allow_failure: true
   variables:
-    INIT_INPUT: 1\nyy
+    INIT_INPUT: 1\ny   # Install CUDA
     GIT_LFS_SKIP_SMUDGE: '1'  # Don't pull Git LFS
   tags:
   - gpu
@@ -270,7 +259,7 @@ cml-cyclegan:
 # This is done everytime the master branch is updated
 docker-images:
   stage: deploy
-  image: docker:19.03.13
+  image: docker:20.10.5
   needs: ["build-code"]
   rules:
   - if: '$CI_COMMIT_REF_NAME == "master"'
@@ -282,25 +271,22 @@ docker-images:
   - docker
   - contabo
   services:
-  - docker:19.03.13-dind
+  - docker:20.10.5-dind
   variables:
     # Ensure that lfs files are available in resulting images!
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ''
   before_script:
+  - export IMAGE_URL=$CI_REGISTRY/kitcar/kitcar-gazebo-simulation
   - |
     if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
-      export TAG_CI_IMAGE=focal
-      export TAG_CI_IMAGE_DOCS=docs
-      export TAG_CI_IMAGE_ML=machine_learning
-      export TAG_DEFAULT_IMAGE_CI=ci
-      export TAG_KITCAR_ROS_IMAGE=focal
+      export CI_IMAGE_TAG=latest
+      export CI_IMAGE_TAG_CML=cml
+      export CI_IMAGE_TAG_ROS=latest
     else
-      export TAG_CI_IMAGE=focal_${CI_COMMIT_REF_NAME}
-      export TAG_CI_IMAGE_DOCS=docs_${CI_COMMIT_REF_NAME}
-      export TAG_CI_IMAGE_ML=machine_learning_${CI_COMMIT_REF_NAME}
-      export TAG_DEFAULT_IMAGE_CI=ci_${CI_COMMIT_REF_NAME}
-      export TAG_KITCAR_ROS_IMAGE=focal_${CI_COMMIT_REF_NAME}
+      export CI_IMAGE_TAG=branch_${CI_COMMIT_REF_NAME}
+      export CI_IMAGE_TAG_CML=branch_${CI_COMMIT_REF_NAME}_cml
+      export CI_IMAGE_TAG_ROS=branch_${CI_COMMIT_REF_NAME}
     fi
   - apk add --no-cache docker-compose git
   - docker --version
@@ -309,31 +295,15 @@ docker-images:
   script:
     # Clone kitcar-rosbag
   - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@git.kitcar-team.de/kitcar/kitcar-rosbag.git
-    $KITCAR_REPO_PATH/kitcar-rosbag
-    # Test building the ci image
-  - cd simulation/docker/ci
-    # The argument NO_PARENT_NEEDED is passed to build.sh just to pass any value,
-    # the docker-compose just ignores it.
-  - /bin/sh build.sh base $TAG_CI_IMAGE NO_PARENT_NEEDED $KITCAR_REPO_PATH/kitcar-rosbag
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE
-  - /bin/sh build.sh machine_learning $TAG_CI_IMAGE_ML $TAG_CI_IMAGE
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_ML
-  - /bin/sh build.sh docs $TAG_CI_IMAGE_DOCS $TAG_CI_IMAGE_ML
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/ci:$TAG_CI_IMAGE_DOCS
-      # Test building the default image
-  - cd ../default
-  - /bin/sh build.sh $CI_REGISTRY $TAG_CI_IMAGE $TAG_DEFAULT_IMAGE_CI $KITCAR_REPO_PATH
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation:$TAG_DEFAULT_IMAGE_CI
-   # Test building the kitcar_ros_ci image
-  - cd ../kitcar_ros_ci
-  - /bin/sh build.sh $CI_REGISTRY $TAG_DEFAULT_IMAGE_CI $TAG_KITCAR_ROS_IMAGE
-  - docker push $CI_REGISTRY/kitcar/kitcar-gazebo-simulation/kitcar_ros_ci:$TAG_KITCAR_ROS_IMAGE
-  after_script:
-  # Clean up
-  - rm -rf $KITCAR_REPO_PATH/kitcar-rosbag
+
+  - cd docker
+    # Build Docker images
+  - docker-compose build
+    # Push docker images
+  - docker-compose push
 
 dvc-repro-images:
-  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci:machine_learning
+  image: git.kitcar-team.de:4567/kitcar/kitcar-gazebo-simulation/ci
   needs: ["build-code"]
   rules:
   - if: '$CI_COMMIT_REF_NAME == "master"'
@@ -342,8 +312,6 @@ dvc-repro-images:
   - when: manual
   allow_failure: true
   stage: deploy
-  variables:
-    INIT_INPUT: 1\nyy
   parallel:
     matrix:
     - DATA_FOLDER: [labeled_images, simulated_images]
@@ -397,8 +365,6 @@ dvc-repro-images:
           --header "Content-Type: application/json" \
           --data "${BODY}";
     fi
-  after_script:
-  - rm -r $KITCAR_REPO_PATH/kitcar-rosbag
   artifacts:
     paths:
     - data/labeled_images/dvc.lock
