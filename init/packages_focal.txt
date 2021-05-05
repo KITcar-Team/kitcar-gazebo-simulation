@@ -20,3 +20,4 @@ ffmpeg
 fdupes
 jq
 shellcheck
+catkin-lint
