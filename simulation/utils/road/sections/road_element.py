@@ -23,33 +23,8 @@ class RoadElement(Transformable):
     def set_transform(self, obj: Union[Line, Transform]):
         """Calculate the correct transform to this element.
 
-        Depending on :attr:`self.normalize_x` the positional behavior is different.
-        If :attr:`self.normalize_x` is True, the element is aligned along the provided line.
-
-        Example:
-            >>> from simulation.utils.geometry import Line, Point, Transform
-            >>> from simulation.utils.road.sections.road_element import RoadElementRect
-            >>> line = Line([Point(0, 0), Point(0, 10)])  # y axis
-            >>> normalized_el = RoadElementRect(_center=Point(1, 1))
-            ... # normalize_x is True by default
-            >>> normalized_el.set_transform(line)
-            >>> normalized_el.transform
-            Transform(translation=Vector(0.0, 1.0, 0.0),\
-rotation=Quaternion(0.7071067811865476, 0.0, 0.0, 0.7071067811865475))
-            >>> normalized_el._center
-            Point(1.0, 1.0, 0.0)
-            >>> normalized_el.center
-            Point(-1.0, 1.0, 0.0)
-            >>> unnormalized_el = RoadElementRect(_center=Point(1,0), normalize_x=False)
-            ... # normalize_x is True by default
-            >>> unnormalized_el.set_transform(line)
-            >>> unnormalized_el.transform
-            Transform(translation=Vector(0.0, 0.0, 0.0),\
-rotation=Quaternion(0.7071067811865476, 0.0, 0.0, 0.7071067811865475))
-            >>> normalized_el._center
-            Point(1.0, 1.0, 0.0)
-            >>> normalized_el.center
-            Point(-1.0, 1.0, 0.0)
+        Depending on :attr:`self.normalize_x` the positional behavior is different. If
+        :attr:`self.normalize_x` is True, the element is aligned along the provided line.
         """
         if type(obj) is Line:
             pose = obj.interpolate_pose(
