@@ -16,6 +16,7 @@ coverage
 docstr-coverage
 dominate>=2.3.1
 visdom>=0.1.8.3
+autodocsumm
 matplotlib>=3.2.1
 better-apidoc>=0.3.1
 docutils==0.16
