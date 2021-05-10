@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #
 # KITcar Simulation documentation build configuration file, created by
 # sphinx-quickstart on Sun Feb 16 00:00:20 2020.
@@ -17,62 +16,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-import sys
 from pathlib import Path
-from typing import List
-
-sys.path.insert(0, os.path.abspath(".."))
-
-
-def create_run_apidoc(root: str, exclude: List[str] = None):
-    """Create the run apidoc function which is used by better-apidoc to build .rst files
-    from modules and packages."""
-
-    def run_apidoc(app):
-        """Generate API documentation."""
-
-        apidoc_args = [
-            "better-apidoc",
-            "-a",
-            "-M",
-            "-t",
-            os.path.join(".", "templates"),
-            "--force",
-            "--no-toc",
-            "--separate",
-            "--ext-autodoc",
-            "--ext-coverage",
-            "-o",
-            os.path.join(".", "content", "_source_files/"),
-            root,
-        ]
-
-        if exclude:
-            apidoc_args.extend(exclude)
-
-        import better_apidoc
-
-        better_apidoc.APP = app
-        better_apidoc.main(apidoc_args)
-
-    return run_apidoc
-
-
-run_apidoc = create_run_apidoc(
-    root="../simulation/",
-    exclude=[
-        # fmt: off
-        "../*setup*",
-        "../*gazebo-renderer*",
-        "../*schema*",
-        # fmt: on
-    ],
-)
-
-
-def setup(app):
-    app.connect("builder-inited", run_apidoc)
-
 
 # -- Project information -----------------------------------------------------
 

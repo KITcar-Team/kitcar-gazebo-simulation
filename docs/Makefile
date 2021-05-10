@@ -17,4 +17,5 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	python3 -m simulation.src.simulation_evaluation.src.state_machine.docs.generate_graphs
+	sphinx-apidoc -f -o ./content/_source_files/ --templatedir apidoc/ ..
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
