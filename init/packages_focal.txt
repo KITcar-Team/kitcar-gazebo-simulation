@@ -9,6 +9,7 @@ python3-pip
 gazebo11
 libgazebo11-dev
 libgirepository1.0-dev
+libignition-common3-graphics-dev
 gcc
 libignition-math6
 libcairo2-dev
