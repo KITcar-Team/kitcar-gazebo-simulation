@@ -25,14 +25,34 @@ default:
   - source /home/kitcar/kitcar-rosbag/devel/setup.bash --extend
 
 stages:
+- lint
 - build
 - test
 - deploy
 
+lint-code:
+  stage: lint
+  variables:
+    GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
+  script:
+  # Check if all files are correctly formatted and comply to our formatting rules.
+  - pre-commit run --all-files
+
+lint-catkin:
+  stage: lint
+  only:
+    changes:
+    - "**/CMakeLists.txt"
+    - "**/package.xml"
+  script:
+  - catkin_lint --resolve-env . --ignore unknown_package
+
 ######## BUILD STAGE ########
-# build kitcar-ros and simulation
+
+# Build simulation
 build-code:
   stage: build
+  needs: []
   variables:
     GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
   script:
@@ -43,14 +63,6 @@ build-code:
     - simulation/devel
     - simulation/build
     expire_in: 2 day
-
-lint:
-  stage: build
-  variables:
-    GIT_LFS_SKIP_SMUDGE: '1'  #  Don't pull Git LFS
-  script:
-  # Check if all files are correctly formatted and comply to our formatting rules.
-  - pre-commit run --all-files
 
 ######## TEST STAGE #########
 

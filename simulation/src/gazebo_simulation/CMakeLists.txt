@@ -18,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   std_msgs
   geometry_msgs
-  )
+)
 
 ## System dependencies are found with CMake's conventions
 
@@ -120,8 +120,8 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES pre_cropping
 #  CATKIN_DEPENDS gazebo_ros_pkgs
-  CATKIN_DEPENDS message_runtime
-  DEPENDS roscpp gazebo_ros
+  CATKIN_DEPENDS gazebo_ros roscpp message_runtime geometry_msgs std_msgs
+# DEPENDS gazebo_ros
 )
 
 ###########

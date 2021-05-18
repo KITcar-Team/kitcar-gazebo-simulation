@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   std_msgs
   geometry_msgs
-  )
+)
 find_package(OpenCV REQUIRED COMPONENTS core imgproc calib3d video aruco)
 
 ## System dependencies are found with CMake's conventions
@@ -115,8 +115,8 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  CATKIN_DEPENDS gazebo_ros_pkgs
-  CATKIN_DEPENDS message_runtime
-  DEPENDS roscpp
+  CATKIN_DEPENDS roscpp message_runtime std_msgs geometry_msgs
+#  DEPENDS
 )
 
 ###########
