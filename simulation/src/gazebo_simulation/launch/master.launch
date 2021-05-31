@@ -49,6 +49,11 @@ Use this launch file to start the complete simulation.-->
        * simulation_evaluation/state_machine_node
        * simulation_evaluation/referee_node -->
   <arg name="evaluate" default="false" />
+
+  <!-- Indicate whether to launch the sign evaluation. -->
+  <arg name="evaluate_sign_detection" default="false"/>
+  <arg name="sign_evaluation_plots_path" default="$(env KITCAR_REPO_PATH)/kitcar-gazebo-simulation/plots/"/>
+
   <!-- Indicate whether to launch the groundtruth node. -->
   <arg name="include_groundtruth" default="true" />
   <!-- Indicate whether to include the renderer and object controller. -->

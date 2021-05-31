@@ -7,6 +7,10 @@
   <arg name="time_limit" default="120"/>
   <arg name="sim_rate_min" default="200"/>
   <arg name="sim_rate_max" default="2000"/>
+  <arg name="include_jetson" default="false"/>
+
+  <arg name="evaluate_sign_detection" default="false"/>
+  <arg name="sign_evaluation_plots_path" default="$(env KITCAR_REPO_PATH)/kitcar-gazebo-simulation/plots/"/>
 
   <arg name="automatic_drive" default="false"/>
   <arg name="path_file" default="$(find gazebo_simulation)/param/automatic_drive/path.yaml" />
@@ -29,6 +33,11 @@
     <arg name="force_reload_road" value="true"/>
     <arg name="sim_rate_min" default="$(arg sim_rate_min)"/>
     <arg name="sim_rate_max" default="$(arg sim_rate_max)"/>
+    <arg name="include_jetson" default="$(arg include_jetson)"/>
+
+    <arg name="evaluate_sign_detection" default="$(arg evaluate_sign_detection)"/>
+    <arg name="sign_evaluation_plots_path" default="$(arg sign_evaluation_plots_path)"/>
+
 
     <arg if="$(arg automatic_drive)" name="include_brain" value="false" />
     <arg if="$(arg automatic_drive)" name="include_vehicle_simulation" value="false" />
@@ -42,6 +51,11 @@
   <include if="$(arg automatic_drive)" file="$(find gazebo_simulation)/launch/automatic_drive.launch">
     <arg name="path_file" value="$(arg path_file)"/>
   </include>
+
+  <include if="$(arg evaluate_sign_detection)" file="$(find simulation_evaluation)/launch/sign_evaluation_node.launch">
+    <arg name="path" value="$(arg sign_evaluation_plots_path)"/>
+  </include>
+
 
 
   <!-- The expected argument allows for generic tests. Possible values are positive, negative -->
