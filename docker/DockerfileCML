@@ -13,5 +13,5 @@ RUN pip3 install \
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash && \
     apt-get update && \
     apt-get install nodejs -y && \
-    npm i -g @dvcorg/cml && \
+    sudo npm i -g --unsafe-perm @dvcorg/cml && \
     rm -rf /var/lib/apt/lists/*
