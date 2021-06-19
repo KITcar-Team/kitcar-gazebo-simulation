@@ -278,7 +278,7 @@ docker-images:
   - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     when: never
   - when: manual
-  allow_failure: true
+    allow_failure: true
   tags:
   - docker
   - server
