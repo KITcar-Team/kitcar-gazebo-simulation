@@ -1,12 +1,14 @@
-gan_default_road:
-  cmd: cp ../../../../simulation/utils/machine_learning/cycle_gan/results/dr_drift/fake_a.mp4
-    gan_default_road.mp4 && ffmpeg -y -i gan_default_road.mp4 -vf scale=400:-1 -loop
-    0 gan_default_road.gif
-  deps:
-  - path: ../../../../simulation/utils/machine_learning/cycle_gan/results/dr_drift/fake_a.mp4
-    md5: e3893b04605511c4de4591f8ceee1372
-    size: 1881735
-  outs:
-  - path: gan_default_road.mp4
-    md5: e3893b04605511c4de4591f8ceee1372
-    size: 1881735
+schema: '2.0'
+stages:
+  gan_default_road:
+    cmd: cp ../../../../simulation/utils/machine_learning/cycle_gan/results/dr_drift/fake_a.mp4
+      gan_default_road.mp4 && ffmpeg -y -i gan_default_road.mp4 -vf scale=400:-1 -loop
+      0 gan_default_road.gif
+    deps:
+    - path: ../../../../simulation/utils/machine_learning/cycle_gan/results/dr_drift/fake_a.mp4
+      md5: e3e730e473666911e8ab73ad58d63698
+      size: 2151507
+    outs:
+    - path: gan_default_road.mp4
+      md5: e3e730e473666911e8ab73ad58d63698
+      size: 2151507
