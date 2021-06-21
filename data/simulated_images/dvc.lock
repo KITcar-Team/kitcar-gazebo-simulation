@@ -1,37 +1,39 @@
-create_simulated_images:
-  cmd: bash ./simulated_images.sh kitcar 30 random_roads "--road ci_roads/random_road"
-  deps:
-  - path: ../../simulation/models/env_db/ci_roads/random_road.py
-    md5: fbf15bc4b3a4ac19b79bfb35506bd837
-    size: 4120
-  - path: ../../simulation/models/meshes
-    md5: 1e0f5cd8520ee4baae2311129d50f661.dir
-    size: 40385385
-    nfiles: 119
-  - path: ./simulated_images.sh
-    md5: 3c3a5309412b9c6ca322dc72cbdb3574
-    size: 354
-  outs:
-  - path: random_roads
-    md5: 63e0b013a9e7c05501f7a5f2924c7449.dir
-    size: 5059923206
-    nfiles: 86392
-create_test_images:
-  cmd: bash ./simulated_images.sh kitcar 1 test_images "--randomize_path False --road
-    default_road"
-  deps:
-  - path: ../../simulation/models/env_db/default_road.py
-    md5: 616e878c2b50ec0ada599db89dbe3960
-    size: 2055
-  - path: ../../simulation/models/meshes
-    md5: 1e0f5cd8520ee4baae2311129d50f661.dir
-    size: 40385385
-    nfiles: 119
-  - path: ./simulated_images.sh
-    md5: 3c3a5309412b9c6ca322dc72cbdb3574
-    size: 354
-  outs:
-  - path: test_images
-    md5: 5c56ccecd686447467eec7a7b73d08da.dir
-    size: 94556118
-    nfiles: 1570
+schema: '2.0'
+stages:
+  create_simulated_images:
+    cmd: bash ./simulated_images.sh kitcar 30 random_roads "--road ci_roads/random_road"
+    deps:
+    - path: ../../simulation/models/env_db/ci_roads/random_road.py
+      md5: fbf15bc4b3a4ac19b79bfb35506bd837
+      size: 4120
+    - path: ../../simulation/models/meshes
+      md5: 1e0f5cd8520ee4baae2311129d50f661.dir
+      size: 40385385
+      nfiles: 119
+    - path: ./simulated_images.sh
+      md5: 3c3a5309412b9c6ca322dc72cbdb3574
+      size: 354
+    outs:
+    - path: random_roads
+      md5: 63e0b013a9e7c05501f7a5f2924c7449.dir
+      size: 5059923206
+      nfiles: 86392
+  create_test_images:
+    cmd: bash ./simulated_images.sh kitcar 1 test_images "--randomize_path False --road
+      default_road"
+    deps:
+    - path: ../../simulation/models/env_db/default_road.py
+      md5: 616e878c2b50ec0ada599db89dbe3960
+      size: 2055
+    - path: ../../simulation/models/meshes
+      md5: 1e0f5cd8520ee4baae2311129d50f661.dir
+      size: 40385385
+      nfiles: 119
+    - path: ./simulated_images.sh
+      md5: 3c3a5309412b9c6ca322dc72cbdb3574
+      size: 354
+    outs:
+    - path: test_images
+      md5: f555babe01d875d475f184909afa74a2.dir
+      size: 22469254
+      nfiles: 641
