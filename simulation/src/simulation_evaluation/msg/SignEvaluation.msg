@@ -1,0 +1,5 @@
+geometry_msgs/Point32 position
+string kind
+uint64 false_positive
+uint64 true_positive
+float32 average_distance

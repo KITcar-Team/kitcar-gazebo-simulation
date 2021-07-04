@@ -54,6 +54,9 @@ add_message_files(
   State.msg
   Broadcast.msg
   Referee.msg
+  SignEvaluation.msg
+  TrafficSign.msg
+  TrafficSigns.msg
 )
 
 generate_messages(
