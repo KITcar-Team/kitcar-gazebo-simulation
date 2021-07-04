@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="time_limit" value="120"/>
+
+  <arg name="pkg" default="simulation_evaluation"/>
+  <arg name="road" default="ci_roads/traffic_sign_straight_road"/>
+
+  <include file="$(find gazebo_simulation)/launch/master.launch">
+    <arg name="road" value="$(arg road)"/>
+    <arg name="gui" value="false"/>
+    <arg name="force_reload_road" value="true"/>
+    <arg name="include_brain" value="false" />
+    <arg name="include_vehicle_simulation" value="false" />
+  </include>
+
+
+  <include file="$(find simulation_evaluation)/launch/sign_evaluation_node.launch"/>
+
+  <test launch-prefix="coverage run -p" test-name="test_sign_evaluation_node" pkg="simulation_evaluation" time-limit="$(arg time_limit)" type="test_sign_evaluation_node">
+    <rosparam file="$(find simulation_groundtruth)/param/groundtruth/topics.yaml" command="load" ns="topics/groundtruth"/>
+    <rosparam file="$(find simulation_evaluation)/param/sign_evaluation/default.yaml" command="load"/>
+    <rosparam file="$(find simulation_evaluation)/param/sign_evaluation/topics.yaml" command="load" ns="topics"/>
+  </test>
+</launch>
