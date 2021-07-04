@@ -54,6 +54,9 @@ add_message_files(
   State.msg
   Broadcast.msg
   Referee.msg
+  SignEvaluation.msg
+  TrafficSign.msg
+  TrafficSigns.msg
 )
 
 generate_messages(
@@ -184,4 +187,5 @@ if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
   add_rostest(launch/test/speaker_node.test)
   add_rostest(launch/test/state_machine_node.test)
+  add_rostest(launch/test/sign_evaluation_node.test)
 endif()

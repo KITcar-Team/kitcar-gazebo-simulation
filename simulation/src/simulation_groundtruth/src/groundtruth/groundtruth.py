@@ -121,6 +121,7 @@ class Groundtruth:
                 spot_msg = LabeledPolygonMsg()
                 spot_msg.frame = spot.frame.to_geometry_msg()
                 spot_msg.type = spot.kind
+                spot_msg.visible = True
                 msg.spots.append(spot_msg)
 
             return msg
@@ -150,6 +151,7 @@ class Groundtruth:
             msg.height = obstacle.height
             msg.type = obstacle.id_
             msg.desc = obstacle.desc
+            msg.visible = True
             msgs.append(msg)
 
         return msgs
@@ -169,6 +171,7 @@ class Groundtruth:
             msg.frame = surface_marking.frame.to_geometry_msg()
             msg.type = surface_marking.kind[0]
             msg.desc = surface_marking.kind[1]
+            msg.visible = True
             msgs.append(msg)
         return msgs
 
@@ -187,6 +190,7 @@ class Groundtruth:
             msg.frame = sign.frame.to_geometry_msg()
             msg.type = sign.kind.id_
             msg.desc = sign.kind.mesh
-            msg.height = sign.height
+            msg.height = sign.kind.collision_box_size[2]
+            msg.visible = sign.visible
             msgs.append(msg)
         return msgs

@@ -1,0 +1,5 @@
+detections: /perception/traffic_sign_position/traffic_signs
+section: /simulation/groundtruth/section
+sign_marking: /simulation/sign_evaluation/sign_marking
+traffic_sign: /simulation/groundtruth/traffic_sign
+evaluation: /simulation/sign_evaluation/evaluation

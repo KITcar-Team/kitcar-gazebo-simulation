@@ -21,6 +21,15 @@ class SignTuple:
         self.id_ = ID.register(ns=100)
 
 
+def get_all_signs():
+    sign_dict = TrafficSign.__dict__
+    return [
+        v
+        for k, v in sign_dict.items()
+        if not k.startswith("__") and k != "kind" and k != "visible"
+    ]
+
+
 @dataclass
 class TrafficSign(RoadElementRect):
     ZONE_10_START = SignTuple(mesh="speed_limit_zone_10_start_sign")
@@ -115,6 +124,10 @@ class TrafficSign(RoadElementRect):
     EXPRESSWAY_START = SignTuple(mesh="expressway_start_sign")
     EXPRESSWAY_END = SignTuple(mesh="expressway_end_sign")
 
+    kind: SignTuple = None
+    visible: bool = True
+    """Indicate whether the traffic sign is visible while driving on the road."""
+
     def __init__(
         self,
         kind: SignTuple,
@@ -122,9 +135,11 @@ class TrafficSign(RoadElementRect):
         y: float = -0.5,
         angle=0,
         normalize_x: bool = True,
+        visible: bool = True,
     ):
 
         self.kind = kind
+        self.visible = visible
         super().__init__(
             arc_length=arc_length,
             y=y,

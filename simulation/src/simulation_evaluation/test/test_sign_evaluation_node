@@ -1,0 +1,67 @@
+#! /usr/bin/env python3
+import math
+import sys
+import unittest
+
+import rospy
+import std_msgs.msg
+from simulation_evaluation.msg import SignEvaluation as SignEvaluationMsg
+from simulation_evaluation.msg import TrafficSign, TrafficSigns
+from simulation_groundtruth.srv import LabeledPolygonSrv, SectionSrv
+
+from simulation.utils.geometry import Polygon, Pose
+from simulation.utils.ros_base.node_base import NodeBase
+
+PKG = "simulation_evaluation"
+
+
+class SignEvaluationTest(unittest.TestCase, NodeBase):
+    """Unittest that is executed through a ROS test and performs some checks on the sign
+    evaluation node."""
+
+    def setUp(self):
+        NodeBase.__init__(self, name="test_sign_evaluation_node", log_level=rospy.DEBUG)
+
+        self.traffic_sign = rospy.Publisher(self.param.topics.detections, TrafficSigns)
+        self.evaluation_msgs = []
+        self.evaluation_subscriber = rospy.Subscriber(
+            self.param.topics.evaluation, SignEvaluationMsg, callback=self.save_msg
+        )
+
+        rospy.sleep(1)
+
+    def save_msg(self, msg):
+        self.evaluation_msgs.append(msg)
+
+    def test_sign_evaluation(self):
+        rospy.wait_for_service(self.param.topics.traffic_sign)
+        sign_proxy = rospy.ServiceProxy(self.param.topics.traffic_sign, LabeledPolygonSrv)
+
+        rospy.wait_for_service(self.param.topics.section)
+        sections = rospy.ServiceProxy(self.param.topics.section, SectionSrv)().sections
+        signs = sign_proxy(sections[0].id).polygons
+
+        maped_signs = [Pose(Polygon(msg.frame).centroid, 0) for msg in signs]
+        first_msg = maped_signs[0]
+        header = std_msgs.msg.Header()
+        header.frame_id = "sim_world"
+        header.stamp = rospy.get_rostime()
+
+        traffic_sign_msg = TrafficSigns(
+            header=header,
+            sub_messages=[TrafficSign(pose=first_msg.to_geometry_msg(), type=1)],
+        )
+        self.traffic_sign.publish(traffic_sign_msg)
+        rospy.sleep(1)
+
+        first_msg = first_msg.position
+        first_detection = self.evaluation_msgs[0].position
+        assert math.isclose(first_detection.x, first_msg.x, abs_tol=1e-5)
+        assert math.isclose(first_detection.y, first_msg.y, abs_tol=1e-5)
+        assert math.isclose(first_detection.z, first_msg.z, abs_tol=1e-5)
+
+
+if __name__ == "__main__":
+    import rostest
+
+    rostest.rosrun(PKG, "test_sign_evaluation_node", SignEvaluationTest, sys.argv)

@@ -20,13 +20,13 @@ y = 0.5
 
 road = Road()
 for s, signs in enumerate(signs_list):
-    straight = StraightRoad(length=3 * straight_length)
+    straight = StraightRoad(length=straight_length)
     for i, sign in enumerate(signs):
         y *= -1
         straight.traffic_signs.append(
             TrafficSign(
                 kind=sign,
-                arc_length=i * 3,
+                arc_length=i,
                 angle=0,
                 normalize_x=False,
                 y=y,

@@ -68,6 +68,7 @@ class TrafficIsland(RoadSection):
                 *traffic_sign_end_point.xy,
                 angle=math.pi,
                 normalize_x=False,
+                visible=False,
             )
         )
         if self.zebra_marking_type == self.ZEBRA:
