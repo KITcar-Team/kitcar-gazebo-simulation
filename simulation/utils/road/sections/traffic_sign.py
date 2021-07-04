@@ -21,6 +21,15 @@ class SignTuple:
         self.id_ = ID.register(ns=100)
 
 
+def get_all_signs():
+    sign_dict = TrafficSign.__dict__
+    return [
+        v
+        for k, v in sign_dict.items()
+        if not k.startswith("__") and k != "kind" and k != "visible"
+    ]
+
+
 @dataclass
 class TrafficSign(RoadElementRect):
     ZONE_10_START = SignTuple(mesh="speed_limit_zone_10_start_sign")
