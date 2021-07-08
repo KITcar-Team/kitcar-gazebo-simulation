@@ -16,6 +16,8 @@ The **evaluation** ROS package provides functionality to evaluate drives automat
    ../_source_files/simulation.src.simulation_evaluation.src.state_machine
    ../_source_files/simulation.src.simulation_evaluation.src.referee
    ../_source_files/simulation.src.simulation_evaluation.src.evaluation_test
+   ../_source_files/simulation.src.simulation_evaluation.src.drive_test
+   ../_source_files/simulation.src.simulation_evaluation.src.sign_evaluation
 
 
 The simulation can be used to automatically detect errors in the car's driving behavior.
