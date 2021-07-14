@@ -172,6 +172,9 @@ Use this launch file to start the complete simulation.-->
   <!-- Launch evaluation pipeline -->
   <include if="$(arg evaluate)" file="$(find simulation_evaluation)/launch/evaluation.launch" />
   <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" output="screen" args="-d  $(find gazebo_simulation)/res/simulation.rviz -s $(find gazebo_simulation)/res/kitcar_logo.png" />
+  <include if="$(arg evaluate_sign_detection)" file="$(find simulation_evaluation)/launch/sign_evaluation_node.launch">
+    <arg name="path" value="$(arg sign_evaluation_plots_path)" />
+  </include>
   <!-- Launch Gazebo -->
   <include file="$(find gazebo_simulation)/launch/world.launch">
     <arg name="world_name" value="$(arg world_name)"/>

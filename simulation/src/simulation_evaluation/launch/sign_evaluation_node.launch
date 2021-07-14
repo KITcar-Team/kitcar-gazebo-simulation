@@ -1,6 +1,6 @@
 <!-- KITcar launch script -->
 <launch>
-  <arg name="path" default="$(env KITCAR_REPO_PATH)/plots"/>
+  <arg name="path" default="$(env KITCAR_REPO_PATH)/kitcar-gazebo-simulation/plots"/>
   <node name="sign_evaluation_node" ns="simulation_evaluation" pkg="simulation_evaluation" type="sign_evaluation_node" output="screen">
     <rosparam file="$(find simulation_evaluation)/param/sign_evaluation/default.yaml" command="load" />
     <rosparam file="$(find simulation_evaluation)/param/sign_evaluation/topics.yaml" command="load" ns="topics" />
